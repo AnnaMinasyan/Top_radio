@@ -293,6 +293,8 @@ class PlayingMusic extends React.Component<any, IState> {
     renderMenuItems(data: any) {
 
         return <TouchableOpacity
+        style={{paddingLeft:calcWidth(29)}}
+
             onPress={() => {
 
                 this.bs.current.snapTo(0),

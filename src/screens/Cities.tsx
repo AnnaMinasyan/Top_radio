@@ -107,7 +107,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
 
 
             <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
-                <Header />
+                <Header  navigation={this.props.navigation}/>
                 <Search />
                 <SafeAreaView style={{ height: '85%' }}>
                     {this.props.menuReducer.styleView ? <FlatList

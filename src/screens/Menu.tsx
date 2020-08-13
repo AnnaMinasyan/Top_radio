@@ -188,7 +188,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
 
         return <TouchableOpacity
-   
+   style={{paddingLeft:calcWidth(29)}}
             onPress={() => {
 
                 this.bs.current.snapTo(0),
@@ -204,7 +204,9 @@ class Menu extends React.Component<IMenuProps, IState> {
                 })
             }}
         >
-            <RadioMenuElement title={data.item.pa} image={data.item.im} backColor={this.props.filterReducer.backgroundColor}
+            <RadioMenuElement title={data.item.pa}
+           
+             image={data.item.im} backColor={this.props.filterReducer.backgroundColor}
             addInFavorite={() => this._addInFavorite(data.item)}
              isFavorite={this.state.favoriteList ? this.checkIsFovorite(data.item.id) : false} />
         </TouchableOpacity>

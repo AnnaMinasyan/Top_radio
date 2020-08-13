@@ -142,6 +142,8 @@ _addLookingList(data:any){
     renderMenuItems(data: any) {
 
         return <TouchableOpacity
+        style={{paddingLeft:calcWidth(29)}}
+
             onPress={() => {
 
                // this.bs.current.snapTo(0),
@@ -228,7 +230,7 @@ console.log(this.props.menuReducer.filterData);
 
             <View style={styles.container}>
                 <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
-                    <Header />
+                    <Header navigation={this.props.navigation} />
                     <Search />
                     <SafeAreaView style={{ height: '85%' }}>
                         {this.props.menuReducer.styleView ?

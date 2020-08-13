@@ -50,7 +50,7 @@ export interface IRadioMenuElementProps {
     image:string,
     addInFavorite():void,
     isFavorite:boolean,
-    backColor:string
+    backColor:string,
 }
 export interface ICitiesMenuElementProps {
     info:ICitiesConnect,

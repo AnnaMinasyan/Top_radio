@@ -41,6 +41,7 @@ import MoonSvg from "../assets/icons/sleep.svg"
 import SunSvg from "../assets/icons/sun.svg"
 import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
+import SmoothPicker from 'react-native-smooth-picker';
 
 interface IState {
   data: any,
@@ -48,8 +49,14 @@ interface IState {
   visibleModal: number | null,
   theme: string
   bufferSize: IData[],
-  selectBufferSize:string
+  selectBufferSize: string,
+  timeSleep:number,
+  timeSleepList:string[]
 }
+ interface ITimeSleepList{
+   time:number,
+   select:boolean
+ }
 
 class Settings extends React.Component<any, IState> {
   constructor(props: any) {
@@ -74,13 +81,19 @@ class Settings extends React.Component<any, IState> {
           check: false
         }
       ],
-      selectBufferSize:'500 ms'
+      timeSleepList:[
+       '00','10','20','30','40','50','60','70','80','90','100'
+     
+    ],
+      timeSleep:10,
+      selectBufferSize: '500 ms'
     }
     // const unsubscribe = props.navigation.addListener('focus', () => {
     //     this.setData()
     //   });
 
   }
+
   onRenderModalTheme() {
     return <View style={[styles.modalTheme,]}>
       <TouchableOpacity
@@ -118,62 +131,104 @@ class Settings extends React.Component<any, IState> {
     </View>
   }
   _changeBufferSize(res: IData) {
-    console.log("Pppppppp",res);
-    
-    let newArr=this.state.bufferSize
+    let newArr = this.state.bufferSize
     for (let index = 0; index < newArr.length; index++) {
       const element = newArr[index];
-      if(element.title==res.title){
-        newArr[index].check=true
-      }else{
-        newArr[index].check=false
+      if (element.title == res.title) {
+        newArr[index].check = true
+      } else {
+        newArr[index].check = false
       }
-      
     }
-    console.log(newArr);
     this.setState({
-      bufferSize:newArr, 
-      visibleModal:null,
-      selectBufferSize:res.title
+      bufferSize: newArr,
+      visibleModal: null,
+      selectBufferSize: res.title
     })
-    
   }
+ 
   onRenderModalBufferSize() {
-    return <View 
-    style={styles.bufferSizeModal}>
-       <Text style={[global_styles.stationTexttitle, { color:  "#1E2B4D", fontSize:calcFontSize(18) , marginBottom:calcHeight(20)}]}>
-                Размер буфера
+    return <View
+      style={styles.bufferSizeModal}>
+      <Text style={[global_styles.stationTexttitle, { color: "#1E2B4D", fontSize: calcFontSize(18), marginBottom: calcHeight(20) }]}>
+        Размер буфера
             </Text>
       {this.state.bufferSize.map((res) => {
-        return <View style={{width:calcWidth(300),
-        flexDirection:'row' ,  
-        justifyContent:'space-between', 
-        alignItems:'center',
-        height:calcHeight(50)
-         }}>
+        return <View style={{
+          width: calcWidth(300),
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: calcHeight(50)
+        }}>
           <Text style={styles.bufferSizeModalText}>{res.title}</Text>
-          <ToDo data={res} valueChanged={(f:any)=>this._changeBufferSize(f)} />
+          <ToDo data={res} valueChanged={(f: any) => this._changeBufferSize(f)} />
         </View>
       })}
     </View>
   }
-  onRenderModalSleepTimer(){
-return<View style={[styles.modalSleepTimer]}>
-
-</View>
+  onRenderModalSleepTimer() {
+    return <View style={[styles.modalSleepTimer]}>
+      <View style={styles.sleepTimerTop}>
+        <View style={{justifyContent:'space-between', alignItems:'center', flexDirection:'row'}}>
+          <MoonSvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
+          <View style={{ marginLeft: calcWidth(17) }}>
+            <Text
+              style={[global_styles.stationTexttitle,
+              { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white",
+              width:calcWidth(80),}]}> Таймер сна </Text>
+          </View>
+        </View>
+        <View>
+          <SimpleSwitch />
+        </View>
+      </View>
+      <View style={{justifyContent:'center',flexDirection: 'row',  alignItems:'center', }}>
+          <View style={{justifyContent:'center',alignItems:'center', }} >
+            <SmoothPicker
+              magnet
+              scrollAnimation
+              selectOnPress
+              initialScrollToIndex={this.state.timeSleep}
+              showsVerticalScrollIndicator={false}
+              data={this.state.timeSleepList}
+              style={{ height: calcHeight(350), marginLeft:calcWidth(35)}}
+             onSelected={({ item, index }) => this.changeTimeSleep(item)}
+              renderItem={({ item, index }) => (
+                <Text style={{ fontSize: calcFontSize(37), color: this.state.timeSleep == item ? 'red' : '#B3BACE' }} >
+                  {item}</Text>)}/>
+          </View>
+          <Text 
+          style={[styles.timeText,{marginRight:calcWidth(41),
+          color:this.props.filterReducer.backgroundColor=="white"?"#1E2B4D":"white"}]}>мин.</Text>
+        </View>
+        <TouchableOpacity
+        style={{borderRadius:8,
+           borderWidth:calcHeight(1.5),
+           borderColor:'#B3BACE',
+          marginTop:calcHeight(5),
+        height:calcHeight(50),
+      justifyContent:'center',
+    alignItems:'center'}}
+        >
+          <Text style={{color:'black'}}>Подтвердить число </Text>
+        </TouchableOpacity>
+    </View>
   }
-
+  changeTimeSleep = (index: number) => {
+    this.setState({
+      timeSleep: index
+    });
+  };
   render() {
 
     return (
-
       <View style={[styles.container, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
         <HeaderByBack title='Настройки' onNavigate={() => { this.props.navigation.goBack() }} />
         <View style={[styles.radiostation, { marginTop: calcFontSize(21), backgroundColor: this.props.filterReducer.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <AvtoPlaySvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-
               <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Автовоспроизведение</Text>
             </View>
           </View>
@@ -185,7 +240,6 @@ return<View style={[styles.modalSleepTimer]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <HeadSetSvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-
               <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]} numberOfLines={2} >Пауза при отключении гарнитуры</Text>
             </View>
           </View>
@@ -197,7 +251,6 @@ return<View style={[styles.modalSleepTimer]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <RefleshSvg height={calcHeight(20.4)} width={calcHeight(22)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-
               <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Переподключаться</Text>
             </View>
           </View>
@@ -206,7 +259,9 @@ return<View style={[styles.modalSleepTimer]}>
           </View>
         </View>
         <TouchableOpacity
-
+          onPress={() => {
+            this.setState({ visibleModal: 3,timeSleep:0 })
+          }}
           style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <AlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
@@ -215,7 +270,7 @@ return<View style={[styles.modalSleepTimer]}>
               <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Таймер сна
             </Text>
-              <Text style={global_styles.stationComment}>20 мин</Text>
+              <Text style={global_styles.stationComment}>{this.state.timeSleep} мин</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -232,7 +287,7 @@ return<View style={[styles.modalSleepTimer]}>
               <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Размер буфера
             </Text>
-        <Text style={global_styles.stationComment}>{this.state.selectBufferSize}</Text>
+              <Text style={global_styles.stationComment}>{this.state.selectBufferSize}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -274,7 +329,7 @@ return<View style={[styles.modalSleepTimer]}>
           onBackdropPress={() => { this.setState({ visibleModal: null }) }}
         >
           {this.onRenderModalBufferSize()}
-        </Modal> 
+        </Modal>
         <Modal
           isVisible={this.state.visibleModal === 3}
           animationIn={'slideInLeft'}
@@ -343,22 +398,43 @@ const styles = StyleSheet.create({
     fontSize: calcFontSize(20),
     marginLeft: calcWidth(8)
   },
-  bufferSizeModal:{ 
+  bufferSizeModal: {
+    borderRadius:5,
+
     height: calcHeight(300),
-   
-     backgroundColor: 'white',
-     alignItems:'center' ,
-    padding:calcWidth(10),
-    justifyContent:'center'
+
+    backgroundColor: 'white',
+    alignItems: 'center',
+    padding: calcWidth(10),
+    justifyContent: 'center'
   },
-     bufferSizeModalText:{
-       fontSize:calcFontSize(20),
-   
-     },
-     modalSleepTimer:{
-      backgroundColor:'white',
-      height:calcHeight(300),
-      width:calcWidth(80)
-     }
+  bufferSizeModalText: {
+    fontSize: calcFontSize(20),
+
+  },
+  modalSleepTimer: {
+    backgroundColor: 'white',
+    height: calcHeight(500),
+    marginHorizontal:calcWidth(65),
+    padding:calcHeight(15),
+    borderRadius:5
+  // width: calcWidth(100)
+  },
+  sleepTimerTop:{
+     alignItems: 'center',
+      justifyContent: 'center',
+       flexDirection: 'row',
+       paddingVertical:calcHeight(20),
+       borderColor:"#B3BACE",
+       borderBottomWidth:1
+      },
+      timeText:{
+        color:'#1E2B4D',
+        fontWeight:'bold',
+        marginBottom:calcHeight(6),
+        fontSize:calcFontSize(17), 
+                marginTop:calcHeight(25),
+                 marginLeft:calcWidth(6)
+      }
 
 })

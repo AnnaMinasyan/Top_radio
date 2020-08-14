@@ -185,7 +185,7 @@ interface Props {
 //                 <TouchableOpacity
 //                     style={styles.btnrecord}
 //                     onPress={() => {
-//                         this.props.navigation?.navigate('AlarmClock')
+//                         this.props.navigation?.navigate('MyAlarmClock')
 //                     }}
 //                 >
 //                     <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill='#1E2B4D' />
@@ -383,7 +383,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
                             style={styles.btnrecord}
                             onPress={() => {
                               console.log(props);
-                               // props.navigation.navigate('AlarmClock')
+                               // props.navigation.navigate('MyAlarmClock')
                             }}
                         >
                             <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill='#1E2B4D' />

@@ -25,7 +25,7 @@ import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import ConnectSvg from "../assets/icons/connect.svg"
 import ArrowLeft from "../assets/icons/arrow_right.svg"
-import AlarmClockSvg from "../assets/icons/alarmClock.svg"
+import MyAlarmClockSvg from "../assets/icons/alarmClock.svg"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RepeatSvg from "../assets/icons/repeat.svg"
 import { Switch } from 'react-native-switch';
@@ -36,7 +36,9 @@ import moment from 'moment';
 import AntennaSvg from "../assets/icons/antena.svg"
 import Modal from 'react-native-modal'; // 2.4.0
 import { changeswipeablePanelActive, changeplayItem } from '../store/actions/filterAction'
-
+import AlarmClock from "react-native-alarm-clock";
+import PushNotification from "react-native-push-notification"
+import ReactNativeAN from 'react-native-alarm-notification';
 interface IState {
   date: any,
   isEnabled: boolean,
@@ -49,13 +51,30 @@ interface IState {
   timeSleepList: any,
   visibleModal: number | null,
   favoriteList: any,
-  playItem:any
+  playItem:any,
+
 }
 
-class AlarmClock extends React.Component<IMenuProps, IState> {
+class MyAlarmClock extends React.Component<IMenuProps, IState> {
   constructor(props: IMenuProps) {
-
     super(props)
+    //this.initStorData(),
+    // PushNotification.configure({
+    //   onRegister: function (token) {
+    //     console.log("TOKEN:", token);
+    //   },
+    //   onNotification: function (notification) {
+    //     console.log("NOTIFICATION:", notification);
+    //   },
+    //   permissions: {
+    //     alert: true,
+    //     badge: true,
+    //     sound: true,
+    //   },
+    //   popInitialNotification: true,
+    //   requestPermissions: true,
+    // });
+    
     this.state = {
       hours: [
         '00',
@@ -75,16 +94,12 @@ class AlarmClock extends React.Component<IMenuProps, IState> {
         '18', '19', '20', '21', '22', '23',
       ],
       minutes: [
-
         '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17',
         '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37',
-
       ],
       minutes2: [
-
         '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17',
         '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37',
-
       ],
       date: new Date(),
       isEnabled: true,
@@ -98,7 +113,7 @@ class AlarmClock extends React.Component<IMenuProps, IState> {
       ],
       selectedTimeSleepList: 0,
       favoriteList: [],
-      playItem:[]
+      playItem:[],
 
     }
     // const unsubscribe = props.navigation.addListener('focus', () => {
@@ -106,18 +121,33 @@ class AlarmClock extends React.Component<IMenuProps, IState> {
     //   });
 
   }
+ testPush (){
+      PushNotification.localNotification({
+        title: "My Notification Title", // (optional)
+        message: "My Notification Message", // (required)
+        color:'red',
+      
+        playSound:true,
+        //soundName:'android.resource:'+this.props.menuReducer.menuData[0].st[0].ur
+      });
+   }
   componentDidMount() {
     console.log(moment().format('LT').split(':'));
-    // for (let index = 0; index < this.state.hours.length; index++) {
-    //   const element = this.state.hours[index];
+   // this.testPush()
+    // PushNotification.localNotificationSchedule({
+      
+    //   //... You can use all the options from localNotifications
+    //   message: "My Notification Message", // (required)
+    //   date: new Date(Date.now() + 10 * 1000), // in 60 secs
+      
+    // //  allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
+    // });
+    	const details = {
 
-    // }
-
-  }
-  onChange() {
-    return <View>
-
-    </View>
+			data: {content: 'my notification id is 45'},
+		};
+		console.log(details);
+	ReactNativeAN.sendNotification(details);
   }
   handleChangeHours = (index: number) => {
     this.setState({
@@ -212,9 +242,7 @@ class AlarmClock extends React.Component<IMenuProps, IState> {
       <Text style={[styles.timeText,
       {
         color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white",
-
       }]}>мин.</Text>
-      
     </View>
     <TouchableOpacity
         style={{borderRadius:8,
@@ -342,7 +370,7 @@ class AlarmClock extends React.Component<IMenuProps, IState> {
           }}
           style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-            <AlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
+            <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
               <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Частота повторений
@@ -396,7 +424,7 @@ const mapDispatchToProps = (dispatch: any) => {
   },
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(AlarmClock);
+export default connect(mapStateToProps, mapDispatchToProps)(MyAlarmClock);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

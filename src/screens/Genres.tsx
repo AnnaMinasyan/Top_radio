@@ -5,7 +5,8 @@ import {
     Text,
     ScrollView,
     SafeAreaView,
-    FlatList
+    FlatList,
+    TouchableOpacity
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
@@ -13,6 +14,7 @@ import Header from "../components/Header"
 import Search from "../components/Search"
 import { IGanresProps, ICitiesConnect } from "../Interface"
 import { getGanresData } from '../store/actions/ganresAction'
+import { changeFilterDataByGenre } from '../store/actions/menuActions'
 
 import CitiesMenuElement from "../components/CitiesMenuElement"
 import { storeData, getData } from "../utils/local_storage"
@@ -84,12 +86,24 @@ class Genres extends React.Component<IGanresProps, IState> {
 
     }
     renderMenuItems(data: any) {
-        return <CitiesMenuElement info={data.item} backColor={this.props.filterReducer.backgroundColor} />
+        return <TouchableOpacity 
+        onPress={()=>{
+            this.props.onchangeFilterDataByGenre(data.item.id)
+            this.props.navigation.navigate('FilterMenu')
+        }}
+        >
+            <CitiesMenuElement info={data.item} backColor={this.props.filterReducer.backgroundColor} />
+        </TouchableOpacity>
     }
     renderMenuItems2(data: any) {
-        return <View style={{ padding: calcWidth(8),backgroundColor:this.props.filterReducer.backgroundColor }}>
+        return <TouchableOpacity
+        onPress={()=>{
+            this.props.onchangeFilterDataByGenre(data.item.id)
+            this.props.navigation.navigate('FilterMenu')
+        }}
+         style={{ padding: calcWidth(8),backgroundColor:this.props.filterReducer.backgroundColor }}>
             <SimpleImage size={calcWidth(98)}  color={this.state.colors[data.item.id %5]} title={data.item.pa} />
-        </View>
+        </TouchableOpacity>
     }
     render() {
         return (
@@ -140,6 +154,9 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         ongetGanresData: () => {
             dispatch(getGanresData())
+        },
+        onchangeFilterDataByGenre:(payload: any)=>{
+            dispatch(changeFilterDataByGenre(payload))
         }
     }
 }

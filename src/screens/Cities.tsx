@@ -94,7 +94,13 @@ class Cities extends React.Component<ICitiesProps, IState> {
         </TouchableOpacity>
     }
     renderMenuItems2(data: any) {
-        return <TouchableOpacity>
+        return <TouchableOpacity
+        onPress={()=>{
+            console.log(data.item.id);
+            this.props.onchangeFilterData(data.item.id)
+            this.props.navigation.navigate('FilterMenu')
+        }}
+        >
             <View style={{ padding: calcWidth(8), }}>
                 <SimpleImage size={calcWidth(98)} title={data.item.pa} color={this.state.colors[data.item.id % 5]} />
             </View>

@@ -43,3 +43,10 @@ export const changeFilterData = (payload:any) => {
 	
 	};
 };
+export const changeFilterDataByGenre = (payload:any) => {
+	return {
+		type: MenuTypes.CHANGE_FILTER_DATA_BY_GENRE,
+		payload
+	
+	};
+};

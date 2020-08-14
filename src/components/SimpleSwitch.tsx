@@ -25,7 +25,7 @@ import SimpleImage from "./SimpleImage"
 import { connect } from "react-redux"
 import ConnectSvg from "../assets/icons/connect.svg"
 import ArrowLeft from "../assets/icons/arrow_right.svg"
-import AlarmClockSvg from "../assets/icons/alarmClock.svg"
+import MyAlarmClockSvg from "../assets/icons/MyAlarmClock.svg"
 import RepeatSvg from "../assets/icons/repeat.svg"
 import { Switch } from 'react-native-switch';
 

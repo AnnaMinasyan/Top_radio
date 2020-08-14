@@ -30,7 +30,7 @@ export interface IGanresProps {
     menuReducer:any,
     ganresReducer:any,
     filterReducer: any,
-
+    onchangeFilterDataByGenre(payload:any):void; 
     navigation: NavigationScreenProp<any, any>;
 
 } 

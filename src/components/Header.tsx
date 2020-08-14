@@ -52,7 +52,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView, { marginTop: calcHeight(6) }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
-           this.props.navigation.navigate("AlarmClock")
+           this.props.navigation.navigate("MyAlarmClock")
           }}
         >
           <Text style={[styles.modalItem,{color:this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':"white"}]}>Установить будильник</Text>

@@ -316,6 +316,13 @@ class Menu extends React.Component<IMenuProps, IState> {
             </View>
         </View>
     }
+    changeRadioStancia(item:any){
+        this.setState({ activBi: item.bi, playUrl: item.ur })
+        this._pouseMusic()
+        setTimeout(() => {
+            this._startPlayMusic()
+        }, 3000);
+    }
    renderBottomSheet=(data: any)=> {
         
                 return <View style={{backgroundColor: this.props.filterReducer.backgroundColor , height: '100%', }}>
@@ -366,8 +373,8 @@ class Menu extends React.Component<IMenuProps, IState> {
                     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
                         {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any) => {
                             return <TouchableOpacity
-                                onPress={() => { this.setState({ activBi: item.bi, playUrl: item.ur }) }}
-                                style={item.bi == this.state.activBi ? styles.activeNumbers : [styles.numbers, { marginRight: calcWidth(15) }]}
+                                onPress={() => { this.changeRadioStancia(item) }}
+                                style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }]:styles.activeNumbers }
                             >
                                 <Text style={styles.activenumber}>{item.bi}</Text>
                             </TouchableOpacity>
@@ -415,7 +422,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     render() {
         // const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.menuData
         const list = this.chouseList()
-console.log("oooo", this.state.favoriteList);
+//console.log("oooo", this.props.menuReducer.menuData);
 
         return (
             <View style={styles.container}>

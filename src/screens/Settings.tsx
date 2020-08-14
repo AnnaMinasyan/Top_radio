@@ -26,7 +26,7 @@ import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import ConnectSvg from "../assets/icons/connect.svg"
 import ArrowLeft from "../assets/icons/arrow_right.svg"
-import AlarmClockSvg from "../assets/icons/alarmClock.svg"
+import MyAlarmClockSvg from "../assets/icons/alarmClock.svg"
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RepeatSvg from "../assets/icons/repeat.svg"
 import { Switch } from 'react-native-switch';
@@ -99,7 +99,7 @@ class Settings extends React.Component<any, IState> {
       <TouchableOpacity
         style={[styles.modalThemeBtn, { backgroundColor: '#1E2B4D' }]}
         onPress={() => {
-          this.props.onchangeBackgroundColor(this.props.filterReducer.backgroundColor == "white")
+          this.props.onchangeBackgroundColor(true)
           this.setState({
             visibleModal: null,
             theme: 'Тёмная'
@@ -112,7 +112,7 @@ class Settings extends React.Component<any, IState> {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          this.props.onchangeBackgroundColor(this.props.filterReducer.backgroundColor == "white")
+          this.props.onchangeBackgroundColor(false)
           this.setState({
             visibleModal: null,
             theme: 'Светлая'
@@ -264,7 +264,7 @@ class Settings extends React.Component<any, IState> {
           }}
           style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-            <AlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
+            <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
 
               <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>

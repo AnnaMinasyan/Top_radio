@@ -5,7 +5,7 @@ import Menu from "../screens/Menu"
 import Cities from "../screens/Cities"
 import Genres from "../screens/Genres"
 import EfirList from "../screens/EfirList"
-import AlarmClock from "../screens/AlarmClock"
+import MyAlarmClock from "../screens/MyAlarmClock"
 import FilterMenu from "../screens/FilterMenu"
 import Settings from "../screens/Settings"
 const Stack = createStackNavigator();
@@ -28,8 +28,8 @@ const HomeNavigator: React.FunctionComponent = () => (
      options={{ header: BaseHeader, headerTransparent: true, }}
     />
     <Stack.Screen
-    name="AlarmClock"
-    component={AlarmClock}
+    name="MyAlarmClock"
+    component={MyAlarmClock}
     options={{headerShown:false}}
     />
     <Stack.Screen

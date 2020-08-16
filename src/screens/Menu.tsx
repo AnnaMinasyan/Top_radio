@@ -16,8 +16,8 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { changeMenuType, getMenuData,getPlayTrackList } from '../store/actions/menuActions'
-import { changeswipeablePanelActive, changeplayItem } from '../store/actions/filterAction'
+import { changeMenuType, getMenuData } from '../store/actions/menuActions'
+import { changeswipeablePanelActive, changeplayItem ,addFavorite,getFavorites} from '../store/actions/filterAction'
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
@@ -88,9 +88,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         })
 
         getData('favorites').then((favorite) => {
-
-
-            this.setState({ favoriteList: favorite })
+this.props.ongetFavorites(favorite)
         })
         getData('isLooking').then((looking) => {
 
@@ -149,11 +147,9 @@ class Menu extends React.Component<IMenuProps, IState> {
         this.props.onchangeswipeablePanelActive(false)
     }
     checkIsFovorite(id: number) {
-        // if( this.state.favoriteList){
-        for (let index = 0; index < this.state.favoriteList.length; index++) {
-            const element = this.state.favoriteList[index];
+        for (let index = 0; index < this.props.filterReducer.favorites.length; index++) {
+            const element = this.props.filterReducer.favorites[index];
             if (element.id == id) {
-               // console.log(element.id);
                 
                 return true
 
@@ -195,6 +191,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
+                
                 // this.state.isPlayingMusic? this._pouseMusic():null
                 this.setState({
                     isPlayingMusic: false,
@@ -207,8 +204,8 @@ class Menu extends React.Component<IMenuProps, IState> {
             <RadioMenuElement title={data.item.pa}
            
              image={data.item.im} backColor={this.props.filterReducer.backgroundColor}
-            addInFavorite={() => this._addInFavorite(data.item)}
-             isFavorite={this.state.favoriteList ? this.checkIsFovorite(data.item.id) : false} />
+            addInFavorite={() => this.props.toaddfavorite(data.item)}
+             isFavorite={this.checkIsFovorite(data.item.id) } />
         </TouchableOpacity>
     }
     renderMenuItemsMenuStyle2(data: any) {
@@ -220,10 +217,10 @@ class Menu extends React.Component<IMenuProps, IState> {
                  this.bs.current.snapTo(0),
                 this.state.isPlayingMusic? this._pouseMusic():null
                 this.props.onchangeswipeablePanelActive(true)
-                this.props.onchangeplayItem(data.item)
+                this.props.onchangeplayItem(data.item.data)
                 this.setState({
                     isPlayingMusic: false,
-                    playItem: data.item,
+                    playItem: data.item.data,
                     activBi: data.item.st[0].bi,
                     playUrl: data.item.st[0].ur
                 })
@@ -231,34 +228,7 @@ class Menu extends React.Component<IMenuProps, IState> {
             <SimpleImage size={calcWidth(98)} />
         </TouchableOpacity>
     }
-    _addInFavorite(data: any) {
-
-        getData('favorites').then((favorite) => {
-            let count = false
-            if (favorite && favorite.length > 0) {
-                for (let index = 0; index < favorite.length; index++) {
-                    const element = favorite[index];
-                    if (element.id == data.id) {
-                        count = true
-                    }
-                    if (count) {
-                        favorite.splice(index, 1)
-                        break
-                    }
-                }
-                if (count == false) {
-                    favorite.push(data)
-                }
-            } else {
-                favorite.push(data)
-            }
-            console.log("favorite",favorite);
-            
-            storeData("favorites", favorite).then(() => {
-                this.setState({ favoriteList: favorite })
-            })
-        })
-    }
+    
     chouseList() {
         if (this.props.filterReducer.isFavorite) {
             return this.state.favoriteList
@@ -294,7 +264,7 @@ class Menu extends React.Component<IMenuProps, IState> {
            <TouchableOpacity
            onPress={()=>{
                   
-            this._addInFavorite(this.state.playItem)
+            this.props.toaddfavorite(this.state.playItem)
             this.setState({ isFavorite: !this.state.isFavorite })
            }}
            >
@@ -345,7 +315,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             onPress={() => {
                                 console.log("ffffff");
                                 
-                                this._addInFavorite(this.state.playItem)
+                                this.props.toaddfavorite(this.state.playItem)
                                 this.setState({ isFavorite: !this.state.isFavorite })
                             }}
                         >
@@ -422,7 +392,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     render() {
         // const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.menuData
         const list = this.chouseList()
-//console.log("oooo", this.props.menuReducer.menuData);
+console.log("oooo", this.props.filterReducer.favorites);
 
         return (
             <View style={styles.container}>
@@ -447,7 +417,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             />
                         }
                     </SafeAreaView>
-                    <BottomSheet
+                    {/* <BottomSheet
                 ref={this.bs}
                 snapPoints={[deviceHeight - 15, 0, 0]}
                  renderContent={() => this.renderBottomSheet(this.state.playItem)}
@@ -459,7 +429,7 @@ class Menu extends React.Component<IMenuProps, IState> {
 
             {this.props.filterReducer.swipeablePanelActive== false? <View style={{ position: 'absolute', height: calcHeight(86), width: '100%', bottom: 0 }}>
                 {this.renderBottomSheetheader()}
-            </View> : null}
+            </View> : null} */}
                 </View>
             </View>
         );
@@ -488,9 +458,12 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeplayItem: (payload: boolean) => {
             dispatch(changeplayItem(payload))
         },
-        ongetPlayTrackList: (payload: any) => {
-            dispatch(getPlayTrackList(payload))
-        }
+        toaddfavorite:(payload: any) => {
+            dispatch(addFavorite(payload))
+        },
+        ongetFavorites:(payload: any) => {
+            dispatch(getFavorites(payload))
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

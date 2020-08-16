@@ -2,13 +2,19 @@
 export enum MenuTypes {
     CHANGE_MENU_TYPE = '@menutypes/CHANGE_MENU_TYPE',
     GET_MENU_DATA= '@menutypes/GET_MENU_DATA',
-    SET_MENU_DATA= '@menutypes/SET_MENU_DATA',
+    SET_MENU_DATA= '@menutypes/SET_MENU_DATA', 
+     SET_PLAY_LIST= '@menutypes/SET_PLAY_LIST',
     GET_STATIC_TEXTS='@menutypes/GET_STATIC_TEXTS',
     SET_STATIC_TEXTS='@menutypes/SET_STATIC_TEXTS', 
     CHANGE_FILTER_DATA='@menutypes/CHANGE_FILTER_DATA',
     CHANGE_FILTER_DATA_BY_GENRE='@menutypes/CHANGE_FILTER_DATA_BY_GENRE',
-    GET_PLAY_TRACK_LIST='@menutypes/GET_PLAY_TRACK_LIST',
-    SET_PLAY_TRACK_LIST='@menutypes/SET_PLAY_TRACK_LIST',
+    GET_FAVORITES='@menutypes/GET_FAVORITES',
+    CHANGE_FAVORITE='@menutypes/CHANGE_FAVORITE',
+}
+export enum PlayListTypes {
+     SET_PLAY_LIST= '@playListtypes/SET_PLAY_LIST',
+     GET_PLAY_LIST= '@playListtypes/GET_PLAY_LIST',
+
 }
 export enum CitiesTypes {  
     GET_CITIES_DATA= '@citiestypes/GET_CITIES_DATA',
@@ -24,4 +30,6 @@ export enum FilterTypes {
     CHANGE_PLAY_ITEM='@filterTypes/CHANGE_PLAY_ITEM',
     CHANGE_IS_LOOKING='@filterTypes/CHANGE_IS_LOOKING',
     CHANGE_BACKGROUNDCOLOR='@filterTypes/CHANGE_BACKGROUNDCOLOR',
+    GET_FAVORITES='@menutypes/GET_FAVORITES',
+    ADD_FAVORITE='@menutypes/ADD_FAVORITE',
 }

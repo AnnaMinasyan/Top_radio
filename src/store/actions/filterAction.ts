@@ -31,3 +31,17 @@ export const changeBackgroundColor = (payload:boolean) => {
 		payload
 	};
 };
+export const getFavorites = (payload:any) => {
+	return {
+		type: FilterTypes.GET_FAVORITES,
+		payload
+	
+	};
+};
+export const addFavorite = (payload:any) => {
+	return {
+		type: FilterTypes.ADD_FAVORITE,
+		payload
+	
+	};
+};

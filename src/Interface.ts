@@ -4,13 +4,21 @@ import { NavigationScreenProp } from 'react-navigation';
     styleView:boolean;
     onChangeMenuType(type:boolean):void;
     ongetPlayTrackList(type:any):void;
+    toaddfavorite(type:any):void;
     ongetMenuData():void; 
     onchangeplayItem(payload:any):void; 
+    ongetFavorites(payload:any):void; 
     onchangeswipeablePanelActive(payload:boolean):void;
     menuReducer:any,
     navigation: NavigationScreenProp<any, any>,
     filterReducer: any,
+    dispatch: any
 
+} 
+export interface IPlayListProps {
+    playListReducer:any,
+    navigation: NavigationScreenProp<any, any>,
+    ongetPlayList(payload:any):void; 
 }
 export interface IFilterMenuProps {
     styleView:boolean;

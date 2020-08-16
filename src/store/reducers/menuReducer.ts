@@ -1,4 +1,5 @@
 import { MenuTypes } from '../constants';
+import { storeData, getData } from "../../utils/local_storage"
 
 interface IReduxAction<T> {
     type: T;
@@ -9,7 +10,8 @@ export interface IMenuState {
     styleView: boolean,
     menuData:any,
     filterData:any,
-    playTrackList:any
+    playTrackList:any,
+    favorites:any
 }
 
 
@@ -17,16 +19,31 @@ export const initialState: IMenuState = {
     styleView: true,
     menuData:[],
     filterData:[],
-    playTrackList:[]
+    playTrackList:[],
+    favorites:[]
 }
 const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
     switch (action.type) {
         case MenuTypes.CHANGE_MENU_TYPE:
             return {...state, styleView: action.payload };
-        case MenuTypes.GET_PLAY_TRACK_LIST:
-            return {...state, playTrackList: action.payload };
+          
         case MenuTypes.SET_MENU_DATA:
-            return {...state,menuData:action.payload}
+            let arraymenu= action.payload
+            for (let index = 0; index <arraymenu.length; index++) {
+                const element = arraymenu[index];
+                element.isfavorite=false
+            }
+            return {...state,menuData:arraymenu}
+            case MenuTypes.CHANGE_FAVORITE:
+            console.log("action.payload",action.payload);
+             
+                //  let arr=state.menuData
+                // // arr[action.payload].isfavorite=!arr[action.payload].isfavorite
+                // // // for (let index = 0; index <arraymenu.length; index++) {
+                // // //     const element = arraymenu[index];
+                // // //     element.isfavorite=false
+                // // // }
+                 return {...state}
         case MenuTypes.CHANGE_FILTER_DATA:
             const array:any=[]
         for (let index = 0; index < state.menuData.length; index++) {

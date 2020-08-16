@@ -23,19 +23,16 @@ export const setMenuData = (payload:any) => {
 	
 	};
 };
-export const getPlayTrackList = (payload:number) => {
+
+
+export const setPlayList = (payload:any) => {
 	return {
-		type: MenuTypes.GET_PLAY_TRACK_LIST,
-		payload
-	};
-};
-export const setPlayReackList = (payload:any) => {
-	return {
-		type: MenuTypes.SET_PLAY_TRACK_LIST,
+		type: MenuTypes.SET_PLAY_LIST,
 		payload
 	
 	};
 };
+
 export const changeFilterData = (payload:any) => {
 	return {
 		type: MenuTypes.CHANGE_FILTER_DATA,

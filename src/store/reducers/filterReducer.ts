@@ -1,4 +1,5 @@
 import { FilterTypes } from '../constants';
+import { storeData, getData } from "../../utils/local_storage"
 
 interface IReduxAction<T> {
     type: T;
@@ -10,7 +11,8 @@ export interface IFilterState {
     swipeablePanelActive:boolean | null,
     playItem:any,
     isLooking:boolean,
-    backgroundColor:string
+    backgroundColor:string,
+    favorites:any
 }
 
 
@@ -19,7 +21,8 @@ export const initialState: IFilterState = {
     swipeablePanelActive:null,
     playItem:{},
     isLooking:false,
-    backgroundColor:'white'
+    backgroundColor:'white',
+    favorites:[]
 }
 const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) => {
     switch (action.type) {
@@ -45,7 +48,38 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
              }
              console.log(action.payload, color);
              
-            return {... state,backgroundColor:color}    
+            return {... state,backgroundColor:color}  
+            case FilterTypes.GET_FAVORITES:
+                return {...state, favorites: action.payload };
+            case FilterTypes.ADD_FAVORITE:
+                const newArr=state.favorites
+                    let count = false
+                    if (state.favorites && state.favorites.length > 0) {
+                        for (let index = 0; index < newArr.length; index++) {
+                            const element = newArr[index];
+                            if (element.id == action.payload.id) {
+                                count = true
+                            }
+                            if (count) {
+                                newArr.splice(index, 1)
+                                break
+                            }
+                        }
+                        if (count == false) {
+                            newArr.push(action.payload)
+                        }
+                    } else {
+                        newArr.push(action.payload)
+                    }
+                    console.log("favorite", newArr);
+        
+                    storeData("favorites", newArr).then(() => {
+                        console.log('reducer',newArr);
+                        
+                        return {...state, favorites:newArr };
+                    })
+                
+                
         default:
             return state;
     }

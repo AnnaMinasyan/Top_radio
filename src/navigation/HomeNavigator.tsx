@@ -4,7 +4,7 @@ import BaseHeader from "../components/BaseHeader"
 import Menu from "../screens/Menu" 
 import Cities from "../screens/Cities"
 import Genres from "../screens/Genres"
-import EfirList from "../screens/EfirList"
+import PlayList from "../screens/PlayList"
 import MyAlarmClock from "../screens/MyAlarmClock"
 import FilterMenu from "../screens/FilterMenu"
 import Settings from "../screens/Settings"
@@ -38,8 +38,8 @@ const HomeNavigator: React.FunctionComponent = () => (
     options={{headerShown:false}}
     />
      <Stack.Screen
-    name="EfirList"
-    component={EfirList}
+    name="PlayList"
+    component={PlayList}
     options={{headerShown:false}}
     />
     <Stack.Screen

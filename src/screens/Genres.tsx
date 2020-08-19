@@ -15,16 +15,19 @@ import Search from "../components/Search"
 import { IGanresProps, ICitiesConnect } from "../Interface"
 import { getGanresData } from '../store/actions/ganresAction'
 import { changeFilterDataByGenre } from '../store/actions/menuActions'
+import { changeSearchData } from '../store/actions/filterAction'
 
 import CitiesMenuElement from "../components/CitiesMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-
+import { createFilter } from 'react-native-search-filter';
+const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     // radioList: ICitiesConnect[],
     styleView: boolean,
-    colors:string[]
+    colors:string[],
+    searchData:any |null
 }
 
 class Genres extends React.Component<IGanresProps, IState> {
@@ -65,6 +68,7 @@ class Genres extends React.Component<IGanresProps, IState> {
 
 
             //     ],
+            searchData:null,
             styleView: this.props.menuReducer.styleView
         }
         // const unsubscribe = props.navigation.addListener('focus', () => {
@@ -88,7 +92,7 @@ class Genres extends React.Component<IGanresProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableOpacity 
         onPress={()=>{
-            this.props.onchangeFilterDataByGenre(data.item.id)
+         this.props.onchangeFilterDataByGenre(data.item.id)
             this.props.navigation.navigate('FilterMenu')
         }}
         >
@@ -105,21 +109,34 @@ class Genres extends React.Component<IGanresProps, IState> {
             <SimpleImage size={calcWidth(98)}  color={this.state.colors[data.item.id %5]} title={data.item.pa} />
         </TouchableOpacity>
     }
+    chouseList() {
+        if(this.state.searchData){
+            return this.state.searchData
+        }else  {
+            return this.props.ganresReducer.ganres
+        } 
+    }
     render() {
+        const list=this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        console.log(":::::::::::::::",this.props.ganresReducer.ganres);
+        
         return (
             <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
-                <Header  navigation={this.props.navigation}/>
-                <Search />
-                <SafeAreaView style={{ height: '85%' }}>
+                <Header  
+                navigation={this.props.navigation}
+                onchnageSearchData={this.props.onchnageSearchData}
+
+                />
+                <SafeAreaView style={{ height: '100%' }}>
                     {this.props.menuReducer.styleView ? <FlatList
-                       data={this.props.ganresReducer.ganres}
+                       data={list}
                         renderItem={(d) => this.renderMenuItems(d)}
                         //renderItem={this.renderMenuItems}
                         keyExtractor={item => item.id}
                         maxToRenderPerBatch={10}
                     /> :
                         <FlatList
-                            data={this.props.ganresReducer.ganres}
+                            data={list}
                             renderItem={(d) => this.renderMenuItems2(d)}
                             contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
                             keyExtractor={item => item.id}
@@ -157,7 +174,10 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeFilterDataByGenre:(payload: any)=>{
             dispatch(changeFilterDataByGenre(payload))
-        }
+        },
+        onchnageSearchData: (payload: any) => {
+            dispatch(changeSearchData(payload))
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Genres);

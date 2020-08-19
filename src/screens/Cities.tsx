@@ -14,13 +14,14 @@ import Search from "../components/Search"
 import { ICitiesProps, ICitiesConnect } from "../Interface"
 import { changeMenuType, changeFilterData } from '../store/actions/menuActions'
 import { getCitiesData } from '../store/actions/citiesAction'
-
+import { changeSearchData } from '../store/actions/filterAction'
 import CitiesMenuElement from "../components/CitiesMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+import { createFilter } from 'react-native-search-filter';
+const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     styleView: boolean
     colors: string[]
@@ -86,7 +87,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
         return <TouchableOpacity
         onPress={()=>{
             console.log(data.item.id);
-            this.props.onchangeFilterData(data.item.id)
+            this.props.onchangeFilterData(data.item.pa)
             this.props.navigation.navigate('FilterMenu')
         }}
         >
@@ -97,7 +98,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
         return <TouchableOpacity
         onPress={()=>{
             console.log(data.item.id);
-            this.props.onchangeFilterData(data.item.id)
+            this.props.onchangeFilterData(data.item.pa)
             this.props.navigation.navigate('FilterMenu')
         }}
         >
@@ -108,16 +109,20 @@ class Cities extends React.Component<ICitiesProps, IState> {
     }
     render() {
         console.log(this.props.citiesReducer.cities);
+        const list=this.props.citiesReducer.cities.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
 
         return (
 
 
             <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
-                <Header  navigation={this.props.navigation}/>
-                <Search />
-                <SafeAreaView style={{ height: '85%' }}>
+                <Header  navigation={this.props.navigation}
+                     onchnageSearchData={this.props.onchnageSearchData}
+
+                />
+                {/* <Search /> */}
+                <SafeAreaView style={{ height: '100%' }}>
                     {this.props.menuReducer.styleView ? <FlatList
-                        data={this.props.citiesReducer.cities}
+                        data={list}
                         renderItem={(d) => this.renderMenuItems(d)}
 
                         //renderItem={this.renderMenuItems}
@@ -125,7 +130,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
                         maxToRenderPerBatch={10}
                     /> :
                         <FlatList
-                            data={this.props.citiesReducer.cities}
+                            data={list}
                             renderItem={(d) => this.renderMenuItems2(d)}
                             contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
                             //renderItem={this.renderMenuItems}
@@ -167,7 +172,10 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeFilterData:(payload: any)=>{
              dispatch(changeFilterData(payload))
-        }
+        },
+        onchnageSearchData: (payload: any) => {
+            dispatch(changeSearchData(payload))
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Cities);

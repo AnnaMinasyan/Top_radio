@@ -4,6 +4,7 @@ import { NavigationScreenProp } from 'react-navigation';
     styleView:boolean;
     onChangeMenuType(type:boolean):void;
     ongetPlayTrackList(type:any):void;
+    onchnageSearchData(type:any):void;
     toaddfavorite(type:any):void;
     ongetMenuData():void; 
     onchangeplayItem(payload:any):void; 
@@ -35,6 +36,7 @@ export interface IGanresProps {
     styleView:boolean;
     onChangeMenuType(type:boolean):void;
     ongetGanresData():void;
+    onchnageSearchData(type:any):void;
     menuReducer:any,
     ganresReducer:any,
     filterReducer: any,
@@ -51,6 +53,7 @@ export interface ICitiesProps {
     menuReducer:any,
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
+    onchnageSearchData(type:any):void;
 
 }
 export interface IRadioMenuElementProps {
@@ -68,7 +71,7 @@ export interface ICitiesMenuElementProps {
 export interface ICitiesConnect{
     pa:string,
     id:number
-    // color?:string
+     co:number
 }
 export interface ISimpleSwitchProps{
 

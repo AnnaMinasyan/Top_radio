@@ -36,26 +36,37 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             return {...state,menuData:arraymenu}
             case MenuTypes.CHANGE_FAVORITE:
             console.log("action.payload",action.payload);
-             
+            let menu= state.menuData
+            for (let index = 0; index <menu.length; index++) {
+                const element = menu[index];
+                if(element.id==action.payload.id){
+                    element.isfavorite=! element.isfavorite
+                }
+                
+            }
+            console.log("=++++++",menu);
+            
                 //  let arr=state.menuData
                 // // arr[action.payload].isfavorite=!arr[action.payload].isfavorite
                 // // // for (let index = 0; index <arraymenu.length; index++) {
                 // // //     const element = arraymenu[index];
                 // // //     element.isfavorite=false
                 // // // }
-                 return {...state}
+                 return {...state,menuData:menu}
         case MenuTypes.CHANGE_FILTER_DATA:
             const array:any=[]
         for (let index = 0; index < state.menuData.length; index++) {
             const element = state.menuData[index];
-            if (element.ci && element.ci.length>0) {
-                element.ci.map((elem:any, key:any)=>{
-                if(elem.id==action.payload){
+            console.log(":::::::::::::::::::::::::::::::::",element);
+
+            if (element.ci == action.payload) {
+                
                 array.push(element)  
-                }  
-                })
+               
             } 
         }
+        console.log(array);
+        
             return {...state,filterData:array} 
          case MenuTypes.CHANGE_FILTER_DATA_BY_GENRE:
             const genre:any=[]

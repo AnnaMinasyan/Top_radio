@@ -12,7 +12,8 @@ export interface IFilterState {
     playItem:any,
     isLooking:boolean,
     backgroundColor:string,
-    favorites:any
+    favorites:any,
+    searchData:any
 }
 
 
@@ -22,17 +23,18 @@ export const initialState: IFilterState = {
     playItem:{},
     isLooking:false,
     backgroundColor:'white',
-    favorites:[]
+    favorites:[],
+    searchData:''
 }
 const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) => {
     switch (action.type) {
         
         case FilterTypes.CHANGE_IS_FAVORITE:
-            
             return {... state,isFavorite:!state.isFavorite} 
         case FilterTypes.CHANGE_IS_LOOKING:
-            
             return {... state,isLooking:!state.isLooking} 
+            case FilterTypes.CHANGE_SHEARCH_DATA:
+            return {... state,searchData:action.payload} 
         case FilterTypes.CHANGE_SWIPEABLEPANELACTIVE:
             console.log("action.payload",action.payload);
             
@@ -53,31 +55,42 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
                 return {...state, favorites: action.payload };
             case FilterTypes.ADD_FAVORITE:
                 const newArr=state.favorites
+                let storageFavorite:any=[]
+                getData('favorites').then((l:any)=>{
+                    console.log("lllllll",l);
+                    
+                    storageFavorite=l
                     let count = false
                     if (state.favorites && state.favorites.length > 0) {
                         for (let index = 0; index < newArr.length; index++) {
                             const element = newArr[index];
-                            if (element.id == action.payload.id) {
+                            if (element == action.payload.id) {
                                 count = true
                             }
                             if (count) {
                                 newArr.splice(index, 1)
+                                storageFavorite.splice(index, 1)
                                 break
                             }
                         }
                         if (count == false) {
-                            newArr.push(action.payload)
+                            newArr.push(action.payload.id)
+                            storageFavorite.push(action.payload)
                         }
                     } else {
-                        newArr.push(action.payload)
+                        newArr.push(action.payload.id)
+                        storageFavorite.push(action.payload)
                     }
-                    console.log("favorite", newArr);
+                    console.log("favorite", newArr,storageFavorite);
         
-                    storeData("favorites", newArr).then(() => {
-                        console.log('reducer',newArr);
+                    storeData("favorites", storageFavorite).then(() => {
+                      getData('favorites').then((d)=>console.log(d)
+                      )
                         
                         return {...state, favorites:newArr };
                     })
+                })
+                    
                 
                 
         default:

@@ -9,6 +9,7 @@ import Filter from '../assets/icons/filter-icon.svg';
 import global_styles from "../assets/styles/global_styles"
 import {calcFontSize,calcHeight,calcWidth} from "../assets/styles/dimensions" 
 interface Props {
+  //filterReducer: any
 }
 
 const styles = StyleSheet.create({
@@ -42,14 +43,14 @@ const BaseHeader: React.FunctionComponent<Props> = (props) => {
   const navigation = useNavigation();
 
   return (
-      
+      <View>
         <TouchableOpacity
       onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
         style={styles.headerContainer}
         >
         <Menu fill='#FFFFFF'   height={calcHeight(21)} width={calcWidth(21)}  /> 
           </TouchableOpacity>
-
+          </View>
        
   );
 };

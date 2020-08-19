@@ -20,17 +20,22 @@ import { changeFavoriteType } from '../store/actions/filterAction'
 import { DrawerActions } from 'react-navigation';
 import { NavigationScreenProp } from 'react-navigation';
 import RedHeart from "../assets/icons/redHeart.svg"
+import SearchSvg from "../assets/icons/search.svg"
+import Search from "./Search"
 interface Props {
 
   onChangeMenuType(type: boolean): void;
   onchangeFavoriteType(): void;
   navigation: NavigationScreenProp<any, any>;
   filterReducer: any,
+  onchnageSearchData(type: any): void;
 
 }
 interface IState {
   hideMenuModal: boolean,
   menuStyle: boolean,
+  showSearchView:boolean,
+  
 }
 class Header extends React.Component<Props, IState> {
   constructor(props: Props) {
@@ -38,6 +43,7 @@ class Header extends React.Component<Props, IState> {
     this.state = {
       hideMenuModal: false,
       menuStyle: true,
+      showSearchView:false
     }
 
   }
@@ -116,12 +122,28 @@ class Header extends React.Component<Props, IState> {
 
             }}
           >
-            {/* <Menu fill='#FFFFFF'   height={calcHeight(21)} width={calcWidth(24)}  /> */}
           </TouchableOpacity>
-          <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(40) }} />
-
+       {!this.state.showSearchView?<Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(40), marginRight:calcWidth(75) }} />:
+       <View style={{backgroundColor:'red',
+       width:calcWidth(250),
+       justifyContent:'center',
+       alignItems:'center',
+        marginLeft:calcWidth(35),}}>
+         <Search 
+       renderSearchData={this.props.onchnageSearchData}
+       />
+         </View>}   
         </View>
-        <View style={[styles.row, { width: '30%' }]}>
+        <View style={[styles.row,]}>
+          <TouchableOpacity
+            style={styles.searchbtn}
+              onPress={()=>{
+                this.setState({showSearchView:!this.state.showSearchView})
+              }}
+          >
+         {!this.state.showSearchView? <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />:
+         <Text style={{color:'white'}}>X</Text>}
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               this.changeIsFavorite()
@@ -155,7 +177,7 @@ class Header extends React.Component<Props, IState> {
         </View>
 
         {this.state.hideMenuModal ? this.hideMenuModal() : null}
-
+       
       </View>
     );
   }
@@ -192,14 +214,17 @@ const styles = StyleSheet.create({
 
   },
   modal: {
-   
-
     height: calcHeight(269.03),
     width: calcWidth(265),
     borderRadius: calcWidth(8),
-
-
   },
+  searchbtn:{ 
+    height: calcHeight(56), 
+    width:calcWidth(50),
+    justifyContent: 'center',
+     alignItems: 'center',
+    },
+
   modalView: {
     height: calcHeight(50),
     justifyContent: 'center',

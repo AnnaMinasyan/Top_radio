@@ -45,3 +45,10 @@ export const addFavorite = (payload:any) => {
 	
 	};
 };
+export const changeSearchData = (payload:any) => {
+	return {
+		type: FilterTypes.CHANGE_SHEARCH_DATA,
+		payload
+	
+	};
+};

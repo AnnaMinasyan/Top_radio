@@ -31,5 +31,6 @@ export enum FilterTypes {
     CHANGE_IS_LOOKING='@filterTypes/CHANGE_IS_LOOKING',
     CHANGE_BACKGROUNDCOLOR='@filterTypes/CHANGE_BACKGROUNDCOLOR',
     GET_FAVORITES='@menutypes/GET_FAVORITES',
-    ADD_FAVORITE='@menutypes/ADD_FAVORITE',
+    ADD_FAVORITE='@menutypes/ADD_FAVORITE', 
+    CHANGE_SHEARCH_DATA='@menutypes/CHANGE_SHEARCH_DATA',
 }

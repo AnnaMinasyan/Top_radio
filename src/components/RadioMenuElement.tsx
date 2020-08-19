@@ -29,13 +29,11 @@ class RadioMenuElement extends React.Component<IRadioMenuElementProps, IState> {
   }
 add(){
   this.props.addInFavorite()
-  this.setState({isFavorite:!this.props.isFavorite})
+  //this.setState({isFavorite:!this.props.isFavorite})
 }
   render() {
   
     return (
-
-   
       <View style={[styles.body,{ backgroundColor:this.props.backColor,}]}>
       <View style={styles.row}>
       <SimpleImage size={calcHeight(54)} image={this.props.image}/>
@@ -48,7 +46,7 @@ add(){
            }}
            style={{ height:calcHeight(50),width:calcWidth(70),justifyContent:'center', alignItems:'center'}}
            >
-           {this.state.isFavorite?
+           {this.props.isFavorite?
     
     <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)}/>: <Heart fill='#B3BACE'  height={calcHeight(18.54)} width={calcWidth(20.83)}/>} 
            </TouchableOpacity>

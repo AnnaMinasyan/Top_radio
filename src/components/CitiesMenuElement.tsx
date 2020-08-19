@@ -43,7 +43,7 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
                 <View style={{ flexDirection: 'row' }}>
                     <ConnectSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
                     <Text style={[styles.countTxt,{color:this.props.backColor=="white"?"#1E2B4D":'white'}]}>
-                        0
+                    {this.props.info.co}
                     </Text>
                 </View>
 

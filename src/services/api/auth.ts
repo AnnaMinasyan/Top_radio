@@ -14,7 +14,7 @@ interface IDATA {
 class Static implements IDATA {
     async getMenuDatas() {
         try {
-            const response = await authApi.get(`${keys.API_URL}/radios.json`,);
+            const response = await authApi.get(`${keys.API_URL}${keys.COUNTRY_TYPE}/radios.json`,);
             return response.data
         } catch (ex) {
             throw new Error(ex);
@@ -22,7 +22,9 @@ class Static implements IDATA {
     }
     async getCities() {
         try {
-            const response = await authApi.get(`${keys.API_URL}/cities.json`,);
+            const response = await authApi.get(`${keys.API_URL}${keys.COUNTRY_TYPE}/cities.json`,);
+            console.log(`${keys.API_URL}${keys.COUNTRY_TYPE}/cities.json`,response.data);
+            
             return response.data
         } catch (ex) {
             throw new Error(ex);
@@ -30,7 +32,7 @@ class Static implements IDATA {
     }
     async getGanres() {
         try {
-            const response = await authApi.get(`${keys.API_URL}/genres.json`,);
+            const response = await authApi.get(`${keys.API_URL}${keys.COUNTRY_TYPE}/genres.json`,);
             return response.data
         } catch (ex) {
             throw new Error(ex);

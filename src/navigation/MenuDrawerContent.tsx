@@ -28,70 +28,73 @@ interface Props {
     filterReducer: any
 }
 const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
-    return (<ScrollView style={{ backgroundColor: '#0F1E45', }}>
-        <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+    return (<View>
+        <ScrollView style={{ backgroundColor: '#0F1E45', }}>
+            <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
 
-            <View style={styles.header}>
-                <Logo height={calcHeight(30)} width={calcWidth(164)} />
-            </View>
+                <View style={styles.header}>
+                    <Logo height={calcHeight(30)} width={calcWidth(164)} />
+                </View>
 
-            <View style={styles.items}>
-                <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => {
-                        props.onChangeMenuType(true)
-                        props.navigation.navigate('Menu')
-                    }}
-                >
-                    <View style={styles.item}>
-                        <RadioSvg height={calcHeight(22.02)} width={calcWidth(30)} fill='white' />
-                        <Text style={styles.itemText}>Все радиостанции</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => {
-                        console.log(";;;;;;;;;;;;;;;;;;",);
-                        props.navigation.navigate('Genres')
-                        props.onChangeMenuType(true)
-                    }}
-                >
-                    <View style={styles.item}>
-                        <Guitar height={calcHeight(29.95)} width={calcWidth(30)} fill='white' />
-                        <Text style={styles.itemText}>Жанры</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => {
-                        console.log(";;;;;;;;;;;;;;;;;;",);
-                        props.navigation.navigate('Cities')
-                        props.onChangeMenuType(true)
-                    }}
-                >
-                    <View style={styles.item}>
-                        <Location height={calcHeight(30)} width={calcWidth(30)} fill='white' />
-                        <Text style={styles.itemText}>Города</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.item}
-                    onPress={() => {
-                        props.onChangeMenuType(true)
-                        props.onchangeisLooking()
-                    }}
-                >
-                    <View style={styles.item}>
-                        <EyesSvg height={calcHeight(30)} width={calcWidth(30)} fill={props.filterReducer.isLooking ? '#6C7BA4' : 'white'} />
-                        <Text style={props.filterReducer.isLooking ? styles.activeitemText : styles.itemText}>Просмотренные</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View>
-                <BackImage />
-            </View>
-        </SafeAreaView>
-    </ScrollView>
+                <View style={styles.items}>
+                    <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => {
+                            props.onChangeMenuType(true)
+                            props.navigation.navigate('Menu')
+                        }}
+                    >
+                        <View style={styles.item}>
+                            <RadioSvg height={calcHeight(22.02)} width={calcWidth(30)} fill='white' />
+                            <Text style={styles.itemText}>Все радиостанции</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => {
+                            console.log(";;;;;;;;;;;;;;;;;;",);
+                            props.navigation.navigate('Genres')
+                            props.onChangeMenuType(true)
+                        }}
+                    >
+                        <View style={styles.item}>
+                            <Guitar height={calcHeight(29.95)} width={calcWidth(30)} fill='white' />
+                            <Text style={styles.itemText}>Жанры</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => {
+                            console.log(";;;;;;;;;;;;;;;;;;",);
+                            props.navigation.navigate('Cities')
+                            props.onChangeMenuType(true)
+                        }}
+                    >
+                        <View style={styles.item}>
+                            <Location height={calcHeight(30)} width={calcWidth(30)} fill='white' />
+                            <Text style={styles.itemText}>Города</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => {
+                            props.onChangeMenuType(true)
+                            props.onchangeisLooking()
+                        }}
+                    >
+                        <View style={styles.item}>
+                            <EyesSvg height={calcHeight(30)} width={calcWidth(30)} fill={props.filterReducer.isLooking ? '#6C7BA4' : 'white'} />
+                            <Text style={props.filterReducer.isLooking ? styles.activeitemText : styles.itemText}>Просмотренные</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <BackImage />
+                </View>
+            </SafeAreaView>
+        </ScrollView>
+      
+    </View>
     )
 };
 

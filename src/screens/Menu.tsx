@@ -17,7 +17,13 @@ import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import { changeMenuType, getMenuData } from '../store/actions/menuActions'
-import { changeswipeablePanelActive, changeplayItem ,addFavorite,getFavorites} from '../store/actions/filterAction'
+import {
+    changeswipeablePanelActive,
+    changeplayItem,
+    addFavorite,
+    getFavorites,
+    changeSearchData
+} from '../store/actions/filterAction'
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
@@ -36,7 +42,9 @@ import TrackPlayer from 'react-native-track-player';
 import BottomSheet from 'reanimated-bottom-sheet'
 import menuReducer from '../store/reducers/menuReducer';
 import { ThemeColors } from 'react-navigation';
-
+import Bottom from "../components/Bottom"
+import { createFilter } from 'react-native-search-filter';
+const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     radioList: [],
     styleView: boolean,
@@ -49,7 +57,8 @@ interface IState {
     playUrl: string,
     activBi: number,
     favoriteList: any,
-    lookingList: any
+    lookingList: any,
+    searchData: any | null
 }
 
 class Menu extends React.Component<IMenuProps, IState> {
@@ -58,7 +67,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         super(props)
         this.state = {
             radioList: [],
-        
+
             styleView: this.props.menuReducer.styleView,
             swipeablePanelActive: false,
             position: new Animated.Value(0),
@@ -69,7 +78,8 @@ class Menu extends React.Component<IMenuProps, IState> {
             playUrl: '',
             activBi: 0,
             favoriteList: [],
-            lookingList: []
+            lookingList: [],
+            searchData: null
 
 
         }
@@ -82,13 +92,22 @@ class Menu extends React.Component<IMenuProps, IState> {
     setData() {
         getData('menuView').then((menuView) => {
             this.bs.current.snapTo(1)
-            // console.log(":::::::::::::::", this.bs.current.snapTo(1));
 
             this.setState({ styleView: menuView })
         })
 
         getData('favorites').then((favorite) => {
-this.props.ongetFavorites(favorite)
+            let favoriteStorage:any =[]
+            console.log("+++++++++++++++++++++++++++", favoriteStorage);
+
+            favorite.map((data: any) => {
+                console.log(data);
+                
+            favoriteStorage.push(data.id)
+            })
+            console.log("+++++++++++++++++++++++++++", favoriteStorage);
+
+            this.props.ongetFavorites(favoriteStorage)
         })
         getData('isLooking').then((looking) => {
 
@@ -146,16 +165,9 @@ this.props.ongetFavorites(favorite)
     closePanel() {
         this.props.onchangeswipeablePanelActive(false)
     }
-    checkIsFovorite(id: number) {
-        for (let index = 0; index < this.props.filterReducer.favorites.length; index++) {
-            const element = this.props.filterReducer.favorites[index];
-            if (element.id == id) {
-                
-                return true
-
-            }
-        }
-        return false
+    checkIsFovorite(num: number) {        
+            return this.props.filterReducer.favorites.map((i: any) => i).includes(num)
+      
     }
     _addLookingList(data: any) {
         getData("isLooking").then((lookList) => {
@@ -181,18 +193,14 @@ this.props.ongetFavorites(favorite)
         })
     }
     // }
-    renderMenuItems(data: any) {
-
+    renderMenuItems(data: any) {        
         return <TouchableOpacity
-   style={{paddingLeft:calcWidth(29)}}
+            style={{ paddingLeft: calcWidth(29) }}
             onPress={() => {
-
-                this.bs.current.snapTo(0),
+                // this.bs.current.snapTo(0),
                 this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
-                
-                // this.state.isPlayingMusic? this._pouseMusic():null
                 this.setState({
                     isPlayingMusic: false,
                     playItem: data.item,
@@ -202,10 +210,9 @@ this.props.ongetFavorites(favorite)
             }}
         >
             <RadioMenuElement title={data.item.pa}
-           
-             image={data.item.im} backColor={this.props.filterReducer.backgroundColor}
-            addInFavorite={() => this.props.toaddfavorite(data.item)}
-             isFavorite={this.checkIsFovorite(data.item.id) } />
+                image={data.item.im} backColor={this.props.filterReducer.backgroundColor}
+                addInFavorite={() => this.props.toaddfavorite(data.item)}
+                isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableOpacity>
     }
     renderMenuItemsMenuStyle2(data: any) {
@@ -214,8 +221,8 @@ this.props.ongetFavorites(favorite)
 
             onPress={() => {
 
-                 this.bs.current.snapTo(0),
-                this.state.isPlayingMusic? this._pouseMusic():null
+                this.bs.current.snapTo(0),
+                    this.state.isPlayingMusic ? this._pouseMusic() : null
                 this.props.onchangeswipeablePanelActive(true)
                 this.props.onchangeplayItem(data.item.data)
                 this.setState({
@@ -228,7 +235,7 @@ this.props.ongetFavorites(favorite)
             <SimpleImage size={calcWidth(98)} />
         </TouchableOpacity>
     }
-    
+
     chouseList() {
         if (this.props.filterReducer.isFavorite) {
             return this.state.favoriteList
@@ -241,165 +248,168 @@ this.props.ongetFavorites(favorite)
     renderBottomSheetheader = () => {
 
 
-        return <View style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor=="white"?'#EBEEF7':'#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
+        return <View style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
             <TouchableOpacity
-               onPress={() => {
-                this.bs.current.snapTo(0),
-                this.props.onchangeswipeablePanelActive(true)
-                 }}
-                style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor=="white"?'#EBEEF7':'#0F1E45', }}>
+                onPress={() => {
+                    this.bs.current.snapTo(0),
+                        this.props.onchangeswipeablePanelActive(true)
+                }}
+                style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
 
                     <View style={{ flexDirection: 'row' }}>
                         <SimpleImage size={calcWidth(47)} />
                         <View style={{ marginLeft: calcHeight(15) }}>
-                            <Text style={[styles.txtTitle,{color:this.props.filterReducer.backgroundColor=="white"?"#1D2A4B":'white'}]}>{this.state.playItem.pa}</Text>
-                            <Text style={[styles.txtTitle, { fontSize: calcFontSize(12), marginTop: calcHeight(5),color:this.props.filterReducer.backgroundColor=="white"?"#1D2A4B":'white' }]}>Супер хиты. Супер новинки</Text>
+                            <Text style={[styles.txtTitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>{this.state.playItem.pa}</Text>
+                            <Text style={[styles.txtTitle, { fontSize: calcFontSize(12), marginTop: calcHeight(5), color: this.props.filterReducer.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>Супер хиты. Супер новинки</Text>
                         </View>
                     </View>
 
                 </View>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-           <TouchableOpacity
-           onPress={()=>{
-                  
-            this.props.toaddfavorite(this.state.playItem)
-            this.setState({ isFavorite: !this.state.isFavorite })
-           }}
-           >
-           {this.checkIsFovorite(this.state.playItem.id) ?
-        <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
-                <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
-           </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.player,{backgroundColor:this.props.filterReducer.backgroundColor=="white"?'#EBEEF7':'#0D1834'}]}
-                onPress={() => {
-                this._pouseMusic()
-                this.setState({isPlayingMusic:!this.state.isPlayingMusic})
-            }}
+                    onPress={() => {
+
+                        this.props.toaddfavorite(this.state.playItem)
+                        this.setState({ isFavorite: !this.state.isFavorite })
+                    }}
                 >
-                    {this.state.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor=="white"?'#101C3B':'white'} /> :
-                                <PlaySvG width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor=="white"?'#101C3B':'white'} />}
+                    {this.checkIsFovorite(this.state.playItem.id) ?
+                        <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
+                        <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.player, { backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0D1834' }]}
+                    onPress={() => {
+                        this._pouseMusic()
+                        this.setState({ isPlayingMusic: !this.state.isPlayingMusic })
+                    }}
+                >
+                    {this.state.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
+                        <PlaySvG width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor == "white" ? '#101C3B' : 'white'} />}
                     {/* <PlaySvG width={calcWidth(16)} height={calcHeight(22)} fill='#101C3B' /> */}
                 </TouchableOpacity>
             </View>
         </View>
     }
-    changeRadioStancia(item:any){
-        this.setState({ activBi: item.bi, playUrl: item.ur })
-        this._pouseMusic()
-        setTimeout(() => {
-            this._startPlayMusic()
-        }, 3000);
-    }
-   renderBottomSheet=(data: any)=> {
-        
-                return <View style={{backgroundColor: this.props.filterReducer.backgroundColor , height: '100%', }}>
-                    <View style={styles.bottomSheet}>
-                        <TouchableOpacity
-                            style={{
-                                height: calcHeight(50), justifyContent: 'center',
-                                width: calcWidth(60), zIndex: 1
-                            }}
-                         onPress={() => {
-                               this.bs.current.snapTo(1)
-                            this.props.onchangeswipeablePanelActive(false)
-                            }}
-        
-                        >
-                            <Arrow fill={ this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':"white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{ justifyContent: 'center', alignItems: 'center', height: 40, }}
-                            onPress={() => {
-                                console.log("ffffff");
-                                
-                                this.props.toaddfavorite(this.state.playItem)
-                                this.setState({ isFavorite: !this.state.isFavorite })
-                            }}
-                        >
-                            {this.checkIsFovorite(this.state.playItem.id) ?
-        
-                                <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> : 
-                                <Heart fill={ this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ marginTop: calcHeight(27), justifyContent: 'center', alignItems: 'center' }}>
-                        {this.state.playItem ? 
-                        <Text style={{ color:this.props.filterReducer.backgroundColor=="white"? '#1E2B4D':'white',
-                         fontSize: calcFontSize(24),
-                          fontWeight: '500' }}>{this.state.playItem.pa}</Text> : null}
-                    </View>
-                    <View style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
-                        <SimpleImage size={calcHeight(257)} />
-        
-                    </View>
-                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                        <Text style={{ color:this.props.filterReducer.backgroundColor=="white"? '#1E2B4D':'white', fontSize: calcFontSize(17) }}>
-                            Супер хиты. Супер новинки
+    
+    renderBottomSheet = (data: any) => {
+
+        return <View style={{ backgroundColor: this.props.filterReducer.backgroundColor, height: '100%', }}>
+            <View style={styles.bottomSheet}>
+                <TouchableOpacity
+                    style={{
+                        height: calcHeight(50), justifyContent: 'center',
+                        width: calcWidth(60), zIndex: 1
+                    }}
+                    onPress={() => {
+                        this.bs.current.snapTo(1)
+                        this.props.onchangeswipeablePanelActive(false)
+                    }}
+
+                >
+                    <Arrow fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{ justifyContent: 'center', alignItems: 'center', height: 40, }}
+                    onPress={() => {
+                        console.log("ffffff");
+
+                        this.props.toaddfavorite(this.state.playItem)
+                        this.setState({ isFavorite: !this.state.isFavorite })
+                    }}
+                >
+                    {this.checkIsFovorite(this.state.playItem.id) ?
+
+                        <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
+                        <Heart fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
+                </TouchableOpacity>
+            </View>
+            <View style={{ marginTop: calcHeight(27), justifyContent: 'center', alignItems: 'center' }}>
+                {this.state.playItem ?
+                    <Text style={{
+                        color: this.props.filterReducer.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                        fontSize: calcFontSize(24),
+                        fontWeight: '500'
+                    }}>{this.state.playItem.pa}</Text> : null}
+            </View>
+            <View style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
+                <SimpleImage size={calcHeight(257)} />
+
+            </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: this.props.filterReducer.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
+                    Супер хиты. Супер новинки
                         </Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
-                        {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any) => {
-                            return <TouchableOpacity
-                                onPress={() => { this.changeRadioStancia(item) }}
-                                style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }]:styles.activeNumbers }
-                            >
-                                <Text style={styles.activenumber}>{item.bi}</Text>
-                            </TouchableOpacity>
-                        }) : null}
-                    </View>
-                    <View style={{ alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center' }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.setState({ isRecording: !this.state.isRecording })
-                            }}
-                            style={[styles.btnrecord,{backgroundColor: this.props.filterReducer.backgroundColor=='white'?'white':'#0F1E45',}]}
-                        >
-                            {data.isRecording ?
-                                <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} /> :
-                                <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' />
-                            }
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => {
-                            this.state.isPlayingMusic ?this._pouseMusic() :this._startPlayMusic()
-                                // this._startPlayMusic()
-                                this.setState({isPlayingMusic:!this.state.isPlayingMusic})
-                            }}
-                            style={[styles.btnPlay,
-                                {backgroundColor: this.props.filterReducer.backgroundColor=='white'?'#101C3B':'#0F1E45',}]}
-                        >
-                            { this.state.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
-                                <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.btnrecord,{backgroundColor: this.props.filterReducer.backgroundColor=='white'?'white':'#101C3B',}]}
-                            onPress={() => {
-                                console.log("this.state", this.state.playItem);
-                                this.props.ongetPlayTrackList(this.state.playItem.pl)
-                               this.props.navigation.navigate('EfirList')
-                            }}
-                        >
-                            <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill= {this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':'white'}/>
-        
-                        </TouchableOpacity>
-        
-                    </View>
-                </View>
-            }
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
+                {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any) => {
+                    return <TouchableOpacity
+                      //  onPress={() => { this.changeRadioStancia(item) }}
+                        style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }] : styles.activeNumbers}
+                    >
+                        <Text style={styles.activenumber}>{item.bi}</Text>
+                    </TouchableOpacity>
+                }) : null}
+            </View>
+            <View style={{ alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center' }}>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.setState({ isRecording: !this.state.isRecording })
+                    }}
+                    style={[styles.btnrecord, { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                >
+                    {data.isRecording ?
+                        <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} /> :
+                        <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' />
+                    }
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.state.isPlayingMusic ? this._pouseMusic() : this._startPlayMusic()
+                        // this._startPlayMusic()
+                        this.setState({ isPlayingMusic: !this.state.isPlayingMusic })
+                    }}
+                    style={[styles.btnPlay,
+                    { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}
+                >
+                    {this.state.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
+                        <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.btnrecord, { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? 'white' : '#101C3B', }]}
+                    onPress={() => {
+                        console.log("this.state", this.state.playItem);
+                        this.props.ongetPlayTrackList(this.state.playItem.pl)
+                        this.props.navigation.navigate('EfirList')
+                    }}
+                >
+                    <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
+
+                </TouchableOpacity>
+
+            </View>
+        </View>
+    }
     render() {
         // const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.menuData
-        const list = this.chouseList()
-console.log("oooo", this.props.filterReducer.favorites);
+        const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+
+        console.log("oooo", list);
+       // const filteredEmails = this.props.data.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS))
 
         return (
             <View style={styles.container}>
                 <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
-                    <Header  navigation={this.props.navigation}/>
-                    <Search />
-                    <SafeAreaView style={{ height: '85%',backgroundColor: this.props.filterReducer.backgroundColor }}>
+                    <Header 
+                    navigation={this.props.navigation} 
+                     onchnageSearchData={this.props.onchnageSearchData}
+                     />
+                    {/* <Search
+                        data={this.props.menuReducer.menuData}
+                        renderSearchData={(data: any) => this.props.onchnageSearchData(data)} /> */}
+                    <SafeAreaView style={{ height: '100%', backgroundColor: this.props.filterReducer.backgroundColor }}>
                         {this.props.menuReducer.styleView ?
                             <FlatList
                                 data={list}
@@ -426,10 +436,30 @@ console.log("oooo", this.props.filterReducer.favorites);
                 enabledInnerScrolling={true}
             onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
             />
-
-            {this.props.filterReducer.swipeablePanelActive== false? <View style={{ position: 'absolute', height: calcHeight(86), width: '100%', bottom: 0 }}>
-                {this.renderBottomSheetheader()}
-            </View> : null} */}
+            
+            
+            {this.props.filterReducer.swipeablePanelActive == false ?
+                    <View style={{ height: calcHeight(86), width: '100%', backgroundColor: 'red' }}>
+                        {this.renderBottomSheetheader()}
+                    </View> : null} */}
+                    <View style={{ position: 'absolute',
+                     height: calcHeight(86),
+                      width: '100%',
+                       bottom: 0 , 
+                      left:-10}}>
+                    <Bottom
+                        filterReducer={this.props.filterReducer}
+                        navigation={this.props.navigation}
+                        modalhide={this.bs}
+                        onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
+                        // isPlayingMusic={this.state.isPlayingMusic}
+                        isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}
+                        playUrl={this.state.playUrl}
+                        chnageplayUrl={(data:any)=>{
+                            this.setState({playUrl:data})
+                        }}
+                    />
+                     </View>  
                 </View>
             </View>
         );
@@ -458,11 +488,14 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeplayItem: (payload: boolean) => {
             dispatch(changeplayItem(payload))
         },
-        toaddfavorite:(payload: any) => {
+        toaddfavorite: (payload: any) => {
             dispatch(addFavorite(payload))
         },
-        ongetFavorites:(payload: any) => {
+        ongetFavorites: (payload: any) => {
             dispatch(getFavorites(payload))
+        },
+        onchnageSearchData: (payload: any) => {
+            dispatch(changeSearchData(payload))
         },
     }
 }

@@ -159,7 +159,8 @@ _addLookingList(data:any){
                     })
             }}
         >
-            <RadioMenuElement  backColor={this.props.filterReducer.backgroundColor}title={data.item.pa} image={data.item.im} addInFavorite={() => this._addInFavorite(data.item)} isFavorite={this.state.favoriteList?this.checkIsFovorite(data.item.id):false} />
+            <RadioMenuElement  backColor={this.props.filterReducer.backgroundColor} title={data.item.pa} image={data.item.im} 
+            addInFavorite={() => this._addInFavorite(data.item)} isFavorite={this.state.favoriteList?this.checkIsFovorite(data.item.id):false} />
         </TouchableOpacity>
     }
     renderMenuItemsMenuStyle2(data: any) {
@@ -224,15 +225,15 @@ _addLookingList(data:any){
   
     render() {
  const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
-console.log(this.props.menuReducer.filterData);
+console.log(list);
 
         return (
 
             <View style={styles.container}>
                 <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
                     <Header navigation={this.props.navigation} />
-                    <Search />
-                    <SafeAreaView style={{ height: '85%' }}>
+                    {/* <Search /> */}
+                    <SafeAreaView style={{ height: '100%' }}>
                         {this.props.menuReducer.styleView ?
 
                             <FlatList

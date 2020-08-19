@@ -142,12 +142,12 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
 
     // //  allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
     // });
-    const details = {
+    // const details = {
 
-      data: { content: 'my notification id is 45' },
-    };
-    console.log(details);
-    ReactNativeAN.sendNotification(details);
+    //   data: { content: 'my notification id is 45' },
+    // };
+    // console.log(details);
+    // ReactNativeAN.sendNotification(details);
   }
   handleChangeHours = (index: number) => {
     this.setState({

@@ -18,27 +18,26 @@ class SimpleImage extends React.Component<Props, IState> {
   constructor(props: Props) {
     super(props)
     this.state = {
-
     }
-
   }
-
   render() {
-   
-    // console.log('https://top-radio.com.ua/assets/image/radio/'+this.props.image);
-    
+    let count=100
+    if(this.props.size==calcHeight(98) || this.props.size==calcHeight(257)){
+      count=180
+    }
     return (
-
-   
      <View>
       { this.props.color && this.props.title?
       <View style={[styles.header,{height:this.props.size, width:this.props.size, backgroundColor:this.props.color}]}>
        <Text style={styles.letter}>{this.props.title.charAt(0)}</Text>
       </View>
         :<View style={[styles.header,{height:this.props.size, width:this.props.size, padding:2}]}>
-          <Image style={[{height:this.props.size, width:this.props.size, backgroundColor:this.props.color,borderRadius:8}]} source={{uri:'https://top-radio.com.ua/assets/image/radio/'+this.props.image}}/>
+          <Image
+           style={[{height:this.props.size, width:this.props.size, backgroundColor:this.props.color,borderRadius:8}]} 
+           source={{uri:'http://top-radio.ru/assets/image/radio/'+count+'/'+this.props.image}}/>
         </View>}
      </View>
+   //  http://top-radio.ru/assets/image/radio/180/radiomarusya.jpg
     );
   }
 };

@@ -101,9 +101,8 @@ class Bottom extends React.Component<Props, IState> {
 
         return <View style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
             <TouchableOpacity
-                onPress={() => {
-
-                    this.props.onCloseStart()
+                onPress={() => {                    
+                    this.props.onchangeswipeablePanelActive(true)
                 }}
                 style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
@@ -131,7 +130,8 @@ class Bottom extends React.Component<Props, IState> {
                 <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
            </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.player, { backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0D1834' }]}
+                    style={[styles.player, 
+                        { backgroundColor: this.props.filterReducer.backgroundColor == "white" ? 'white' : '#0D1834' }]}
                     onPress={() => {
                     this._pouseMusic()
                     this.setState({isPlayingMusic:!this.state.isPlayingMusic})

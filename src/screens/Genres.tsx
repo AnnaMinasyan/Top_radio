@@ -117,8 +117,8 @@ class Genres extends React.Component<IGanresProps, IState> {
         } 
     }
     render() {
-        const list=this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        console.log(":::::::::::::::",this.props.ganresReducer.ganres);
+        const list=this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        console.log(":::::::::::::::",list);
         
         return (
             <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>

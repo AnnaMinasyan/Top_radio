@@ -22,6 +22,7 @@ import { NavigationScreenProp } from 'react-navigation';
 import RedHeart from "../assets/icons/redHeart.svg"
 import SearchSvg from "../assets/icons/search.svg"
 import Search from "./Search"
+import CloseSvg from "../assets/icons/close.svg"
 interface Props {
 
   onChangeMenuType(type: boolean): void;
@@ -142,7 +143,7 @@ class Header extends React.Component<Props, IState> {
               }}
           >
          {!this.state.showSearchView? <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />:
-         <Text style={{color:'white'}}>X</Text>}
+        <CloseSvg width={calcWidth(15.48)} height={calcHeight(15)} fill='#B3BACE'/>}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {

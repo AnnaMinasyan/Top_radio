@@ -14,7 +14,7 @@ interface IDATA {
 class Static implements IDATA {
     async getMenuDatas() {
         try {
-            const response = await authApi.get(`${keys.API_URL}${keys.COUNTRY_TYPE}/radios.json`,);
+            const response = await authApi.get(`${keys.API_URL}/radios.json`,);
             return response.data
         } catch (ex) {
             throw new Error(ex);

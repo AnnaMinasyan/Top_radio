@@ -164,10 +164,8 @@ _addLookingList(data:any){
         </TouchableOpacity>
     }
     renderMenuItemsMenuStyle2(data: any) {
-
         return <TouchableOpacity
             onPress={() => {
-
               //  this.bs.current.snapTo(0),
                     // this.state.isPlayingMusic? this._pouseMusic():null
                     this.props.onchangeswipeablePanelActive(false)

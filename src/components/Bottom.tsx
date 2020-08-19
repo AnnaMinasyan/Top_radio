@@ -31,10 +31,10 @@ import RecordSvg from "../assets/icons/disrecording.svg"
 import DisRecordSvg from "../assets/icons/recording.svg"
 import TrackPlayer from 'react-native-track-player';
 import InfoSvg from "../assets/icons/infoMenu.svg"
-
+import {getPlayList} from "../store/actions/playlistAction"
 interface Props {
     onCloseStart(): void;
-    modalhide: any,
+   // modalhide: any,
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
     // isPlayingMusic: boolean,
@@ -43,6 +43,7 @@ interface Props {
     isFavorite: boolean,
     playUrl: string,
     chnageplayUrl(type: any): void;
+    ongetPlayList(type: any): void;
 
 }
 interface IState {
@@ -197,9 +198,9 @@ class Bottom extends React.Component<Props, IState> {
                     style={{
                         height: calcHeight(50), justifyContent: 'center',
                         width: calcWidth(80), zIndex: 1,
+                        //borderWidth:1
                     }}
                     onPress={() => {
-                        console.log("========================================");
                         
                         this.props.onchangeswipeablePanelActive(false)
                     }}
@@ -207,7 +208,7 @@ class Bottom extends React.Component<Props, IState> {
                     <Arrow fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={{ justifyContent: 'center', alignItems: 'center', height: 40, }}
+                    style={{ justifyContent: 'center', alignItems: 'center', height: calcHeight(40),width:calcWidth(50) }}
                     onPress={() => {
                         console.log("ffffff");
 
@@ -275,10 +276,9 @@ class Bottom extends React.Component<Props, IState> {
                 <TouchableOpacity
                     style={[styles.btnrecord, { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? 'white' : '#101C3B', }]}
                     onPress={() => {
-console.log('this.propsss',this.props.navigation);
 
-                        //  this.props.ongetPlayTrackList(this.props.filterReducer.playItem.pl)
-                        this.props.navigation.navigate('EfirList')
+                         this.props.ongetPlayList(this.props.filterReducer.playItem.pl)
+                        this.props.navigation.navigate('PlayList')
                     }}
                 >
                     <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
@@ -291,11 +291,15 @@ console.log('this.propsss',this.props.navigation);
     bs: any = React.createRef()
 
     render() {
-        console.log(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::",this.props.filterReducer.swipeablePanelActive);
+        console.log("::::::::::::::::::::",this.props.filterReducer.swipeablePanelActive);
 
         return (
 
-            <View >
+            <View style={{ position: 'absolute',
+            height: calcHeight(86),
+             width: '100%',
+              bottom: 0 , 
+          }}>
                 {/* <BottomSheet
                     ref={this.props.modalhide}
                     snapPoints={[deviceHeight - 15, 0, 0]}
@@ -306,7 +310,7 @@ console.log('this.propsss',this.props.navigation);
                     onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
                 /> */}
 
-                {this.props.filterReducer.swipeablePanelActive == false ?
+                {this.props.filterReducer.swipeablePanelActive ==false ?
                     <View style={{ height: calcHeight(86), width: '100%', backgroundColor: 'red' }}>
                         {this.renderBottomSheetheader()}
                     </View> : null}
@@ -342,6 +346,9 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeswipeablePanelActive: (payload: boolean) => {
             dispatch(changeswipeablePanelActive(payload))
         },
+        ongetPlayList: (payload: any) => {
+            dispatch(getPlayList(payload))
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Bottom);
@@ -364,7 +371,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginLeft: calcWidth(20),
-       paddingRight: calcWidth(30),
+       paddingRight: calcWidth(15),
         marginTop: calcHeight(20),
     },
     numbers: {

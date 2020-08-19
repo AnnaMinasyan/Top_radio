@@ -21,10 +21,12 @@ class SimpleImage extends React.Component<Props, IState> {
     }
   }
   render() {
+    
     let count=100
     if(this.props.size==calcHeight(98) || this.props.size==calcHeight(257)){
       count=180
     }
+    
     return (
      <View>
       { this.props.color && this.props.title?

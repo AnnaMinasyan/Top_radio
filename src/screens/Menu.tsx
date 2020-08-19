@@ -88,10 +88,10 @@ class Menu extends React.Component<IMenuProps, IState> {
         });
 
     }
-    bs: any = React.createRef()
+    //bs: any = React.createRef()
     setData() {
         getData('menuView').then((menuView) => {
-            this.bs.current.snapTo(1)
+         //   this.bs.current.snapTo(1)
 
             this.setState({ styleView: menuView })
         })
@@ -221,7 +221,7 @@ class Menu extends React.Component<IMenuProps, IState> {
 
             onPress={() => {
 
-                this.bs.current.snapTo(0),
+                //this.bs.current.snapTo(0),
                     this.state.isPlayingMusic ? this._pouseMusic() : null
                 this.props.onchangeswipeablePanelActive(true)
                 this.props.onchangeplayItem(data.item.data)
@@ -251,7 +251,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         return <View style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
             <TouchableOpacity
                 onPress={() => {
-                    this.bs.current.snapTo(0),
+                    //this.bs.current.snapTo(0),
                         this.props.onchangeswipeablePanelActive(true)
                 }}
                 style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
@@ -304,7 +304,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                         width: calcWidth(60), zIndex: 1
                     }}
                     onPress={() => {
-                        this.bs.current.snapTo(1)
+                      //  this.bs.current.snapTo(1)
                         this.props.onchangeswipeablePanelActive(false)
                     }}
 
@@ -409,7 +409,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                     {/* <Search
                         data={this.props.menuReducer.menuData}
                         renderSearchData={(data: any) => this.props.onchnageSearchData(data)} /> */}
-                    <SafeAreaView style={{ height: '100%', backgroundColor: this.props.filterReducer.backgroundColor }}>
+                    <SafeAreaView style={{ height: deviceHeight - calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor }}>
                         {this.props.menuReducer.styleView ?
                             <FlatList
                                 data={list}
@@ -446,11 +446,11 @@ class Menu extends React.Component<IMenuProps, IState> {
                      height: calcHeight(86),
                       width: '100%',
                        bottom: 0 , 
-                      left:-10}}>
+                   }}>
                     <Bottom
                         filterReducer={this.props.filterReducer}
                         navigation={this.props.navigation}
-                        modalhide={this.bs}
+                  //      modalhide={this.bs}
                         onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
                         // isPlayingMusic={this.state.isPlayingMusic}
                         isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}

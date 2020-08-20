@@ -22,6 +22,7 @@ import { NavigationScreenProp } from 'react-navigation';
 import { useEffect, useState, } from 'react';
 import { useSelector,useDispatch } from "react-redux"
 import { panelActiveSelector, playItem } from "../src/store/selector/filterSelector"
+import { initFavorites } from './store/actions/favoritesActions';
 interface Props {
     onchangeswipeablePanelActive(payload: boolean): void;
     filterReducer: any,
@@ -203,28 +204,10 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     const filterReducer = useSelector(panelActiveSelector)
     const dispatch=useDispatch()
     const item = useSelector(playItem)
-    console.log(filterReducer.swipeablePanelActive);
     const bs: any = React.createRef()
-
     useEffect(() => {
-        console.log('0000000000000000000000',filterReducer.swipeablePanelActive);
-  //      if (bs) {
-        //    if (filterReducer.swipeablePanelActive != animeted) {
-        //         if (filterReducer.swipeablePanelActive == true) {
-                    
-        //             //   setanimeted(1)
-        //               // bs.current.snapTo(0)
-        //         } else {
-        //             console.log("bssss", bs==null);
-        //         bs.current.snapTo(1)
-                
-        //         }
-               
-        //    }
-
-       // }
-
-    },[filterReducer]);
+        dispatch(initFavorites())
+    }, [])
     const _startPlayMusic=async()=> {
      
 

@@ -34,3 +34,9 @@ export enum FilterTypes {
     ADD_FAVORITE='@menutypes/ADD_FAVORITE', 
     CHANGE_SHEARCH_DATA='@menutypes/CHANGE_SHEARCH_DATA',
 }
+export enum FavoriteType {
+    ADD = "@FavoriteType/ADD",
+    SET = "@FavoriteType/SET",
+    INIT = "@FavoriteType/INIT"
+    
+}

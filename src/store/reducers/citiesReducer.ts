@@ -17,9 +17,7 @@ export const initialState: ICitiesState = {
 }
 const citiesReducer = (state = initialState, action: IReduxAction<CitiesTypes>) => {
     switch (action.type) {
-        
         case CitiesTypes.SET_CITIES_DATA:
-            
             return {cities:action.payload} 
         default:
             return state;

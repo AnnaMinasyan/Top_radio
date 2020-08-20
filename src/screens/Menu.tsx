@@ -44,6 +44,7 @@ import menuReducer from '../store/reducers/menuReducer';
 import { ThemeColors } from 'react-navigation';
 import Bottom from "../components/Bottom"
 import { createFilter } from 'react-native-search-filter';
+import { addFavorites } from '../store/actions/favoritesActions';
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     radioList: [],
@@ -98,14 +99,11 @@ class Menu extends React.Component<IMenuProps, IState> {
 
         getData('favorites').then((favorite) => {
             let favoriteStorage:any =[]
-            console.log("+++++++++++++++++++++++++++", favoriteStorage);
-
             favorite.map((data: any) => {
                 console.log(data);
                 
             favoriteStorage.push(data.id)
             })
-            console.log("+++++++++++++++++++++++++++", favoriteStorage);
 
             this.props.ongetFavorites(favoriteStorage)
         })
@@ -117,8 +115,6 @@ class Menu extends React.Component<IMenuProps, IState> {
 
     }
     async _startPlayMusic() {
-        console.log("_startPlayMusic", this.state.playUrl);
-
         const currentTrack = await TrackPlayer.getCurrentTrack();
         // if (currentTrack == null) {
         await TrackPlayer.reset();
@@ -166,7 +162,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         this.props.onchangeswipeablePanelActive(false)
     }
     checkIsFovorite(num: number) {        
-            return this.props.filterReducer.favorites.map((i: any) => i).includes(num)
+            return this.props.favorites.includes(num)
       
     }
     _addLookingList(data: any) {
@@ -246,8 +242,6 @@ class Menu extends React.Component<IMenuProps, IState> {
         }
     }
     renderBottomSheetheader = () => {
-
-
         return <View style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
             <TouchableOpacity
                 onPress={() => {
@@ -400,8 +394,9 @@ class Menu extends React.Component<IMenuProps, IState> {
        // const filteredEmails = this.props.data.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS))
 
         return (
-            <View style={styles.container}>
-                <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
+            <SafeAreaView >
+                    
+            <View style={[styles.container, {backgroundColor: this.props.filterReducer.backgroundColor}]}>
                     <Header 
                     navigation={this.props.navigation} 
                      onchnageSearchData={this.props.onchnageSearchData}
@@ -409,7 +404,6 @@ class Menu extends React.Component<IMenuProps, IState> {
                     {/* <Search
                         data={this.props.menuReducer.menuData}
                         renderSearchData={(data: any) => this.props.onchnageSearchData(data)} /> */}
-                    <SafeAreaView style={{ height: deviceHeight - calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor }}>
                         {this.props.menuReducer.styleView ?
                             <FlatList
                                 data={list}
@@ -426,7 +420,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                                 maxToRenderPerBatch={10}
                             />
                         }
-                    </SafeAreaView>
+                   
                     {/* <BottomSheet
                 ref={this.bs}
                 snapPoints={[deviceHeight - 15, 0, 0]}
@@ -448,7 +442,6 @@ class Menu extends React.Component<IMenuProps, IState> {
                        bottom: 0 , 
                    }}>
                     <Bottom
-                        filterReducer={this.props.filterReducer}
                         navigation={this.props.navigation}
                   //      modalhide={this.bs}
                         onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
@@ -460,13 +453,13 @@ class Menu extends React.Component<IMenuProps, IState> {
                         }}
                     />
                      </View>  
-                </View>
             </View>
+            </SafeAreaView>
         );
     }
 };
-const mapStateToProps = (state: any) => {
-    return state
+const mapStateToProps = ({filterReducer,menuReducer,favorites}:any) => {
+    return {filterReducer,menuReducer,favorites}
 };
 // const mapStateToProps = (state: any) => ({
 
@@ -489,7 +482,7 @@ const mapDispatchToProps = (dispatch: any) => {
             dispatch(changeplayItem(payload))
         },
         toaddfavorite: (payload: any) => {
-            dispatch(addFavorite(payload))
+            dispatch(addFavorites(payload))
         },
         ongetFavorites: (payload: any) => {
             dispatch(getFavorites(payload))
@@ -602,9 +595,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     container: {
-
-        backgroundColor: '#6f6f76',
-
+        height:deviceHeight
     },
     box: {
         width: 50,

@@ -32,6 +32,7 @@ import DisRecordSvg from "../assets/icons/recording.svg"
 import TrackPlayer from 'react-native-track-player';
 import InfoSvg from "../assets/icons/infoMenu.svg"
 import {getPlayList} from "../store/actions/playlistAction"
+import { addFavorites } from '../store/actions/favoritesActions';
 interface Props {
     onCloseStart(): void;
    // modalhide: any,
@@ -291,10 +292,7 @@ class Bottom extends React.Component<Props, IState> {
     bs: any = React.createRef()
 
     render() {
-        console.log("::::::::::::::::::::",this.props.filterReducer.swipeablePanelActive);
-
         return (
-
             <View style={{ position: 'absolute',
             height: calcHeight(86),
              width: '100%',
@@ -329,8 +327,8 @@ class Bottom extends React.Component<Props, IState> {
         );
     }
 };
-const mapStateToProps = (state: any) => {
-    return state
+const mapStateToProps = ({filterReducer, favorites}: any) => {
+    return {filterReducer,favorites}
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {
@@ -341,7 +339,7 @@ const mapDispatchToProps = (dispatch: any) => {
             dispatch(changeFavoriteType())
         },
         toaddfavorite: (payload: any) => {
-            dispatch(addFavorite(payload))
+            dispatch(addFavorites(payload))
         },
         onchangeswipeablePanelActive: (payload: boolean) => {
             dispatch(changeswipeablePanelActive(payload))

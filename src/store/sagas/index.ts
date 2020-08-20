@@ -6,6 +6,7 @@ import { watchMenuType } from './menuSaga';
 import { watchCities } from './citiesSaga';
 import { watchGanres } from './ganresSaga';
 import { watchPlayList } from './playListSaga';
+import { watchFavoritesSaga } from './favotitesSaga';
 
 
 export default function* rootSaga() {
@@ -13,6 +14,7 @@ export default function* rootSaga() {
         watchMenuType(),
 		watchCities(),
 		watchGanres(),
-		watchPlayList()]
+		watchPlayList(),
+		watchFavoritesSaga()]
 	);
 }

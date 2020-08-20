@@ -13,7 +13,8 @@ import { NavigationScreenProp } from 'react-navigation';
     menuReducer:any,
     navigation: NavigationScreenProp<any, any>,
     filterReducer: any,
-    dispatch: any
+    dispatch: any,
+    favorites:number[]
 
 } 
 export interface IPlayListProps {

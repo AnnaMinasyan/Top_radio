@@ -12,6 +12,7 @@ color?:string,
 image?:any
 }
 import {calcFontSize,calcHeight,calcWidth} from "../assets/styles/dimensions"
+import keys from "../services/keys";
 
 interface IState { }
 class SimpleImage extends React.Component<Props, IState> {
@@ -26,6 +27,7 @@ class SimpleImage extends React.Component<Props, IState> {
     if(this.props.size==calcHeight(98) || this.props.size==calcHeight(257)){
       count=180
     }
+    console.log(keys.API_URL+keys.COUNTRY_TYPE,'/assets/image/radio/'+count+'/'+this.props.image);
     
     return (
      <View>
@@ -36,7 +38,7 @@ class SimpleImage extends React.Component<Props, IState> {
         :<View style={[styles.header,{height:this.props.size, width:this.props.size, padding:2}]}>
           <Image
            style={[{height:this.props.size, width:this.props.size, backgroundColor:this.props.color,borderRadius:8}]} 
-           source={{uri:'http://top-radio.ru/assets/image/radio/'+count+'/'+this.props.image}}/>
+           source={{uri:keys.API_URL+keys.COUNTRY_TYPE+'/assets/image/radio/'+count+'/'+this.props.image}}/>
         </View>}
      </View>
    //  http://top-radio.ru/assets/image/radio/180/radiomarusya.jpg

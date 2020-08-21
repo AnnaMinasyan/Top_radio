@@ -6,7 +6,7 @@ import { useEffect, useState, } from 'react';
 import { useSelector,useDispatch } from "react-redux"
 import { panelActiveSelector, playItem } from "../src/store/selector/filterSelector"
 import { initFavorites } from './store/actions/favoritesActions';
-import { changeswipeablePanelActive } from './store/actions/filterAction';
+import { changeswipeablePanelActive,changeplayItem ,changePlayingMusic} from './store/actions/filterAction';
 import {init} from "./utils/createAlarmClock"
 import { getData, storeData } from "./utils/local_storage"
 
@@ -23,17 +23,23 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     const dispatch=useDispatch()
     const item = useSelector(playItem)
     const bs: any = React.createRef()
-    const isplaying=  getData('isplaying')
+    
     useEffect(() => {
        const data= new Date()
         dispatch(initFavorites())
     }, [])
-
+   const  changeActivePanel =()=>{
+    getData('alarmClock').then((time)=>{
+        console.log("alarmClockalarmClock",time.playItem);
+        dispatch(changeswipeablePanelActive(false))
+        dispatch(changeplayItem(time.playItem))
+        dispatch(changePlayingMusic(true))
+    }) 
+   }
     return (
-        
         <SafeAreaView style={{ flex: 1, }}>
             <Navigator />
-          {  init()} 
+          {  init(changeActivePanel)} 
         </SafeAreaView>
     );
 };

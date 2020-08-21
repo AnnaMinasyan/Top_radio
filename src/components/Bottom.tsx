@@ -16,7 +16,7 @@ import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight,deviceWidth } from "../assets/styles/dimensions"
 import { connect } from "react-redux"
 import { changeMenuType } from '../store/actions/menuActions'
-import { changeFavoriteType } from '../store/actions/filterAction'
+import { changeFavoriteType,changePlayingMusic } from '../store/actions/filterAction'
 import { DrawerActions } from 'react-navigation';
 import { NavigationScreenProp } from 'react-navigation';
 import RedHeart from "../assets/icons/redHeart.svg"
@@ -40,13 +40,14 @@ interface Props {
    // modalhide: any,
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
-    // isPlayingMusic: boolean,
+   //  isPlayingMusic: boolean,
     toaddfavorite(type: any): void;
     onchangeswipeablePanelActive(type: any): void;
     isFavorite: boolean,
     playUrl: string,
     chnageplayUrl(type: any): void;
     ongetPlayList(type: any): void;
+    onchangePlayingMusic(type: boolean): void;
 
 }
 interface IState {
@@ -54,7 +55,7 @@ interface IState {
     menuStyle: boolean,
     isRecording: boolean,
     activBi: number,
-    isPlayingMusic: boolean,
+   /// isPlayingMusic: boolean,
 
 }
 class Bottom extends React.Component<Props, IState> {
@@ -65,7 +66,7 @@ class Bottom extends React.Component<Props, IState> {
             menuStyle: true,
             isRecording: false,
             activBi: 0,
-            isPlayingMusic: false,
+         //   isPlayingMusic: false,
 
         }
 
@@ -137,10 +138,11 @@ class Bottom extends React.Component<Props, IState> {
                         { backgroundColor: this.props.filterReducer.backgroundColor == "white" ? 'white' : '#0D1834' }]}
                     onPress={() => {
                     this._pouseMusic()
-                    this.setState({isPlayingMusic:!this.state.isPlayingMusic})
+                    this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+                 //   this.setState({isPlayingMusic:!this.state.isPlayingMusic})
                 }}
                 >
-                    {this.state.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
+                    {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
                         <PlaySvG width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor == "white" ? '#101C3B' : 'white'} />}
                 </TouchableOpacity>
             </View>
@@ -149,7 +151,7 @@ class Bottom extends React.Component<Props, IState> {
     async _pouseMusic() {
         console.log("_pouseMusic");
         const currentTrack = await TrackPlayer.getCurrentTrack();
-        if (this.state.isPlayingMusic) {
+        if (this.props.filterReducer.isPlayingMusic) {
             console.log("playMusic");
             await TrackPlayer.play();
         } else {
@@ -173,14 +175,7 @@ class Bottom extends React.Component<Props, IState> {
             duration: 28
         });
         await TrackPlayer.play();
-        // } 
-        // else {
-        //     if (this.state.isPlayingMusic) {
-        //         await TrackPlayer.play();
-        //     } else {
-        //         await TrackPlayer.pause();
-        //     }
-        // }
+    
 
     }
     changeRadioStancia(item: any) {
@@ -201,7 +196,7 @@ class Bottom extends React.Component<Props, IState> {
                     style={{
                         height: calcHeight(50), justifyContent: 'center',
                         width: calcWidth(80), zIndex: 1,
-                        //borderWidth:1
+                        borderWidth:1
                     }}
                     onPress={() => {
                         
@@ -243,9 +238,9 @@ class Bottom extends React.Component<Props, IState> {
                         </Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
-                {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any) => {
+                {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any,index:number) => {
                     return <TouchableOpacity
-                        onPress={() => { this.changeRadioStancia(item),storeData('alarmClock',null)
+                        onPress={() => { this.changeRadioStancia(item)
                     }}
                         style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }] : styles.activeNumbers}
                     >
@@ -267,14 +262,15 @@ class Bottom extends React.Component<Props, IState> {
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
-                        this.state.isPlayingMusic ? this._pouseMusic() : this._startPlayMusic()
+                        this.props.filterReducer.isPlayingMusic ? this._pouseMusic() : this._startPlayMusic()
                         // this._startPlayMusic()
-                        this.setState({ isPlayingMusic: !this.state.isPlayingMusic })
+                        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic )
+                      //  this.setState({ isPlayingMusic: !this.state.isPlayingMusic })
                     }}
                     style={[styles.btnPlay,
                     { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}
                 >
-                    {this.state.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
+                    {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
                         <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -339,6 +335,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         ongetPlayList: (payload: any) => {
             dispatch(getPlayList(payload))
+        },
+        onchangePlayingMusic: (payload: any) => {
+            dispatch(changePlayingMusic(payload))
         },
     }
 }

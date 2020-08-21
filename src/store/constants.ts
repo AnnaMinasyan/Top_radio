@@ -30,9 +30,10 @@ export enum FilterTypes {
     CHANGE_PLAY_ITEM='@filterTypes/CHANGE_PLAY_ITEM',
     CHANGE_IS_LOOKING='@filterTypes/CHANGE_IS_LOOKING',
     CHANGE_BACKGROUNDCOLOR='@filterTypes/CHANGE_BACKGROUNDCOLOR',
-    GET_FAVORITES='@menutypes/GET_FAVORITES',
-    ADD_FAVORITE='@menutypes/ADD_FAVORITE', 
-    CHANGE_SHEARCH_DATA='@menutypes/CHANGE_SHEARCH_DATA',
+    GET_FAVORITES='@filterTypes/GET_FAVORITES',
+    ADD_FAVORITE='@filterTypes/ADD_FAVORITE', 
+    CHANGE_SHEARCH_DATA='@filterTypes/CHANGE_SHEARCH_DATA',
+    CHANGE_PLAYING_MUSIC='@filterTypes/CHANGE_PLAYING_MUSIC',
 }
 export enum FavoriteType {
     ADD = "@FavoriteType/ADD",

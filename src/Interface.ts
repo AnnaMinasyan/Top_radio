@@ -9,7 +9,8 @@ import { NavigationScreenProp } from 'react-navigation';
     ongetMenuData():void; 
     onchangeplayItem(payload:any):void; 
     ongetFavorites(payload:any):void; 
-    onchangeswipeablePanelActive(payload:boolean):void;
+    onchangeswipeablePanelActive(payload:boolean):void; 
+    onchangePlayingMusic(payload:boolean):void;
     menuReducer:any,
     navigation: NavigationScreenProp<any, any>,
     filterReducer: any,

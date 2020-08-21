@@ -13,7 +13,9 @@ export interface IFilterState {
     isLooking: boolean,
     backgroundColor: string,
     favorites: any,
-    searchData: any
+    searchData: any,
+    isPlayingMusic:boolean
+
 }
 
 
@@ -24,7 +26,8 @@ export const initialState: IFilterState = {
     isLooking: false,
     backgroundColor: 'white',
     favorites: [],
-    searchData: ''
+    searchData: '',
+    isPlayingMusic:false
 }
 const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) => {
     switch (action.type) {
@@ -36,9 +39,9 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
         case FilterTypes.CHANGE_SHEARCH_DATA:
             return { ...state, searchData: action.payload }
         case FilterTypes.CHANGE_SWIPEABLEPANELACTIVE:
-            console.log("action.payload", action.payload);
-
             return { ...state, swipeablePanelActive: action.payload }
+        case FilterTypes.CHANGE_PLAYING_MUSIC:
+            return { ...state,isPlayingMusic : action.payload }
         case FilterTypes.CHANGE_PLAY_ITEM:
             return { ...state, playItem: action.payload }
         case FilterTypes.CHANGE_BACKGROUNDCOLOR:

@@ -19,6 +19,12 @@ export const changeswipeablePanelActive = (payload:boolean) => {
 		payload
 	};
 };
+export const changePlayingMusic = (payload:boolean) => {
+	return {
+		type: FilterTypes.CHANGE_PLAYING_MUSIC,
+		payload
+	};
+};
 export const changeplayItem = (payload:boolean) => {
 	return {
 		type: FilterTypes.CHANGE_PLAY_ITEM,

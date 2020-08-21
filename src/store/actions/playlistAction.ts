@@ -5,9 +5,20 @@ export const getPlayList = (payload:number) => {
 		payload
 	};
 };
-export const setPlayList = (payload:number) => {
+export const setPlayList = (payload:any) => {
+	console.log("nnnnnnnnnnnnnnnnnnnn",payload);
+	
 	return {
 		type: PlayListTypes.SET_PLAY_LIST,
 		payload
 	};
 };
+export const setTrackList = (payload:any) => {
+	console.log("nnnnnnnnnnnnnnnnnnnn",payload);
+	
+	return {
+		type: PlayListTypes.SET_TRACK_LIST,
+		payload
+	};
+};
+

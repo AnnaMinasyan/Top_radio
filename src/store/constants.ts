@@ -13,8 +13,8 @@ export enum MenuTypes {
 }
 export enum PlayListTypes {
      SET_PLAY_LIST= '@playListtypes/SET_PLAY_LIST',
-     GET_PLAY_LIST= '@playListtypes/GET_PLAY_LIST',
-
+     SET_TRACK_LIST= '@playListtypes/GET_TRACK_LIST',
+ GET_PLAY_LIST= '@playListtypes/GET_PLAY_LIST',
 }
 export enum CitiesTypes {  
     GET_CITIES_DATA= '@citiestypes/GET_CITIES_DATA',

@@ -19,7 +19,11 @@ export const initialState: IPlayListState = {
 const playListReducer = (state = initialState, action: IReduxAction<PlayListTypes>) => {
     switch (action.type) {
         case PlayListTypes.SET_PLAY_LIST:
+            
             return {...state, playList: action.payload };
+        case PlayListTypes.SET_TRACK_LIST:
+            
+            return {...state, trackList: action.payload };
         default: 
             return state;
     }

@@ -41,7 +41,7 @@ class Static implements IDATA {
     async getPlayLists(payload: any) {
         try {
             const data = moment().format('YYYY-MM-DD')
-            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload.payload}/schedules/${data}`,);
+            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload.payload}/schedules/${data}?trackList=true`,);
             return response.data
         } catch (ex) {
             throw new Error(ex);

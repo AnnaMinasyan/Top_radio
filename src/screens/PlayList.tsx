@@ -35,8 +35,11 @@ class PlayList extends React.Component<IPlayListProps, IState> {
         }
     }
     render() {
+        
     const list= this.state.filterType=='playList'?this.props.playListReducer.playList:this.props.playListReducer.trackList
-        return (
+     console.log(list);
+       
+    return (
             <View style={{ backgroundColor: 'white' }}>
 
                 <HeaderByBack title='Новое радио' onNavigate={() => { this.props.navigation.navigate('Menu') }} />
@@ -66,7 +69,12 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                                         <Text style={styles.elementAuther}>{data.artist}</Text>
                                     </View>
                                     <View>
-                                        <Text style={styles.elementCount}>{data.date.split(' ')[1]}</Text>
+                                        {
+                                            this.state.filterType == 'playList'? 
+                                            <Text style={styles.elementCount}>{data.date.split(' ')[1]}</Text>:
+                                            <Text style={styles.elementCount}>{data.count}</Text>
+                                        }
+                                       
                                     </View>
 
                                 </View>

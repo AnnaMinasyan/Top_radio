@@ -33,6 +33,8 @@ import TrackPlayer from 'react-native-track-player';
 import InfoSvg from "../assets/icons/infoMenu.svg"
 import {getPlayList} from "../store/actions/playlistAction"
 import { addFavorites } from '../store/actions/favoritesActions';
+import { storeData, getData } from "../utils/local_storage"
+
 interface Props {
     onCloseStart(): void;
    // modalhide: any,
@@ -243,7 +245,8 @@ class Bottom extends React.Component<Props, IState> {
             <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
                 {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any) => {
                     return <TouchableOpacity
-                        onPress={() => { this.changeRadioStancia(item) }}
+                        onPress={() => { this.changeRadioStancia(item),storeData('alarmClock',null)
+                    }}
                         style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }] : styles.activeNumbers}
                     >
                         <Text style={styles.activenumber}>{item.bi}</Text>
@@ -298,16 +301,6 @@ class Bottom extends React.Component<Props, IState> {
              width: '100%',
               bottom: 0 , 
           }}>
-                {/* <BottomSheet
-                    ref={this.props.modalhide}
-                    snapPoints={[deviceHeight - 15, 0, 0]}
-                    renderContent={() => this.renderBottomSheet(this.props.filterReducer.playItem)}
-                    renderHeader={() => null}
-                    initialSnap={1}
-                    enabledInnerScrolling={true}
-                    onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                /> */}
-
                 {this.props.filterReducer.swipeablePanelActive ==false ?
                     <View style={{ height: calcHeight(86), width: '100%', backgroundColor: 'red' }}>
                         {this.renderBottomSheetheader()}

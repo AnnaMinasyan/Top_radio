@@ -36,9 +36,7 @@ import moment from 'moment';
 import AntennaSvg from "../assets/icons/antena.svg"
 import Modal from 'react-native-modal'; // 2.4.0
 import { changeswipeablePanelActive, changeplayItem } from '../store/actions/filterAction'
-import AlarmClock from "react-native-alarm-clock";
-import PushNotification from "react-native-push-notification"
-import ReactNativeAN from 'react-native-alarm-notification';
+
 interface IState {
   date: any,
   isEnabled: boolean,
@@ -47,59 +45,27 @@ interface IState {
   selectedMinut: number,
   selectedTimeSleepList: number,
   minutes: any,
-  minutes2: any,
   timeSleepList: any,
   visibleModal: number | null,
   favoriteList: any,
   playItem: any,
-
+  isOnAlarmclock: boolean
 }
 
 class MyAlarmClock extends React.Component<IMenuProps, IState> {
   constructor(props: IMenuProps) {
     super(props)
-    //this.initStorData(),
-    // PushNotification.configure({
-    //   onRegister: function (token) {
-    //     console.log("TOKEN:", token);
-    //   },
-    //   onNotification: function (notification) {
-    //     console.log("NOTIFICATION:", notification);
-    //   },
-    //   permissions: {
-    //     alert: true,
-    //     badge: true,
-    //     sound: true,
-    //   },
-    //   popInitialNotification: true,
-    //   requestPermissions: true,
-    // });
 
     this.state = {
       hours: [
-        '00',
-        '01',
-        '02',
-        '03',
-        '04',
-        '05',
-        '06',
-        '07',
-        '08',
-        '09',
-        '10',
-        '11',
-        '12',
-        '13', '14', '15', '16', '17',
-        '18', '19', '20', '21', '22', '23',
+        0,
+        1,
+        2,
+        3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23
       ],
       minutes: [
-        '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17',
-        '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37',
-      ],
-      minutes2: [
-        '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17',
-        '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37',
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39,40,41,42,43,44,45,46
       ],
       date: new Date(),
       isEnabled: true,
@@ -114,40 +80,16 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       selectedTimeSleepList: 0,
       favoriteList: [],
       playItem: [],
-
+      isOnAlarmclock: false
     }
-    // const unsubscribe = props.navigation.addListener('focus', () => {
-    //     this.setData()
-    //   });
 
   }
-  testPush() {
-    PushNotification.localNotification({
-      title: "My Notification Title", // (optional)
-      message: "My Notification Message", // (required)
-      color: 'red',
 
-      playSound: true,
-      //soundName:'android.resource:'+this.props.menuReducer.menuData[0].st[0].ur
-    });
-  }
   componentDidMount() {
-    console.log(moment().format('LT').split(':'));
-    // this.testPush()
-    // PushNotification.localNotificationSchedule({
+    var jsonDate = (new Date()).toJSON();
 
-    //   //... You can use all the options from localNotifications
-    //   message: "My Notification Message", // (required)
-    //   date: new Date(Date.now() + 10 * 1000), // in 60 secs
+    console.log('Сериализованный объект даты: ' + jsonDate);
 
-    // //  allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
-    // });
-    // const details = {
-
-    //   data: { content: 'my notification id is 45' },
-    // };
-    // console.log(details);
-    // ReactNativeAN.sendNotification(details);
   }
   handleChangeHours = (index: number) => {
     this.setState({
@@ -249,6 +191,12 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
     </View>
 
   }
+  _changeIsOnAlarmClock() {
+    this.setState({ isOnAlarmclock: !this.state.isOnAlarmclock })
+    const data = new Date()
+    storeData('alarmClock',{hours:this.state.selectedHours,minute:this.state.selectedMinut,playItem:this.state.playItem})
+  }
+  
   render() {
 
     return (
@@ -265,7 +213,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             </View>
           </View>
           <View>
-            <SimpleSwitch />
+            <SimpleSwitch isEnabled={this.state.isOnAlarmclock} onValueChange={() => this._changeIsOnAlarmClock()} />
           </View>
         </View>
         <TouchableOpacity
@@ -301,9 +249,19 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
               data={this.state.hours}
               style={{ height: 240 }}
               onSelected={({ item, index }) => this.handleChangeHours(item)}
-              renderItem={({ item, index }) => (
-                <Text style={{ fontSize: calcFontSize(37), color: this.state.selectedHours == item ? 'red' : '#B3BACE' }} >
-                  {item}</Text>
+              renderItem={({ item, index }) => (<View>
+                {item < 10 ? <Text style={{
+                  fontSize: calcFontSize(37),
+                  color: this.state.selectedHours == item ? 'red' : '#B3BACE'
+                }}
+                >0{item}</Text> : <Text style={{
+                  fontSize: calcFontSize(37),
+                  color: this.state.selectedHours == item ? 'red' : '#B3BACE'
+                }}
+                >{item}</Text>}
+
+              </View>
+
               )}
             />
           </View>
@@ -319,8 +277,17 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
               style={{ height: 240 }}
               onSelected={({ item, index }) => this.handleChangeMinut(item)}
               renderItem={({ item, index }) => (
-                <Text style={{ fontSize: calcFontSize(37), color: this.state.selectedMinut == item ? 'red' : '#B3BACE' }} >{item}</Text>
-              )}
+                <View>
+                  {item < 10 ? <Text style={{
+                    fontSize: calcFontSize(37),
+                    color: this.state.selectedMinut == item ? 'red' : '#B3BACE'
+                  }}
+                  >0{item}</Text> : <Text style={{
+                    fontSize: calcFontSize(37),
+                    color: this.state.selectedMinut == item ? 'red' : '#B3BACE'
+                  }}
+                  >{item}</Text>}
+                </View>)}
             />
           </View>
           <Text style={[styles.timeText, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>мин.</Text>
@@ -415,7 +382,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: calcWidth(24),
     paddingRight: calcWidth(26.58)
-  }, 
+  },
   timeText: {
     color: '#1E2B4D',
     fontWeight: 'bold',

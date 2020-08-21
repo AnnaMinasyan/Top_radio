@@ -85,6 +85,8 @@ class Menu extends React.Component<IMenuProps, IState> {
 
         }
         const unsubscribe = props.navigation.addListener('focus', () => {
+            console.log("ooooooooooooooooooooooooooo");
+            
             this.setData()
         });
 
@@ -96,6 +98,7 @@ class Menu extends React.Component<IMenuProps, IState> {
 
             this.setState({ styleView: menuView })
         })
+
 
         getData('favorites').then((favorite) => {
             let favoriteStorage:any =[]
@@ -120,7 +123,6 @@ class Menu extends React.Component<IMenuProps, IState> {
         await TrackPlayer.reset();
         await TrackPlayer.add({
             id: "local-track",
-            // url: 'https://us3.internet-radio.com/proxy/cd1019?mp=/stream;',
             url: this.state.playUrl,
             title: "Pure (Demo)",
             artist: "David Chavez",
@@ -128,15 +130,7 @@ class Menu extends React.Component<IMenuProps, IState> {
             duration: 28
         });
         await TrackPlayer.play();
-        // } 
-        // else {
-        //     if (this.state.isPlayingMusic) {
-        //         await TrackPlayer.play();
-        //     } else {
-        //         await TrackPlayer.pause();
-        //     }
-        // }
-
+        
     }
     async _pouseMusic() {
         console.log("_pouseMusic");
@@ -390,7 +384,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         // const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.menuData
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
 
-        console.log("oooo", list);
+        console.log("oooo", this.props.filterReducer.swipeablePanelActive);
        // const filteredEmails = this.props.data.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS))
 
         return (
@@ -408,7 +402,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
-                                keyExtractor={item => item.id}
+                                keyExtractor={(item:any) => item.id}
                                 maxToRenderPerBatch={10}
                             />
                             :
@@ -443,9 +437,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                    }}>
                     <Bottom
                         navigation={this.props.navigation}
-                  //      modalhide={this.bs}
                         onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                        // isPlayingMusic={this.state.isPlayingMusic}
                         isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}
                         playUrl={this.state.playUrl}
                         chnageplayUrl={(data:any)=>{

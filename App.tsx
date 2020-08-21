@@ -30,16 +30,21 @@ class App extends React.Component<Props, any> {
         storeData("menuView", true)
       }
     })
-    getData("favorites").then((favorites) => {
-      if (favorites == null) {
-        storeData("favorites", [])
-      }
-    })
+    // getData("favorites").then((favorites) => {
+    //   if (favorites == null) {
+    //     storeData("favorites", [])
+    //   }
+    // })
     getData("isLooking").then((favorites) => {
       if (favorites == null) {
         storeData("isLooking", [])
       }
     })
+    getData('alarmClock').then((time)=>{
+      if(time){
+          console.log("alarmClock",time);
+      }
+      })
   }
   render() {
     return (

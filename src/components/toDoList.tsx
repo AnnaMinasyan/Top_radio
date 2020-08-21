@@ -1,34 +1,23 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity,ScrollView } from 'react-native';
 import Check from "../assets/icons/checked-radio.svg"
-import Modal from 'react-native-modal';
-import Close from "../assets/icons/close.svg"
-import global_styles from "../assets/styles/global_styles"
 import {IData} from "../Interface"
 import {calcFontSize,calcHeight,calcWidth} from "../assets/styles/dimensions" 
 interface Props {
     data:IData
-
     valueChanged:any,
-   
 }
-
-
   interface IState {
    status:boolean,
-   isModalVisible:number
   }
   //export const ToDoTask = (): React.ReactElement => {
   class ToDo extends React.Component<Props, IState> {
     constructor(props: Props) {
         super(props)
         this.state = {
-            isModalVisible:6,
             status:false
         }
-        
       }
-   
    change(res:IData){
        console.log(";;;;",res);
        this.props.valueChanged(res);
@@ -37,9 +26,6 @@ interface Props {
     }
       render(){
         return (
-
-          
-                
             <TouchableOpacity  
             style={{width:calcWidth(50), height:calcHeight(50),  justifyContent:'center', alignItems:'flex-end'}}  
                 onPress={() => {
@@ -51,15 +37,10 @@ interface Props {
                         style={[this.props.data.check?styles.unchecked:[styles.unchecked,
                             {backgroundColor:'#F7F8F9',borderColor:'#9DA5B7'}]]}
                         >
-                          
                             </View> :
                         <View style={styles.checked}>
                             <Check height={calcHeight(10)}/></View>}
                 </TouchableOpacity> 
-                
-               
-           
-    
         );  }
     
 }

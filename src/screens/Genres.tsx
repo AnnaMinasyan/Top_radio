@@ -121,13 +121,14 @@ class Genres extends React.Component<IGanresProps, IState> {
         console.log(":::::::::::::::",list);
         
         return (
+            <SafeAreaView style={{ height: '100%' }}>
+
             <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
                 <Header  
                 navigation={this.props.navigation}
                 onchnageSearchData={this.props.onchnageSearchData}
 
                 />
-                <SafeAreaView style={{ height: '100%' }}>
                     {this.props.menuReducer.styleView ? <FlatList
                        data={list}
                         renderItem={(d) => this.renderMenuItems(d)}
@@ -142,25 +143,23 @@ class Genres extends React.Component<IGanresProps, IState> {
                             keyExtractor={item => item.id}
                             maxToRenderPerBatch={10}
                         />}
-                </SafeAreaView>
-                {/* <ScrollView>
-                    {!this.props.menuReducer.styleView? <View style={{ marginTop: calcHeight(8) }}>
-                        {this.state.radioList.map((title) => {
-                            return (
-                                <CitiesMenuElement info={title} />
-                            )
-                        })}
-                    </View> :
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}>
-                            {this.state.radioList.map((key, value) => {
-                                return <View style={{ padding: calcWidth(8), }}>
-                                    <SimpleImage size={calcWidth(98)} />
-                                </View>
-                            })}
-
-                        </View>}
-                </ScrollView> */}
+                         {/* <View style={{ position: 'absolute',
+                     height: calcHeight(86),
+                      width: '100%',
+                       bottom: 0 , 
+                   }}>
+                    <Bottom
+                        navigation={this.props.navigation}
+                        onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
+                        isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}
+                        playUrl={this.state.playUrl}
+                        chnageplayUrl={(data:any)=>{
+                            this.setState({playUrl:data})
+                        }}
+                    />
+                     </View>  */}
             </View>
+            </SafeAreaView>
         );
     }
 };

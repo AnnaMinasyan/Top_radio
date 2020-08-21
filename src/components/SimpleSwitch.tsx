@@ -30,42 +30,18 @@ import RepeatSvg from "../assets/icons/repeat.svg"
 import { Switch } from 'react-native-switch';
 
 interface IState {
-  data: any,
-  isEnabled: boolean
-}
 
-class SimpleSwitch extends React.Component<ISimpleSwitchProps, IState> {
-  constructor(props: ISimpleSwitchProps) {
+}
+interface Props{
+  isEnabled: boolean
+  onValueChange():void; 
+}
+class SimpleSwitch extends React.Component<Props, IState> {
+  constructor(props: Props) {
 
     super(props)
     this.state = {
-      // radioList: [
-      //   'Новое радио',
-      //   'Радио Energy',
-      //   'Русское радио',
-      //   'Европа Плюс',
-      //   'Новое радио',
-      //   'Радио Energy',
-      //   'Русское радио',
-      //   'Европа Плюс',
-      //   'Европа Плюс',
-      //   'Европа Плюс',
-      //   'Европа Плюс',
-      //   'Радио Energy',
-      //   'Русское радио',
-      //   'Европа Плюс',
-      //   'Радио Energy',
-      //   'Русское радио',
-      //   'Европа Плюс',
-
-      // ],
-      data: new Date(1598051730000),
-      isEnabled: true
-
     }
-    // const unsubscribe = props.navigation.addListener('focus', () => {
-    //     this.setData()
-    //   });
 
   }
   onChange() {
@@ -80,8 +56,8 @@ class SimpleSwitch extends React.Component<ISimpleSwitchProps, IState> {
 
           <View>
             <Switch
-              value={this.state.isEnabled}
-              onValueChange={(val) => this.setState({isEnabled:!this.state.isEnabled})}
+              value={this.props.isEnabled}
+              onValueChange={() => this.props.onValueChange()}
             //  disabled={false}
               activeText={'ДА'}
               inActiveText={'НЕТ'}

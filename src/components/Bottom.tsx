@@ -196,7 +196,7 @@ class Bottom extends React.Component<Props, IState> {
                     style={{
                         height: calcHeight(50), justifyContent: 'center',
                         width: calcWidth(80), zIndex: 1,
-                        borderWidth:1
+                        //borderWidth:1
                     }}
                     onPress={() => {
                         

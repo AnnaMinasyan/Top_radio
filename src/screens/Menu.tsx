@@ -239,12 +239,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         }
     }
     render() {
-        // const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.menuData
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-
-        console.log("oooo", this.props.filterReducer.isPlayingMusic);
-       // const filteredEmails = this.props.data.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS))
-
         return (
             <SafeAreaView >
                     

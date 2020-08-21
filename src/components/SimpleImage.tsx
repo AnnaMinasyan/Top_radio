@@ -27,7 +27,6 @@ class SimpleImage extends React.Component<Props, IState> {
     if(this.props.size==calcHeight(98) || this.props.size==calcHeight(257)){
       count=180
     }
-    console.log(keys.API_URL+keys.COUNTRY_TYPE,'/assets/image/radio/'+count+'/'+this.props.image);
     
     return (
      <View>

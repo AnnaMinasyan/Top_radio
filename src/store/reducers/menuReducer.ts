@@ -73,10 +73,12 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
         for (let index = 0; index < state.menuData.length; index++) {
             const element = state.menuData[index];
             if (element.ci && element.ge.length>0) {
+              
+                
                 element.ge.map((elem:any, key:any)=>{
-                   console.log(elem.id,action.payload);
+                   console.log(elem,action.payload);
                    
-                if(elem.id==action.payload){
+                if(elem==action.payload){
                     console.log("element",element);
                     genre.push(element)  
                 }  

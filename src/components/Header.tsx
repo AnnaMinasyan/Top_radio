@@ -54,7 +54,7 @@ class Header extends React.Component<Props, IState> {
       style={{ position: 'absolute', top: calcHeight(30), right: calcWidth(8), backgroundColor: 'rgba(0, 0, 0, 0.25)' }}
       onBackdropPress={() => { this.setState({ hideMenuModal: false }) }}
       isVisible={this.state.hideMenuModal}>
-      <View style={[styles.modal,{backgroundColor:this.props.filterReducer.backgroundColor}]}>
+      <View style={[styles.modal,{backgroundColor:this.props.theme.backgroundColor}]}>
         <TouchableOpacity
           style={[styles.modalView, { marginTop: calcHeight(6) }]}
           onPress={() => {
@@ -62,7 +62,7 @@ class Header extends React.Component<Props, IState> {
            this.props.navigation.navigate("MyAlarmClock")
           }}
         >
-          <Text style={[styles.modalItem,{color:this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':"white"}]}>Установить будильник</Text>
+          <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Установить будильник</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.modalView}
@@ -70,7 +70,7 @@ class Header extends React.Component<Props, IState> {
             this.setState({ hideMenuModal: false })
           }}
         >
-          <Text style={[styles.modalItem,{color:this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':"white"}]}>Предложить радиостанцию</Text>
+          <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Предложить радиостанцию</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.modalView}
@@ -78,7 +78,7 @@ class Header extends React.Component<Props, IState> {
             this.setState({ hideMenuModal: false })
           }}
         >
-          <Text style={[styles.modalItem,{color:this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':"white"}]}>Оставить отзыв</Text>
+          <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Оставить отзыв</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.modalView}
@@ -87,7 +87,7 @@ class Header extends React.Component<Props, IState> {
             this.props.navigation.navigate('Settings')
           }}
         >
-          <Text style={[styles.modalItem,{color:this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':"white"}]}>Настройки</Text>
+          <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Настройки</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.modalView, { borderBottomWidth: 0 }]}
@@ -95,7 +95,7 @@ class Header extends React.Component<Props, IState> {
             this.setState({ hideMenuModal: false })
           }}
         >
-          <Text style={[styles.modalItem,{color:this.props.filterReducer.backgroundColor=='white'?'#1E2B4D':"white"}]}>Выход</Text>
+          <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Выход</Text>
         </TouchableOpacity>
       </View>
     </Modal>
@@ -106,8 +106,13 @@ class Header extends React.Component<Props, IState> {
   }
   changeIsFavorite() {
     console.log("iiiiiiiiii",this.props.filterReducer.isFavorite);
-    
+    if(this.props.filterReducer.isFavorite){
+      this.props.navigation.navigate("Menu")
+    }else{
+      this.props.navigation.navigate("Favorite")
+    }
     this.props.onchangeFavoriteType()
+  
   }
 
   render() {
@@ -148,6 +153,7 @@ class Header extends React.Component<Props, IState> {
           <TouchableOpacity
             onPress={() => {
               this.changeIsFavorite()
+
             }}
             style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
           >

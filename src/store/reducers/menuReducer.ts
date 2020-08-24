@@ -44,7 +44,6 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
                 }
                 
             }
-            console.log("=++++++",menu);
             
                 //  let arr=state.menuData
                 // // arr[action.payload].isfavorite=!arr[action.payload].isfavorite

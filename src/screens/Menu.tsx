@@ -31,7 +31,6 @@ import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import Player from "./PlaylistScreen"
 import RecordSvg from "../assets/icons/disrecording.svg"
 import DisRecordSvg from "../assets/icons/recording.svg"
 import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
@@ -101,16 +100,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         })
 
 
-        getData('favorites').then((favorite) => {
-            let favoriteStorage:any =[]
-            favorite.map((data: any) => {
-                console.log(data);
-                
-            favoriteStorage.push(data.id)
-            })
-
-            this.props.ongetFavorites(favoriteStorage)
-        })
+        
         getData('isLooking').then((looking) => {
 
             this.setState({ lookingList: looking })
@@ -194,45 +184,39 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this.props.onchangeplayItem(data.item)
                 this.props.onchangePlayingMusic(false)
                 this.setState({
-                    //isPlayingMusic: false,
                     playItem: data.item,
                     activBi: data.item.st[0].bi,
-                    playUrl: data.item.st[0].ur
+                    playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
                 })
             }}
         >
-            <RadioMenuElement title={data.item.pa}
-                image={data.item.im} backColor={this.props.filterReducer.backgroundColor}
+            <RadioMenuElement
+             title={data.item.pa}
+                image={data.item.im}
+                 backColor={this.props.theme.backgroundColor}
                 addInFavorite={() => this.props.toaddfavorite(data.item)}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableOpacity>
     }
     renderMenuItemsMenuStyle2(data: any) {
-
         return <TouchableOpacity
-
             onPress={() => {
-
-                //this.bs.current.snapTo(0),
-                    this.props.filterReducer.isPlayingMusic ? this._pouseMusic() : null
                 this.props.onchangeswipeablePanelActive(true)
-                this.props.onchangeplayItem(data.item.data)
+                this._addLookingList(data.item)
+                this.props.onchangeplayItem(data.item)
                 this.props.onchangePlayingMusic(false)
                 this.setState({
-                  //  isPlayingMusic: false,
-                    playItem: data.item.data,
+                    playItem: data.item,
                     activBi: data.item.st[0].bi,
-                    playUrl: data.item.st[0].ur
+                    playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
                 })
             }} style={{ padding: calcWidth(8), }}>
-            <SimpleImage size={calcWidth(98)} />
+            <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
         </TouchableOpacity>
     }
 
     chouseList() {
-        if (this.props.filterReducer.isFavorite) {
-            return this.state.favoriteList
-        } else if (this.props.filterReducer.isLooking) {
+       if (this.props.filterReducer.isLooking) {
             return this.state.lookingList
         } else {
             return this.props.menuReducer.menuData
@@ -240,17 +224,16 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        console.log(list);
+        
         return (
             <SafeAreaView >
-                    
-            <View style={[styles.container, {backgroundColor: this.props.filterReducer.backgroundColor}]}>
+            <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
+                
                     <Header 
                     navigation={this.props.navigation} 
                      onchnageSearchData={this.props.onchnageSearchData}
                      />
-                    {/* <Search
-                        data={this.props.menuReducer.menuData}
-                        renderSearchData={(data: any) => this.props.onchnageSearchData(data)} /> */}
                         {this.props.menuReducer.styleView ?
                             <FlatList
                                 data={list}
@@ -267,22 +250,6 @@ class Menu extends React.Component<IMenuProps, IState> {
                                 maxToRenderPerBatch={10}
                             />
                         }
-                   
-                    {/* <BottomSheet
-                ref={this.bs}
-                snapPoints={[deviceHeight - 15, 0, 0]}
-                 renderContent={() => this.renderBottomSheet(this.state.playItem)}
-                renderHeader={() => null}
-                initialSnap={1}
-                enabledInnerScrolling={true}
-            onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-            />
-            
-            
-            {this.props.filterReducer.swipeablePanelActive == false ?
-                    <View style={{ height: calcHeight(86), width: '100%', backgroundColor: 'red' }}>
-                        {this.renderBottomSheetheader()}
-                    </View> : null} */}
                     <View style={{ position: 'absolute',
                      height: calcHeight(86),
                       width: '100%',
@@ -303,8 +270,8 @@ class Menu extends React.Component<IMenuProps, IState> {
         );
     }
 };
-const mapStateToProps = ({filterReducer,menuReducer,favorites}:any) => {
-    return {filterReducer,menuReducer,favorites}
+const mapStateToProps = ({filterReducer,menuReducer,favorites,theme}:any) => {
+    return {filterReducer,menuReducer,favorites,theme}
 };
 // const mapStateToProps = (state: any) => ({
 

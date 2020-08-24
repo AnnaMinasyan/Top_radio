@@ -35,6 +35,7 @@ import SmoothPicker from 'react-native-smooth-picker';
 import moment from 'moment';
 import AntennaSvg from "../assets/icons/antena.svg"
 import Modal from 'react-native-modal'; // 2.4.0
+import PowerOffSvg  from "../assets/icons/powerOff.svg"
 import { changeswipeablePanelActive, changeplayItem, changeSearchData } from '../store/actions/filterAction'
 import { createFilter } from 'react-native-search-filter';
 const KEYS_TO_FILTERS = ['pa'];
@@ -130,7 +131,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       style={{ width: '100%' }}
     >
       <RadioMenuElement title={data.item.pa} image={data.item.im}
-        backColor={this.props.filterReducer.backgroundColor}
+        backColor={this.props.theme.backgroundColor}
         addInFavorite={() => this._changeInFavorite(data.item)}
         isFavorite={this.checkIsFovorite(data.item.id)} />
     </TouchableOpacity>
@@ -190,7 +191,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           />
         </View>
         <Text
-          style={[styles.timeText, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white", }]}>
+          style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white", }]}>
           мин.
           </Text>
       </View>
@@ -233,14 +234,14 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
 console.log(this.state.selectedMinut);
 
     return (
-      <View style={[styles.container, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+      <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
         <HeaderByBack title='Будильник' onNavigate={() => { this.props.navigation.goBack() }} />
-        <View style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor, marginTop: calcFontSize(21), borderTopWidth: 1, }]}>
+        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor, marginTop: calcFontSize(21), borderTopWidth: 1, }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-            <RepeatSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE' />
+            <PowerOffSvg height={calcHeight(34)} width={calcHeight(20)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
               <Text
-                style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+                style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Включить будельник
                 </Text>
             </View>
@@ -254,13 +255,13 @@ console.log(this.state.selectedMinut);
             this.setState({ visibleModal: 2 })
           }}
           style={[styles.radiostation, {
-            backgroundColor: this.props.filterReducer.backgroundColor,
+            backgroundColor: this.props.theme.backgroundColor,
             borderTopWidth: 1,
           }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <ConnectSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Радиостанция
             </Text>
               <Text style={global_styles.stationComment}>{this.state.playItem.pa}</Text>
@@ -269,7 +270,7 @@ console.log(this.state.selectedMinut);
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
         </TouchableOpacity>
         <View style={{ justifyContent: 'center', alignItems: "center", }}>
-          <Text style={[styles.timeText, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Время</Text>
+          <Text style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Время</Text>
         </View>
         <View style={styles.timer}>
           <View >
@@ -299,7 +300,7 @@ console.log(this.state.selectedMinut);
               )}
             />
           </View>
-          <Text style={[styles.timeText, { marginRight: calcWidth(41), color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>ч.</Text>
+          <Text style={[styles.timeText, { marginRight: calcWidth(41), color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>ч.</Text>
           <View >
             <SmoothPicker
               magnet
@@ -325,14 +326,14 @@ console.log(this.state.selectedMinut);
                 </View>)}
             />
           </View>
-          <Text style={[styles.timeText, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>мин.</Text>
+          <Text style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>мин.</Text>
         </View>
-        <View style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor, borderTopWidth: 1, }]}>
+        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor, borderTopWidth: 1, }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <RepeatSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
               <Text
-                style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+                style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Повтор
                 </Text>
             </View>
@@ -349,11 +350,11 @@ console.log(this.state.selectedMinut);
           onPress={() => {
             this.setState({ visibleModal: 1 })
           }}
-          style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+          style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Частота повторений
             </Text>
               <Text style={global_styles.stationComment}>{this.state.selectedTimeRepeat} мин</Text>
@@ -361,17 +362,17 @@ console.log(this.state.selectedMinut);
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
         </TouchableOpacity>
-        <View style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+        {/* <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <AntennaSvg height={calcHeight(32)} width={calcHeight(32)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Плавное увеличение громкости</Text>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Плавное увеличение громкости</Text>
             </View>
           </View>
           <View>
             <SimpleSwitch />
           </View>
-        </View>
+        </View> */}
         <Modal
           isVisible={this.state.visibleModal === 1}
           animationIn={'slideInLeft'}

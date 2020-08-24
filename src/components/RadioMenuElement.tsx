@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } from 'react-native';
 import Menu from "../assets/icons/menu.svg"
 import Logo from "../assets/icons/logo.svg"
@@ -29,13 +30,13 @@ class RadioMenuElement extends React.Component<IRadioMenuElementProps, IState> {
   }
 add(){
   this.props.addInFavorite()
-  //this.setState({isFavorite:!this.props.isFavorite})
 }
   render() {
   
     return (
       <View style={[styles.body,{ backgroundColor:this.props.backColor,}]}>
       <View style={styles.row}>
+      
       <SimpleImage size={calcHeight(54)} image={this.props.image}/>
     
     <Text style={[global_styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":"white"}]}>{this.props.title}</Text>

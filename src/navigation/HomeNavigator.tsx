@@ -8,6 +8,7 @@ import PlayList from "../screens/PlayList"
 import MyAlarmClock from "../screens/MyAlarmClock"
 import FilterMenu from "../screens/FilterMenu"
 import Settings from "../screens/Settings"
+import Favorite from "../screens/Favorite"
 const Stack = createStackNavigator();
 const HomeNavigator: React.FunctionComponent = () => (
   <Stack.Navigator initialRouteName="Menu">
@@ -25,6 +26,11 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
     name="Genres"
     component={Genres}
+     options={{ header: BaseHeader, headerTransparent: true, }}
+    /> 
+    <Stack.Screen
+    name="Favorite"
+    component={Favorite}
      options={{ header: BaseHeader, headerTransparent: true, }}
     />
     <Stack.Screen

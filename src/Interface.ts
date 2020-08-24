@@ -15,13 +15,15 @@ import { NavigationScreenProp } from 'react-navigation';
     navigation: NavigationScreenProp<any, any>,
     filterReducer: any,
     dispatch: any,
-    favorites:number[]
+    favorites:number[],
+    theme:any
 
 } 
 export interface IPlayListProps {
     playListReducer:any,
     navigation: NavigationScreenProp<any, any>,
     ongetPlayList(payload:any):void; 
+    theme:any
 }
 export interface IFilterMenuProps {
     styleView:boolean;
@@ -32,7 +34,10 @@ export interface IFilterMenuProps {
     menuReducer:any,
     navigation: NavigationScreenProp<any, any>,
     filterReducer: any,
-
+    theme:any,
+    onchangePlayingMusic(payload:boolean):void;
+    toaddfavorite(type:any):void;
+    favorites:any
 } 
 export interface IGanresProps {
     styleView:boolean;
@@ -44,7 +49,7 @@ export interface IGanresProps {
     filterReducer: any,
     onchangeFilterDataByGenre(payload:any):void; 
     navigation: NavigationScreenProp<any, any>;
-
+    theme:any
 } 
 export interface ICitiesProps {
     styleView:boolean;
@@ -56,7 +61,7 @@ export interface ICitiesProps {
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
     onchnageSearchData(type:any):void;
-
+    theme:any
 }
 export interface IRadioMenuElementProps {
     title:string,
@@ -64,6 +69,7 @@ export interface IRadioMenuElementProps {
     addInFavorite():void,
     isFavorite:boolean,
     backColor:string,
+    //theme:any
 }
 export interface ICitiesMenuElementProps {
     info:ICitiesConnect,
@@ -80,7 +86,6 @@ export interface ISimpleSwitchProps{
 }
 export interface IData{
     title:string,
-   
    check:boolean,
    
 }

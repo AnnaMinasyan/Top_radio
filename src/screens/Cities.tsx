@@ -91,7 +91,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
             this.props.navigation.navigate('FilterMenu')
         }}
         >
-            <CitiesMenuElement info={data.item} backColor={this.props.filterReducer.backgroundColor} />
+            <CitiesMenuElement info={data.item} backColor={this.props.theme.backgroundColor} />
         </TouchableOpacity>
     }
     renderMenuItems2(data: any) {
@@ -114,7 +114,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
         return (
 
 
-            <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
+            <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
                 <Header  navigation={this.props.navigation}
                      onchnageSearchData={this.props.onchnageSearchData}
 

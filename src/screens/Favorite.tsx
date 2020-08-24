@@ -15,12 +15,14 @@ import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
 import Search from "../components/Search"
-import { IFilterMenuProps } from "../Interface"
+import { IMenuProps } from "../Interface"
 import { changeMenuType, getMenuData } from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
-    getFavorites,
     changeplayItem,
+    addFavorite,
+    getFavorites,
+    changeSearchData,
     changePlayingMusic
 } from '../store/actions/filterAction'
 import Heart from "../assets/icons/heart.svg"
@@ -29,144 +31,141 @@ import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import { addFavorites } from '../store/actions/favoritesActions';
+import Player from "./PlaylistScreen"
+import RecordSvg from "../assets/icons/disrecording.svg"
+import DisRecordSvg from "../assets/icons/recording.svg"
+import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
+import Arrow from "../assets/icons/arrow.svg"
+import Stop from "../assets/icons/stop.svg"
+import InfoSvg from "../assets/icons/infoMenu.svg"
+import RedHeart from "../assets/icons/redHeart.svg"
+import TrackPlayer from 'react-native-track-player';
+import BottomSheet from 'reanimated-bottom-sheet'
+import menuReducer from '../store/reducers/menuReducer';
+import { ThemeColors } from 'react-navigation';
 import Bottom from "../components/Bottom"
-
-
+import { createFilter } from 'react-native-search-filter';
+import { addFavorites } from '../store/actions/favoritesActions';
+const KEYS_TO_FILTERS = ['pa'];
 interface IState {
-    radioList: [],
-    styleView: boolean,
-    swipeablePanelActive: boolean,
-    position: any,
-    isRecording: boolean,
-    isPlayingMusic: boolean,
-    isFavorite: boolean,
-    playItem: any,
-    playUrl: string,
-    activBi: number,
-    favoriteList: any,
-    lookingList:any
+    favoriteList:[],
+    playItem:[],
+    activBi:number,
+    playUrl:string
 }
 
-class FilterMenu extends React.Component<IFilterMenuProps, IState> {
-    constructor(props: IFilterMenuProps) {
+class Favorite extends React.Component<IMenuProps, IState> {
+    constructor(props: IMenuProps) {
 
         super(props)
         this.state = {
-            radioList: [],
-          
-            styleView: this.props.menuReducer.styleView,
-            swipeablePanelActive: false,
-            position: new Animated.Value(0),
-            isRecording: false,
-            isPlayingMusic: false,
-            isFavorite: false,
-            playItem: '',
-            playUrl: '',
-            activBi: 0,
-            favoriteList: [],
-            lookingList:[]
-
-
+            favoriteList:[],
+            playItem:[],
+            activBi:0,
+            playUrl:''
         }
         const unsubscribe = props.navigation.addListener('focus', () => {
+            
             this.setData()
         });
 
     }
-    animete: any = React.createRef()
+    //bs: any = React.createRef()
     setData() {
-        getData('menuView').then((menuView) => {
-            this.setState({ styleView: menuView })
+        getData('favorites').then((favorite) => {
+           this.setState({favoriteList:favorite})
         })
-        this.props.ongetMenuData()
     }
+   
     checkIsFovorite(num: number) {        
-        return this.props.favorites.includes(num)
-  
-}
-_addLookingList(data:any){
-    getData("isLooking").then((lookList) => {
-        let count =true
-        if (lookList  ) {
-           
-         for (let index = 0; index < lookList.length; index++) {
-             const element = lookList[index];
-             if(element.id==data.id){
-                count=false
-                break
-             }
-         }
-        if (count) {
-            lookList.push(data)
-        }
-        }
-        
-        storeData("isLooking",lookList)
-        
-      })
-}
-    // }
-    renderMenuItems(data: any) {
+            return this.props.favorites.includes(num)
+      
+    }
+    _addLookingList(data: any) {
+        getData("isLooking").then((lookList) => {
+            let count = true
+            if (lookList) {
+                for (let index = 0; index < lookList.length; index++) {
+                    const element = lookList[index];
+                    if (element.id == data.id) {
+                        count = false
+                        break
+                    }
+                }
+                if (count) {
+                    lookList.push(data)
+                }
+            }
+            storeData("isLooking", lookList)
 
-        return <TouchableOpacity
-        style={{ paddingLeft: calcWidth(29) }}
-        onPress={() => {
-            // this.bs.current.snapTo(0),
-            this.props.onchangeswipeablePanelActive(true)
-            this._addLookingList(data.item)
-            this.props.onchangeplayItem(data.item)
-            this.props.onchangePlayingMusic(false)
-            this.setState({
-                playItem: data.item,
-                activBi: data.item.st[0].bi,
-                playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
-            })
-        }}
-    >
-        <RadioMenuElement
-         title={data.item.pa}
-            image={data.item.im}
-             backColor={this.props.theme.backgroundColor}
-            addInFavorite={() => this.props.toaddfavorite(data.item)}
-            isFavorite={this.checkIsFovorite(data.item.id)} />
-    </TouchableOpacity>
+        })
+    }
+    renderMenuItems(data: any) { 
+        if(this.checkIsFovorite(data.item.id))  {
+            return <TouchableOpacity
+            style={{ paddingLeft: calcWidth(29) }}
+            onPress={() => {
+                // this.bs.current.snapTo(0),
+                this.props.onchangeswipeablePanelActive(true)
+               this._addLookingList(data.item)
+                this.props.onchangeplayItem(data.item)
+                this.props.onchangePlayingMusic(false)
+                this.setState({
+                    playItem: data.item,
+                    activBi: data.item.st[0].bi,
+                    playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
+                })
+            }}
+        >
+            <RadioMenuElement
+             title={data.item.pa}
+                image={data.item.im}
+                 backColor={this.props.theme.backgroundColor}
+                addInFavorite={() => this.props.toaddfavorite(data.item)}
+                isFavorite={this.checkIsFovorite(data.item.id)} />
+        </TouchableOpacity>
+        }     
+       
     }
     renderMenuItemsMenuStyle2(data: any) {
-        return<TouchableOpacity
-        onPress={() => {
-            this.props.onchangeswipeablePanelActive(true)
-            this._addLookingList(data.item)
-            this.props.onchangeplayItem(data.item)
-            this.props.onchangePlayingMusic(false)
-            this.setState({
-                playItem: data.item,
-                activBi: data.item.st[0].bi,
-                playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
-            })
-        }} style={{ padding: calcWidth(8), }}>
-        <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
-    </TouchableOpacity>
+        return <TouchableOpacity
+            onPress={() => {
+                this.props.onchangeswipeablePanelActive(true)
+                // //this._addLookingList(data.item)
+                 this.props.onchangeplayItem(data.item)
+                this.props.onchangePlayingMusic(false)
+                this.setState({
+                    playItem: data.item,
+                    activBi: data.item.st[0].bi,
+                    playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
+                })
+            }} style={{ padding: calcWidth(8), }}>
+            <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
+        </TouchableOpacity>
     }
-    
+
+    chouseList() {
+      
+       
+    }
     render() {
- const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
- 
-console.log('mfskks[',list);
-
+        const list = this.state.favoriteList
+        //.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        console.log(list);
+        
         return (
-            <SafeAreaView style={{ backgroundColor: this.props.theme.backgroundColor }}>
-        {/* //    <View style={styles.container}> */}
-                <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor }]}>
-                    <Header navigation={this.props.navigation} />
+            <SafeAreaView >
+            <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
+                
+                    <Header 
+                    navigation={this.props.navigation} 
+                     onchnageSearchData={this.props.onchnageSearchData}
+                     />
                         {this.props.menuReducer.styleView ?
-
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
-
-                                //renderItem={this.renderMenuItems}
-                                keyExtractor={item => item.id}
+                                keyExtractor={(item:any) => item.id}
                                 maxToRenderPerBatch={10}
                             />
                             :
@@ -174,19 +173,16 @@ console.log('mfskks[',list);
                                 data={this.props.menuReducer.menuData}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                                //renderItem={this.renderMenuItems}
                                 keyExtractor={item => item.id}
                                 maxToRenderPerBatch={10}
                             />
-
                         }
-                   
                     <View style={{ position: 'absolute',
                      height: calcHeight(86),
                       width: '100%',
                        bottom: 0 , 
                    }}>
-                    <Bottom
+                    {/* <Bottom
                         navigation={this.props.navigation}
                         onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
                         isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}
@@ -194,13 +190,9 @@ console.log('mfskks[',list);
                         chnageplayUrl={(data:any)=>{
                             this.setState({playUrl:data})
                         }}
-                    />
-                     </View> 
-
-                </View>
-             
-
-            {/* </View> */}
+                    /> */}
+                     </View>  
+            </View>
             </SafeAreaView>
         );
     }
@@ -222,8 +214,11 @@ const mapDispatchToProps = (dispatch: any) => {
         ongetMenuData: () => {
             dispatch(getMenuData())
         },
-        onchangeswipeablePanelActive: (payload:boolean) => {
+        onchangeswipeablePanelActive: (payload: boolean) => {
             dispatch(changeswipeablePanelActive(payload))
+        },
+        onchangeplayItem: (payload: boolean) => {
+            dispatch(changeplayItem(payload))
         },
         toaddfavorite: (payload: any) => {
             dispatch(addFavorites(payload))
@@ -231,15 +226,15 @@ const mapDispatchToProps = (dispatch: any) => {
         ongetFavorites: (payload: any) => {
             dispatch(getFavorites(payload))
         },
-        onchangeplayItem: (payload: boolean) => {
-            dispatch(changeplayItem(payload))
+        onchnageSearchData: (payload: any) => {
+            dispatch(changeSearchData(payload))
         },
         onchangePlayingMusic: (payload: any) => {
             dispatch(changePlayingMusic(payload))
         },
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(FilterMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(Favorite);
 
 const styles = StyleSheet.create({
     header: {

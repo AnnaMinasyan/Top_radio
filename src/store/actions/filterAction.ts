@@ -31,12 +31,7 @@ export const changeplayItem = (payload:boolean) => {
 		payload
 	};
 };
-export const changeBackgroundColor = (payload:boolean) => {
-	return {
-		type: FilterTypes.CHANGE_BACKGROUNDCOLOR,
-		payload
-	};
-};
+
 export const getFavorites = (payload:any) => {
 	return {
 		type: FilterTypes.GET_FAVORITES,

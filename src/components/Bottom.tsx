@@ -45,6 +45,7 @@ interface Props {
     onchangeswipeablePanelActive(type: any): void;
     isFavorite: boolean,
     playUrl: string,
+    theme:any
     chnageplayUrl(type: any): void;
     ongetPlayList(type: any): void;
     onchangePlayingMusic(type: boolean): void;
@@ -86,7 +87,7 @@ class Bottom extends React.Component<Props, IState> {
         </View>
     }
     hideMenuModal() {
-        return <View style={{ backgroundColor: this.props.filterReducer.backgroundColor, height: '100%', }}>
+        return <View style={{ backgroundColor: this.props.theme.backgroundColor, height: '100%', }}>
 
             <TouchableOpacity
                 onPress={() => {
@@ -103,19 +104,19 @@ class Bottom extends React.Component<Props, IState> {
     renderBottomSheetheader = () => {
 
 
-        return <View style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
+        return <View style={{ height: calcHeight(86), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
             <TouchableOpacity
                 onPress={() => {                    
                     this.props.onchangeswipeablePanelActive(true)
                 }}
-                style={{ height: calcHeight(86), backgroundColor: this.props.filterReducer.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
+                style={{ height: calcHeight(86), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
 
                     <View style={{ flexDirection: 'row' }}>
                         <SimpleImage size={calcWidth(47)} image={this.props.filterReducer.playItem.im} />
                         <View style={{ marginLeft: calcHeight(15) }}>
-                            <Text style={[styles.txtTitle,{color:this.props.filterReducer.backgroundColor=="white"?"#1D2A4B":'white'}]}>{this.props.filterReducer.playItem.pa}</Text>
-                            <Text style={[styles.txtTitle, { fontSize: calcFontSize(12), marginTop: calcHeight(5), color: this.props.filterReducer.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>Супер хиты. Супер новинки</Text>
+                            <Text style={[styles.txtTitle,{color:this.props.theme.backgroundColor=="white"?"#1D2A4B":'white'}]}>{this.props.filterReducer.playItem.pa}</Text>
+                            <Text style={[styles.txtTitle, { fontSize: calcFontSize(12), marginTop: calcHeight(5), color: this.props.theme.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>Супер хиты. Супер новинки</Text>
                         </View>
                     </View>
 
@@ -135,15 +136,15 @@ class Bottom extends React.Component<Props, IState> {
            </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.player, 
-                        { backgroundColor: this.props.filterReducer.backgroundColor == "white" ? 'white' : '#0D1834' }]}
+                        { backgroundColor: this.props.theme.backgroundColor == "white" ? 'white' : '#0D1834' }]}
                     onPress={() => {
                     this._pouseMusic()
                     this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
                  //   this.setState({isPlayingMusic:!this.state.isPlayingMusic})
                 }}
                 >
-                    {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
-                        <PlaySvG width={calcWidth(16)} height={calcHeight(22)} fill={this.props.filterReducer.backgroundColor == "white" ? '#101C3B' : 'white'} />}
+                    {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
+                        <PlaySvG width={calcWidth(16)} height={calcHeight(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} />}
                 </TouchableOpacity>
             </View>
         </View>
@@ -186,24 +187,31 @@ class Bottom extends React.Component<Props, IState> {
             this._startPlayMusic()
         }, 3000);
     }
+    _navigatePlayList(){
+        if (this.props.filterReducer.playItem.pl) {
+            this.props.ongetPlayList(this.props.filterReducer.playItem.pl)
+        this.props.navigation.navigate('PlayList')
+        }
+        
+    }
     renderBottomSheet  ()  {
         return <View 
         style={{ 
-            backgroundColor: this.props.filterReducer.backgroundColor,  
+            backgroundColor: this.props.theme.backgroundColor,  
             height:deviceHeight, width:deviceWidth+10}}>
             <View style={styles.bottomSheet}>
                 <TouchableOpacity
                     style={{
                         height: calcHeight(50), justifyContent: 'center',
                         width: calcWidth(80), zIndex: 1,
-                        //borderWidth:1
+                       // borderWidth:1
                     }}
                     onPress={() => {
                         
                         this.props.onchangeswipeablePanelActive(false)
                     }}
                 >
-                    <Arrow fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
+                    <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{ justifyContent: 'center', alignItems: 'center', height: calcHeight(40),width:calcWidth(50) }}
@@ -217,13 +225,13 @@ class Bottom extends React.Component<Props, IState> {
                     {this.props.isFavorite ?
 
                         <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
-                        <Heart fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
+                        <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                 </TouchableOpacity>
             </View>
             <View style={{ marginTop: calcHeight(27), justifyContent: 'center', alignItems: 'center' }}>
                 {this.props.filterReducer.playItem ?
                     <Text style={{
-                        color: this.props.filterReducer.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                        color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
                         fontSize: calcFontSize(24),
                         fontWeight: '500'
                     }}>{this.props.filterReducer.playItem.pa}</Text> : null}
@@ -233,11 +241,24 @@ class Bottom extends React.Component<Props, IState> {
 
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: this.props.filterReducer.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
+                <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
                     Супер хиты. Супер новинки
                         </Text>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
+            {
+               Array.isArray( this.props.filterReducer.playItem.st)?<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
+               {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any,index:number) => {
+                   return <TouchableOpacity
+                       onPress={() => { this.changeRadioStancia(item)
+                   }}
+                       style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }] : styles.activeNumbers}
+                   >
+                       <Text style={styles.activenumber}>{item.bi}</Text>
+                   </TouchableOpacity>
+               }) : null}
+           </View>:null
+            }
+            {/* <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
                 {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any,index:number) => {
                     return <TouchableOpacity
                         onPress={() => { this.changeRadioStancia(item)
@@ -247,13 +268,13 @@ class Bottom extends React.Component<Props, IState> {
                         <Text style={styles.activenumber}>{item.bi}</Text>
                     </TouchableOpacity>
                 }) : null}
-            </View>
+            </View> */}
             <View style={{ alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center' }}>
                 <TouchableOpacity
                     onPress={() => {
                         this.setState({ isRecording: !this.state.isRecording })
                     }}
-                    style={[styles.btnrecord, { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                    style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
                 >
                     {this.props.filterReducer.playItem.isRecording ?
                         <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} /> :
@@ -268,20 +289,20 @@ class Bottom extends React.Component<Props, IState> {
                       //  this.setState({ isPlayingMusic: !this.state.isPlayingMusic })
                     }}
                     style={[styles.btnPlay,
-                    { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}
+                    { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}
                 >
                     {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
                         <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.btnrecord, { backgroundColor: this.props.filterReducer.backgroundColor == 'white' ? 'white' : '#101C3B', }]}
+                disabled={!this.props.filterReducer.playItem.pl}
+                    style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#101C3B', }]}
                     onPress={() => {
 
-                         this.props.ongetPlayList(this.props.filterReducer.playItem.pl)
-                        this.props.navigation.navigate('PlayList')
+                       this._navigatePlayList()
                     }}
                 >
-                    <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.filterReducer.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
+                    <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
 
                 </TouchableOpacity>
 
@@ -291,6 +312,8 @@ class Bottom extends React.Component<Props, IState> {
     bs: any = React.createRef()
 
     render() {
+        console.log("===================0", this.props.playUrl);
+        
         return (
             <View style={{ position: 'absolute',
             height: calcHeight(86),
@@ -316,8 +339,8 @@ class Bottom extends React.Component<Props, IState> {
         );
     }
 };
-const mapStateToProps = ({filterReducer, favorites}: any) => {
-    return {filterReducer,favorites}
+const mapStateToProps = ({filterReducer, favorites,theme}: any) => {
+    return {filterReducer,favorites,theme}
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {

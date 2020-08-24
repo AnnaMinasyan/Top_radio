@@ -17,7 +17,7 @@ import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import { changeMenuType } from '../store/actions/menuActions'
-import { changeBackgroundColor } from "../store/actions/filterAction"
+import { changeBackgroundColor } from "../store/actions/themeAction"
 import HeaderByBack from "../components/HeaderByBack"
 import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
@@ -175,7 +175,7 @@ class Settings extends React.Component<any, IState> {
           <View style={{ marginLeft: calcWidth(17) }}>
             <Text
               style={[global_styles.stationTexttitle,
-              { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white",
+              { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white",
               width:calcWidth(80),}]}> Таймер сна </Text>
           </View>
         </View>
@@ -200,7 +200,7 @@ class Settings extends React.Component<any, IState> {
           </View>
           <Text 
           style={[styles.timeText,{marginRight:calcWidth(41),
-          color:this.props.filterReducer.backgroundColor=="white"?"#1E2B4D":"white"}]}>мин.</Text>
+          color:this.props.theme.backgroundColor=="white"?"#1E2B4D":"white"}]}>мин.</Text>
         </View>
         <TouchableOpacity
         style={{borderRadius:8,
@@ -223,35 +223,35 @@ class Settings extends React.Component<any, IState> {
   render() {
 
     return (
-      <View style={[styles.container, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+      <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
         <HeaderByBack title='Настройки' onNavigate={() => { this.props.navigation.goBack() }} />
-        <View style={[styles.radiostation, { marginTop: calcFontSize(21), backgroundColor: this.props.filterReducer.backgroundColor }]}>
+        <View style={[styles.radiostation, { marginTop: calcFontSize(21), backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <AvtoPlaySvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Автовоспроизведение</Text>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Автовоспроизведение</Text>
             </View>
           </View>
           <View>
             <SimpleSwitch />
           </View>
         </View>
-        <View style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <HeadSetSvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]} numberOfLines={2} >Пауза при отключении гарнитуры</Text>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]} numberOfLines={2} >Пауза при отключении гарнитуры</Text>
             </View>
           </View>
           <View>
             <SimpleSwitch />
           </View>
         </View>
-        <View style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <RefleshSvg height={calcHeight(20.4)} width={calcHeight(22)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Переподключаться</Text>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Переподключаться</Text>
             </View>
           </View>
           <View>
@@ -262,12 +262,12 @@ class Settings extends React.Component<any, IState> {
           onPress={() => {
             this.setState({ visibleModal: 3,timeSleep:0 })
           }}
-          style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+          style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
 
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Таймер сна
             </Text>
               <Text style={global_styles.stationComment}>{this.state.timeSleep} мин</Text>
@@ -279,12 +279,12 @@ class Settings extends React.Component<any, IState> {
           onPress={() => {
             this.setState({ visibleModal: 2 })
           }}
-          style={[styles.radiostation, { backgroundColor: this.props.filterReducer.backgroundColor }]}>
+          style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <CradSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
 
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Размер буфера
             </Text>
               <Text style={global_styles.stationComment}>{this.state.selectBufferSize}</Text>
@@ -295,14 +295,14 @@ class Settings extends React.Component<any, IState> {
         <TouchableOpacity
           onPress={() => {
             this.setState({ visibleModal: 1 })
-            //  this.props.onchangeBackgroundColor(this.props.filterReducer.backgroundColor=="white")
+            //  this.props.onchangeBackgroundColor(this.props.theme.backgroundColor=="white")
           }}
-          style={[styles.radiostation, { borderBottomWidth: 1, backgroundColor: this.props.filterReducer.backgroundColor }]}>
+          style={[styles.radiostation, { borderBottomWidth: 1, backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <PhoneSvg height={calcHeight(24)} width={calcHeight(14.45)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
 
-              <Text style={[global_styles.stationTexttitle, { color: this.props.filterReducer.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Выбрать тему
             </Text>
               <Text style={[global_styles.stationComment]}>{this.state.theme}</Text>

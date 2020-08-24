@@ -96,7 +96,7 @@ class Genres extends React.Component<IGanresProps, IState> {
             this.props.navigation.navigate('FilterMenu')
         }}
         >
-            <CitiesMenuElement info={data.item} backColor={this.props.filterReducer.backgroundColor} />
+            <CitiesMenuElement info={data.item} backColor={this.props.theme.backgroundColor} />
         </TouchableOpacity>
     }
     renderMenuItems2(data: any) {
@@ -105,7 +105,7 @@ class Genres extends React.Component<IGanresProps, IState> {
             this.props.onchangeFilterDataByGenre(data.item.id)
             this.props.navigation.navigate('FilterMenu')
         }}
-         style={{ padding: calcWidth(8),backgroundColor:this.props.filterReducer.backgroundColor }}>
+         style={{ padding: calcWidth(8),backgroundColor:this.props.theme.backgroundColor }}>
             <SimpleImage size={calcWidth(98)}  color={this.state.colors[data.item.id %5]} title={data.item.pa} />
         </TouchableOpacity>
     }
@@ -123,7 +123,7 @@ class Genres extends React.Component<IGanresProps, IState> {
         return (
             <SafeAreaView style={{ height: '100%' }}>
 
-            <View style={{ backgroundColor: this.props.filterReducer.backgroundColor }}>
+            <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
                 <Header  
                 navigation={this.props.navigation}
                 onchnageSearchData={this.props.onchnageSearchData}

@@ -52,7 +52,6 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
-                            console.log(";;;;;;;;;;;;;;;;;;",);
                             props.navigation.navigate('Genres')
                             props.onChangeMenuType(true)
                         }}
@@ -65,7 +64,6 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
-                            console.log(";;;;;;;;;;;;;;;;;;",);
                             props.navigation.navigate('Cities')
                             props.onChangeMenuType(true)
                         }}
@@ -78,8 +76,10 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
-                            props.onChangeMenuType(true)
                             props.onchangeisLooking()
+                            props.navigation.navigate('Menu')
+                            props.onChangeMenuType(true)
+                            
                         }}
                     >
                         <View style={styles.item}>

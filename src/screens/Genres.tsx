@@ -117,9 +117,7 @@ class Genres extends React.Component<IGanresProps, IState> {
         } 
     }
     render() {
-        const list=this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        console.log(":::::::::::::::",list);
-        
+        const list=this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))        
         return (
             <SafeAreaView style={{ height: '100%' }}>
 
@@ -132,15 +130,14 @@ class Genres extends React.Component<IGanresProps, IState> {
                     {this.props.menuReducer.styleView ? <FlatList
                        data={list}
                         renderItem={(d) => this.renderMenuItems(d)}
-                        //renderItem={this.renderMenuItems}
-                        keyExtractor={item => item.id}
+                        keyExtractor={(item: any, index: number) => item.id.toString()}
                         maxToRenderPerBatch={10}
                     /> :
                         <FlatList
                             data={list}
                             renderItem={(d) => this.renderMenuItems2(d)}
                             contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                            keyExtractor={item => item.id}
+                            keyExtractor={(item: any, index: number) => item.id.toString()}
                             maxToRenderPerBatch={10}
                         />}
                          {/* <View style={{ position: 'absolute',

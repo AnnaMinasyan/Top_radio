@@ -166,7 +166,7 @@ console.log('mfskks[',list);
                                 renderItem={(d) => this.renderMenuItems(d)}
 
                                 //renderItem={this.renderMenuItems}
-                                keyExtractor={item => item.id}
+                                keyExtractor={(item:any, index:number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             />
                             :
@@ -175,7 +175,7 @@ console.log('mfskks[',list);
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
                                 //renderItem={this.renderMenuItems}
-                                keyExtractor={item => item.id}
+                                keyExtractor={(item:any, index:number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             />
 

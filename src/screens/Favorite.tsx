@@ -124,10 +124,13 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 addInFavorite={() => this.props.toaddfavorite(data.item)}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableOpacity>
-        }     
+        }   else{
+            return null
+        }  
        
     }
     renderMenuItemsMenuStyle2(data: any) {
+        if(this.checkIsFovorite(data.item.id))  {
         return <TouchableOpacity
             onPress={() => {
                 this.props.onchangeswipeablePanelActive(true)
@@ -142,6 +145,9 @@ class Favorite extends React.Component<IMenuProps, IState> {
             }} style={{ padding: calcWidth(8), }}>
             <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
         </TouchableOpacity>
+         }   else{
+            return null
+        } 
     }
 
     chouseList() {
@@ -149,8 +155,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
        
     }
     render() {
-        const list = this.state.favoriteList
-        //.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        const list = this.state.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
         console.log(list);
         
         return (
@@ -165,15 +170,15 @@ class Favorite extends React.Component<IMenuProps, IState> {
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
-                                keyExtractor={(item:any) => item.id}
+                                keyExtractor={(item:any, index:number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             />
                             :
                             <FlatList
-                                data={this.props.menuReducer.menuData}
+                                data={list}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                                keyExtractor={item => item.id}
+                                keyExtractor={(item:any, index:number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             />
                         }

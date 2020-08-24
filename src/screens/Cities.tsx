@@ -108,33 +108,23 @@ class Cities extends React.Component<ICitiesProps, IState> {
         </TouchableOpacity>
     }
     render() {
-        console.log(this.props.citiesReducer.cities);
         const list=this.props.citiesReducer.cities.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-
         return (
-
-
             <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
                 <Header  navigation={this.props.navigation}
-                     onchnageSearchData={this.props.onchnageSearchData}
-
-                />
-                {/* <Search /> */}
+                     onchnageSearchData={this.props.onchnageSearchData} />
                 <SafeAreaView style={{ height: '100%' }}>
                     {this.props.menuReducer.styleView ? <FlatList
                         data={list}
                         renderItem={(d) => this.renderMenuItems(d)}
-
-                        //renderItem={this.renderMenuItems}
-                        keyExtractor={item => item.id}
+                        keyExtractor={(item: any, index: number) => item.id.toString()}
                         maxToRenderPerBatch={10}
                     /> :
                         <FlatList
                             data={list}
                             renderItem={(d) => this.renderMenuItems2(d)}
                             contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                            //renderItem={this.renderMenuItems}
-                            keyExtractor={item => item.id}
+                            keyExtractor={(item: any, index: number) => item.id.toString()}
                             maxToRenderPerBatch={10}
                         />}
                 </SafeAreaView>

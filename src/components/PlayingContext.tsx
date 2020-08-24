@@ -6,10 +6,7 @@ import {
     ScrollView,
     TouchableOpacity,
     Animated,
-    Easing,
-    TouchableWithoutFeedback,
-    FlatList,
-    SafeAreaView
+    
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"

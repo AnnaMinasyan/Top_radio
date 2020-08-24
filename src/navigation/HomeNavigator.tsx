@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BaseHeader from "../components/BaseHeader"
-import Menu from "../screens/Menu" 
+import Menu from "../screens/RadiosList" 
 import Cities from "../screens/Cities"
 import Genres from "../screens/Genres"
 import PlayList from "../screens/PlayList"

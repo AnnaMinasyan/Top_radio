@@ -157,7 +157,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             style={{ marginBottom: 10, }}
             data={list}
             renderItem={(d) => this.renderMenuItems(d)}
-            keyExtractor={item => item.id}
+            keyExtractor={(item:any, index:number) => item.id.toString()}
             maxToRenderPerBatch={10}
           />
         </View>

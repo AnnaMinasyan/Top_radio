@@ -5,27 +5,18 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import Menu from "../assets/icons/menu.svg"
-import Logo from "../assets/icons/logo.svg"
-import Menu2 from "../assets/icons/menu_2.svg"
-import MenuDots from "../assets/icons/menu_dots.svg"
 import Heart from "../assets/icons/heart.svg"
 import Modal from 'react-native-modal';
-import MenuSvg from "../assets/icons/menu_cob.svg"
-import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight,deviceWidth } from "../assets/styles/dimensions"
 import { connect } from "react-redux"
 import { changeMenuType } from '../store/actions/menuActions'
 import { changeFavoriteType,changePlayingMusic } from '../store/actions/filterAction'
-import { DrawerActions } from 'react-navigation';
 import { NavigationScreenProp } from 'react-navigation';
 import RedHeart from "../assets/icons/redHeart.svg"
 import SimpleImage from "./SimpleImage"
 import PlaySvG from "../assets/icons/play.svg"
 import Stop from "../assets/icons/stop.svg"
-import { changeswipeablePanelActive, changeplayItem, addFavorite, getFavorites } from '../store/actions/filterAction'
-import { chnageFavorite } from '../store/actions/menuActions'
-import BottomSheet from 'reanimated-bottom-sheet'
+import { changeswipeablePanelActive } from '../store/actions/filterAction'
 import Arrow from "../assets/icons/arrow.svg"
 import RecordSvg from "../assets/icons/disrecording.svg"
 import DisRecordSvg from "../assets/icons/recording.svg"
@@ -33,14 +24,10 @@ import TrackPlayer from 'react-native-track-player';
 import InfoSvg from "../assets/icons/infoMenu.svg"
 import {getPlayList} from "../store/actions/playlistAction"
 import { addFavorites } from '../store/actions/favoritesActions';
-import { storeData, getData } from "../utils/local_storage"
-
 interface Props {
     onCloseStart(): void;
-   // modalhide: any,
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
-   //  isPlayingMusic: boolean,
     toaddfavorite(type: any): void;
     onchangeswipeablePanelActive(type: any): void;
     isFavorite: boolean,
@@ -56,8 +43,6 @@ interface IState {
     menuStyle: boolean,
     isRecording: boolean,
     activBi: number,
-   /// isPlayingMusic: boolean,
-
 }
 class Bottom extends React.Component<Props, IState> {
     constructor(props: Props) {
@@ -67,24 +52,7 @@ class Bottom extends React.Component<Props, IState> {
             menuStyle: true,
             isRecording: false,
             activBi: 0,
-         //   isPlayingMusic: false,
-
         }
-
-    }
-    onRenderModalMenuRadio() {
-        return <View style={[styles.modalMenuRadio, {}]}>
-
-            <View style={{ height: calcHeight(500) }}>
-                {/* <FlatList
-              style={{ marginBottom: 10, }}
-              data={this.props.menuReducer.menuData}
-              renderItem={(d) => this.renderMenuItems(d)}
-              keyExtractor={item => item.id}
-              maxToRenderPerBatch={10}
-            /> */}
-            </View>
-        </View>
     }
     hideMenuModal() {
         return <View style={{ backgroundColor: this.props.theme.backgroundColor, height: '100%', }}>
@@ -93,17 +61,13 @@ class Bottom extends React.Component<Props, IState> {
                 onPress={() => {
                     this.props.toaddfavorite(this.props.filterReducer.playItem)
                     this.props.onchangeswipeablePanelActive(false)
-
                 }}
             >
                 <Text>favorite</Text>
             </TouchableOpacity>
-
         </View>
     }
     renderBottomSheetheader = () => {
-
-
         return <View style={{ height: calcHeight(86), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', flexDirection: 'row', justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
             <TouchableOpacity
                 onPress={() => {                    
@@ -119,15 +83,12 @@ class Bottom extends React.Component<Props, IState> {
                             <Text style={[styles.txtTitle, { fontSize: calcFontSize(12), marginTop: calcHeight(5), color: this.props.theme.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>Супер хиты. Супер новинки</Text>
                         </View>
                     </View>
-
                 </View>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                 <TouchableOpacity
            onPress={()=>{
-                  
             this.props.toaddfavorite(this.props.filterReducer.playItem)
-           // this.setState({ isFavorite: !this.state.isFavorite })
            }}
            >
            {this.props.isFavorite?
@@ -140,7 +101,6 @@ class Bottom extends React.Component<Props, IState> {
                     onPress={() => {
                     this._pouseMusic()
                     this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                 //   this.setState({isPlayingMusic:!this.state.isPlayingMusic})
                 }}
                 >
                     {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
@@ -150,7 +110,6 @@ class Bottom extends React.Component<Props, IState> {
         </View>
     }
     async _pouseMusic() {
-        console.log("_pouseMusic");
         const currentTrack = await TrackPlayer.getCurrentTrack();
         if (this.props.filterReducer.isPlayingMusic) {
             console.log("playMusic");
@@ -161,14 +120,10 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
     async _startPlayMusic() {
-        console.log("_startPlayMusic", this.props.playUrl);
-
         const currentTrack = await TrackPlayer.getCurrentTrack();
-        // if (currentTrack == null) {
         await TrackPlayer.reset();
         await TrackPlayer.add({
             id: "local-track",
-            // url: 'https://us3.internet-radio.com/proxy/cd1019?mp=/stream;',
             url: this.props.playUrl,
             title: "Pure (Demo)",
             artist: "David Chavez",
@@ -176,8 +131,6 @@ class Bottom extends React.Component<Props, IState> {
             duration: 28
         });
         await TrackPlayer.play();
-    
-
     }
     changeRadioStancia(item: any) {
         this.props.chnageplayUrl(item.ur)
@@ -192,7 +145,6 @@ class Bottom extends React.Component<Props, IState> {
             this.props.ongetPlayList(this.props.filterReducer.playItem.pl)
         this.props.navigation.navigate('PlayList')
         }
-        
     }
     renderBottomSheet  ()  {
         return <View 
@@ -207,23 +159,16 @@ class Bottom extends React.Component<Props, IState> {
                        // borderWidth:1
                     }}
                     onPress={() => {
-                        
                         this.props.onchangeswipeablePanelActive(false)
-                    }}
-                >
+                    }}>
                     <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{ justifyContent: 'center', alignItems: 'center', height: calcHeight(40),width:calcWidth(50) }}
                     onPress={() => {
-                        console.log("ffffff");
-
                         this.props.toaddfavorite(this.props.filterReducer.playItem)
-                        //this.setState({ isFavorite: !this.state.isFavorite })
-                    }}
-                >
+                    }}>
                     {this.props.isFavorite ?
-
                         <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                         <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                 </TouchableOpacity>
@@ -238,7 +183,6 @@ class Bottom extends React.Component<Props, IState> {
             </View>
             <View style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
                 <SimpleImage size={calcHeight(257)} image={this.props.filterReducer.playItem.im} />
-
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
@@ -284,13 +228,10 @@ class Bottom extends React.Component<Props, IState> {
                 <TouchableOpacity
                     onPress={() => {
                         this.props.filterReducer.isPlayingMusic ? this._pouseMusic() : this._startPlayMusic()
-                        // this._startPlayMusic()
                         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic )
-                      //  this.setState({ isPlayingMusic: !this.state.isPlayingMusic })
                     }}
                     style={[styles.btnPlay,
-                    { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}
-                >
+                    { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
                     {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
                         <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
                 </TouchableOpacity>
@@ -298,22 +239,15 @@ class Bottom extends React.Component<Props, IState> {
                 disabled={!this.props.filterReducer.playItem.pl}
                     style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#101C3B', }]}
                     onPress={() => {
-
                        this._navigatePlayList()
-                    }}
-                >
+                    }}>
                     <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
-
                 </TouchableOpacity>
-
             </View>
         </View>
     }
     bs: any = React.createRef()
-
     render() {
-        console.log("===================0", this.props.playUrl);
-        
         return (
             <View style={{ position: 'absolute',
             height: calcHeight(86),
@@ -325,9 +259,8 @@ class Bottom extends React.Component<Props, IState> {
                         {this.renderBottomSheetheader()}
                     </View> : null}
                 <Modal
-                    isVisible={this.props.filterReducer.swipeablePanelActive}
+                    isVisible={this.props.filterReducer.swipeablePanelActive?this.props.filterReducer.swipeablePanelActive:false}
                     backdropOpacity={0.8}
-                    
                     style={{  height:deviceHeight, 
                         width:deviceWidth+10,
                         backgroundColor:'red',

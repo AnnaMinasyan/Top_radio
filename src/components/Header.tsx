@@ -30,6 +30,7 @@ interface Props {
   navigation: NavigationScreenProp<any, any>;
   filterReducer: any,
   onchnageSearchData(type: any): void;
+  theme:any
 
 }
 interface IState {
@@ -121,17 +122,11 @@ class Header extends React.Component<Props, IState> {
 
       <View style={styles.header}>
         <View style={[styles.row,]}>
-          <TouchableOpacity
-            onPress={() => {
-              console.log(this.props.navigation);
-              
-
-            }}
-          >
-          </TouchableOpacity>
-       {!this.state.showSearchView?<Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(40), marginRight:calcWidth(75) }} />:
-       <View style={{backgroundColor:'red',
-       width:calcWidth(250),
+          
+       {!this.state.showSearchView?
+       <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(33), }} />:
+       <View style={{
+       width:calcWidth(230),
        justifyContent:'center',
        alignItems:'center',
         marginLeft:calcWidth(35),}}>
@@ -145,10 +140,15 @@ class Header extends React.Component<Props, IState> {
             style={styles.searchbtn}
               onPress={()=>{
                 this.setState({showSearchView:!this.state.showSearchView})
+                this.props.onchnageSearchData('')
               }}
           >
          {!this.state.showSearchView? <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />:
-        <CloseSvg width={calcWidth(15.48)} height={calcHeight(15)} fill='#B3BACE'/>}
+        <TouchableOpacity
+       // onPress={()=>this.props.onchnageSearchData('')}
+        >
+        <CloseSvg width={calcWidth(15.48)} height={calcHeight(15)} fill='#B3BACE'/>
+        </TouchableOpacity>}
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {

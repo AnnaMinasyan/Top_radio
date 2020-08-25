@@ -171,7 +171,7 @@ console.log('mfskks[',list);
                             />
                             :
                             <FlatList
-                                data={this.props.menuReducer.menuData}
+                                data={list}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
                                 //renderItem={this.renderMenuItems}

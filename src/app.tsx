@@ -30,7 +30,6 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     }, [])
    const  changeActivePanel =()=>{
     getData('alarmClock').then((time)=>{
-        console.log("alarmClockalarmClock",time.playItem);
         dispatch(changeswipeablePanelActive(false))
         dispatch(changeplayItem(time.playItem))
         dispatch(changePlayingMusic(true))

@@ -11,7 +11,6 @@ export const changeMenuType = (payload: Partial<IMenuPayload>) => {
 	};
 };
 export const getMenuData = () => {
-	console.log("getMenuDatagetMenuDatagetMenuDatagetMenuData");
 	
 	return {
 		type: MenuTypes.GET_MENU_DATA,

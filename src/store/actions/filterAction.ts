@@ -6,13 +6,16 @@ export const changeFavoriteType = () => {
 		type: FilterTypes.CHANGE_IS_FAVORITE,
 	};
 };
-export const changeisLooking = () => {
+export const changeisActive = (payload:string) => {
+	
+	
 	return {
-		type: FilterTypes.CHANGE_IS_LOOKING,
+		type: FilterTypes.CHANGE_IS_ACTIVE,
+		payload
 	};
 };
 export const changeswipeablePanelActive = (payload:boolean) => {
-	console.log(";;;;;;",payload);
+
 	
 	return {
 		type: FilterTypes.CHANGE_SWIPEABLEPANELACTIVE,

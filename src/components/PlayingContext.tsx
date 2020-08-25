@@ -98,7 +98,6 @@ class PlayingMusic extends React.Component<any, IState> {
         })
 
         getData('favorites').then((favorite) => {
-            console.log(":::::::::::", favorite);
 
             this.setState({ favoriteList: favorite })
         })
@@ -146,7 +145,6 @@ class PlayingMusic extends React.Component<any, IState> {
         TrackPlayer.STATE_PAUSED
     }
     changeViewStyle(res: boolean) {
-        //console.log(":::::::::::::::::::", this.props);
     }
     openPanel() {
         this.props.onchangeswipeablePanelActive(true)
@@ -178,7 +176,6 @@ class PlayingMusic extends React.Component<any, IState> {
                 <TouchableOpacity
                     style={[styles.player,]}
                     onPress={() => {
-                        console.log("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[");
                         this._pouseMusic()
                         this.setState({ isPlayingMusic: !this.state.isPlayingMusic })
                     }}

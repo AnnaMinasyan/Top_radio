@@ -110,6 +110,7 @@ class Bottom extends React.Component<Props, IState> {
         </View>
     }
     async _pouseMusic() {
+
         const currentTrack = await TrackPlayer.getCurrentTrack();
         if (this.props.filterReducer.isPlayingMusic) {
             console.log("playMusic");
@@ -120,6 +121,8 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
     async _startPlayMusic() {
+        console.log(this.props.playUrl);
+        
         const currentTrack = await TrackPlayer.getCurrentTrack();
         await TrackPlayer.reset();
         await TrackPlayer.add({
@@ -144,6 +147,7 @@ class Bottom extends React.Component<Props, IState> {
         if (this.props.filterReducer.playItem.pl) {
             this.props.ongetPlayList(this.props.filterReducer.playItem.pl)
         this.props.navigation.navigate('PlayList')
+        this.props.onchangeswipeablePanelActive(false)
         }
     }
     renderBottomSheet  ()  {
@@ -392,7 +396,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: calcHeight(54),
         height: calcHeight(54),
-        borderRadius: calcWidth(20),
+        borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
         marginLeft: calcWidth(16)

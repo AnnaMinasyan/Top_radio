@@ -37,10 +37,11 @@ class PlayList extends React.Component<IPlayListProps, IState> {
     render() {
         
     const list= this.state.filterType=='playList'?this.props.playListReducer.playList:this.props.playListReducer.trackList
-     console.log(list);
+    
        
     return (
-            <View style={{ backgroundColor: 'white' }}>
+        <ScrollView  style={{ backgroundColor: this.props.theme.backgroundColor}}  >
+            <View style={{ backgroundColor: this.props.theme.backgroundColor}}>
 
                 <HeaderByBack title='Новое радио' onNavigate={() => { this.props.navigation.navigate('Menu') }} />
                 <View style={styles.tabFilter}>
@@ -59,7 +60,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                         <Text style={this.state.filterType == 'efir' ? styles.touchText : styles.activeTouchText}>Эфир</Text>
                     </TouchableOpacity>
                 </View>
-                <ScrollView >
+                
                     <View>
                         {list.map((data: any) => {
                             return (
@@ -95,8 +96,8 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                         )
                     })} */}
                     </View>
-                </ScrollView>
             </View>
+            </ScrollView>
         );
     }
 };
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
         paddingVertical: calcHeight(16),
         paddingHorizontal: calcWidth(25),
         justifyContent: 'space-between',
-        backgroundColor: 'white'
+      
     },
     activeTouch: {
         height: calcHeight(28),

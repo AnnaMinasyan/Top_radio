@@ -39,7 +39,6 @@ const themeReducer = (state = initialState, action: IReduxAction<ThemeTypes>) =>
             } else {
                 color = "white"
             }
-            console.log(action.payload, color);
 
             return { ...state, backgroundColor: color }
         default:

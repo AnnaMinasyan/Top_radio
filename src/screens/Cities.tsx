@@ -33,37 +33,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
         super(props)
         this.state = {
             colors: ['#4F67A6', '#41A1BF', '#42B39E', '#49BE7F', '#7C59C5'],
-            // radioList: [
-            //    { title:'Москва',
-            //    count:26,
-            //    color:'#4F67A6'
-            // },
-            //    { title: 'Санкт-Петербург',
-            //    count:12,
-            //    color:'#41A1BF'
-            // },
-            //    { title: 'Екатеринбург',
-            //    count:10,
-            // color:'#42B39E'},
-            //    { title: 'Пермь',
-            //    count:26,
-            //    color:'#49BE7F'
-            // },
-            //    { title:'Липетск',
-            //    count:5,
-            // color:'#7C59C5'},
-            //    { title: 'Владивосток',count:2, color:'#4F67A6'},
-            //    { title:'Красноярск',count:26,  color:'#41A1BF'},
-
-            //    { title:'Красноярск',count:26, color:'#42B39E'},
-
-            //    { title:'Красноярск',count:26, color:'#42B39E'},
-
-            //    { title:'Красноярск',count:26, color:'#42B39E'},
-
-
-
-            // ],
+           
             styleView: this.props.menuReducer.styleView
         }
         const unsubscribe = props.navigation.addListener('focus', () => {

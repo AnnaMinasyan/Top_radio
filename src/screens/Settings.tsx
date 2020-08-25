@@ -414,7 +414,6 @@ const styles = StyleSheet.create({
   },
   modalSleepTimer: {
     backgroundColor: 'white',
-    height: calcHeight(500),
     marginHorizontal:calcWidth(65),
     padding:calcHeight(15),
     borderRadius:5

@@ -17,17 +17,19 @@ import RadioSvg from "../assets/icons/radio.svg"
 import Location from "../assets/icons/location.svg"
 import EyesSvg from "../assets/icons/eyes.svg"
 import BackImage from "../assets/icons/loading_top.svg"
-import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
+import { calcFontSize, calcHeight, calcWidth ,deviceHeight} from "../assets/styles/dimensions"
 import { NavigationScreenProp } from 'react-navigation';
-import { changeisLooking } from "../store/actions/filterAction"
+import { changeisActive } from "../store/actions/filterAction"
 import { changeMenuType } from "../store/actions/menuActions"
 interface Props {
     navigation: NavigationScreenProp<any, any>;
-    onchangeisLooking(): void;
+    onchangeisActive(type:string): void;
     onChangeMenuType(type: boolean): void;
     filterReducer: any
 }
 const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
+    
+    
     return (<View>
         <ScrollView style={{ backgroundColor: '#0F1E45', }}>
             <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -40,13 +42,14 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
+                            props.onchangeisActive('all')
                             props.onChangeMenuType(true)
                             props.navigation.navigate('Menu')
                         }}
                     >
                         <View style={styles.item}>
                             <RadioSvg height={calcHeight(22.02)} width={calcWidth(30)} fill='white' />
-                            <Text style={styles.itemText}>Все радиостанции</Text>
+                            <Text style={props.filterReducer.isActive=="all" ? styles.activeitemText : styles.itemText}>Все радиостанции</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -54,11 +57,13 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         onPress={() => {
                             props.navigation.navigate('Genres')
                             props.onChangeMenuType(true)
+                            props.onchangeisActive('genres')
+
                         }}
                     >
                         <View style={styles.item}>
                             <Guitar height={calcHeight(29.95)} width={calcWidth(30)} fill='white' />
-                            <Text style={styles.itemText}>Жанры</Text>
+                            <Text style={props.filterReducer.isActive=="genres" ? styles.activeitemText : styles.itemText}>Жанры</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -66,17 +71,19 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         onPress={() => {
                             props.navigation.navigate('Cities')
                             props.onChangeMenuType(true)
+                            props.onchangeisActive('cities')
+
                         }}
                     >
                         <View style={styles.item}>
                             <Location height={calcHeight(30)} width={calcWidth(30)} fill='white' />
-                            <Text style={styles.itemText}>Города</Text>
+                            <Text style={props.filterReducer.isActive=="cities" ? styles.activeitemText : styles.itemText}>Города</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
-                            props.onchangeisLooking()
+                            props.onchangeisActive('looking')
                             props.navigation.navigate('Menu')
                             props.onChangeMenuType(true)
                             
@@ -84,11 +91,11 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                     >
                         <View style={styles.item}>
                             <EyesSvg height={calcHeight(30)} width={calcWidth(30)} fill={props.filterReducer.isLooking ? '#6C7BA4' : 'white'} />
-                            <Text style={props.filterReducer.isLooking ? styles.activeitemText : styles.itemText}>Просмотренные</Text>
+                            <Text style={props.filterReducer.isActive=="looking" ? styles.activeitemText : styles.itemText}>Просмотренные</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View>
+                <View style={{position:'absolute', bottom:0}} >
                     <BackImage />
                 </View>
             </SafeAreaView>
@@ -101,7 +108,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
+height:deviceHeight
     },
     item: {
 
@@ -159,8 +166,8 @@ const mapStateToProps = (state: any) => {
 // });
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onchangeisLooking: () => {
-            dispatch(changeisLooking())
+        onchangeisActive: (payload: string) => {
+            dispatch(changeisActive(payload))
         },
         onChangeMenuType: (payload: any) => {
             dispatch(changeMenuType(payload))

@@ -23,8 +23,6 @@ class Static implements IDATA {
     async getCities() {
         try {
             const response = await authApi.get(`${keys.API_URL}${keys.COUNTRY_TYPE}/cities.json`,);
-            console.log(`${keys.API_URL}${keys.COUNTRY_TYPE}/cities.json`,response.data);
-            
             return response.data
         } catch (ex) {
             throw new Error(ex);

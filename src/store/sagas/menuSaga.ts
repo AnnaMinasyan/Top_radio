@@ -10,7 +10,6 @@ function* getMenuData() {
 		const data= yield auth.getMenuDatas()
 		yield put(setMenuData(data))
 	} catch (ex) {
-		console.log(ex);
 	}
 }
 

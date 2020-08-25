@@ -42,7 +42,6 @@ class App extends React.Component<Props, any> {
     })
     getData('alarmClock').then((time)=>{
       if(time){
-          console.log("alarmClock",time);
       }
       })
   }

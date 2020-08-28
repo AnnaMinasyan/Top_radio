@@ -16,7 +16,6 @@ import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions
 import Header from "./Header"
 import Search from "./Search"
 import { ISimpleSwitchProps } from "../Interface"
-import { changeMenuType } from '../store/actions/menuActions'
 import HeaderByBack from "./HeaderByBack"
 import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "./RadioMenuElement"
@@ -92,9 +91,6 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onChangeMenuType: (payload: any) => {
-      dispatch(changeMenuType(payload))
-    }
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SimpleSwitch);

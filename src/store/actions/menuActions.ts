@@ -3,18 +3,9 @@ interface IMenuPayload {
 	menuType?: boolean,
 	
 }
-
-export const changeMenuType = (payload: Partial<IMenuPayload>) => {
-	return {
-		type: MenuTypes.CHANGE_MENU_TYPE,
-		payload,
-	};
-};
 export const getMenuData = () => {
-	
 	return {
 		type: MenuTypes.GET_MENU_DATA,
-	
 	};
 };
 export const setMenuData = (payload:any) => {
@@ -24,8 +15,6 @@ export const setMenuData = (payload:any) => {
 	
 	};
 };
-
-
 export const setPlayList = (payload:any) => {
 	return {
 		type: MenuTypes.SET_PLAY_LIST,

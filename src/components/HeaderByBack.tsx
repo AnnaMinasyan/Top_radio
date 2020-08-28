@@ -12,7 +12,6 @@ import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 
 import { IMenuProps, ICitiesConnect } from "../Interface"
-import { changeMenuType } from '../store/actions/menuActions'
 
 import { connect } from "react-redux"
 import Arrow from "../assets/icons/arrow_back.svg"
@@ -60,9 +59,6 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onChangeMenuType: (payload: any) => {
-            dispatch(changeMenuType(payload))
-        }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderByBack);

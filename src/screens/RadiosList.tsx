@@ -7,16 +7,17 @@ import {
     TouchableOpacity,
     Animated,
     Easing,
-    TouchableWithoutFeedback,
+    TouchableHighlight ,
     FlatList,
-    SafeAreaView
+    SafeAreaView,
+    TouchableWithoutFeedback
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { changeMenuType, getMenuData } from '../store/actions/menuActions'
+import { getMenuData } from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     changeplayItem,
@@ -107,9 +108,10 @@ class Menu extends React.Component<IMenuProps, IState> {
         })
     }
     renderMenuItems(data: any) {
-        return <TouchableOpacity
-            style={{ paddingLeft: calcWidth(29) }}
+        return <TouchableHighlight 
             onPress={() => {
+                console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+                
                 this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
@@ -119,17 +121,19 @@ class Menu extends React.Component<IMenuProps, IState> {
                     //  activBi: data.item.st[0].bi,
                     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
                 })
-            }} >
+            }} 
+            >
             <RadioMenuElement
                 title={data.item.pa}
                 image={data.item.im}
                 backColor={this.props.theme.backgroundColor}
                 addInFavorite={() => this.props.toaddfavorite(data.item)}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
-        </TouchableOpacity>
+        </TouchableHighlight >
     }
     renderMenuItemsMenuStyle2(data: any) {
-        return <TouchableOpacity
+        return <TouchableHighlight
+
             onPress={() => {
                 this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
@@ -139,11 +143,10 @@ class Menu extends React.Component<IMenuProps, IState> {
                     playItem: data.item,
                     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
                 })
-            }} style={{ padding: calcWidth(8), }}>
+            }} style={{ margin: calcWidth(8), borderRadius:8 }}>
             <SimpleImage size={calcWidth(98)} image={data.item.im} />
-        </TouchableOpacity>
+        </TouchableHighlight>
     }
-
     chouseList() {
         if (this.props.filterReducer.isActive=="looking") {
             return this.state.lookingList
@@ -153,14 +156,16 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {        
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+
+      
         return (
             <SafeAreaView >
-                <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
+                <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor  }]}>
                     <Header
                         navigation={this.props.navigation}
                         onchnageSearchData={this.props.onchnageSearchData}
                     />
-                    {this.props.menuReducer.styleView ?
+                    {this.props.filterReducer.menuType==1 ?
                         <FlatList
                             data={list}
                             renderItem={(d) => this.renderMenuItems(d)}
@@ -171,7 +176,13 @@ class Menu extends React.Component<IMenuProps, IState> {
                         <FlatList
                             data={list}
                             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
-                            contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
+                            contentContainerStyle={{
+                                width:'100%',
+                             flexWrap: 'wrap',
+                             flexDirection:'row',
+                             paddingLeft: calcWidth(12),
+                            //   paddingRight: calcWidth(16), 
+                               justifyContent: 'center' }}
                             keyExtractor={(item: any, index: number) => item.id.toString()}
                             maxToRenderPerBatch={10}
                         />
@@ -197,9 +208,6 @@ const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme }: any) 
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onChangeMenuType: (payload: any) => {
-            dispatch(changeMenuType(payload))
-        },
         ongetMenuData: () => {
             dispatch(getMenuData())
         },
@@ -236,7 +244,7 @@ const styles = StyleSheet.create({
     },
     bottomView: {
         position: 'absolute',
-        height: calcHeight(86),
+      //  height: calcHeight(86),
         width: '100%',
         bottom: 0,
     },
@@ -332,7 +340,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     container: {
-        height: deviceHeight
+        height: deviceHeight-calcHeight(30)
     },
     box: {
         width: 50,

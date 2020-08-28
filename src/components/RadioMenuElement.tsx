@@ -34,7 +34,10 @@ add(){
   render() {
   
     return (
-      <View style={[styles.body,{ backgroundColor:this.props.backColor,}]}>
+      <View style={[styles.body,
+      { backgroundColor:this.props.backColor,
+        borderBottomColor:this.props.backColor=="white"?'#F3F4F5':'#1E2B4D',
+      }]}>
       <View style={styles.row}>
       
       <SimpleImage size={calcHeight(54)} image={this.props.image}/>
@@ -62,11 +65,12 @@ const styles = StyleSheet.create({
   body: {
   
    height:calcHeight(74),
-   borderBottomColor:'#F3F4F5',
+
    borderBottomWidth:calcHeight(1),
    flexDirection:'row',
    alignItems:'center',
     justifyContent:'space-between',
+    paddingLeft:calcWidth(25)
     //paddingLeft:calcWidth(29),
    
   },

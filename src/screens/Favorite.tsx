@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     Animated,
     Easing,
-    TouchableWithoutFeedback,
+    TouchableHighlight,
     FlatList,
     SafeAreaView
 } from 'react-native';
@@ -16,7 +16,7 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { changeMenuType, getMenuData } from '../store/actions/menuActions'
+import { getMenuData } from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     changeplayItem,
@@ -102,8 +102,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
     }
     renderMenuItems(data: any) { 
         if(this.checkIsFovorite(data.item.id))  {
-            return <TouchableOpacity
-            style={{ paddingLeft: calcWidth(29) }}
+            return <TouchableHighlight
             onPress={() => {
                 // this.bs.current.snapTo(0),
                 this.props.onchangeswipeablePanelActive(true)
@@ -123,7 +122,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                  backColor={this.props.theme.backgroundColor}
                 addInFavorite={() => this.props.toaddfavorite(data.item)}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
-        </TouchableOpacity>
+        </TouchableHighlight>
         }   else{
             return null
         }  
@@ -131,7 +130,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
     }
     renderMenuItemsMenuStyle2(data: any) {
         if(this.checkIsFovorite(data.item.id))  {
-        return <TouchableOpacity
+        return <TouchableHighlight
             onPress={() => {
                 this.props.onchangeswipeablePanelActive(true)
                 // //this._addLookingList(data.item)
@@ -144,15 +143,10 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 })
             }} style={{ padding: calcWidth(8), }}>
             <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
-        </TouchableOpacity>
+        </TouchableHighlight>
          }   else{
             return null
         } 
-    }
-
-    chouseList() {
-      
-       
     }
     render() {
         const list = this.state.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
@@ -166,7 +160,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                     navigation={this.props.navigation} 
                      onchnageSearchData={this.props.onchnageSearchData}
                      />
-                        {this.props.menuReducer.styleView ?
+                        {this.props.filterReducer.menuType==1 ?
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
@@ -213,9 +207,6 @@ const mapStateToProps = ({filterReducer,menuReducer,favorites,theme}:any) => {
 // });
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onChangeMenuType: (payload: any) => {
-            dispatch(changeMenuType(payload))
-        },
         ongetMenuData: () => {
             dispatch(getMenuData())
         },

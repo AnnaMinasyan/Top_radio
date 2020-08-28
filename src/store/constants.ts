@@ -1,6 +1,5 @@
 
 export enum MenuTypes {
-    CHANGE_MENU_TYPE = '@menutypes/CHANGE_MENU_TYPE',
     GET_MENU_DATA= '@menutypes/GET_MENU_DATA',
     SET_MENU_DATA= '@menutypes/SET_MENU_DATA', 
      SET_PLAY_LIST= '@menutypes/SET_PLAY_LIST',
@@ -33,6 +32,9 @@ export enum FilterTypes {
     ADD_FAVORITE='@filterTypes/ADD_FAVORITE', 
     CHANGE_SHEARCH_DATA='@filterTypes/CHANGE_SHEARCH_DATA',
     CHANGE_PLAYING_MUSIC='@filterTypes/CHANGE_PLAYING_MUSIC',
+    SET_MENU_TYPE='@filterTypes/CHANGE_MENU_TYPE', 
+    INIT_MENU_TYPE='@filterTypes/INIT_MENU_TYPE', 
+    GET_MENU_TYPE='@filterTypes/GET_MENU_TYPE'
 }
 export enum ThemeTypes{
     CHANGE_BACKGROUNDCOLOR='@themeTypes/CHANGE_BACKGROUNDCOLOR'

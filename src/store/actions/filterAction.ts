@@ -56,3 +56,23 @@ export const changeSearchData = (payload:any) => {
 	
 	};
 };
+
+export const initMenuType = () => {
+	return {
+		type: FilterTypes.INIT_MENU_TYPE,
+	};
+};
+export const getMenuType = (payload:number) => {
+	console.log("payload",payload);
+	
+	return {
+		type: FilterTypes.GET_MENU_TYPE,
+		payload
+	};
+};
+export const setMenuType = (payload:number) => {
+	return {
+		type: FilterTypes.SET_MENU_TYPE,
+		payload
+	};
+};

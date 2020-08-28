@@ -1,44 +1,35 @@
-/**
- * 
- * const newArr = [...state.favorites]
-            let storageFavorite: any = []
-            const index = newArr.indexOf(action.payload.id);
-            if(index==-1){
-                newArr.push(action.payload.id)
-            }else{
-                newArr.splice(index,1);
-            }
-            return { ...state, favorites: newArr }
- */
+
 
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
-import { MenuTypes, FavoriteType, FilterTypes } from '../constants';
-import auth from "../../services/api/auth"
-import {setMenuData,setPlayList} from "../actions/menuActions"
-import { favoritesSelector } from '../selector/favorites';
-import { setFavorites } from '../actions/favoritesActions';
+import {  FilterTypes } from '../constants';
+import {  getMenuType,setMenuType} from '../actions/filterAction';
 import { getData, storeData } from '../../utils/local_storage';
 
-
-
-
-function* changePlayngMusic( tmp:any) {
-    // const favorites = yield getData('favorites');
-    // if(!favorites){
-    //     yield storeData('favorites',[]);
-    // }
-    // const tmp:number[] = favorites?favorites.map((i:{id:number})=>i.id):[];
-   // const tmp= yield
-    yield put(changePlayngMusic(tmp));
-
+function* onGetMenuType({payload}:any) {
+    yield storeData('menuType',payload);
+    yield put(setMenuType(payload));
+   
 }
+function* initMenuTypebyStorage() {
+    
+    const menuType = yield getData('menuType');
 
-export function* watchFavoritesSaga() {
-	
+    if(menuType==null){        
+        yield storeData('menuType',1);
+        yield put(setMenuType(1));
+    }else{
+        yield put(setMenuType(menuType));
+    }
+    
+}
+export function* watchFilterSaga() {
     yield takeEvery(
-		FilterTypes.CHANGE_PLAYING_MUSIC as any,
-		changePlayngMusic
+        FilterTypes.INIT_MENU_TYPE as any,
+		initMenuTypebyStorage
+    )
+    yield takeEvery(
+        FilterTypes.GET_MENU_TYPE as any,
+		onGetMenuType
 	)
-	
 }
 

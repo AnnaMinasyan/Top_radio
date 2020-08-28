@@ -13,7 +13,7 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { changeMenuType, getMenuData } from '../store/actions/menuActions'
+import { getMenuData } from '../store/actions/menuActions'
 import {changeswipeablePanelActive} from '../store/actions/filterAction'
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"

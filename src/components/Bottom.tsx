@@ -3,13 +3,13 @@ import {
     View,
     StyleSheet,
     Text,
-    TouchableOpacity
+    TouchableOpacity,SafeAreaView,
+    StatusBar
 } from 'react-native';
 import Heart from "../assets/icons/heart.svg"
 import Modal from 'react-native-modal';
 import { calcFontSize, calcHeight, calcWidth, deviceHeight,deviceWidth } from "../assets/styles/dimensions"
 import { connect } from "react-redux"
-import { changeMenuType } from '../store/actions/menuActions'
 import { changeFavoriteType,changePlayingMusic } from '../store/actions/filterAction'
 import { NavigationScreenProp } from 'react-navigation';
 import RedHeart from "../assets/icons/redHeart.svg"
@@ -155,7 +155,8 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
     renderBottomSheet  ()  {
-        return <View 
+        return  <SafeAreaView >
+        <StatusBar barStyle='dark-content' backgroundColor="white" /><View 
         style={{ 
             backgroundColor: this.props.theme.backgroundColor,  
             height:deviceHeight, width:deviceWidth+10}}>
@@ -193,7 +194,7 @@ class Bottom extends React.Component<Props, IState> {
             </View>
             <BackGroundSvg  width={deviceWidth} style={{position:'absolute',top:calcHeight(-40)}}/>
             <View style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
-                <SimpleImage size={calcHeight(257)} image={this.props.filterReducer.playItem.im} />
+                <SimpleImage size={calcHeight(180)} image={this.props.filterReducer.playItem.im} />
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                 <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
@@ -201,8 +202,10 @@ class Bottom extends React.Component<Props, IState> {
                         </Text>
             </View>
             {
-               Array.isArray( this.props.filterReducer.playItem.st)?<View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
-               {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any,index:number) => {
+               Array.isArray( this.props.filterReducer.playItem.st)?
+               <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
+               {this.props.filterReducer.playItem.st ? 
+               this.props.filterReducer.playItem.st.map((item: any) => {
                    return <TouchableOpacity
                        onPress={() => { this.changeRadioStancia(item)
                    }}
@@ -229,11 +232,13 @@ class Bottom extends React.Component<Props, IState> {
                     onPress={() => {
                         this.setState({ isRecording: !this.state.isRecording })
                     }}
-                    style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                    style={[styles.btnrecord, 
+                        { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
                 >
-                    {this.props.filterReducer.playItem.isRecording ?
-                        <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} /> :
-                        <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' />
+                    {this.props.filterReducer.playItem.isRecording ? 
+                    <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' />:
+                        <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} /> 
+                       
                     }
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -246,9 +251,9 @@ class Bottom extends React.Component<Props, IState> {
                     {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
                         <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
                 </TouchableOpacity>
-                <TouchableOpacity
+            <TouchableOpacity
                 disabled={!this.props.filterReducer.playItem.pl}
-                    style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#101C3B', }]}
+                    style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
                     onPress={() => {
                        this._navigatePlayList()
                     }}>
@@ -256,6 +261,7 @@ class Bottom extends React.Component<Props, IState> {
                 </TouchableOpacity>
             </View>
         </View>
+        </SafeAreaView >
     }
     bs: any = React.createRef()
     render() {
@@ -291,9 +297,6 @@ const mapStateToProps = ({filterReducer, favorites,theme}: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onChangeMenuType: (payload: any) => {
-            dispatch(changeMenuType(payload))
-        },
         onchangeFavoriteType: () => {
             dispatch(changeFavoriteType())
         },
@@ -330,7 +333,7 @@ const styles = StyleSheet.create({
         height: calcHeight(30), flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: calcHeight(20),
+       marginTop: calcHeight(20),
     },
     numbers: {
         height: calcHeight(28),

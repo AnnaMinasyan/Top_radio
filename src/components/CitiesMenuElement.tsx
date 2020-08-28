@@ -31,7 +31,10 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
         return (
 
 
-            <View style={[styles.body,{backgroundColor:this.props.backColor}]}>
+            <View style={[styles.body,
+            {backgroundColor:this.props.backColor,
+                borderBottomColor:this.props.backColor=="white"?'#F3F4F5':'#1E2B4D',
+            }]}>
                 <View style={styles.row}>
                     <SimpleImage size={calcHeight(54)} title={this.props.info.pa} 
                  color={this.state.colors[this.props.info.id %5]}  
@@ -58,7 +61,6 @@ const styles = StyleSheet.create({
     body: {
         backgroundColor: 'white',
         height: calcHeight(74),
-        borderBottomColor: '#F3F4F5',
         borderBottomWidth: calcHeight(1),
         flexDirection: 'row',
         alignItems: 'center',

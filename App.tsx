@@ -25,11 +25,7 @@ class App extends React.Component<Props, any> {
 }
   componentDidMount() {
     SplashScreen.hide()
-    getData("menuView").then((menuView) => {
-      if (menuView == null) {
-        storeData("menuView", true)
-      }
-    })
+   
     // getData("favorites").then((favorites) => {
     //   if (favorites == null) {
     //     storeData("favorites", [])

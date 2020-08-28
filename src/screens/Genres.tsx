@@ -6,7 +6,8 @@ import {
     ScrollView,
     SafeAreaView,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    TouchableHighlight
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
@@ -24,8 +25,7 @@ import { connect } from "react-redux"
 import { createFilter } from 'react-native-search-filter';
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
-    // radioList: ICitiesConnect[],
-    styleView: boolean,
+
     colors:string[],
     searchData:any |null
 }
@@ -36,52 +36,14 @@ class Genres extends React.Component<IGanresProps, IState> {
         super(props)
         this.state = {
             colors:['#4F67A6','#41A1BF','#42B39E','#49BE7F','#7C59C5'],
-            //     radioList: [
-            //        { title:'Alternative',
-            //        count:32,
-
-            //     },
-            //        { title: 'Rock',
-            //        count:12,
-
-            //     },
-            //        { title: 'Rap',
-            //        count:54,
-            //     },
-            //        { title: 'Rap',
-            //        count:26,
-
-            //     },
-            //        { title:'Rap',
-            //        count:5,
-            //   },
-            //        { title: 'DnB',count:2,},
-            //        { title:'Hip Hop',count:352, },
-
-            //        { title:'Alternative',count:910, },
-
-            //        { title:'Alternative',count:21, },
-
-            //        { title:'Rap',count:26, },
-
-
-
-            //     ],
             searchData:null,
-            styleView: this.props.menuReducer.styleView
         }
-        // const unsubscribe = props.navigation.addListener('focus', () => {
-        //     this.setData()
-        //   });
 
     }
     componentDidMount() {
         this.props.ongetGanresData()
         getData('menuView').then((menuView) => {
 
-
-            //   this.props.onChangeMenuType(false)
-            this.setState({ styleView: menuView })
         })
     }
 
@@ -89,24 +51,14 @@ class Genres extends React.Component<IGanresProps, IState> {
 
     }
     renderMenuItems(data: any) {
-        return <TouchableOpacity 
+        return <TouchableHighlight 
         onPress={()=>{
          this.props.onchangeFilterDataByGenre(data.item.id)
             this.props.navigation.navigate('FilterMenu')
         }}
         >
             <CitiesMenuElement info={data.item} backColor={this.props.theme.backgroundColor} />
-        </TouchableOpacity>
-    }
-    renderMenuItems2(data: any) {
-        return <TouchableOpacity
-        onPress={()=>{
-            this.props.onchangeFilterDataByGenre(data.item.id)
-            this.props.navigation.navigate('FilterMenu')
-        }}
-         style={{ padding: calcWidth(8),backgroundColor:this.props.theme.backgroundColor }}>
-            <SimpleImage size={calcWidth(98)}  color={this.state.colors[data.item.id %5]} title={data.item.pa} />
-        </TouchableOpacity>
+        </TouchableHighlight>
     }
     chouseList() {
         if(this.state.searchData){
@@ -117,6 +69,8 @@ class Genres extends React.Component<IGanresProps, IState> {
     }
     render() {
         const list=this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))        
+       console.log("this.props.filterReducer.menuType",this.props.filterReducer.menuType);
+       
         return (
             <SafeAreaView style={{ height: '100%' }}>
 
@@ -126,34 +80,13 @@ class Genres extends React.Component<IGanresProps, IState> {
                 onchnageSearchData={this.props.onchnageSearchData}
 
                 />
-                    {this.props.menuReducer.styleView ? <FlatList
+                     <FlatList
+                     numColumns={1}
                        data={list}
                         renderItem={(d) => this.renderMenuItems(d)}
                         keyExtractor={(item: any, index: number) => item.id.toString()}
                         maxToRenderPerBatch={10}
-                    /> :
-                        <FlatList
-                            data={list}
-                            renderItem={(d) => this.renderMenuItems2(d)}
-                            contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                            keyExtractor={(item: any, index: number) => item.id.toString()}
-                            maxToRenderPerBatch={10}
-                        />}
-                         {/* <View style={{ position: 'absolute',
-                     height: calcHeight(86),
-                      width: '100%',
-                       bottom: 0 , 
-                   }}>
-                    <Bottom
-                        navigation={this.props.navigation}
-                        onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                        isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}
-                        playUrl={this.state.playUrl}
-                        chnageplayUrl={(data:any)=>{
-                            this.setState({playUrl:data})
-                        }}
-                    />
-                     </View>  */}
+                    /> 
             </View>
             </SafeAreaView>
         );

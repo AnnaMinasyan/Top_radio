@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   Text,
-  ScrollView,TouchableOpacity
+  ScrollView,TouchableOpacity,
+  TextInput
 } from 'react-native';
 import SearchSvg from "../assets/icons/search.svg"
 import MenuSvg from "../assets/icons/menu_icon.svg"
@@ -43,13 +44,13 @@ class Search extends React.Component<Props, IState> {
          paddingHorizontal:calcWidth(3),
          flexDirection:'row'}}>
         {/* <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} style={{marginTop:calcHeight(20), marginRight:calcWidth(13.26)}}/> */}
-        <SearchInput 
+        <TextInput 
           onChangeText={(term) => { this.searchUpdated(term),
              this.props.renderSearchData(term) }} 
           style={styles.searchInput}
          placeholderTextColor='white'
          placeholder="Поиск"
-         
+         autoFocus={true}
           />
         </View>
       </View>

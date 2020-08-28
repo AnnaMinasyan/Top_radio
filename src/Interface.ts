@@ -2,7 +2,6 @@ import { NavigationScreenProp } from 'react-navigation';
 
  export interface IMenuProps {
     styleView:boolean;
-    onChangeMenuType(type:boolean):void;
     ongetPlayTrackList(type:any):void;
     onchnageSearchData(type:any):void;
     toaddfavorite(type:any):void;
@@ -27,7 +26,6 @@ export interface IPlayListProps {
 }
 export interface IFilterMenuProps {
     styleView:boolean;
-    onChangeMenuType(type:boolean):void;
     ongetMenuData():void; 
     onchangeplayItem(payload:any):void; 
     onchangeswipeablePanelActive(payload:boolean):void;
@@ -41,7 +39,6 @@ export interface IFilterMenuProps {
 } 
 export interface IGanresProps {
     styleView:boolean;
-    onChangeMenuType(type:boolean):void;
     ongetGanresData():void;
     onchnageSearchData(type:any):void;
     menuReducer:any,
@@ -51,9 +48,16 @@ export interface IGanresProps {
     navigation: NavigationScreenProp<any, any>;
     theme:any
 } 
+export interface ISettings {
+    styleView:boolean;
+    onchangeBackgroundColor(type:boolean):void;
+    theme:any,
+    navigation: NavigationScreenProp<any, any>,
+    onChangeMenuType(type:number):void;
+    filterReducer: any,
+} 
 export interface ICitiesProps {
     styleView:boolean;
-    onChangeMenuType(type:boolean):void;
     onchangeFilterData(type:any):void;
     onGetCities():void;
     citiesReducer:any,

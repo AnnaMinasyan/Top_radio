@@ -16,7 +16,7 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IFilterMenuProps } from "../Interface"
-import { changeMenuType, getMenuData } from '../store/actions/menuActions'
+import {  getMenuData } from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     getFavorites,
@@ -110,9 +110,7 @@ _addLookingList(data:any){
     renderMenuItems(data: any) {
 
         return <TouchableOpacity
-        style={{ paddingLeft: calcWidth(29) }}
         onPress={() => {
-            // this.bs.current.snapTo(0),
             this.props.onchangeswipeablePanelActive(true)
             this._addLookingList(data.item)
             this.props.onchangeplayItem(data.item)
@@ -159,22 +157,21 @@ console.log('mfskks[',list);
         {/* //    <View style={styles.container}> */}
                 <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor }]}>
                     <Header navigation={this.props.navigation} />
-                        {this.props.menuReducer.styleView ?
+                        {this.props.filterReducer.menuType=="cписок" ?
 
                             <FlatList
+                            numColumns={1}
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
-
-                                //renderItem={this.renderMenuItems}
                                 keyExtractor={(item:any, index:number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             />
                             :
                             <FlatList
+                            numColumns={3}
                                 data={list}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
-                                contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                                //renderItem={this.renderMenuItems}
+                                contentContainerStyle={{  paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
                                 keyExtractor={(item:any, index:number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             />
@@ -182,7 +179,7 @@ console.log('mfskks[',list);
                         }
                    
                     <View style={{ position: 'absolute',
-                     height: calcHeight(86),
+                    
                       width: '100%',
                        bottom: 0 , 
                    }}>
@@ -216,9 +213,6 @@ const mapStateToProps = ({filterReducer,menuReducer,favorites,theme}:any) => {
 // });
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onChangeMenuType: (payload: any) => {
-            dispatch(changeMenuType(payload))
-        },
         ongetMenuData: () => {
             dispatch(getMenuData())
         },
@@ -342,7 +336,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     container: {
-        height:deviceHeight
+        height:deviceHeight-calcHeight(30)
     },
     box: {
         width: 50,

@@ -11,12 +11,15 @@ import Settings from "../screens/Settings"
 import Favorite from "../screens/Favorite"
 const Stack = createStackNavigator();
 const HomeNavigator: React.FunctionComponent = () => (
-  <Stack.Navigator initialRouteName="Menu">
+  <Stack.Navigator 
+
+
+  initialRouteName="Menu">
   
     <Stack.Screen
       name="Menu"
       component={Menu}
-       options={{ header: BaseHeader, headerTransparent: true, }}
+       options={{ header: BaseHeader, headerTransparent: true, animationEnabled:false}}
     />
     <Stack.Screen
     name="Cities"
@@ -31,7 +34,7 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
     name="Favorite"
     component={Favorite}
-     options={{ header: BaseHeader, headerTransparent: true, }}
+     options={{ header: BaseHeader, headerTransparent: true, animationEnabled:false}}
     />
     <Stack.Screen
     name="MyAlarmClock"

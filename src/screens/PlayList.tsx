@@ -81,20 +81,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                                 </View>
                  
                             )})}
-                             {/* {this.state.radioList.filter(data => data.type == this.state.filterType).map((data, key) => {
-                        return (
-                            <View  style={styles.elements}>
-                                <View style={styles.elementsRow}>
-                                    <Text style={styles.elementTitle}>{data.title}</Text>
-                                    <Text style={styles.elementAuther}>{data.auther}</Text>
-                                </View>
-                                <View>
-                                    <Text style={styles.elementCount}>{data.count}</Text>
-                                </View>
-
-                            </View>
-                        )
-                    })} */}
+                             
                     </View>
             </View>
             </ScrollView>

@@ -27,6 +27,7 @@ class SimpleImage extends React.Component<Props, IState> {
     if (this.props.size == calcHeight(98) || this.props.size == calcHeight(257)) {
       count = 180
     }
+    
     return (
       <View style={[styles.header,{
         height: this.props.size,
@@ -37,8 +38,8 @@ class SimpleImage extends React.Component<Props, IState> {
           <View style={[styles.header, { height: this.props.size, width: this.props.size, backgroundColor: this.props.color }]}>
             <Text style={styles.letter}>{this.props.title.charAt(0)}</Text>
           </View>
-          : <View style={[styles.header, { height: this.props.size, width: this.props.size, padding: 2 }]}>
-
+          :
+           <View style={[styles.header, { height: this.props.size, width: this.props.size,}]}>
           <Image
       style={[{
         height: this.props.size,
@@ -46,12 +47,11 @@ class SimpleImage extends React.Component<Props, IState> {
         borderRadius: 8,
       }]} 
         source={{
-          uri:'https://radioarg.net/assets/image/radio/' + count + '/' + this.props.image
+          uri:'https://top-radio.ru/assets/image/radio/' + count + '/' + this.props.image
         }}
       />
           </View>}
       </View>
-      //  http://top-radio.ru/assets/image/radio/180/radiomarusya.jpg
     );
   }
 };
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     },
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOpacity: 0.25,
-    shadowRadius: 16,
+
 
     elevation: 4,
     justifyContent: 'center',

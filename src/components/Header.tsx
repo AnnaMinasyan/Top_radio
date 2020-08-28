@@ -11,11 +11,9 @@ import Menu2 from "../assets/icons/menu_2.svg"
 import MenuDots from "../assets/icons/menu_dots.svg"
 import Heart from "../assets/icons/heart.svg"
 import Modal from 'react-native-modal';
-import MenuSvg from "../assets/icons/menu_cob.svg"
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 import { connect } from "react-redux"
-import { changeMenuType } from '../store/actions/menuActions'
 import { changeFavoriteType } from '../store/actions/filterAction'
 import { DrawerActions } from 'react-navigation';
 import { NavigationScreenProp } from 'react-navigation';
@@ -24,8 +22,6 @@ import SearchSvg from "../assets/icons/search.svg"
 import Search from "./Search"
 import CloseSvg from "../assets/icons/close.svg"
 interface Props {
-
-  onChangeMenuType(type: boolean): void;
   onchangeFavoriteType(): void;
   navigation: NavigationScreenProp<any, any>;
   filterReducer: any,
@@ -103,7 +99,7 @@ class Header extends React.Component<Props, IState> {
   }
   chnageMenuType() {
     this.setState({ menuStyle: !this.state.menuStyle })
-    this.props.onChangeMenuType(!this.state.menuStyle)
+
   }
   changeIsFavorite() {
     console.log("iiiiiiiiii",this.props.filterReducer.isFavorite);
@@ -126,10 +122,10 @@ class Header extends React.Component<Props, IState> {
        {!this.state.showSearchView?
        <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(33), }} />:
        <View style={{
-       width:calcWidth(230),
+       width:calcWidth(240),
        justifyContent:'center',
        alignItems:'center',
-        marginLeft:calcWidth(35),}}>
+        marginLeft:calcWidth(20),}}>
          <Search 
        renderSearchData={this.props.onchnageSearchData}
        />
@@ -161,7 +157,7 @@ class Header extends React.Component<Props, IState> {
           {this.props.filterReducer.isFavorite?<RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)}/>: <Heart fill='#FFFFFF' height={calcHeight(21)} width={calcWidth(23.61)} />} 
           </TouchableOpacity>
 
-          {this.state.menuStyle ?
+          {/* {this.state.menuStyle ?
             <TouchableOpacity
             
             style={global_styles.searchbtn}
@@ -176,13 +172,13 @@ class Header extends React.Component<Props, IState> {
               onPress={() => { this.chnageMenuType() }}
             >
               <MenuSvg height={calcHeight(21)} width={calcHeight(21)} style={{ marginLeft: calcWidth(22), marginRight: calcWidth(19) }} />
-            </TouchableOpacity>}
+            </TouchableOpacity>} */}
           <TouchableOpacity
              style={global_styles.searchbtn}
             onPress={() => {
               this.setState({ hideMenuModal: true })
             }}
-            style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
+           // style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
           >
             <MenuDots height={calcHeight(6.88)} width={calcWidth(26.33)} />
           </TouchableOpacity>
@@ -199,9 +195,6 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onChangeMenuType: (payload: any) => {
-      dispatch(changeMenuType(payload))
-    },
     onchangeFavoriteType: () => {
       dispatch(changeFavoriteType())
     }
@@ -216,12 +209,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingLeft: calcWidth(13),
-    paddingRight: calcWidth(22.73)
+    paddingLeft: calcWidth(20),
+    paddingRight: calcWidth(13.83)
   },
   row: {
     flexDirection: 'row',
-
     alignItems: 'center',
 
   },

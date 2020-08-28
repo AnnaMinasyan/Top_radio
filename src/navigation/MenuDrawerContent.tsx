@@ -20,11 +20,9 @@ import BackImage from "../assets/icons/loading_top.svg"
 import { calcFontSize, calcHeight, calcWidth ,deviceHeight} from "../assets/styles/dimensions"
 import { NavigationScreenProp } from 'react-navigation';
 import { changeisActive } from "../store/actions/filterAction"
-import { changeMenuType } from "../store/actions/menuActions"
 interface Props {
     navigation: NavigationScreenProp<any, any>;
     onchangeisActive(type:string): void;
-    onChangeMenuType(type: boolean): void;
     filterReducer: any
 }
 const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
@@ -43,7 +41,6 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         style={styles.item}
                         onPress={() => {
                             props.onchangeisActive('all')
-                            props.onChangeMenuType(true)
                             props.navigation.navigate('Menu')
                         }}
                     >
@@ -56,7 +53,6 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         style={styles.item}
                         onPress={() => {
                             props.navigation.navigate('Genres')
-                            props.onChangeMenuType(true)
                             props.onchangeisActive('genres')
 
                         }}
@@ -70,7 +66,6 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         style={styles.item}
                         onPress={() => {
                             props.navigation.navigate('Cities')
-                            props.onChangeMenuType(true)
                             props.onchangeisActive('cities')
 
                         }}
@@ -85,8 +80,6 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         onPress={() => {
                             props.onchangeisActive('looking')
                             props.navigation.navigate('Menu')
-                            props.onChangeMenuType(true)
-                            
                         }}
                     >
                         <View style={styles.item}>
@@ -169,9 +162,6 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeisActive: (payload: string) => {
             dispatch(changeisActive(payload))
         },
-        onChangeMenuType: (payload: any) => {
-            dispatch(changeMenuType(payload))
-        }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawerContentComponent);

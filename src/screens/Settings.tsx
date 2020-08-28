@@ -16,7 +16,7 @@ import { calcFontSize, calcHeight, calcWidth, deviceWidth } from "../assets/styl
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { changeMenuType } from '../store/actions/menuActions'
+import { getMenuType } from '../store/actions/filterAction'
 import { changeBackgroundColor } from "../store/actions/themeAction"
 import HeaderByBack from "../components/HeaderByBack"
 import PlaySvG from "../assets/icons/play.svg"
@@ -27,9 +27,8 @@ import { connect } from "react-redux"
 import ConnectSvg from "../assets/icons/connect.svg"
 import ArrowLeft from "../assets/icons/arrow_right.svg"
 import MyAlarmClockSvg from "../assets/icons/alarmClock.svg"
-import DateTimePicker from '@react-native-community/datetimepicker';
-import RepeatSvg from "../assets/icons/repeat.svg"
-import { Switch } from 'react-native-switch';
+import Menu2 from "../assets/icons/menu_2.svg"
+import MenuSvg from "../assets/icons/menu_cob.svg"
 import SimpleSwitch from '../components/SimpleSwitch';
 import AvtoPlaySvg from "../assets/icons/avtoPlay.svg"
 import HeadSetSvg from "../assets/icons/headsets.svg";
@@ -42,7 +41,7 @@ import SunSvg from "../assets/icons/sun.svg"
 import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
 import SmoothPicker from 'react-native-smooth-picker';
-
+import {ISettings} from "../Interface"
 interface IState {
   data: any,
   isEnabled: boolean,
@@ -58,8 +57,8 @@ interface IState {
    select:boolean
  }
 
-class Settings extends React.Component<any, IState> {
-  constructor(props: any) {
+class Settings extends React.Component<ISettings, IState> {
+  constructor(props: ISettings) {
 
     super(props)
     this.state = {
@@ -130,6 +129,41 @@ class Settings extends React.Component<any, IState> {
       </TouchableOpacity>
     </View>
   }
+  onchangingMenuTypes() {
+    return <View style={[styles.modalTheme,]}>
+      <TouchableOpacity
+        style={[styles.modalThemeBtn, { backgroundColor: this.props.theme.backgroundColor }]}
+        onPress={() => {
+          this.props.onChangeMenuType(0)
+          this.setState({
+            visibleModal: null,})
+        }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}> 
+        <Menu2 height={calcHeight(21)} width={calcHeight(21)}  fill='#B3BACE' />
+     
+          <Text style={[global_styles.stationTexttitle, styles.themeTxt, { color: "#1E2B4D", }]}>Сетка  </Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => { 
+           this.props.onChangeMenuType(1)
+          this.setState({
+            visibleModal: null,
+          })
+        }}
+        style={[styles.modalThemeBtn, {backgroundColor: this.props.theme.backgroundColor }]}
+
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <MenuSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE'/>
+
+          <Text style={[global_styles.stationTexttitle, styles.themeTxt, { color: "#1E2B4D", }]}>
+           Список
+        </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  }
   _changeBufferSize(res: IData) {
     let newArr = this.state.bufferSize
     for (let index = 0; index < newArr.length; index++) {
@@ -153,7 +187,7 @@ class Settings extends React.Component<any, IState> {
       <Text style={[global_styles.stationTexttitle, { color: "#1E2B4D", fontSize: calcFontSize(18), marginBottom: calcHeight(20) }]}>
         Размер буфера
             </Text>
-      {this.state.bufferSize.map((res) => {
+      {this.state.bufferSize.map((res:any) => {
         return <View style={{
           width: calcWidth(300),
           flexDirection: 'row',
@@ -297,7 +331,7 @@ class Settings extends React.Component<any, IState> {
             this.setState({ visibleModal: 1 })
             //  this.props.onchangeBackgroundColor(this.props.theme.backgroundColor=="white")
           }}
-          style={[styles.radiostation, { borderBottomWidth: 1, backgroundColor: this.props.theme.backgroundColor }]}>
+          style={[styles.radiostation, {  backgroundColor: this.props.theme.backgroundColor }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <PhoneSvg height={calcHeight(24)} width={calcHeight(14.45)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -306,6 +340,27 @@ class Settings extends React.Component<any, IState> {
                 Выбрать тему
             </Text>
               <Text style={[global_styles.stationComment]}>{this.state.theme}</Text>
+            </View>
+          </View>
+          <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({ visibleModal: 4 })
+          }}
+          style={[styles.radiostation, { borderBottomWidth: 1, backgroundColor: this.props.theme.backgroundColor }]}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+           <View >
+           {this.props.filterReducer.menuType==1?
+           <MenuSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE'/>:
+            <Menu2 height={calcHeight(21)} width={calcHeight(21)}  fill='#B3BACE' />
+          }
+           </View>
+            <View style={{ marginLeft: calcWidth(17) }}>
+
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
+              Тип отображения: {this.props.filterReducer.menuType==1?"cписок":"cетка"}
+            </Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -339,6 +394,15 @@ class Settings extends React.Component<any, IState> {
         >
           {this.onRenderModalSleepTimer()}
         </Modal>
+        <Modal
+          isVisible={this.state.visibleModal === 4}
+          animationIn={'slideInLeft'}
+          animationOut={'slideOutRight'}
+          backdropOpacity={0.2}
+          onBackdropPress={() => { this.setState({ visibleModal: null }) }}
+        >
+          {this.onchangingMenuTypes()}
+        </Modal>
       </View>
     );
   }
@@ -348,8 +412,8 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onChangeMenuType: (payload: any) => {
-      dispatch(changeMenuType(payload))
+    onChangeMenuType: (payload: number) => {
+      dispatch(getMenuType(payload))
     },
     onchangeBackgroundColor: (payload: any) => {
       dispatch(changeBackgroundColor(payload))

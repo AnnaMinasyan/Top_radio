@@ -15,7 +15,6 @@ import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { changeMenuType } from '../store/actions/menuActions'
 import HeaderByBack from "../components/HeaderByBack"
 import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData, _addInFavorite } from "../utils/local_storage"
@@ -386,9 +385,6 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onChangeMenuType: (payload: any) => {
-      dispatch(changeMenuType(payload))
-    },
     onchangeplayItem: (payload: boolean) => {
       dispatch(changeplayItem(payload))
     },

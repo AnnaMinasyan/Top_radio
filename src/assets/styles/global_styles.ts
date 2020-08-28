@@ -36,5 +36,12 @@ import {
       stationComment:{
     fontSize:calcFontSize(14),
     color:'#B3BACE'
-    }
+    },
+    searchbtn:{ 
+        height: calcHeight(56), 
+        paddingHorizontal:calcWidth(11),
+        //width:calcWidth(40),
+        justifyContent: 'center',
+         alignItems: 'center',
+        },
 });

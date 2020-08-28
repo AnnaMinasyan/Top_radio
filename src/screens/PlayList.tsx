@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     elementsRow: {
-
+        width:'80%'
     },
     elementTitle: {
         color: '#1E2B4D',

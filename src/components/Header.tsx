@@ -137,7 +137,7 @@ class Header extends React.Component<Props, IState> {
         </View>
         <View style={[styles.row,]}>
           <TouchableOpacity
-            style={styles.searchbtn}
+            style={global_styles.searchbtn}
               onPress={()=>{
                 this.setState({showSearchView:!this.state.showSearchView})
                 this.props.onchnageSearchData('')
@@ -151,29 +151,34 @@ class Header extends React.Component<Props, IState> {
         </TouchableOpacity>}
           </TouchableOpacity>
           <TouchableOpacity
+             style={global_styles.searchbtn}
             onPress={() => {
               this.changeIsFavorite()
 
             }}
-            style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
+           // style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
           >
           {this.props.filterReducer.isFavorite?<RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)}/>: <Heart fill='#FFFFFF' height={calcHeight(21)} width={calcWidth(23.61)} />} 
           </TouchableOpacity>
 
           {this.state.menuStyle ?
             <TouchableOpacity
+            
+            style={global_styles.searchbtn}
               onPress={() => { this.chnageMenuType() }}
             >
-              <Menu2 height={calcHeight(21)} width={calcHeight(21)} style={{ marginLeft: calcWidth(22), marginRight: calcWidth(19) }} />
+              <Menu2 height={calcHeight(21)} width={calcHeight(21)}  />
             </TouchableOpacity>
 
             :
             <TouchableOpacity
+            style={global_styles.searchbtn}
               onPress={() => { this.chnageMenuType() }}
             >
               <MenuSvg height={calcHeight(21)} width={calcHeight(21)} style={{ marginLeft: calcWidth(22), marginRight: calcWidth(19) }} />
             </TouchableOpacity>}
           <TouchableOpacity
+             style={global_styles.searchbtn}
             onPress={() => {
               this.setState({ hideMenuModal: true })
             }}
@@ -225,12 +230,7 @@ const styles = StyleSheet.create({
     width: calcWidth(265),
     borderRadius: calcWidth(8),
   },
-  searchbtn:{ 
-    height: calcHeight(56), 
-    width:calcWidth(50),
-    justifyContent: 'center',
-     alignItems: 'center',
-    },
+ 
 
   modalView: {
     height: calcHeight(50),

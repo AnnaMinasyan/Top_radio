@@ -270,7 +270,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
               scrollAnimation
               selectOnPress
               showsVerticalScrollIndicator={false}
-              offsetSelection={-15}
+             // offsetSelection={-5}
               initialScrollToIndex={this.state.hours[this.state.selectedHours]}
               data={this.state.hours}
               style={{ height: 240 }}
@@ -295,7 +295,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
               scrollAnimation
               selectOnPress
               showsVerticalScrollIndicator={false}
-              offsetSelection={-25}
+            //  offsetSelection={-5}
               data={this.state.minutes}
               style={{ height: 240 }}
               initialScrollToIndex={this.state.minutes[this.state.selectedMinut]}

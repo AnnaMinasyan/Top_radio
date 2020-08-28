@@ -48,7 +48,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         }}
                     >
                         <View style={styles.item}>
-                            <RadioSvg height={calcHeight(22.02)} width={calcWidth(30)} fill='white' />
+                            <RadioSvg height={calcHeight(22.02)} width={calcWidth(30)} fill={props.filterReducer.isActive=="all"?'#6C7BA4':"white"} />
                             <Text style={props.filterReducer.isActive=="all" ? styles.activeitemText : styles.itemText}>Все радиостанции</Text>
                         </View>
                     </TouchableOpacity>
@@ -62,7 +62,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         }}
                     >
                         <View style={styles.item}>
-                            <Guitar height={calcHeight(29.95)} width={calcWidth(30)} fill='white' />
+                            <Guitar height={calcHeight(29.95)} width={calcWidth(30)} fill={props.filterReducer.isActive=="genres"?'#6C7BA4':"white"} />
                             <Text style={props.filterReducer.isActive=="genres" ? styles.activeitemText : styles.itemText}>Жанры</Text>
                         </View>
                     </TouchableOpacity>
@@ -76,7 +76,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         }}
                     >
                         <View style={styles.item}>
-                            <Location height={calcHeight(30)} width={calcWidth(30)} fill='white' />
+                            <Location height={calcHeight(30)} width={calcWidth(30)} fill={props.filterReducer.isActive=="cities"?'#6C7BA4':"white"} />
                             <Text style={props.filterReducer.isActive=="cities" ? styles.activeitemText : styles.itemText}>Города</Text>
                         </View>
                     </TouchableOpacity>
@@ -90,7 +90,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         }}
                     >
                         <View style={styles.item}>
-                            <EyesSvg height={calcHeight(30)} width={calcWidth(30)} fill={props.filterReducer.isLooking ? '#6C7BA4' : 'white'} />
+                            <EyesSvg height={calcHeight(30)} width={calcWidth(30)} fill={props.filterReducer.isActive=="looking"?'#6C7BA4':"white"} />
                             <Text style={props.filterReducer.isActive=="looking" ? styles.activeitemText : styles.itemText}>Просмотренные</Text>
                         </View>
                     </TouchableOpacity>
@@ -114,7 +114,7 @@ height:deviceHeight
 
         width: '100%',
         alignItems: 'center',
-
+        height:calcHeight(60),
         flexDirection: 'row'
     },
     itemText: {

@@ -24,6 +24,9 @@ import TrackPlayer from 'react-native-track-player';
 import InfoSvg from "../assets/icons/infoMenu.svg"
 import {getPlayList} from "../store/actions/playlistAction"
 import { addFavorites } from '../store/actions/favoritesActions';
+import BackGroundSvg from "../assets/icons/background.svg"
+import global_styles from "../assets/styles/global_styles"
+
 interface Props {
     onCloseStart(): void;
     navigation: NavigationScreenProp<any, any>;
@@ -73,7 +76,7 @@ class Bottom extends React.Component<Props, IState> {
                 onPress={() => {                    
                     this.props.onchangeswipeablePanelActive(true)
                 }}
-                style={{ height: calcHeight(86), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
+                style={{ height: calcHeight(86),width:calcWidth(270), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
 
                     <View style={{ flexDirection: 'row' }}>
@@ -87,6 +90,7 @@ class Bottom extends React.Component<Props, IState> {
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                 <TouchableOpacity
+                style={global_styles.searchbtn}
            onPress={()=>{
             this.props.toaddfavorite(this.props.filterReducer.playItem)
            }}
@@ -158,7 +162,9 @@ class Bottom extends React.Component<Props, IState> {
             <View style={styles.bottomSheet}>
                 <TouchableOpacity
                     style={{
-                        height: calcHeight(50), justifyContent: 'center',
+                        paddingLeft:calcWidth(22),
+                        height: calcHeight(70), 
+                        justifyContent: 'center',
                         width: calcWidth(80), zIndex: 1,
                        // borderWidth:1
                     }}
@@ -168,7 +174,7 @@ class Bottom extends React.Component<Props, IState> {
                     <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={{ justifyContent: 'center', alignItems: 'center', height: calcHeight(40),width:calcWidth(50) }}
+                    style={{ justifyContent: 'center', alignItems: 'center', height: calcHeight(70),width:calcWidth(80) }}
                     onPress={() => {
                         this.props.toaddfavorite(this.props.filterReducer.playItem)
                     }}>
@@ -185,6 +191,7 @@ class Bottom extends React.Component<Props, IState> {
                         fontWeight: '500'
                     }}>{this.props.filterReducer.playItem.pa}</Text> : null}
             </View>
+            <BackGroundSvg  width={deviceWidth} style={{position:'absolute',top:calcHeight(-40)}}/>
             <View style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
                 <SimpleImage size={calcHeight(257)} image={this.props.filterReducer.playItem.im} />
             </View>
@@ -252,6 +259,7 @@ class Bottom extends React.Component<Props, IState> {
     }
     bs: any = React.createRef()
     render() {
+        
         return (
             <View style={{ position: 'absolute',
             height: calcHeight(86),
@@ -263,6 +271,8 @@ class Bottom extends React.Component<Props, IState> {
                         {this.renderBottomSheetheader()}
                     </View> : null}
                 <Modal
+               animationInTiming	={500}
+                animationOutTiming={500}
                     isVisible={this.props.filterReducer.swipeablePanelActive?this.props.filterReducer.swipeablePanelActive:false}
                     backdropOpacity={0.8}
                     style={{  height:deviceHeight, 
@@ -320,8 +330,6 @@ const styles = StyleSheet.create({
         height: calcHeight(30), flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginLeft: calcWidth(20),
-       paddingRight: calcWidth(15),
         marginTop: calcHeight(20),
     },
     numbers: {
@@ -399,7 +407,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: calcWidth(16)
+       marginLeft: calcWidth(5)
     },
     modalView: {
         height: calcHeight(50),

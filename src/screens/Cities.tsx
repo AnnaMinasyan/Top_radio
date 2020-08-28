@@ -134,7 +134,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
                             return (
                                 <CitiesMenuElement info={title.pa} />
                             )
-                        })}
+                        })}a
                     </View> :
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}>
                             {this.state.radioList.map((key) => {

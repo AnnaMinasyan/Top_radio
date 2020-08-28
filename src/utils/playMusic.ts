@@ -1,8 +1,6 @@
 import TrackPlayer from 'react-native-track-player';
 export  const _startPlayMusic= async(playUrl:any) =>{
     const currentTrack = await TrackPlayer.getCurrentTrack();
-    console.log("llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
-    
     await TrackPlayer.reset();
     await TrackPlayer.add({
         id: "local-track",
@@ -17,10 +15,8 @@ export  const _startPlayMusic= async(playUrl:any) =>{
 export const   _pouseMusic=async(isPlayingMusic:boolean)=> {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     if (isPlayingMusic) {
-        console.log("playMusic");
         await TrackPlayer.play();
     } else {
-        console.log("_pouseMusic");
         await TrackPlayer.pause();
     }
 }

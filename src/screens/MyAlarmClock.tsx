@@ -13,27 +13,19 @@ import {
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
-import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import { changeMenuType } from '../store/actions/menuActions'
 import HeaderByBack from "../components/HeaderByBack"
-import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData, _addInFavorite } from "../utils/local_storage"
-import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import ConnectSvg from "../assets/icons/connect.svg"
 import ArrowLeft from "../assets/icons/arrow_right.svg"
 import MyAlarmClockSvg from "../assets/icons/alarmClock.svg"
-import DateTimePicker from '@react-native-community/datetimepicker';
 import RepeatSvg from "../assets/icons/repeat.svg"
-import { Switch } from 'react-native-switch';
 import SimpleSwitch from '../components/SimpleSwitch';
-import DatePicker from 'react-native-date-picker'
 import SmoothPicker from 'react-native-smooth-picker';
-import moment from 'moment';
-import AntennaSvg from "../assets/icons/antena.svg"
 import Modal from 'react-native-modal'; // 2.4.0
 import PowerOffSvg  from "../assets/icons/powerOff.svg"
 import { changeswipeablePanelActive, changeplayItem, changeSearchData } from '../store/actions/filterAction'
@@ -231,7 +223,6 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
     })
   }
   render() {
-console.log(this.state.selectedMinut);
 
     return (
       <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
@@ -279,7 +270,7 @@ console.log(this.state.selectedMinut);
               scrollAnimation
               selectOnPress
               showsVerticalScrollIndicator={false}
-              offsetSelection={-20}
+             // offsetSelection={-5}
               initialScrollToIndex={this.state.hours[this.state.selectedHours]}
               data={this.state.hours}
               style={{ height: 240 }}
@@ -293,10 +284,7 @@ console.log(this.state.selectedMinut);
                   fontSize: calcFontSize(37),
                   color: this.state.selectedHours == item ? 'red' : '#B3BACE'
                 }}
-                >{item}</Text>}
-
-              </View>
-
+                >{item}</Text>}</View>
               )}
             />
           </View>
@@ -307,10 +295,10 @@ console.log(this.state.selectedMinut);
               scrollAnimation
               selectOnPress
               showsVerticalScrollIndicator={false}
-              offsetSelection={-20}
+            //  offsetSelection={-5}
               data={this.state.minutes}
               style={{ height: 240 }}
-              initialScrollToIndex={this.state.selectedMinut}
+              initialScrollToIndex={this.state.minutes[this.state.selectedMinut]}
               onSelected={({ item, index }) => this.handleChangeMinut(item)}
               renderItem={({ item, index }) => (
                 <View>

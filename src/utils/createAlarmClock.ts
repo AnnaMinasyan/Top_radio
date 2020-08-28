@@ -7,7 +7,6 @@ export const init = (toAlert: () => void) => {
     let repeat = 0
     getData('alarmClock').then((time) => {
         if (time) {
-            console.log(":::::::::::::::::::", time);
             playItem = time.playItem.st[0].ur
             minute = time.minute
             hours = time.hours
@@ -19,11 +18,8 @@ export const init = (toAlert: () => void) => {
             const alertTime = f.getTime()
             let alertIsRun: boolean = false
             let now: number = Date.now();
-console.log(now,alertTime,alertIsRun);
 
             if (now > alertTime  ) {
-                console.log("kkkkkkkkkkkk");
-                
                 f.setDate(f.getDate() + 1);
                 let tomorrowTime=time
                 tomorrowTime.hours= f.getHours();
@@ -33,7 +29,6 @@ console.log(now,alertTime,alertIsRun);
 
             }else{
             const interval = setInterval(() => {
-                console.log("----------------------------------------------", now - alertTime);
 
                 if (now > alertTime ) {
                     clearTimeout(interval);
@@ -41,7 +36,6 @@ console.log(now,alertTime,alertIsRun);
                     alertIsRun=true
                     toAlert()
                     if (repeat && repeat > 0) {
-                        console.log("llllllllllllllllllllllllllwwoefffffffff");
                         storeData('alarmClock',
                             {
                                 hours: hours,

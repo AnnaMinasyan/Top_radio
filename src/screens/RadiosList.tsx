@@ -145,13 +145,13 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
 
     chouseList() {
-        if (this.props.filterReducer.isLooking) {
+        if (this.props.filterReducer.isActive=="looking") {
             return this.state.lookingList
         } else {
             return this.props.menuReducer.menuData
         }
     }
-    render() {
+    render() {        
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
         return (
             <SafeAreaView >
@@ -169,7 +169,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                         />
                         :
                         <FlatList
-                            data={this.props.menuReducer.menuData}
+                            data={list}
                             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                             contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
                             keyExtractor={(item: any, index: number) => item.id.toString()}

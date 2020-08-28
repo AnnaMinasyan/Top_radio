@@ -42,6 +42,7 @@ class HeaderByBack extends React.Component<IHeaderByBackProps, IState> {
             <View style={{ backgroundColor: 'white' }}>
                 <View style={styles.header}>
                     <TouchableOpacity
+                    style={global_styles.searchbtn}
                     onPress={()=>{
                         this.props.onNavigate()
                     }}
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     title:{
         color:'white',
         fontSize:calcFontSize(20),
-        marginLeft:calcWidth(16),
+        marginLeft:calcWidth(5),
         fontWeight:'500'
     }
 });

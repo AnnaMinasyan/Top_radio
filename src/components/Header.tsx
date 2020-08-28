@@ -30,6 +30,7 @@ interface Props {
   navigation: NavigationScreenProp<any, any>;
   filterReducer: any,
   onchnageSearchData(type: any): void;
+  theme:any
 
 }
 interface IState {
@@ -121,17 +122,11 @@ class Header extends React.Component<Props, IState> {
 
       <View style={styles.header}>
         <View style={[styles.row,]}>
-          <TouchableOpacity
-            onPress={() => {
-              console.log(this.props.navigation);
-              
-
-            }}
-          >
-          </TouchableOpacity>
-       {!this.state.showSearchView?<Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(40), marginRight:calcWidth(75) }} />:
-       <View style={{backgroundColor:'red',
-       width:calcWidth(250),
+          
+       {!this.state.showSearchView?
+       <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(33), }} />:
+       <View style={{
+       width:calcWidth(230),
        justifyContent:'center',
        alignItems:'center',
         marginLeft:calcWidth(35),}}>
@@ -142,38 +137,48 @@ class Header extends React.Component<Props, IState> {
         </View>
         <View style={[styles.row,]}>
           <TouchableOpacity
-            style={styles.searchbtn}
+            style={global_styles.searchbtn}
               onPress={()=>{
                 this.setState({showSearchView:!this.state.showSearchView})
+                this.props.onchnageSearchData('')
               }}
           >
          {!this.state.showSearchView? <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />:
-        <CloseSvg width={calcWidth(15.48)} height={calcHeight(15)} fill='#B3BACE'/>}
+        <TouchableOpacity
+       // onPress={()=>this.props.onchnageSearchData('')}
+        >
+        <CloseSvg width={calcWidth(15.48)} height={calcHeight(15)} fill='#B3BACE'/>
+        </TouchableOpacity>}
           </TouchableOpacity>
           <TouchableOpacity
+             style={global_styles.searchbtn}
             onPress={() => {
               this.changeIsFavorite()
 
             }}
-            style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
+           // style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
           >
           {this.props.filterReducer.isFavorite?<RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)}/>: <Heart fill='#FFFFFF' height={calcHeight(21)} width={calcWidth(23.61)} />} 
           </TouchableOpacity>
 
           {this.state.menuStyle ?
             <TouchableOpacity
+            
+            style={global_styles.searchbtn}
               onPress={() => { this.chnageMenuType() }}
             >
-              <Menu2 height={calcHeight(21)} width={calcHeight(21)} style={{ marginLeft: calcWidth(22), marginRight: calcWidth(19) }} />
+              <Menu2 height={calcHeight(21)} width={calcHeight(21)}  />
             </TouchableOpacity>
 
             :
             <TouchableOpacity
+            style={global_styles.searchbtn}
               onPress={() => { this.chnageMenuType() }}
             >
               <MenuSvg height={calcHeight(21)} width={calcHeight(21)} style={{ marginLeft: calcWidth(22), marginRight: calcWidth(19) }} />
             </TouchableOpacity>}
           <TouchableOpacity
+             style={global_styles.searchbtn}
             onPress={() => {
               this.setState({ hideMenuModal: true })
             }}
@@ -225,12 +230,7 @@ const styles = StyleSheet.create({
     width: calcWidth(265),
     borderRadius: calcWidth(8),
   },
-  searchbtn:{ 
-    height: calcHeight(56), 
-    width:calcWidth(50),
-    justifyContent: 'center',
-     alignItems: 'center',
-    },
+ 
 
   modalView: {
     height: calcHeight(50),

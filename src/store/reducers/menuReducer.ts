@@ -56,7 +56,6 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             const array:any=[]
         for (let index = 0; index < state.menuData.length; index++) {
             const element = state.menuData[index];
-            console.log(":::::::::::::::::::::::::::::::::",element);
 
             if (element.ci == action.payload) {
                 
@@ -64,7 +63,6 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
                
             } 
         }
-        console.log(array);
         
             return {...state,filterData:array} 
          case MenuTypes.CHANGE_FILTER_DATA_BY_GENRE:
@@ -75,10 +73,8 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
               
                 
                 element.ge.map((elem:any, key:any)=>{
-                   console.log(elem,action.payload);
                    
                 if(elem==action.payload){
-                    console.log("element",element);
                     genre.push(element)  
                 }  
                 })

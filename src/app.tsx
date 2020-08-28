@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView ,StatusBar } from 'react-native';
 import Navigator from "./navigation/Navigator"
 import { NavigationScreenProp } from 'react-navigation';
 import { useEffect, useState, } from 'react';
@@ -30,7 +30,6 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     }, [])
    const  changeActivePanel =()=>{
     getData('alarmClock').then((time)=>{
-        console.log("alarmClockalarmClock",time.playItem);
         dispatch(changeswipeablePanelActive(false))
         dispatch(changeplayItem(time.playItem))
         dispatch(changePlayingMusic(true))
@@ -38,6 +37,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
    }
     return (
         <SafeAreaView style={{ flex: 1, }}>
+             <StatusBar barStyle="light-content" backgroundColor="#0F1E45" />
             <Navigator />
           {  init(changeActivePanel)} 
         </SafeAreaView>

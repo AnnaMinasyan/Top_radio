@@ -19,7 +19,6 @@ interface Props {
         }
       }
    change(res:IData){
-       console.log(";;;;",res);
        this.props.valueChanged(res);
       this.setState({status:!this.state.status})
            

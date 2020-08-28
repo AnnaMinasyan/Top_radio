@@ -32,7 +32,6 @@ interface IState {
 
 class Genres extends React.Component<IGanresProps, IState> {
     constructor(props: IGanresProps) {
-        console.log("LLLLLLLLLLLLLLLLLLLLLL", props);
 
         super(props)
         this.state = {

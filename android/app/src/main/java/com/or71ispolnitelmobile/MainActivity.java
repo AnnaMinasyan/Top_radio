@@ -1,5 +1,5 @@
 package com.or71ispolnitelmobile;
-
+import org.devio.rn.splashscreen.SplashScreen; // here
 import com.facebook.react.ReactActivity;
 
 public class MainActivity extends ReactActivity {
@@ -12,4 +12,5 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "or71IspolnitelMobile";
   }
+ 
 }

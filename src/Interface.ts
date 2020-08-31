@@ -15,7 +15,8 @@ import { NavigationScreenProp } from 'react-navigation';
     filterReducer: any,
     dispatch: any,
     favorites:number[],
-    theme:any
+    theme:any,
+    settingsReducer:any
 
 } 
 export interface IPlayListProps {
@@ -50,11 +51,13 @@ export interface IGanresProps {
 } 
 export interface ISettings {
     styleView:boolean;
+    onchangeAutoPlay(type:boolean):void;
     onchangeBackgroundColor(type:boolean):void;
     theme:any,
     navigation: NavigationScreenProp<any, any>,
     onChangeMenuType(type:number):void;
     filterReducer: any,
+    settingsReducer:any
 } 
 export interface ICitiesProps {
     styleView:boolean;

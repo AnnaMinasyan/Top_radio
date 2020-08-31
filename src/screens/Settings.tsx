@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Animated,
   Easing,
-  TouchableWithoutFeedback,
+  TouchableHighlight,
 
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
@@ -42,6 +42,7 @@ import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
 import SmoothPicker from 'react-native-smooth-picker';
 import {ISettings} from "../Interface"
+import {changeAutoPlay} from "../store/actions/settingsAcrion"
 interface IState {
   data: any,
   isEnabled: boolean,
@@ -50,7 +51,8 @@ interface IState {
   bufferSize: IData[],
   selectBufferSize: string,
   timeSleep:number,
-  timeSleepList:string[]
+  timeSleepList:string[],
+  autoPlay:boolean
 }
  interface ITimeSleepList{
    time:number,
@@ -85,17 +87,16 @@ class Settings extends React.Component<ISettings, IState> {
      
     ],
       timeSleep:10,
-      selectBufferSize: '500 ms'
-    }
-    // const unsubscribe = props.navigation.addListener('focus', () => {
-    //     this.setData()
-    //   });
+      selectBufferSize: '500 ms',
+      autoPlay:false
 
+    }
   }
 
   onRenderModalTheme() {
     return <View style={[styles.modalTheme,]}>
-      <TouchableOpacity
+      <TouchableHighlight
+       underlayColor={ 'rgba(30, 41, 69,5)' }
         style={[styles.modalThemeBtn, { backgroundColor: '#1E2B4D' }]}
         onPress={() => {
           this.props.onchangeBackgroundColor(true)
@@ -108,8 +109,9 @@ class Settings extends React.Component<ISettings, IState> {
           <MoonSvg width={calcWidth(20)} height={calcWidth(20)} fill='white' />
           <Text style={[global_styles.stationTexttitle, styles.themeTxt, { color: "white", }]}>Тёмная </Text>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity
+      </TouchableHighlight>
+      <TouchableHighlight
+       underlayColor={'rgba(235, 235, 237,5)'} 
         onPress={() => {
           this.props.onchangeBackgroundColor(false)
           this.setState({
@@ -126,13 +128,16 @@ class Settings extends React.Component<ISettings, IState> {
             Светлая
         </Text>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     </View>
   }
   onchangingMenuTypes() {
     return <View style={[styles.modalTheme,]}>
-      <TouchableOpacity
-        style={[styles.modalThemeBtn, { backgroundColor: this.props.theme.backgroundColor }]}
+      <TouchableHighlight
+        underlayColor={ this.props.theme.backgroundColor=="white"?'rgba(235, 235, 237,5)':'rgba(30, 41, 69,5)' }
+        style={[styles.modalThemeBtn, { backgroundColor: this.props.theme.backgroundColor, 
+          borderBottomWidth:1,
+          borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}
         onPress={() => {
           this.props.onChangeMenuType(0)
           this.setState({
@@ -141,10 +146,12 @@ class Settings extends React.Component<ISettings, IState> {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}> 
         <Menu2 height={calcHeight(21)} width={calcHeight(21)}  fill='#B3BACE' />
      
-          <Text style={[global_styles.stationTexttitle, styles.themeTxt, { color: "#1E2B4D", }]}>Сетка  </Text>
+          <Text style={[global_styles.stationTexttitle, styles.themeTxt, {  color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Сетка  </Text>
         </View>
-      </TouchableOpacity>
-      <TouchableOpacity
+      </TouchableHighlight>
+      <TouchableHighlight
+      
+      underlayColor={ this.props.theme.backgroundColor=="white"? 'rgba(235, 235, 237,5)':'rgba(30, 41, 69,5)' }
         onPress={() => { 
            this.props.onChangeMenuType(1)
           this.setState({
@@ -157,11 +164,11 @@ class Settings extends React.Component<ISettings, IState> {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <MenuSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE'/>
 
-          <Text style={[global_styles.stationTexttitle, styles.themeTxt, { color: "#1E2B4D", }]}>
+          <Text style={[global_styles.stationTexttitle, styles.themeTxt, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
            Список
         </Text>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     </View>
   }
   _changeBufferSize(res: IData) {
@@ -254,12 +261,19 @@ class Settings extends React.Component<ISettings, IState> {
       timeSleep: index
     });
   };
+  chnageAutoPlay(){
+    this.props.onchangeAutoPlay(!this.props.settingsReducer.autoPlay)
+  }
   render() {
+console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.autoPlay);
 
     return (
       <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
         <HeaderByBack title='Настройки' onNavigate={() => { this.props.navigation.goBack() }} />
-        <View style={[styles.radiostation, { marginTop: calcFontSize(21), backgroundColor: this.props.theme.backgroundColor }]}>
+        <View style={[styles.radiostation,
+           { marginTop: calcFontSize(21), backgroundColor: this.props.theme.backgroundColor,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
+             }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <AvtoPlaySvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -267,10 +281,16 @@ class Settings extends React.Component<ISettings, IState> {
             </View>
           </View>
           <View>
-            <SimpleSwitch />
+            <SimpleSwitch isEnabled={this.props.settingsReducer.autoPlay} 
+            onValueChange={()=>{
+              this.chnageAutoPlay()
+            }}/>
           </View>
         </View>
-        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
+        <View style={[styles.radiostation,
+           { backgroundColor: this.props.theme.backgroundColor,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
+            }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <HeadSetSvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -281,7 +301,10 @@ class Settings extends React.Component<ISettings, IState> {
             <SimpleSwitch />
           </View>
         </View>
-        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
+        <View style={[styles.radiostation,
+           { backgroundColor: this.props.theme.backgroundColor,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
+             }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <RefleshSvg height={calcHeight(20.4)} width={calcHeight(22)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -289,14 +312,21 @@ class Settings extends React.Component<ISettings, IState> {
             </View>
           </View>
           <View>
-            <SimpleSwitch />
+            <SimpleSwitch 
+            isEnabled={true}
+            onValueChange={() => {
+              
+            }}/>
           </View>
         </View>
         <TouchableOpacity
           onPress={() => {
             this.setState({ visibleModal: 3,timeSleep:0 })
           }}
-          style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
+          style={[styles.radiostation,
+           { backgroundColor: this.props.theme.backgroundColor,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
+             }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -313,7 +343,10 @@ class Settings extends React.Component<ISettings, IState> {
           onPress={() => {
             this.setState({ visibleModal: 2 })
           }}
-          style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
+          style={[styles.radiostation, 
+          { backgroundColor: this.props.theme.backgroundColor,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
+             }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <CradSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -331,7 +364,9 @@ class Settings extends React.Component<ISettings, IState> {
             this.setState({ visibleModal: 1 })
             //  this.props.onchangeBackgroundColor(this.props.theme.backgroundColor=="white")
           }}
-          style={[styles.radiostation, {  backgroundColor: this.props.theme.backgroundColor }]}>
+          style={[styles.radiostation, 
+          {backgroundColor: this.props.theme.backgroundColor,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <PhoneSvg height={calcHeight(24)} width={calcHeight(14.45)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -348,7 +383,9 @@ class Settings extends React.Component<ISettings, IState> {
           onPress={() => {
             this.setState({ visibleModal: 4 })
           }}
-          style={[styles.radiostation, { borderBottomWidth: 1, backgroundColor: this.props.theme.backgroundColor }]}>
+          style={[styles.radiostation,
+           { borderBottomWidth: 1, backgroundColor: this.props.theme.backgroundColor ,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
            <View >
            {this.props.filterReducer.menuType==1?
@@ -417,6 +454,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     onchangeBackgroundColor: (payload: any) => {
       dispatch(changeBackgroundColor(payload))
+    },
+    onchangeAutoPlay: (payload: boolean) => {
+      dispatch(changeAutoPlay(payload))
     }
   }
 }
@@ -431,11 +471,8 @@ const styles = StyleSheet.create({
   },
   radiostation: {
     height: calcHeight(74),
-    // marginTop: calcFontSize(21),
     backgroundColor: 'white',
     borderTopWidth: 1,
-
-    borderColor: '#F3F4F5',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
@@ -459,7 +496,7 @@ const styles = StyleSheet.create({
   },
   themeTxt: {
 
-    fontSize: calcFontSize(20),
+    fontSize: calcFontSize(15),
     marginLeft: calcWidth(8)
   },
   bufferSizeModal: {

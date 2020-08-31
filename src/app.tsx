@@ -6,10 +6,10 @@ import { useEffect, useState, } from 'react';
 import { useSelector,useDispatch } from "react-redux"
 import { panelActiveSelector, playItem } from "../src/store/selector/filterSelector"
 import { initFavorites } from './store/actions/favoritesActions';
+import {initAutoPlay} from "./store/actions/settingsAcrion"
 import { changeswipeablePanelActive,changeplayItem ,changePlayingMusic,initMenuType} from './store/actions/filterAction';
 import {init} from "./utils/createAlarmClock"
 import { getData, storeData } from "./utils/local_storage"
-
 import {_startPlayMusic} from "./utils/playMusic"
 interface Props {
     onchangeswipeablePanelActive(payload: boolean): void;
@@ -27,6 +27,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
        const data= new Date()
         dispatch(initFavorites())
         dispatch(initMenuType())
+        dispatch(initAutoPlay())
     }, [])
    const  changeActivePanel =()=>{
     getData('alarmClock').then((time)=>{
@@ -37,7 +38,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
    }
     return (
         <SafeAreaView style={{ flex: 1, }}>
-             <StatusBar barStyle="light-content" backgroundColor="#0F1E45" />
+             <StatusBar barStyle='default' backgroundColor="#0F1E45" />
             <Navigator />
           {  init(changeActivePanel)} 
         </SafeAreaView>

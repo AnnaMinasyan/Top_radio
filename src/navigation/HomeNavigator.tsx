@@ -24,12 +24,12 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
     name="Cities"
     component={Cities}
-     options={{ header: BaseHeader, headerTransparent: true, }}
+     options={{ header: BaseHeader, headerTransparent: true,animationEnabled:false }}
     /> 
     <Stack.Screen
     name="Genres"
     component={Genres}
-     options={{ header: BaseHeader, headerTransparent: true, }}
+     options={{ header: BaseHeader, headerTransparent: true,animationEnabled:false }}
     /> 
     <Stack.Screen
     name="Favorite"
@@ -39,22 +39,22 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
     name="MyAlarmClock"
     component={MyAlarmClock}
-    options={{headerShown:false}}
+    options={{headerShown:false,animationEnabled:false}}
     />
     <Stack.Screen
     name="Settings"
     component={Settings}
-    options={{headerShown:false}}
+    options={{headerShown:false,animationEnabled:false}}
     />
      <Stack.Screen
     name="PlayList"
     component={PlayList}
-    options={{headerShown:false}}
+    options={{headerShown:false,animationEnabled:false}}
     />
     <Stack.Screen
     name="FilterMenu"
     component={FilterMenu}
-    options={{ header: BaseHeader, headerTransparent: true, }}
+    options={{ header: BaseHeader, headerTransparent: true, animationEnabled:false}}
     />
   </Stack.Navigator>
 );

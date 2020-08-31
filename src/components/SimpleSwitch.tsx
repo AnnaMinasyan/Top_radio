@@ -13,19 +13,8 @@ import {
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
-import Header from "./Header"
-import Search from "./Search"
-import { ISimpleSwitchProps } from "../Interface"
-import HeaderByBack from "./HeaderByBack"
-import PlaySvG from "../assets/icons/play.svg"
-import RadioMenuElement from "./RadioMenuElement"
-import { storeData, getData } from "../utils/local_storage"
-import SimpleImage from "./SimpleImage"
+
 import { connect } from "react-redux"
-import ConnectSvg from "../assets/icons/connect.svg"
-import ArrowLeft from "../assets/icons/arrow_right.svg"
-import MyAlarmClockSvg from "../assets/icons/MyAlarmClock.svg"
-import RepeatSvg from "../assets/icons/repeat.svg"
 import { Switch } from 'react-native-switch';
 
 interface IState {
@@ -34,6 +23,7 @@ interface IState {
 interface Props{
   isEnabled: boolean
   onValueChange():void; 
+  theme:any
 }
 class SimpleSwitch extends React.Component<Props, IState> {
   constructor(props: Props) {
@@ -67,7 +57,7 @@ class SimpleSwitch extends React.Component<Props, IState> {
             circleBorderWidth={0}
           // circleBorderActiveColor={'white'}
                backgroundActive={'#3CDC86'}
-              backgroundInactive={'#B3BACE'}
+              backgroundInactive={this.props.theme.backgroundColor=="white"?'#B3BACE':'#192E66'}
               circleActiveColor={'white'}
               circleInActiveColor={'white'}
               changeValueImmediately={true}

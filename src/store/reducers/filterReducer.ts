@@ -62,39 +62,6 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
             }
             return { ...state, favorites: newArr }
 
-            // getData('favorites').then((l: any) => {
-
-            //     storageFavorite = l
-            //     let count = false
-            //     if (state.favorites && state.favorites.length > 0) {
-            //         for (let index = 0; index < newArr.length; index++) {
-            //             const element = newArr[index];
-            //             if (element == action.payload.id) {
-            //                 count = true
-            //             }
-            //             if (count) {
-            //                 newArr.splice(index, 1)
-            //                 storageFavorite.splice(index, 1)
-            //                 break
-            //             }
-            //         }
-            //         if (count == false) {
-            //             newArr.push(action.payload.id)
-            //             storageFavorite.push(action.payload)
-            //         }
-            //     } else {
-            //         newArr.push(action.payload.id)
-            //         storageFavorite.push(action.payload)
-            //     }
-            //     storeData("favorites", storageFavorite).then(() => {
-            //         getData('favorites').then((d) => console.log(d)
-            //         )
-
-            //         return { ...state, favorites: newArr };
-            //     })
-            // })
-
-
 
         default:
             return state;

@@ -157,7 +157,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
 
   }
   onRenderModalSleepTimer() {
-    return <View style={styles.modalTimer}>
+    return <View style={[styles.modalTimer,{backgroundColor:this.props.theme.backgroundColor, }]}>
       <View style={styles.modalSleepTimer
       }>
         <View style={{}}>
@@ -168,7 +168,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             showsVerticalScrollIndicator={false}
             offsetSelection={-20}
             data={this.state.timeSleepList}
-            style={{ height: calcHeight(240), marginTop: calcHeight(10) }}
+            style={{ height: calcHeight(370), marginTop: calcHeight(10) }}
             onSelected={({ item, index }) => this.handleChangeTimeSleepList(item)}
             renderItem={({ item, index }) => (
               <View>
@@ -187,13 +187,13 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           </Text>
       </View>
       <TouchableOpacity
-        style={styles.btn}
+        style={[styles.btn,{borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
         onPress={() => {
           this._changeAlarmClock()
           this.setState({ visibleModal: 0 })
         }}
       >
-        <Text style={{ color: 'black' }}>Подтвердить число </Text>
+        <Text   style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white", marginTop:0}]}>Подтвердить число </Text>
       </TouchableOpacity>
     </View>
   }
@@ -226,7 +226,9 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
     return (
       <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
         <HeaderByBack title='Будильник' onNavigate={() => { this.props.navigation.goBack() }} />
-        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor, marginTop: calcFontSize(21), borderTopWidth: 1, }]}>
+        <View style={[styles.radiostation, 
+          { backgroundColor: this.props.theme.backgroundColor, marginTop: calcFontSize(21), borderTopWidth: 1,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <PowerOffSvg height={calcHeight(34)} width={calcHeight(20)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -246,7 +248,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           }}
           style={[styles.radiostation, {
             backgroundColor: this.props.theme.backgroundColor,
-            borderTopWidth: 1,
+            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
           }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <ConnectSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
@@ -315,7 +317,9 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           </View>
           <Text style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>мин.</Text>
         </View>
-        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor, borderTopWidth: 1, }]}>
+        <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor,
+           borderTopWidth: 1,
+           borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <RepeatSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -337,7 +341,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           onPress={() => {
             this.setState({ visibleModal: 1 })
           }}
-          style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor }]}>
+          style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor,  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
@@ -403,7 +407,6 @@ const styles = StyleSheet.create({
     height: calcHeight(74),
     backgroundColor: 'white',
     borderBottomWidth: 1,
-    borderColor: '#F3F4F5',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
@@ -437,10 +440,11 @@ const styles = StyleSheet.create({
   },
   modalTimer: {
     backgroundColor: 'white',
-    height: calcHeight(380),
+    height: calcHeight(500),
     marginHorizontal: calcWidth(65),
     paddingHorizontal: calcWidth(20),
-    borderRadius: calcWidth(5)
+    borderRadius: calcWidth(5),
+    justifyContent:'space-between'
   },
   timer: {
     justifyContent: 'center',
@@ -453,7 +457,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: calcHeight(1.5),
     borderColor: '#B3BACE',
-    marginTop: calcHeight(5),
+    marginVertical: calcHeight(15),
     height: calcHeight(50),
     justifyContent: 'center',
     alignItems: 'center'

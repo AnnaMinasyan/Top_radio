@@ -32,6 +32,7 @@ class SimpleImage extends React.Component<Props, IState> {
       <View style={[styles.header,{
         height: this.props.size,
         width: this.props.size,
+        shadowColor:this.props.size==180? 'rgba(0, 0, 0, 0.04)':'rgba(0, 0, 0, 0.1)',
         borderRadius: 8,
       }]} >
         {this.props.color && this.props.title ?
@@ -61,15 +62,15 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
+   
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 3,
     },
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOpacity: 0.25,
-
-
-    elevation: 4,
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    
+    elevation: 7,
     justifyContent: 'center',
     alignItems: 'center'
   },

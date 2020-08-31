@@ -110,8 +110,6 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight 
             onPress={() => {
-                console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-                
                 this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
@@ -203,8 +201,8 @@ class Menu extends React.Component<IMenuProps, IState> {
         );
     }
 };
-const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme }: any) => {
-    return { filterReducer, menuReducer, favorites, theme }
+const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme,settingsReducer }: any) => {
+    return { filterReducer, menuReducer, favorites, theme,settingsReducer}
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {
@@ -340,7 +338,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     container: {
-        height: deviceHeight-calcHeight(30)
+        height: deviceHeight-calcHeight(28.5)
     },
     box: {
         width: 50,

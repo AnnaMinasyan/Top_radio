@@ -8,6 +8,7 @@ import { watchGanres } from './ganresSaga';
 import { watchPlayList } from './playListSaga';
 import { watchFavoritesSaga } from './favotitesSaga';
 import { watchFilterSaga } from './filterSaga';
+import {watchSettingsSaga}from "./settingsSaga"
 
 export default function* rootSaga() {
 	yield all([
@@ -16,6 +17,7 @@ export default function* rootSaga() {
 		watchGanres(),
 		watchPlayList(),
 		watchFavoritesSaga(),
-		watchFilterSaga()]
+		watchFilterSaga(),
+		watchSettingsSaga()]
 	);
 }

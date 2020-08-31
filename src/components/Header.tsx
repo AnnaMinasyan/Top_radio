@@ -51,9 +51,9 @@ class Header extends React.Component<Props, IState> {
       style={{ position: 'absolute', top: calcHeight(30), right: calcWidth(8), backgroundColor: 'rgba(0, 0, 0, 0.25)' }}
       onBackdropPress={() => { this.setState({ hideMenuModal: false }) }}
       isVisible={this.state.hideMenuModal}>
-      <View style={[styles.modal,{backgroundColor:this.props.theme.backgroundColor}]}>
+      <View style={[styles.modal,{backgroundColor:this.props.theme.backgroundColor,}]}>
         <TouchableOpacity
-          style={[styles.modalView, { marginTop: calcHeight(6) }]}
+          style={[styles.modalView, { marginTop: calcHeight(6),  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
            this.props.navigation.navigate("MyAlarmClock")
@@ -62,7 +62,7 @@ class Header extends React.Component<Props, IState> {
           <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Установить будильник</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.modalView}
+          style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
           }}
@@ -70,7 +70,7 @@ class Header extends React.Component<Props, IState> {
           <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Предложить радиостанцию</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.modalView}
+          style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
           }}
@@ -78,7 +78,7 @@ class Header extends React.Component<Props, IState> {
           <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Оставить отзыв</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.modalView}
+          style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
             this.props.navigation.navigate('Settings')
@@ -87,7 +87,7 @@ class Header extends React.Component<Props, IState> {
           <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Настройки</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.modalView, { borderBottomWidth: 0 }]}
+          style={[styles.modalView, { borderBottomWidth: 0 ,borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
           }}

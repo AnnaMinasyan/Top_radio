@@ -44,4 +44,10 @@ export enum FavoriteType {
     SET = "@FavoriteType/SET",
     INIT = "@FavoriteType/INIT"
     
+    
+}
+export enum SettingsType {
+    CHANGE_AUTO_PLAY = "@FavoriteType/CHANGE_AUTO_PLAY",
+    INIT_AUTO_PLA = "@FavoriteType/INIT_AUTO_PLA",
+    SET_AUTO_PLAY= "@FavoriteType/SET_AUTO_PLAY",
 }

@@ -64,9 +64,9 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                     <View>
                         {list.map((data: any) => {
                             return (
-                                <View style={styles.elements}>
+                                <View style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
                                     <View style={styles.elementsRow}>
-                                        <Text style={styles.elementTitle}>{data.song}</Text>
+                                        <Text style={[styles.elementTitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>{data.song}</Text>
                                         <Text style={styles.elementAuther}>{data.artist}</Text>
                                     </View>
                                     <View>
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     },
     elements: {
         height: calcHeight(74),
-        backgroundColor: 'white',
+      
         borderBottomWidth: 1,
         borderColor: '#F3F4F5',
         flexDirection: 'row',

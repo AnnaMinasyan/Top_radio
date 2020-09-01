@@ -15,7 +15,8 @@ export interface IFilterState {
     favorites: any,
     searchData: any ,
     isPlayingMusic:boolean
-    menuType:number
+    menuType:number,
+    playListType:any
 }
 
 
@@ -28,7 +29,8 @@ export const initialState: IFilterState = {
     favorites: [],
     searchData: '',
     isPlayingMusic:false,
-    menuType:0
+    menuType:0,
+    playListType:{}
 }
 const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) => {
     
@@ -48,7 +50,8 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
             return { ...state,isPlayingMusic : action.payload }
         case FilterTypes.CHANGE_PLAY_ITEM:
             return { ...state, playItem: action.payload }
-        
+        case FilterTypes.SET_PLAYLIST_TYPE:
+            return { ...state, playListType: action.payload }
         case FilterTypes.GET_FAVORITES:
             return { ...state, favorites: action.payload };
         case FilterTypes.ADD_FAVORITE:

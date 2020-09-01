@@ -76,3 +76,9 @@ export const setMenuType = (payload:number) => {
 		payload
 	};
 };
+export const setPlayItemType = (payload:any) => {
+	return {
+		type: FilterTypes.SET_PLAYLIST_TYPE,
+		payload
+	};
+};

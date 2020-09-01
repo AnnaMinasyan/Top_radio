@@ -154,6 +154,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {        
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+console.log("+++++++++++++++++",this.props.filterReducer.playListType);
 
       
         return (
@@ -241,10 +242,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     bottomView: {
-        position: 'absolute',
-      //  height: calcHeight(86),
+      position: 'absolute',
+     
         width: '100%',
-        bottom: 0,
+       bottom: 0,
     },
     row: {
         flexDirection: 'row',

@@ -34,7 +34,8 @@ export enum FilterTypes {
     CHANGE_PLAYING_MUSIC='@filterTypes/CHANGE_PLAYING_MUSIC',
     SET_MENU_TYPE='@filterTypes/CHANGE_MENU_TYPE', 
     INIT_MENU_TYPE='@filterTypes/INIT_MENU_TYPE', 
-    GET_MENU_TYPE='@filterTypes/GET_MENU_TYPE'
+    GET_MENU_TYPE='@filterTypes/GET_MENU_TYPE',
+    SET_PLAYLIST_TYPE='@filterTypes/SET_PLAYLIST_TYPE'
 }
 export enum ThemeTypes{
     CHANGE_BACKGROUNDCOLOR='@themeTypes/CHANGE_BACKGROUNDCOLOR'

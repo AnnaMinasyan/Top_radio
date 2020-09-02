@@ -57,7 +57,8 @@ interface IState {
     orientation: string,
     startValue: any,
     endValue: any,
-    duration: number
+    duration: number,
+    headerHeight:number
 }
 class Bottom extends React.Component<Props, IState> {
     constructor(props: Props) {
@@ -71,7 +72,8 @@ class Bottom extends React.Component<Props, IState> {
             orientation: '',
             startValue: new Animated.Value(1),
             endValue: 0,
-            duration: 5000
+            duration: 5000,
+            headerHeight:86
         }
         
     }
@@ -104,17 +106,24 @@ class Bottom extends React.Component<Props, IState> {
     onPanResponderRelease: (evt, gestureState) => {
         if (Math.abs(gestureState.dx) < 20 && Math.abs(gestureState.dy) < 20) {
             if (this.modalHeightAnim._value == this.modalHeight) {
+                console.log("this.modalHeightAnim._value == this.modalHeight");
+                
                 this.swipeAnimationOpen()
             }
             else {
                 this.swipeAnimationClose()
             }
         }
-        else if (gestureState.moveY < 250) {
+        else if (gestureState.moveY < 500) {
+            console.log("gestureState.moveY < 250");
             this.swipeAnimationOpen()
+            this.setState({headerHeight:0})
         }
         else {
+            console.log("gestureState.moveY ================== 250");
+
             this.swipeAnimationClose()
+            this.setState({headerHeight:86})
         }
 
         // The user has released all touches while this view is the
@@ -153,6 +162,7 @@ class Bottom extends React.Component<Props, IState> {
             })
         });
     }
+    
     swipeAnimationOpen() {
         Animated.parallel([
             
@@ -171,14 +181,7 @@ class Bottom extends React.Component<Props, IState> {
                     toValue: this.modalWidthOpen,
                     duration: 150
                 }),
-                // Animated.timing(
-                //     console.log("9999999999999999999"),
-                //     this.state.startValue,
-                //     {
-                //         toValue: this.state.endValue,
-                //         duration: this.state.duration,
-                //         useNativeDriver: true
-                //     })
+                
         ]).start(() => {
             
             this.setState({
@@ -187,13 +190,7 @@ class Bottom extends React.Component<Props, IState> {
             })
         });
        
-        // Animated.timing(
-        //     this.state.startValue,
-        //     {
-        //         toValue: this.state.endValue,
-        //         duration: this.state.duration,
-        //         useNativeDriver: true
-        //     }).start();
+       
     }
     fadeIn = () => {
         // Will change fadeAnim value to 1 in 5 seconds
@@ -225,15 +222,16 @@ class Bottom extends React.Component<Props, IState> {
         return <View style={[styles.bottomHeader, {
             backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
         }]}>
-            <TouchableHighlight
-                underlayColor='rgba(73,182,77,1,0.9)'
-                onPress={() => {
-                    console.log(":::sfajklhyusaoaso");
+            <View
+            {...this._panResponder.panHandlers}
+                // underlayColor='rgba(73,182,77,1,0.9)'
+                // onPress={() => {
+                //     console.log(":::sfajklhyusaoaso");
                     
-                    this.props.onchangeswipeablePanelActive(true)
+                //     this.props.onchangeswipeablePanelActive(true)
                     
-                    // this.bs.current.open()
-                }}
+                //     // this.bs.current.open()
+                // }}
                 style={{ height: calcHeight(86), width: calcWidth(270), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
 
@@ -247,7 +245,7 @@ class Bottom extends React.Component<Props, IState> {
                         </View>
                     </View>
                 </View>
-            </TouchableHighlight>
+            </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                 <TouchableOpacity
                     style={global_styles.searchbtn}
@@ -324,8 +322,13 @@ class Bottom extends React.Component<Props, IState> {
         Dimensions.addEventListener('change', () => {
             this.isPortrait();
         });
-       
-
+        // Animated.timing(
+        //     this.state.startValue,
+        //     {
+        //         toValue: this.state.endValue,
+        //         duration: this.state.duration,
+        //         useNativeDriver: true
+        //     }).start();
     }
     isPlaying() {
         //  if (this.props.settingsReducer.autoPlay) {
@@ -457,14 +460,14 @@ class Bottom extends React.Component<Props, IState> {
         </SafeAreaView >
     }
     renderBottomSheet() {
-        return <SafeAreaView >
+        return <SafeAreaView   >
             <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'} backgroundColor={this.props.theme.backgroundColor} /><View
                 style={{
                     backgroundColor: this.props.theme.backgroundColor,
                     height: deviceHeight, width: deviceWidth + 10
                 }}>
 
-                <View style={[styles.bottomSheet,]}>
+                <View    style={[styles.bottomSheet,{ zIndex:0}]}>
                     <TouchableOpacity
                         style={{
                             paddingLeft: calcWidth(22),
@@ -488,7 +491,8 @@ class Bottom extends React.Component<Props, IState> {
                             <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginTop: calcHeight(27), justifyContent: 'center', alignItems: 'center', }}>
+                <View   {...this._panResponder.panHandlers}>
+                <View   {...this._panResponder.panHandlers} style={{ marginTop: calcHeight(27), justifyContent: 'center', alignItems: 'center', }}>
                     {this.props.filterReducer.playItem ?
                         <Text style={{
                             color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
@@ -497,13 +501,14 @@ class Bottom extends React.Component<Props, IState> {
                         }}>{this.props.filterReducer.playItem.pa}</Text> : null}
                 </View>
                 <BackGroundSvg width={deviceWidth} style={{ position: 'absolute', top: calcHeight(-40) }} />
-                <View style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
+                <View   {...this._panResponder.panHandlers} style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
                     <SimpleImage size={calcHeight(180)} image={this.props.filterReducer.playItem.im} />
                 </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     {this.props.filterReducer.playListType ? <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
                         {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
                     </Text> : null}
+                </View>
                 </View>
                 {
                     Array.isArray(this.props.filterReducer.playItem.st) ?
@@ -540,7 +545,7 @@ class Bottom extends React.Component<Props, IState> {
                             this.setState({ isRecording: !this.state.isRecording })
                         }}
                         style={[styles.btnrecord,
-                        { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                        { zIndex:0, backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
                     >
                         {this.props.filterReducer.playItem.isRecording ?
                             <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' /> :
@@ -577,7 +582,8 @@ class Bottom extends React.Component<Props, IState> {
             this.isPortrait();
         });
         // 
-        console.log(this.props.filterReducer.isPlayingMusic);
+        console.log("height:", this.state.headerHeight,
+            "width:" ,this.modalWidthAnim,);
 
         return (
             <View
@@ -602,13 +608,13 @@ class Bottom extends React.Component<Props, IState> {
                 {
                     height: this.modalHeightAnim,
                     width: this.modalWidthAnim,
-                  opacity: this.state.startValue
+                //  opacity: this.state.startValue
                 }
                 ]}>
                   <View
-                        {...this._panResponder.panHandlers}
-                        style={styles.panResponderView} >
-                        {this.renderBottomSheetheader()}
+                        
+                        style={[styles.panResponderView,{height:calcHeight(this.state.headerHeight), }]} >
+                        {this.state.headerHeight>0?this.renderBottomSheetheader():null}
 
                     </View> 
                     {this.state.orientation == 'portrait' ? this.renderBottomSheet() : this.renderBottomSheetHorizontal()}
@@ -698,7 +704,7 @@ const styles = StyleSheet.create({
         width: '100%',
         bottom: 0,
         alignItems: 'center',
-        backgroundColor: "red",
+        backgroundColor: "white",
     },
     fadingContainer: {
         paddingVertical: 8,
@@ -715,9 +721,9 @@ const styles = StyleSheet.create({
         marginVertical: 16
     },
     shadowContent: {
+        height:calcHeight(86),
         elevation: 10,
         alignItems: 'center',
-        backgroundColor: 'blue',
         shadowColor: 'rgba(0, 0, 0, 0.25)',
         shadowOffset: {
             width: 0,
@@ -730,7 +736,7 @@ const styles = StyleSheet.create({
         zIndex: 2,
         position: 'absolute',
         width: "100%",
-        height: calcHeight(86),
+        //height: calcHeight(86),
         backgroundColor: "yellow"
     },
     wrapper: {

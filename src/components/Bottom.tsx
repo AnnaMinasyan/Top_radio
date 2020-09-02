@@ -5,7 +5,9 @@ import {
     Text,
     TouchableOpacity, SafeAreaView,
     StatusBar,
-    TouchableHighlight
+    TouchableHighlight,
+    Animated,
+    PanResponder
 } from 'react-native';
 import Heart from "../assets/icons/heart.svg"
 import Modal from 'react-native-modal';
@@ -30,6 +32,7 @@ import global_styles from "../assets/styles/global_styles"
 import BottomSheet from 'reanimated-bottom-sheet';
 import RBSheet from "react-native-raw-bottom-sheet";
 import Swiper from 'react-native-swiper'
+
 import { Dimensions } from 'react-native';
 import BackSvg from "../assets/icons/backgraundHorizontal.svg"
 interface Props {
@@ -51,37 +54,172 @@ interface IState {
     isRecording: boolean,
     activBi: number,
     activeHeader: boolean,
-    orientation:string
+    orientation: string,
+    startValue: any,
+    endValue: any,
+    duration: number
 }
 class Bottom extends React.Component<Props, IState> {
     constructor(props: Props) {
         super(props)
+       
         this.state = {
             menuStyle: true,
             isRecording: false,
             activBi: 0,
             activeHeader: true,
-            orientation: ''
+            orientation: '',
+            startValue: new Animated.Value(1),
+            endValue: 0,
+            duration: 5000
         }
+        
     }
-  
-  
-  
-  
+  modalHeight = calcHeight(86)//278//42 * Dimensions.get('window').height / 100 - 20
+  modalHeightOpen = Dimensions.get('window').height - 24
+    modalWidth = Dimensions.get('window').width
+    modalWidthOpen = Dimensions.get('window').width
+    modalHeightAnim = new Animated.Value(this.modalHeight)
+   modalWidthAnim = new Animated.Value(this.modalWidth)
+   _panResponder = PanResponder.create({
+    // Ask to be the responder:
+    onStartShouldSetPanResponder: (evt, gestureState) => true,
+    onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+    onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
+    onPanResponderGrant: (evt, gestureState) => {
+        // The gesture has started. Show visual feedback so the user knows
+        // what is happening!
+        // gestureState.d{x,y} will be set to zero now
+    },
+    onPanResponderMove: (evt, gestureState) => {
+        this.modalHeightAnim.setValue(Dimensions.get('window').height - gestureState.moveY + 30)
+        // The most recent move distance is gestureState.move{X,Y}
+
+        // The accumulated gesture distance since becoming responder is
+        // gestureState.d{x,y}
+    },
+    onPanResponderTerminationRequest: (evt, gestureState) => true,
+    onPanResponderRelease: (evt, gestureState) => {
+        if (Math.abs(gestureState.dx) < 20 && Math.abs(gestureState.dy) < 20) {
+            if (this.modalHeightAnim._value == this.modalHeight) {
+                this.swipeAnimationOpen()
+            }
+            else {
+                this.swipeAnimationClose()
+            }
+        }
+        else if (gestureState.moveY < 250) {
+            this.swipeAnimationOpen()
+        }
+        else {
+            this.swipeAnimationClose()
+        }
+
+        // The user has released all touches while this view is the
+        // responder. This typically means a gesture has succeeded
+    },
+    onPanResponderTerminate: (evt, gestureState) => {
+        // Another component has become the responder, so this gesture
+        // should be cancelled
+    },
+    onShouldBlockNativeResponder: (evt, gestureState) => {
+        // Returns whether this component should block native components from becoming the JS
+        // responder. Returns true by default. Is currently only supported on android.
+        return true;
+    },
+});
+
+    swipeAnimationClose() {
+        Animated.parallel([
+            Animated.timing(                  // Animate over time
+                this.modalHeightAnim,            // The animated value to drive
+                {
+                    toValue: this.modalHeight,
+                    duration: 200,              // Make it take a while
+                }
+            ),
+            Animated.timing(
+                this.modalWidthAnim,
+                {
+                    toValue: this.modalWidth,
+                    duration: 150
+                })
+        ]).start(() => {
+            this.setState({
+                arrowUp: true,
+                backBttVelosity: false
+            })
+        });
+    }
+    swipeAnimationOpen() {
+        Animated.parallel([
+            
+            Animated.timing(   
+                // Animate over time
+                this.modalHeightAnim,            // The animated value to drive
+                {
+                    toValue: this.modalHeightOpen,
+                    duration: 200,              // Make it take a while
+                }
+                
+            ),
+            Animated.timing(
+                this.modalWidthAnim,
+                {
+                    toValue: this.modalWidthOpen,
+                    duration: 150
+                }),
+                // Animated.timing(
+                //     console.log("9999999999999999999"),
+                //     this.state.startValue,
+                //     {
+                //         toValue: this.state.endValue,
+                //         duration: this.state.duration,
+                //         useNativeDriver: true
+                //     })
+        ]).start(() => {
+            
+            this.setState({
+                arrowUp: false,
+                backBttVelosity: true
+            })
+        });
+       
+        // Animated.timing(
+        //     this.state.startValue,
+        //     {
+        //         toValue: this.state.endValue,
+        //         duration: this.state.duration,
+        //         useNativeDriver: true
+        //     }).start();
+    }
+    fadeIn = () => {
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.timing(this.fadeAnim, {
+            toValue: 1,
+            duration: 5000
+        }).start();
+    };
+
+    fadeOut = () => {
+        // Will change fadeAnim value to 0 in 5 seconds
+        Animated.timing(this.fadeAnim, {
+            toValue: 0,
+            duration: 5000
+        }).start();
+    };
     isPortrait = () => {
-        console.log("safafffffffffff");
-        
-      
-            if( Dimensions.get('window').width < Dimensions.get('window').height )
-            {
-              this.setState({ orientation: 'portrait' });
-            }
-            else
-            {
-              this.setState({ orientation: 'landscape' });
-            }
-        
+
+
+        if (Dimensions.get('window').width < Dimensions.get('window').height) {
+            this.setState({ orientation: 'portrait' });
+        }
+        else {
+            this.setState({ orientation: 'landscape' });
+        }
+
     };
     renderBottomSheetheader = () => {
         return <View style={[styles.bottomHeader, {
@@ -90,7 +228,10 @@ class Bottom extends React.Component<Props, IState> {
             <TouchableHighlight
                 underlayColor='rgba(73,182,77,1,0.9)'
                 onPress={() => {
+                    console.log(":::sfajklhyusaoaso");
+                    
                     this.props.onchangeswipeablePanelActive(true)
+                    
                     // this.bs.current.open()
                 }}
                 style={{ height: calcHeight(86), width: calcWidth(270), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
@@ -135,7 +276,7 @@ class Bottom extends React.Component<Props, IState> {
     async _pouseMusic() {
 
         const currentTrack = await TrackPlayer.getCurrentTrack();
-        console.log(currentTrack);
+
 
         if (this.props.filterReducer.isPlayingMusic) {
             console.log("playMusic");
@@ -146,7 +287,7 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
     async _startPlayMusic() {
-        console.log(this.props.playUrl);
+        console.log(":::::::::::::::::", this.props.playUrl);
 
         const currentTrack = await TrackPlayer.getCurrentTrack();
         await TrackPlayer.reset();
@@ -164,9 +305,11 @@ class Bottom extends React.Component<Props, IState> {
         this.props.chnageplayUrl(item.ur)
         this.setState({ activBi: item.bi })
         this._pouseMusic()
+        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
         setTimeout(() => {
             this._startPlayMusic()
-        }, 3000);
+            this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+        }, 500);
     }
     _navigatePlayList() {
         if (this.props.filterReducer.playItem.pl) {
@@ -175,45 +318,49 @@ class Bottom extends React.Component<Props, IState> {
             this.props.onchangeswipeablePanelActive(false)
         }
     }
-    componentDidMount()
-{
-  this.isPortrait();
-  
-  Dimensions.addEventListener( 'change', () =>
-  {
-    this.isPortrait();
-  });
-}
+    componentDidMount() {
+        this.isPortrait();
+
+        Dimensions.addEventListener('change', () => {
+            this.isPortrait();
+        });
+       
+
+    }
     isPlaying() {
         //  if (this.props.settingsReducer.autoPlay) {
         //     this._startPlayMusic()
         //  }
-        this.props.filterReducer.isPlayingMusic ? this._pouseMusic() : this._startPlayMusic()
+        if (this.props.filterReducer.isPlayingMusic && this.props.settingsReducer.autoPlay) {
+            this._startPlayMusic()
+        } else if (this.props.filterReducer.isPlayingMusic) {
+            this._pouseMusic()
+        }
         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
     }
     renderBottomSheetHorizontal() {
-        console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPPP");
-        
+
         return <SafeAreaView >
-            <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'} 
-            
-            backgroundColor={this.props.theme.backgroundColor} /><View
-                style={{
-                    backgroundColor: this.props.theme.backgroundColor,
-                    height: deviceWidth, width: deviceHeight 
-                }}>
-<BackSvg/>
-                <View ref = "rootView" style={{ flexDirection: 'row', justifyContent: 'space-between',marginTop: calcHeight(45.48),position:'absolute' }}>
-                    <View style={{ width: '50%',  flexDirection: 'row', 
-                 }}>
+            <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'}
+
+                backgroundColor={this.props.theme.backgroundColor} /><View
+                    style={{
+                        backgroundColor: this.props.theme.backgroundColor,
+                        height: deviceWidth, width: deviceHeight
+                    }}>
+                <BackSvg />
+                <View ref="rootView" style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: calcHeight(45.48), position: 'absolute' }}>
+                    <View style={{
+                        width: '50%', flexDirection: 'row',
+                    }}>
                         <TouchableOpacity
                             style={{
                                 paddingLeft: calcWidth(22),
                                 height: calcHeight(70),
-                                marginTop:-20,
-                                justifyContent:'center',
+                                marginTop: -20,
+                                justifyContent: 'center',
                                 width: calcWidth(80), zIndex: 1,
-                               
+
                             }}
                             onPress={() => {
                                 this.props.onchangeswipeablePanelActive(false)
@@ -221,7 +368,7 @@ class Bottom extends React.Component<Props, IState> {
                             <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                         </TouchableOpacity>
                         <View>
-                            <View style={{  alignItems: 'center' }}>
+                            <View style={{ alignItems: 'center' }}>
                                 {this.props.filterReducer.playItem ?
                                     <Text style={{
                                         color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
@@ -230,19 +377,19 @@ class Bottom extends React.Component<Props, IState> {
                                     }}>{this.props.filterReducer.playItem.pa}</Text> : null}
                             </View>
 
-                            <View style={{ height: calcHeight(257),marginTop:calcHeight(24), justifyContent: 'center', alignItems: 'center', }}>
+                            <View style={{ height: calcHeight(257), marginTop: calcHeight(24), justifyContent: 'center', alignItems: 'center', }}>
                                 <SimpleImage size={calcHeight(257)} image={this.props.filterReducer.playItem.im} />
                             </View>
-                           
+
                         </View>
                     </View>
-                    <View style={{ width: '50%',  flexDirection:'row' }}>
+                    <View style={{ width: '50%', flexDirection: 'row' }}>
                         <View>
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                 {this.props.filterReducer.playListType ?
-                                 <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17),width:calcWidth(250) }}>
-                                    {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
-                                </Text> : null}
+                                    <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17), width: calcWidth(250) }}>
+                                        {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
+                                    </Text> : null}
                                 {
                                     Array.isArray(this.props.filterReducer.playItem.st) ?
                                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
@@ -294,31 +441,22 @@ class Bottom extends React.Component<Props, IState> {
                             </View>
                         </View>
                         <TouchableOpacity
-                        style={{ alignItems: 'center', height: calcHeight(70), width: calcWidth(80), marginTop:-20,justifyContent:'center' }}
-                        onPress={() => {
-                            this.props.toaddfavorite(this.props.filterReducer.playItem)
-                        }}>
-                        {this.props.isFavorite ?
-                            <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
-                            <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
-                    </TouchableOpacity>
+                            style={{ alignItems: 'center', height: calcHeight(70), width: calcWidth(80), marginTop: -20, justifyContent: 'center' }}
+                            onPress={() => {
+                                this.props.toaddfavorite(this.props.filterReducer.playItem)
+                            }}>
+                            {this.props.isFavorite ?
+                                <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
+                                <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
+                        </TouchableOpacity>
                     </View>
                 </View>
-               
+
             </View>
 
         </SafeAreaView >
     }
     renderBottomSheet() {
-        // if(this.props.filterReducer.swipeablePanelActive){
-        //     if(this.props.settingsReducer.autoPlay){
-        //         console.log(":::::::::::::::::::::::::::");
-        // this.props.onchangePlayingMusic(true)
-        //         this._startPlayMusic()
-        //     }
-        // }
-        console.log("lllllllllllllllllll");
-        
         return <SafeAreaView >
             <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'} backgroundColor={this.props.theme.backgroundColor} /><View
                 style={{
@@ -394,8 +532,9 @@ class Bottom extends React.Component<Props, IState> {
                     </TouchableOpacity>
                 }) : null}
             </View> */}
-                <View style={{ alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
-              }}>
+                <View style={{
+                    alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
+                }}>
                     <TouchableOpacity
                         onPress={() => {
                             this.setState({ isRecording: !this.state.isRecording })
@@ -415,7 +554,7 @@ class Bottom extends React.Component<Props, IState> {
                         }}
                         style={[styles.btnPlay,
                         { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
-                        {this.props.filterReducer.cd ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
+                        {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
                             <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -431,68 +570,101 @@ class Bottom extends React.Component<Props, IState> {
 
         </SafeAreaView >
     }
-    bs: any = React.createRef()
+
     render() {
-        //this.props.filterReducer.swipeablePanelActive? this.bs.current.snapTo(0): this.bs.current.snapTo(1)
-        console.log("/////////////////////////////////////////////////", this.state.orientation);
-        Dimensions.addEventListener( 'change', () =>
-        {
-            console.log("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
-            
-          this.isPortrait();
+        Dimensions.addEventListener('change', () => {
+
+            this.isPortrait();
         });
+        // 
+        console.log(this.props.filterReducer.isPlayingMusic);
+
         return (
             <View
-                style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "#000"
-                }}
-            >
-                {this.props.filterReducer.swipeablePanelActive == false ?
-                    <View style={{
-                        height: calcHeight(86),
-                        width: '100%',
-                        shadowColor: "#000",
-                        shadowOffset: {
-                            width: 0,
-                            height: 12,
-                        },
-                        shadowOpacity: 0.58,
-                        shadowRadius: 16.00,
+                style={[
+                    styles.container,
+                    {
+                        zIndex: this.props.filterReducer.swipeablePanelActive == false ? 0 : 3,
+                    }]}>
+                {/* <Animated.View
+                    style={[
+                        styles.fadingContainer,
+                        {
+                            opacity: this.state.startValue // Bind opacity to animated value
+                        }
+                    ]}
+                >
+                    <Text style={styles.fadingText}>Fading View!</Text>
+                </Animated.View> */}
 
-                        elevation: 24,
-                        //  paddingTop: calcHeight(1),
-                        borderTopColor: this.props.theme.backgroundColor == "white" ? '#B3BACE' : 'rgba(174, 184, 211, 0.5)',
-                        borderTopWidth: calcHeight(1)
-                    }}>
+
+                <Animated.View style={[styles.shadowContent,
+                {
+                    height: this.modalHeightAnim,
+                    width: this.modalWidthAnim,
+                  opacity: this.state.startValue
+                }
+                ]}>
+                  <View
+                        {...this._panResponder.panHandlers}
+                        style={styles.panResponderView} >
                         {this.renderBottomSheetheader()}
-                    </View> : null}
 
-                <View style={{
-                    position: 'absolute',
-                    height: calcHeight(86),
-                    width: '100%',
-                    bottom: 0,
-                }}>
-
-                    <Modal
-                        animationInTiming={500}
-                        animationOutTiming={500}
-                        isVisible={this.props.filterReducer.swipeablePanelActive ? this.props.filterReducer.swipeablePanelActive : false}
-                        backdropOpacity={0.8}
-                        style={{
-                            height: deviceHeight,
-                            width: deviceWidth + 10,
-                            backgroundColor: 'red',
-                            marginLeft: 0
-                        }}
-                    >
-                        {this.state.orientation == 'portrait'?    this.renderBottomSheet():this.renderBottomSheetHorizontal() }
-                    </Modal>
-                </View>
+                    </View> 
+                    {this.state.orientation == 'portrait' ? this.renderBottomSheet() : this.renderBottomSheetHorizontal()}
+                </Animated.View>
             </View>
+            // <View
+            //     style={{
+            //         flex: 1,
+            //         justifyContent: "center",
+            //         alignItems: "center",
+            //         backgroundColor: "#000"
+            //     }}
+            // >
+            //     {this.props.filterReducer.swipeablePanelActive == false ?
+            //         <View style={{
+            //             height: calcHeight(86),
+            //             width: '100%',
+            //             shadowColor: "#000",
+            //             shadowOffset: {
+            //                 width: 0,
+            //                 height: 12,
+            //             },
+            //             shadowOpacity: 0.58,
+            //             shadowRadius: 16.00,
+
+            //             elevation: 24,
+            //             //  paddingTop: calcHeight(1),
+            //             borderTopColor: this.props.theme.backgroundColor == "white" ? '#B3BACE' : 'rgba(174, 184, 211, 0.5)',
+            //             borderTopWidth: calcHeight(1)
+            //         }}>
+            //             {this.renderBottomSheetheader()}
+            //         </View> : null}
+
+            //     <View style={{
+            //         position: 'absolute',
+            //         height: calcHeight(86),
+            //         width: '100%',
+            //         bottom: 0,
+            //     }}>
+
+            //         <Modal
+            //             animationInTiming={500}
+            //             animationOutTiming={500}
+            //             isVisible={this.props.filterReducer.swipeablePanelActive ? this.props.filterReducer.swipeablePanelActive : false}
+            //             backdropOpacity={0.8}
+            //             style={{
+            //                 height: deviceHeight,
+            //                 width: deviceWidth + 10,
+            //                 backgroundColor: 'red',
+            //                 marginLeft: 0
+            //             }}
+            //         >
+            //             {this.state.orientation == 'portrait' ? this.renderBottomSheet() : this.renderBottomSheetHorizontal()}
+            //         </Modal>
+            //     </View>
+            // </View>
         );
     }
 };
@@ -521,6 +693,46 @@ const mapDispatchToProps = (dispatch: any) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Bottom);
 
 const styles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        width: '100%',
+        bottom: 0,
+        alignItems: 'center',
+        backgroundColor: "red",
+    },
+    fadingContainer: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        backgroundColor: "powderblue"
+    },
+    fadingText: {
+        fontSize: 28,
+        textAlign: "center",
+        margin: 10
+    },
+    buttonRow: {
+        flexDirection: "row",
+        marginVertical: 16
+    },
+    shadowContent: {
+        elevation: 10,
+        alignItems: 'center',
+        backgroundColor: 'blue',
+        shadowColor: 'rgba(0, 0, 0, 0.25)',
+        shadowOffset: {
+            width: 0,
+            height: -4
+        },
+        shadowRadius: 6,
+        shadowOpacity: 1
+    },
+    panResponderView: {
+        zIndex: 2,
+        position: 'absolute',
+        width: "100%",
+        height: calcHeight(86),
+        backgroundColor: "yellow"
+    },
     wrapper: {
         // flexDirection:'column'
     },

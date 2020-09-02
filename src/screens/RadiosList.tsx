@@ -110,10 +110,15 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight 
             onPress={() => {
-                this.props.onchangeswipeablePanelActive(true)
+                this.props.onchangeswipeablePanelActive(false)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
-                this.props.onchangePlayingMusic(false)
+                // if(this.props.settingsReducer.autoPlay){
+                //     this.props.onchangePlayingMusic(true)
+                // }
+                // else{
+                    this.props.onchangePlayingMusic(false)
+               // }
                 this.setState({
                     playItem: data.item,
                     //  activBi: data.item.st[0].bi,

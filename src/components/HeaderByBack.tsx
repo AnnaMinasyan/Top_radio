@@ -38,7 +38,15 @@ class HeaderByBack extends React.Component<IHeaderByBackProps, IState> {
     }
     render() {
         return (
-            <View style={{ backgroundColor: 'white' }}>
+            <View style={{ backgroundColor: 'white',shadowColor: "#000",
+            shadowOffset: {
+                width: 0,
+                height: 5,
+            },
+            shadowOpacity: 0.36,
+            shadowRadius: 6.68,
+            
+            elevation: 11, }}>
                 <View style={styles.header}>
                     <TouchableOpacity
                     style={global_styles.searchbtn}

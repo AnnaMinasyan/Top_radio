@@ -45,7 +45,7 @@ class App extends React.Component<Props, any> {
     return (
       <Provider store={store}>
        {/* <Navigator/> */}
-   <MyApp/>
+   <MyApp/> 
       </Provider>
     );
   }

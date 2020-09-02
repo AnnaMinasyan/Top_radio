@@ -149,15 +149,12 @@ _addLookingList(data:any){
     
     render() {
  const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
- 
-console.log('mfskks[',list);
-
         return (
             <SafeAreaView style={{ backgroundColor: this.props.theme.backgroundColor }}>
         {/* //    <View style={styles.container}> */}
                 <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor }]}>
                     <Header navigation={this.props.navigation} />
-                        {this.props.filterReducer.menuType=="cписок" ?
+                        {this.props.filterReducer.menuType==1 ?
 
                             <FlatList
                             numColumns={1}

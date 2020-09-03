@@ -29,9 +29,8 @@ import { getPlayList } from "../store/actions/playlistAction"
 import { addFavorites } from '../store/actions/favoritesActions';
 import BackGroundSvg from "../assets/icons/background.svg"
 import global_styles from "../assets/styles/global_styles"
-import BottomSheet from 'reanimated-bottom-sheet';
-import RBSheet from "react-native-raw-bottom-sheet";
-import Swiper from 'react-native-swiper'
+
+import MusicControl from 'react-native-music-control';
 
 import { Dimensions } from 'react-native';
 import BackSvg from "../assets/icons/backgraundHorizontal.svg"
@@ -91,51 +90,38 @@ class Bottom extends React.Component<Props, IState> {
     onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
     onPanResponderGrant: (evt, gestureState) => {
-        // The gesture has started. Show visual feedback so the user knows
-        // what is happening!
-        // gestureState.d{x,y} will be set to zero now
     },
     onPanResponderMove: (evt, gestureState) => {
         this.modalHeightAnim.setValue(Dimensions.get('window').height - gestureState.moveY + 30)
-        // The most recent move distance is gestureState.move{X,Y}
-
-        // The accumulated gesture distance since becoming responder is
-        // gestureState.d{x,y}
     },
     onPanResponderTerminationRequest: (evt, gestureState) => true,
     onPanResponderRelease: (evt, gestureState) => {
         if (Math.abs(gestureState.dx) < 20 && Math.abs(gestureState.dy) < 20) {
             if (this.modalHeightAnim._value == this.modalHeight) {
-                console.log("this.modalHeightAnim._value == this.modalHeight");
-                
+                this.setState({headerHeight:0})
                 this.swipeAnimationOpen()
+                if(this.props.settingsReducer.autoPlay && !this.props.filterReducer.isPlayingMusic){
+                    
+                   this._startPlayMusic()
+                   this.props.onchangePlayingMusic(true)
+                }
             }
             else {
                 this.swipeAnimationClose()
             }
         }
         else if (gestureState.moveY < 500) {
-            console.log("gestureState.moveY < 250");
             this.swipeAnimationOpen()
             this.setState({headerHeight:0})
         }
         else {
-            console.log("gestureState.moveY ================== 250");
-
             this.swipeAnimationClose()
             this.setState({headerHeight:86})
         }
-
-        // The user has released all touches while this view is the
-        // responder. This typically means a gesture has succeeded
     },
     onPanResponderTerminate: (evt, gestureState) => {
-        // Another component has become the responder, so this gesture
-        // should be cancelled
     },
     onShouldBlockNativeResponder: (evt, gestureState) => {
-        // Returns whether this component should block native components from becoming the JS
-        // responder. Returns true by default. Is currently only supported on android.
         return true;
     },
 });
@@ -164,8 +150,11 @@ class Bottom extends React.Component<Props, IState> {
     }
     
     swipeAnimationOpen() {
+        if(this.props.settingsReducer.autoPlay && !this.props.filterReducer.isPlayingMusic){
+           this._startPlayMusic()
+           this.props.onchangePlayingMusic(true)
+        }
         Animated.parallel([
-            
             Animated.timing(   
                 // Animate over time
                 this.modalHeightAnim,            // The animated value to drive
@@ -173,7 +162,6 @@ class Bottom extends React.Component<Props, IState> {
                     toValue: this.modalHeightOpen,
                     duration: 200,              // Make it take a while
                 }
-                
             ),
             Animated.timing(
                 this.modalWidthAnim,
@@ -192,24 +180,7 @@ class Bottom extends React.Component<Props, IState> {
        
        
     }
-    fadeIn = () => {
-        // Will change fadeAnim value to 1 in 5 seconds
-        Animated.timing(this.fadeAnim, {
-            toValue: 1,
-            duration: 5000
-        }).start();
-    };
-
-    fadeOut = () => {
-        // Will change fadeAnim value to 0 in 5 seconds
-        Animated.timing(this.fadeAnim, {
-            toValue: 0,
-            duration: 5000
-        }).start();
-    };
     isPortrait = () => {
-
-
         if (Dimensions.get('window').width < Dimensions.get('window').height) {
             this.setState({ orientation: 'portrait' });
         }
@@ -224,14 +195,7 @@ class Bottom extends React.Component<Props, IState> {
         }]}>
             <View
             {...this._panResponder.panHandlers}
-                // underlayColor='rgba(73,182,77,1,0.9)'
-                // onPress={() => {
-                //     console.log(":::sfajklhyusaoaso");
-                    
-                //     this.props.onchangeswipeablePanelActive(true)
-                    
-                //     // this.bs.current.open()
-                // }}
+               
                 style={{ height: calcHeight(86), width: calcWidth(270), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
 
@@ -261,7 +225,7 @@ class Bottom extends React.Component<Props, IState> {
                     style={[styles.player,
                     { backgroundColor: this.props.theme.backgroundColor == "white" ? 'white' : '#0D1834' }]}
                     onPress={() => {
-                        this._pouseMusic()
+                        this.isPlaying()
                         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
                     }}
                 >
@@ -272,10 +236,7 @@ class Bottom extends React.Component<Props, IState> {
         </View>
     }
     async _pouseMusic() {
-
         const currentTrack = await TrackPlayer.getCurrentTrack();
-
-
         if (this.props.filterReducer.isPlayingMusic) {
             console.log("playMusic");
             await TrackPlayer.play();
@@ -285,17 +246,17 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
     async _startPlayMusic() {
-        console.log(":::::::::::::::::", this.props.playUrl);
-
+        console.log('https://top-radio.ru/assets/image/radio/180/'+this.props.filterReducer.playItem.im);
+        
         const currentTrack = await TrackPlayer.getCurrentTrack();
         await TrackPlayer.reset();
         await TrackPlayer.add({
             id: "local-track",
-            url: this.props.playUrl,
-            title: "Pure (Demo)",
-            artist: "David Chavez",
-            artwork: "https://i.picsum.photos/id/500/200/200.jpg",
-            duration: 28
+            url: this.props.playUrl? this.props.playUrl: Array.isArray(this.props.filterReducer.playItem.st) ? this.props.filterReducer.playItem.st[0].ur : this.props.filterReducer.playItem.st,
+            title:this.props.filterReducer.playListType.song,
+            artist: this.props.filterReducer.playListType.artist,
+            artwork:'https://top-radio.ru/assets/image/radio/180/'+this.props.filterReducer.playItem.im,
+            
         });
         await TrackPlayer.play();
     }
@@ -316,28 +277,38 @@ class Bottom extends React.Component<Props, IState> {
             this.props.onchangeswipeablePanelActive(false)
         }
     }
+    
     componentDidMount() {
         this.isPortrait();
-
         Dimensions.addEventListener('change', () => {
             this.isPortrait();
         });
-        // Animated.timing(
-        //     this.state.startValue,
-        //     {
-        //         toValue: this.state.endValue,
-        //         duration: this.state.duration,
-        //         useNativeDriver: true
-        //     }).start();
+    
+        TrackPlayer.updateOptions({
+            // One of RATING_HEART, RATING_THUMBS_UP_DOWN, RATING_3_STARS, RATING_4_STARS, RATING_5_STARS, RATING_PERCENTAGE
+            ratingType: TrackPlayer.RATING_5_STARS,
+            
+            stopWithApp: true,
+         capabilities:[
+               
+               TrackPlayer.CAPABILITY_PAUSE,
+                TrackPlayer.CAPABILITY_PLAY,
+                TrackPlayer.CAPABILITY_STOP,
+                TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
+                TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS
+            ],
+            compactCapabilities: [
+                TrackPlayer.CAPABILITY_PLAY,
+                TrackPlayer.CAPABILITY_PAUSE,
+                
+            ]
+        });
     }
     isPlaying() {
-        //  if (this.props.settingsReducer.autoPlay) {
-        //     this._startPlayMusic()
-        //  }
-        if (this.props.filterReducer.isPlayingMusic && this.props.settingsReducer.autoPlay) {
-            this._startPlayMusic()
-        } else if (this.props.filterReducer.isPlayingMusic) {
+        if (this.props.filterReducer.isPlayingMusic) {
             this._pouseMusic()
+        }else{
+            this._startPlayMusic()
         }
         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
     }
@@ -429,7 +400,7 @@ class Bottom extends React.Component<Props, IState> {
                                         }}
                                         style={[styles.btnPlay,
                                         { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
-                                        {this.props.filterReducer.cd ? <Stop width={calcHeight(24)} height={calcHeight(27)} fill='white' /> :
+                                        {this.props.filterReducer.isPlayingMusic ? <Stop width={calcHeight(24)} height={calcHeight(27)} fill='white' /> :
                                             <PlaySvG width={calcHeight(26.66)} height={calcHeight(37)} fill='white' />}
                                     </TouchableOpacity>
                                     <TouchableOpacity
@@ -474,6 +445,7 @@ class Bottom extends React.Component<Props, IState> {
                             height: calcHeight(70),
                             justifyContent: 'center',
                             width: calcWidth(80), zIndex: 1,
+                            marginLeft:calcWidth(16)
                             // borderWidth:1
                         }}
                         onPress={() => {
@@ -526,17 +498,6 @@ class Bottom extends React.Component<Props, IState> {
                                 }) : null}
                         </View> : null
                 }
-                {/* <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
-                {this.props.filterReducer.playItem.st ? this.props.filterReducer.playItem.st.map((item: any,index:number) => {
-                    return <TouchableOpacity
-                        onPress={() => { this.changeRadioStancia(item)
-                    }}
-                        style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }] : styles.activeNumbers}
-                    >
-                        <Text style={styles.activenumber}>{item.bi}</Text>
-                    </TouchableOpacity>
-                }) : null}
-            </View> */}
                 <View style={{
                     alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
                 }}>
@@ -581,9 +542,7 @@ class Bottom extends React.Component<Props, IState> {
 
             this.isPortrait();
         });
-        // 
-        console.log("height:", this.state.headerHeight,
-            "width:" ,this.modalWidthAnim,);
+       
 
         return (
             <View
@@ -592,27 +551,13 @@ class Bottom extends React.Component<Props, IState> {
                     {
                         zIndex: this.props.filterReducer.swipeablePanelActive == false ? 0 : 3,
                     }]}>
-                {/* <Animated.View
-                    style={[
-                        styles.fadingContainer,
-                        {
-                            opacity: this.state.startValue // Bind opacity to animated value
-                        }
-                    ]}
-                >
-                    <Text style={styles.fadingText}>Fading View!</Text>
-                </Animated.View> */}
-
-
                 <Animated.View style={[styles.shadowContent,
                 {
                     height: this.modalHeightAnim,
                     width: this.modalWidthAnim,
-                //  opacity: this.state.startValue
                 }
                 ]}>
                   <View
-                        
                         style={[styles.panResponderView,{height:calcHeight(this.state.headerHeight), }]} >
                         {this.state.headerHeight>0?this.renderBottomSheetheader():null}
 
@@ -620,57 +565,6 @@ class Bottom extends React.Component<Props, IState> {
                     {this.state.orientation == 'portrait' ? this.renderBottomSheet() : this.renderBottomSheetHorizontal()}
                 </Animated.View>
             </View>
-            // <View
-            //     style={{
-            //         flex: 1,
-            //         justifyContent: "center",
-            //         alignItems: "center",
-            //         backgroundColor: "#000"
-            //     }}
-            // >
-            //     {this.props.filterReducer.swipeablePanelActive == false ?
-            //         <View style={{
-            //             height: calcHeight(86),
-            //             width: '100%',
-            //             shadowColor: "#000",
-            //             shadowOffset: {
-            //                 width: 0,
-            //                 height: 12,
-            //             },
-            //             shadowOpacity: 0.58,
-            //             shadowRadius: 16.00,
-
-            //             elevation: 24,
-            //             //  paddingTop: calcHeight(1),
-            //             borderTopColor: this.props.theme.backgroundColor == "white" ? '#B3BACE' : 'rgba(174, 184, 211, 0.5)',
-            //             borderTopWidth: calcHeight(1)
-            //         }}>
-            //             {this.renderBottomSheetheader()}
-            //         </View> : null}
-
-            //     <View style={{
-            //         position: 'absolute',
-            //         height: calcHeight(86),
-            //         width: '100%',
-            //         bottom: 0,
-            //     }}>
-
-            //         <Modal
-            //             animationInTiming={500}
-            //             animationOutTiming={500}
-            //             isVisible={this.props.filterReducer.swipeablePanelActive ? this.props.filterReducer.swipeablePanelActive : false}
-            //             backdropOpacity={0.8}
-            //             style={{
-            //                 height: deviceHeight,
-            //                 width: deviceWidth + 10,
-            //                 backgroundColor: 'red',
-            //                 marginLeft: 0
-            //             }}
-            //         >
-            //             {this.state.orientation == 'portrait' ? this.renderBottomSheet() : this.renderBottomSheetHorizontal()}
-            //         </Modal>
-            //     </View>
-            // </View>
         );
     }
 };

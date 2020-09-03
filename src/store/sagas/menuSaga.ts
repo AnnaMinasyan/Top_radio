@@ -2,12 +2,13 @@ import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setMenuData,setPlayList} from "../actions/menuActions"
-
+import {changeplayItem} from "../actions/filterAction"
 
 
 function* getMenuData() {
 	try {
 		const data= yield auth.getMenuDatas()
+		yield put(changeplayItem(data[0]))
 		yield put(setMenuData(data))
 	} catch (ex) {
 	}

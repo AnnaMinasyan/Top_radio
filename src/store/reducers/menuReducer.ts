@@ -26,10 +26,7 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
     switch (action.type) {
         case MenuTypes.SET_MENU_DATA:
             let arraymenu = action.payload
-            for (let index = 0; index < arraymenu.length; index++) {
-                const element = arraymenu[index];
-                element.isfavorite = false
-            }
+            
             return { ...state, menuData: arraymenu }
         case MenuTypes.CHANGE_FAVORITE:
             console.log("action.payload", action.payload);

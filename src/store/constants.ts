@@ -52,5 +52,7 @@ export enum FavoriteType {
 export enum SettingsType {
     CHANGE_AUTO_PLAY = "@FavoriteType/CHANGE_AUTO_PLAY",
     INIT_AUTO_PLA = "@FavoriteType/INIT_AUTO_PLA",
-    SET_AUTO_PLAY= "@FavoriteType/SET_AUTO_PLAY",
+    SET_AUTO_PLAY= "@FavoriteType/SET_AUTO_PLAY", 
+    SET_BUFFER_SIZE= "@FavoriteType/SET_BUFFER_SIZE",
+    CHANGE_BUFFER_SIZE= "@FavoriteType/CHANGE_BUFFER_SIZE",
 }

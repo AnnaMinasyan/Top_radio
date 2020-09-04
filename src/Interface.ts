@@ -56,7 +56,8 @@ export interface ISettings {
     onchangeBackgroundColor(type:boolean):void;
     theme:any,
     navigation: NavigationScreenProp<any, any>,
-    onChangeMenuType(type:number):void;
+    onChangeMenuType(type:number):void; 
+    onchangeBufferSize(type:string):void;
     filterReducer: any,
     settingsReducer:any
 } 

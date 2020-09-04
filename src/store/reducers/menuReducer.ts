@@ -12,7 +12,8 @@ export interface IMenuState {
     filterData: any,
     playTrackList: any,
     favorites: any,
-    activeIndex:number
+    activeIndex:number,
+    swipeList:any
 }
 
 
@@ -22,18 +23,35 @@ export const initialState: IMenuState = {
     filterData: [],
     playTrackList: [],
     favorites: [],
-    activeIndex:0
+    activeIndex:0,
+    swipeList:[]
 }
 const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
     switch (action.type) {
         case MenuTypes.SET_MENU_DATA:
             let arraymenu = action.payload
+            let swip=[]
+            for (let index = 0; index < 4; index++) {
+               
+                if (index>=0) {
+                 const element = action.payload[index];   
+                   swip.push(element)
+                }
             
-            return { ...state, menuData: arraymenu }
+            }
+            return { ...state, menuData: arraymenu,swipeList:swip }
         case MenuTypes.SET_ACTIVE_INDEX:
-            console.log("iiiii",action.payload);
+            let swipers=[]
+            for (let index = action.payload.payload-3; index < action.payload.payload+3; index++) {
+               
+                if (index>=0) {
+                 const element = state.menuData[index];   
+                    swipers.push(element)
+                }
             
-            return { ...state, activeIndex: action.payload.payload }
+            }
+            
+            return { ...state, activeIndex: action.payload.payload ,swipeList:swipers}
         case MenuTypes.CHANGE_FAVORITE:
             console.log("action.payload", action.payload);
             let menu = state.menuData

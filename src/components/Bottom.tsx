@@ -33,6 +33,7 @@ import { addFavorites } from '../store/actions/favoritesActions';
 import BackGroundSvg from "../assets/icons/background.svg"
 import global_styles from "../assets/styles/global_styles"
 import GestureRecognizer from 'react-native-swipe-gestures';
+import Swiper from 'react-native-swiper'
 
 import { swipeDirections } from "react-native-swipe-gestures"
 import { Dimensions } from 'react-native';
@@ -68,7 +69,9 @@ interface IState {
     endValue: any,
     duration: number,
     headerHeight: boolean,
-    backBttVelosity: boolean
+    backBttVelosity: boolean,
+    swipeList: any,
+    swiperIndex: number | null
 }
 class Bottom extends React.Component<Props, IState> {
     constructor(props: Props) {
@@ -84,7 +87,9 @@ class Bottom extends React.Component<Props, IState> {
             endValue: 0,
             duration: 5000,
             headerHeight: true,
-            backBttVelosity: false
+            backBttVelosity: false,
+            swipeList: [],
+            swiperIndex: null
         }
 
     }
@@ -167,6 +172,8 @@ class Bottom extends React.Component<Props, IState> {
             this._startPlayMusic()
             this.props.onchangePlayingMusic(true)
         }
+        console.log("idhpsfehhhhhhh");
+
         Animated.parallel([
             Animated.timing(
                 // Animate over time
@@ -215,10 +222,10 @@ class Bottom extends React.Component<Props, IState> {
                     <View style={{ flexDirection: 'row' }}>
                         <SimpleImage size={calcWidth(47)} image={this.props.filterReducer.playItem.im} />
                         <View style={{ marginLeft: calcHeight(15) }}>
-                            <Text style={[styles.txtTitle, { color: this.props.theme.backgroundColor == "white" ? "#1D2A4B" : 'white' ,}]}>{this.props.filterReducer.playItem.pa}</Text>
-                            {this.props.filterReducer.playListType ? <Text 
-                            style={[styles.txtTitle,
-                            { fontSize: calcFontSize(12), marginTop: calcHeight(5), width:calcWidth(200),color: this.props.theme.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>
+                            <Text style={[styles.txtTitle, { color: this.props.theme.backgroundColor == "white" ? "#1D2A4B" : 'white', }]}>{this.props.filterReducer.playItem.pa}</Text>
+                            {this.props.filterReducer.playListType ? <Text
+                                style={[styles.txtTitle,
+                                { fontSize: calcFontSize(12), marginTop: calcHeight(5), width: calcWidth(200), color: this.props.theme.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>
                                 {this.props.filterReducer.playListType.artist} {this.props.filterReducer.playListType.song}</Text> : null}
                         </View>
                     </View>
@@ -276,29 +283,29 @@ class Bottom extends React.Component<Props, IState> {
     //     await TrackPlayer.play();
     // }
     async _startPlayMusic() {
-       
-        
+
+
         const playerState = await TrackPlayer.getState();
-        console.log("----------------------------",playerState);
+        console.log("----------------------------", playerState);
         if (
-          playerState==1
+            playerState == 1
         ) {
-          console.log('destroying..');
-          await TrackPlayer.reset();
-              await TrackPlayer.add({
-                  id: "local-track",
-                  url: this.props.playUrl ? this.props.playUrl : Array.isArray(this.props.filterReducer.playItem.st) ? this.props.filterReducer.playItem.st[0].ur : this.props.filterReducer.playItem.st,
-                  title: this.props.filterReducer.playListType.song,
-                  artist: this.props.filterReducer.playListType.artist,
-                  artwork: 'https://top-radio.ru/assets/image/radio/180/' + this.props.filterReducer.playItem.im,
-      
-              });
-      
-              await TrackPlayer.play();
-        }else{
+            console.log('destroying..');
+            await TrackPlayer.reset();
+            await TrackPlayer.add({
+                id: "local-track",
+                url: this.props.playUrl ? this.props.playUrl : Array.isArray(this.props.filterReducer.playItem.st) ? this.props.filterReducer.playItem.st[0].ur : this.props.filterReducer.playItem.st,
+                title: this.props.filterReducer.playListType.song,
+                artist: this.props.filterReducer.playListType.artist,
+                artwork: 'https://top-radio.ru/assets/image/radio/180/' + this.props.filterReducer.playItem.im,
+
+            });
+
+            await TrackPlayer.play();
+        } else {
             this._pouseMusic()
         }
-      };
+    };
     changeRadioStancia(item: any) {
         this.props.chnageplayUrl(item.ur)
         this.setState({ activBi: item.bi })
@@ -318,30 +325,40 @@ class Bottom extends React.Component<Props, IState> {
     }
 
     componentWillReceiveProps() {
-        if (this.props.filterReducer.swipeablePanelActive) { this.swipeAnimationOpen() }
+        console.log("wpDJ[[DKE[KD[");
+
+        if (this.props.filterReducer.swipeablePanelActive) {
+            this.swipeAnimationOpen()
+        }
+        if (this.props.menuReducer.activeIndex >= 0) {
+            this.setState({ swiperIndex: 3 })
+        } else {
+            this.setState({ swiperIndex: 0 })
+
+        }
 
     }
-   async componentDidMount() {
+    async componentDidMount() {
         this.isPortrait();
         Dimensions.addEventListener('change', () => {
             this.isPortrait();
         });
         await TrackPlayer.setupPlayer();
         TrackPlayer.updateOptions({
-          stopWithApp: true,
-          capabilities: [
-            TrackPlayer.CAPABILITY_PLAY,
-            TrackPlayer.CAPABILITY_PAUSE,
-            TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
-            TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
-            TrackPlayer.CAPABILITY_STOP,
-          ],
-          compactCapabilities: [
-            TrackPlayer.CAPABILITY_PLAY,
-            TrackPlayer.CAPABILITY_PAUSE,
-            TrackPlayer.CAPABILITY_STOP,
-          ],
-        //  alwaysPauseOnInterruption: false,
+            stopWithApp: true,
+            capabilities: [
+                TrackPlayer.CAPABILITY_PLAY,
+                TrackPlayer.CAPABILITY_PAUSE,
+                TrackPlayer.CAPABILITY_SKIP_TO_NEXT,
+                TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
+                TrackPlayer.CAPABILITY_STOP,
+            ],
+            compactCapabilities: [
+                TrackPlayer.CAPABILITY_PLAY,
+                TrackPlayer.CAPABILITY_PAUSE,
+                TrackPlayer.CAPABILITY_STOP,
+            ],
+            //  alwaysPauseOnInterruption: false,
         });
         await TrackPlayer.reset();
         await TrackPlayer.add(tracks);
@@ -380,7 +397,7 @@ class Bottom extends React.Component<Props, IState> {
 
                             }}
                             onPress={() => {
-                                this.props.onchangeswipeablePanelActive(false)
+                                this.props.onchangeswipeablePanelActive(true)
                             }}>
                             <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                         </TouchableOpacity>
@@ -493,15 +510,15 @@ class Bottom extends React.Component<Props, IState> {
                 this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1])
                 this.props.chnageplayUrl(Array.isArray(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st)
                     ? this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st[0].ur : this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st)
-                    if(this.props.filterReducer.isPlayingMusic){
-                this._pouseMusic()
-                this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                setTimeout(() => {
-
-                    this._startPlayMusic()
+                if (this.props.filterReducer.isPlayingMusic) {
+                    this._pouseMusic()
                     this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                }, 500);
-            }
+                    setTimeout(() => {
+
+                        this._startPlayMusic()
+                        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+                    }, 500);
+                }
                 //    this.setState({backgroundColor: 'blue'});
                 break;
             case SWIPE_RIGHT:
@@ -511,12 +528,14 @@ class Bottom extends React.Component<Props, IState> {
                     this.props.chnageplayUrl(Array.isArray(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st)
                         ? this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st[0].ur : this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st)
 
-                  if(this.props.filterReducer.isPlayingMusic)  {this._pouseMusic()
-                    this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                    setTimeout(() => {
-                        this._startPlayMusic()
+                    if (this.props.filterReducer.isPlayingMusic) {
+                        this._pouseMusic()
                         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                    }, 500);}
+                        setTimeout(() => {
+                            this._startPlayMusic()
+                            this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+                        }, 500);
+                    }
                 }
                 //  this.setState({backgroundColor: 'yellow'});
                 break;
@@ -532,8 +551,9 @@ class Bottom extends React.Component<Props, IState> {
 
                 {!this.state.backBttVelosity ? this.renderBottomSheetheader() :
                     <View style={{ flexDirection: 'row' }}>
-                        <View   {...this._panResponder.panHandlers} style={[styles.bottomSheet, { zIndex: 0, }]}>
-                            <TouchableOpacity
+                        <View style={[styles.bottomSheet,]}>
+                            <View
+                                {...this._panResponder.panHandlers}
                                 style={{
                                     paddingLeft: calcWidth(22),
                                     height: calcHeight(70),
@@ -542,15 +562,21 @@ class Bottom extends React.Component<Props, IState> {
                                     marginLeft: calcWidth(16)
                                     // borderWidth:1
                                 }}
-                                onPress={() => {
-                                    this.props.onchangeswipeablePanelActive(false)
-                                }}>
+                                onTouchEnd={() => {
+                                    this.props.onchangeswipeablePanelActive(true)
+                                }}
+                            >
                                 <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
-                            </TouchableOpacity>
+                            </View>
 
                         </View>
                         <TouchableOpacity
-                            style={{ justifyContent: 'center', alignItems: 'center', height: calcHeight(70), width: calcWidth(80) }}
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: calcHeight(70),
+                                width: calcWidth(80),
+                            }}
                             onPress={() => {
                                 this.props.toaddfavorite(this.props.filterReducer.playItem)
                             }}>
@@ -560,32 +586,50 @@ class Bottom extends React.Component<Props, IState> {
                         </TouchableOpacity>
                     </View>
                 }
-               
-                    <View
-                        {...this._panResponder.panHandlers}
-                    >
-                        <View
-                            style={{ marginTop: calcHeight(27), justifyContent: 'center', alignItems: 'center', }}>
-                            {this.props.filterReducer.playItem ?
-                                <Text style={{
-                                    color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                    fontSize: calcFontSize(24),
-                                    fontWeight: '500'
-                                }}>{this.props.filterReducer.playItem.pa}</Text> : null}
-                        </View>
-                        <BackGroundSvg width={deviceWidth} style={{ position: 'absolute', top: calcHeight(-40) }} />
-                        <View
+                <View style={{ height: calcHeight(360) }}>
+                    <Swiper
+                        showsPagination={false}
+                        index={3}
+                        onIndexChanged={(index: number) => {
+                            console.log("index", index),
 
-                            style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
-                            <SimpleImage size={calcHeight(180)} image={this.props.filterReducer.playItem.im} />
-                        </View>
-                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                            {this.props.filterReducer.playListType ? <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
-                                {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
-                            </Text> : null}
-                        </View>
-                    </View>
-               
+                            this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex + 1)
+                            
+                            this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1])
+                        }
+
+                        }>
+                        {
+                            this.props.menuReducer.swipeList.map((data: any) => {
+                                return <View
+                                // {...this._panResponder.panHandlers}
+                                >
+                                    <View
+                                        style={{ justifyContent: 'center', alignItems: 'center', }}>
+                                        {data ?
+                                            <Text style={{
+                                                color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                                fontSize: calcFontSize(24),
+                                                fontWeight: '500'
+                                            }}>{data.pa}</Text> : null}
+                                    </View>
+                                    <BackGroundSvg width={deviceWidth} style={{ position: 'absolute', top: calcHeight(-120) }} />
+                                    <View
+
+                                        style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
+                                        <SimpleImage size={calcHeight(180)} image={data.im} />
+                                    </View>
+
+                                </View>
+                            })
+                        }
+                    </Swiper>
+                </View>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    {this.props.filterReducer.playListType ? <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
+                        {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
+                    </Text> : null}
+                </View>
                 {
                     Array.isArray(this.props.filterReducer.playItem.st) ?
                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }}>
@@ -602,49 +646,49 @@ class Bottom extends React.Component<Props, IState> {
                                 }) : null}
                         </View> : null
                 }
- <GestureRecognizer
+                <GestureRecognizer
                     onSwipe={(direction, state) => this.onSwipe(direction, state)}
-style={{flex:1,backgroundColor:'red'}}
+                    style={{ flex: 1 }}
                     onSwipeLeft={(state) => this.onSwipeLeft(state)}
                     onSwipeRight={(state) => this.onSwipeRight(state)}
 
                 >
-                <View style={{
-                    alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
-                }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.setState({ isRecording: !this.state.isRecording })
-                        }}
-                        style={[styles.btnrecord,
-                        { zIndex: 0, backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
-                    >
-                        {this.props.filterReducer.playItem.isRecording ?
-                            <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' /> :
-                            <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} />
+                    <View style={{
+                        alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
+                    }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.setState({ isRecording: !this.state.isRecording })
+                            }}
+                            style={[styles.btnrecord,
+                            { zIndex: 0, backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                        >
+                            {this.props.filterReducer.playItem.isRecording ?
+                                <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' /> :
+                                <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} />
 
-                        }
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.isPlaying()
-                        }}
-                        style={[styles.btnPlay,
-                        { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
-                        {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
-                            <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        disabled={!this.props.filterReducer.playItem.pl}
-                        style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
-                        onPress={() => {
-                            this._navigatePlayList()
-                        }}>
-                        <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
-                    </TouchableOpacity>
-                </View>
+                            }
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.isPlaying()
+                            }}
+                            style={[styles.btnPlay,
+                            { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
+                            {this.props.filterReducer.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
+                                <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            disabled={!this.props.filterReducer.playItem.pl}
+                            style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                            onPress={() => {
+                                this._navigatePlayList()
+                            }}>
+                            <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
+                        </TouchableOpacity>
+                    </View>
                 </GestureRecognizer>
-                
+
 
             </View>
 
@@ -654,22 +698,8 @@ style={{flex:1,backgroundColor:'red'}}
 
     render() {
         Dimensions.addEventListener('change', () => {
-
             this.isPortrait();
         });
-        TrackPlayer.addEventListener('remote-play', () => {
-            console.log('remote-play');
-
-            TrackPlayer.play();
-        });
-
-        TrackPlayer.addEventListener('remote-pause', () => {
-          
-
-            TrackPlayer.pause();
-        });
-        
-
         return (
             <View
                 style={[
@@ -766,7 +796,7 @@ const styles = StyleSheet.create({
         backgroundColor: "yellow"
     },
     wrapper: {
-        // flexDirection:'column'
+        backgroundColor: 'red'
     },
     slide1: {
         // flex:1,

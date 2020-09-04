@@ -16,3 +16,19 @@ export const initAutoPlay= () => {
 		type: SettingsType.INIT_AUTO_PLA
 	};
 };
+export const setBufferSize = (payload:string) => {
+	console.log("xxxx",payload);
+	
+	return {
+        type: SettingsType.SET_BUFFER_SIZE,
+        payload
+	};
+};
+export const changeBufferSize= (payload:string) => {
+	console.log("LL",payload);
+
+	return {
+		type: SettingsType.CHANGE_BUFFER_SIZE,
+		payload
+	};
+};

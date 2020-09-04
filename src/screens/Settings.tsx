@@ -35,14 +35,16 @@ import HeadSetSvg from "../assets/icons/headsets.svg";
 import RefleshSvg from "../assets/icons/reflesh.svg"
 import CradSvg from "../assets/icons/card.svg"
 import PhoneSvg from "../assets/icons/phone.svg"
-import Modal from 'react-native-modal'; // 2.4.0
+import Modal from 'react-native-modal'; // 2.4.0S
 import MoonSvg from "../assets/icons/sleep.svg"
 import SunSvg from "../assets/icons/sun.svg"
 import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
 import SmoothPicker from 'react-native-smooth-picker';
 import {ISettings} from "../Interface"
-import {changeAutoPlay} from "../store/actions/settingsAcrion"
+import {changeAutoPlay,changeBufferSize} from "../store/actions/settingsAcrion"
+import HeadphoneDetection from 'react-native-headphone-detection';
+
 interface IState {
   data: any,
   isEnabled: boolean,
@@ -87,7 +89,6 @@ class Settings extends React.Component<ISettings, IState> {
      
     ],
       timeSleep:10,
-      selectBufferSize: '500 ms',
       autoPlay:false
 
     }
@@ -172,19 +173,19 @@ class Settings extends React.Component<ISettings, IState> {
     </View>
   }
   _changeBufferSize(res: IData) {
-    let newArr = this.state.bufferSize
-    for (let index = 0; index < newArr.length; index++) {
-      const element = newArr[index];
-      if (element.title == res.title) {
-        newArr[index].check = true
-      } else {
-        newArr[index].check = false
-      }
-    }
+    // let newArr = this.state.bufferSize
+    // for (let index = 0; index < newArr.length; index++) {
+    //   const element = newArr[index];
+    //   if (element.title == res.title) {
+    //     newArr[index].check = true
+    //   } else {
+    //     newArr[index].check = false
+    //   }
+    // }
+this.props.onchangeBufferSize( res.title)
     this.setState({
-      bufferSize: newArr,
+      //bufferSize: newArr,
       visibleModal: null,
-      selectBufferSize: res.title
     })
   }
  
@@ -194,7 +195,7 @@ class Settings extends React.Component<ISettings, IState> {
       <Text style={[global_styles.stationTexttitle, { color: "#1E2B4D", fontSize: calcFontSize(18), marginBottom: calcHeight(20) }]}>
         Размер буфера
             </Text>
-      {this.state.bufferSize.map((res:any) => {
+      {this.props.settingsReducer.bufferSize.map((res:any) => {
         return <View style={{
           width: calcWidth(300),
           flexDirection: 'row',
@@ -265,7 +266,7 @@ class Settings extends React.Component<ISettings, IState> {
     this.props.onchangeAutoPlay(!this.props.settingsReducer.autoPlay)
   }
   render() {
-console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.autoPlay);
+console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.bufferSize.filter((item:IData) => item.check == true)[0].title);
 
     return (
       <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
@@ -354,7 +355,7 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.aut
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Размер буфера
             </Text>
-              <Text style={global_styles.stationComment}>{this.state.selectBufferSize}</Text>
+              <Text style={global_styles.stationComment}>{this.props.settingsReducer.bufferSize.filter((item:IData) => item.check == true)[0].title}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -451,6 +452,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onChangeMenuType: (payload: number) => {
       dispatch(getMenuType(payload))
+    }, 
+    onchangeBufferSize: (payload: number) => {
+      dispatch(changeBufferSize(payload))
     },
     onchangeBackgroundColor: (payload: any) => {
       dispatch(changeBackgroundColor(payload))

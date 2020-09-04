@@ -13,8 +13,10 @@ import { bindActionCreators } from "redux"
 import { connect } from 'react-redux';
 import Logo from "../assets/icons/logo.svg"
 import Guitar from "../assets/icons/guitar.svg"
+import GuitarDark from "../assets/icons/guitarDark.svg"
 import RadioSvg from "../assets/icons/radio.svg"
 import Location from "../assets/icons/location.svg"
+import LocationSvg from "../assets/icons/locationDark.svg"
 import EyesSvg from "../assets/icons/eyes.svg"
 import BackImage from "../assets/icons/loading_top.svg"
 import { calcFontSize, calcHeight, calcWidth ,deviceHeight} from "../assets/styles/dimensions"
@@ -58,7 +60,8 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         }}
                     >
                         <View style={styles.item}>
-                            <Guitar height={calcHeight(29.95)} width={calcWidth(30)} fill={props.filterReducer.isActive=="genres"?'#6C7BA4':"white"} />
+                            {props.filterReducer.isActive=="genres"?
+                            <GuitarDark height={calcHeight(29.95)} width={calcWidth(30)} />:<Guitar height={calcHeight(29.95)} width={calcWidth(30)}   />}
                             <Text style={props.filterReducer.isActive=="genres" ? styles.activeitemText : styles.itemText}>Жанры</Text>
                         </View>
                     </TouchableOpacity>
@@ -71,7 +74,9 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         }}
                     >
                         <View style={styles.item}>
-                            <Location height={calcHeight(30)} width={calcWidth(30)} fill={props.filterReducer.isActive=="cities"?'#6C7BA4':"white"} />
+                        {props.filterReducer.isActive=="cities"?
+                          <LocationSvg height={calcHeight(30)} width={calcWidth(30)}/>:
+                            <Location height={calcHeight(30)} width={calcWidth(30)}/>}
                             <Text style={props.filterReducer.isActive=="cities" ? styles.activeitemText : styles.itemText}>Города</Text>
                         </View>
                     </TouchableOpacity>

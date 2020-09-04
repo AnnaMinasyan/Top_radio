@@ -24,12 +24,9 @@ function* initMenuTypebyStorage() {
     
 }
 function* onGetPlayType({payload}:any) {
-    console.log(payload.pl);
     
     try {
         const data= yield auth.getPlayItemType(payload.pl)
-		//console.log("dataaaa",data);
-		
 		yield put(setPlayItemType(data.playList[0]))
 	} catch (ex) {
 		console.log(ex);

@@ -2,7 +2,7 @@
 
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import {  SettingsType } from '../constants';
-import {  setAutoPlay} from '../actions/settingsAcrion';
+import {  setAutoPlay,setBufferSize} from '../actions/settingsAcrion';
 import { getData, storeData } from '../../utils/local_storage';
 
 function* onChangeAutoPlay({payload}:any) {
@@ -22,6 +22,13 @@ function* initAutoPlaybyStorage() {
     }
     
 }
+function* changingBufferSize(payload:any) {
+    console.log(" changingBufferSize(payload:string)",payload);
+    
+        yield put(setBufferSize(payload.payload));
+    
+    
+}
 export function* watchSettingsSaga() {
     yield takeEvery(
         SettingsType.INIT_AUTO_PLA as any,
@@ -30,6 +37,10 @@ export function* watchSettingsSaga() {
     yield takeEvery(
         SettingsType.CHANGE_AUTO_PLAY as any,
 		onChangeAutoPlay
+    )
+    yield takeEvery(
+        SettingsType.CHANGE_BUFFER_SIZE as any,
+		changingBufferSize
 	)
 }
 

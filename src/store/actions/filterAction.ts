@@ -28,7 +28,9 @@ export const changePlayingMusic = (payload:boolean) => {
 		payload
 	};
 };
-export const changeplayItem = (payload:boolean) => {
+export const changeplayItem = (payload:any) => {
+	console.log(payload);
+	
 	return {
 		type: FilterTypes.CHANGE_PLAY_ITEM,
 		payload

@@ -17,7 +17,7 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { getMenuData } from '../store/actions/menuActions'
+import { getMenuData,changeActiveIndex } from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     changeplayItem,
@@ -113,12 +113,9 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this.props.onchangeswipeablePanelActive(false)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
-                // if(this.props.settingsReducer.autoPlay){
-                //     this.props.onchangePlayingMusic(true)
-                // }
-                // else{
+               
                     this.props.onchangePlayingMusic(false)
-               // }
+         
                 this.setState({
                     playItem: data.item,
                     //  activBi: data.item.st[0].bi,
@@ -142,6 +139,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
                 this.props.onchangePlayingMusic(false)
+                this.props.onchangeActiveIndex(data.index)
                 this.setState({
                     playItem: data.item,
                     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
@@ -159,9 +157,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {        
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-console.log("+++++++++++++++++",this.props.filterReducer.playListType);
 
-      
         return (
             <SafeAreaView >
                 <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor  }]}>
@@ -232,6 +228,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangePlayingMusic: (payload: any) => {
             dispatch(changePlayingMusic(payload))
+        },
+        onchangeActiveIndex: (payload: number) => {
+            dispatch(changeActiveIndex(payload))
         },
     }
 }

@@ -44,3 +44,20 @@ export const chnageFavorite = (payload:any) => {
 	
 	};
 };
+export const changeActiveIndex = (payload:number) => {
+	console.log("{{{{{{{{{{{{{{{{{",payload);
+	
+	return {
+		type: MenuTypes.CHANGE_ACTIVE_INDEX,
+		payload
+	
+	};
+};export const setActiveIndex = (payload:number) => {
+
+	
+	return {
+		type: MenuTypes.SET_ACTIVE_INDEX,
+		payload
+	
+	};
+};

@@ -9,6 +9,8 @@ export enum MenuTypes {
     CHANGE_FILTER_DATA_BY_GENRE='@menutypes/CHANGE_FILTER_DATA_BY_GENRE',
     GET_FAVORITES='@menutypes/GET_FAVORITES',
     CHANGE_FAVORITE='@menutypes/CHANGE_FAVORITE',
+    CHANGE_ACTIVE_INDEX='@menutypes/CHANGE_ACTIVE_INDEX',
+    SET_ACTIVE_INDEX='@menutypes/SET_ACTIVE_INDEX',
 }
 export enum PlayListTypes {
      SET_PLAY_LIST= '@playListtypes/SET_PLAY_LIST',

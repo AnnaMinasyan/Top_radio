@@ -158,6 +158,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {        
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+console.log(list);
 
         return (
             <SafeAreaView >

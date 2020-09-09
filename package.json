@@ -31,7 +31,6 @@
     "react-native": "0.62.2",
     "react-native-autocomplete-search": "^1.0.8",
     "react-native-blur": "^3.2.2",
-    "react-native-bottom-sheet-behavior": "^2.0.0",
     "react-native-date-picker": "^3.1.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-headphone-detection": "^1.2.0",

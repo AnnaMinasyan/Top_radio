@@ -2,6 +2,7 @@ import authApi from "./authInstance"
 import qs from 'query-string';
 import keys from "../keys";
 import moment from 'moment';
+import { Alert } from "react-native";
 
 export interface IgetMenuDatasMethodResponse {
     [key: string]: any,
@@ -16,8 +17,9 @@ class Static implements IDATA {
         try {
             const response = await authApi.get(`${keys.API_URL}radios.json`,);
             return response.data
-        } catch (ex) {
-            throw new Error(ex);
+        } catch (error) {
+         return Alert.alert("Error",error)
+          
         }
     }
     async getCities() {
@@ -25,7 +27,7 @@ class Static implements IDATA {
             const response = await authApi.get(`${keys.API_URL}cities.json`,);
             return response.data
         } catch (ex) {
-            throw new Error(ex);
+            return Alert.alert("Error",ex)
         }
     }
     async getGanres() {
@@ -33,7 +35,7 @@ class Static implements IDATA {
             const response = await authApi.get(`${keys.API_URL}genres.json`,);
             return response.data
         } catch (ex) {
-            throw new Error(ex);
+            return Alert.alert("Error",ex)
         }
     }
     async getPlayLists(payload: any) {
@@ -42,7 +44,7 @@ class Static implements IDATA {
             const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload.payload}/schedules/${data}?trackList=true`,);
             return response.data
         } catch (ex) {
-            throw new Error(ex);
+            return Alert.alert("Error",ex)
         }
     }
     async getPlayItemType(payload: any) {
@@ -54,7 +56,7 @@ class Static implements IDATA {
            
             return response.data
         } catch (ex) {
-            throw new Error(ex);
+            return Alert.alert("Error",ex)
         }
     }
 }

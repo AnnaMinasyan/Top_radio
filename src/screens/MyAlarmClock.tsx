@@ -139,11 +139,11 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
   }
   onRenderModalMenuRadio() {
     let list = this.props.menuReducer.menuData.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-    return <ScrollView >
-      <View style={[styles.modalMenuRadio, {}]}>
-        <View style={{ width: '100%' }}><Search renderSearchData={this.props.onchnageSearchData}
+    return <ScrollView  >
+      <View style={[styles.modalMenuRadio,{backgroundColor:this.props.theme.backgroundColor} ]}>
+        <View style={{ width: '100%',backgroundColor:this.props.theme.backgroundColor }}><Search renderSearchData={this.props.onchnageSearchData}
         /></View>
-        <View style={{ height: calcHeight(500) }}>
+        <View style={{ height: calcHeight(400) }}>
           <FlatList
             style={{ marginBottom: 10, }}
             data={list}
@@ -193,7 +193,8 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           this.setState({ visibleModal: 0 })
         }}
       >
-        <Text   style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white", marginTop:0}]}>Подтвердить число </Text>
+        <Text   style={[styles.timeText,
+           { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white", marginTop:0}]}>Подтвердить число </Text>
       </TouchableOpacity>
     </View>
   }
@@ -231,14 +232,16 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <PowerOffSvg height={calcHeight(34)} width={calcHeight(20)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            <View style={{ marginLeft: calcWidth(17), width:calcWidth(220), }}>
               <Text
-                style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
-                Включить будельник
+                style={[global_styles.stationTexttitle,
+                 { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" ,
+                 }]}>
+                Включить будельник 
                 </Text>
             </View>
           </View>
-          <View>
+          <View >
             <SimpleSwitch isEnabled={this.state.isOnAlarmclock} onValueChange={() => this._changeIsOnAlarmClock()} />
           </View>
         </View>
@@ -256,7 +259,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Радиостанция
             </Text>
-              <Text style={global_styles.stationComment}>{this.state.playItem.pa}</Text>
+              <Text style={global_styles.stationComment}>{this.state.playItem.pa?this.state.playItem.pa:'Выберите радио'}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -431,8 +434,9 @@ const styles = StyleSheet.create({
     // width: calcWidth(100)
   },
   modalMenuRadio: {
-    backgroundColor: 'white',
-    height: calcHeight(560),
+    marginTop:calcHeight(150),
+
+    height: calcHeight(400),
     marginHorizontal: calcWidth(45),
     borderRadius: 5,
     justifyContent: 'center',

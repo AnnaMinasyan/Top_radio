@@ -149,6 +149,8 @@ _addLookingList(data:any){
     
     render() {
  const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
+ console.log(":::::::::::::::::::::",list);
+ 
         return (
             <SafeAreaView style={{ backgroundColor: this.props.theme.backgroundColor }}>
         {/* //    <View style={styles.container}> */}

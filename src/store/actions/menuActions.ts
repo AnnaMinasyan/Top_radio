@@ -1,8 +1,5 @@
 import { MenuTypes } from "../constants"
-interface IMenuPayload {
-	menuType?: boolean,
-	
-}
+
 export const getMenuData = () => {
 	return {
 		type: MenuTypes.GET_MENU_DATA,

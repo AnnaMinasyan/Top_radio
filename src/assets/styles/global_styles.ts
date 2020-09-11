@@ -31,7 +31,7 @@ import {
         color:'#1E2B4D',
         fontWeight:'bold',
         marginBottom:calcHeight(6),
-        width:calcWidth(158)
+        width:calcWidth(220),
       },
       stationComment:{
     fontSize:calcFontSize(14),

@@ -278,7 +278,8 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
             <AvtoPlaySvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
-              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Автовоспроизведение</Text>
+              <Text style={[global_styles.stationTexttitle,
+                 { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Автовоспроизведение</Text>
             </View>
           </View>
           <View>
@@ -332,8 +333,7 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
             <View style={{ marginLeft: calcWidth(17) }}>
 
-              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
-                Таймер сна
+              <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Таймер сна
             </Text>
               <Text style={global_styles.stationComment}>{this.state.timeSleep} мин</Text>
             </View>

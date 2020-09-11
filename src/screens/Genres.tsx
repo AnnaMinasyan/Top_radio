@@ -69,7 +69,6 @@ class Genres extends React.Component<IGanresProps, IState> {
     }
     render() {
         const list=this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))        
-       console.log("this.props.filterReducer.menuType",this.props.filterReducer.menuType);
        
         return (
             <SafeAreaView style={{ height: '100%' }}>

@@ -49,7 +49,8 @@ class SimpleImage extends React.Component<Props, IState> {
         borderRadius: 8,
       }]} 
         source={{
-          uri:'https://top-radio.ru/assets/image/radio/' + count + '/' + this.props.image
+          uri:'https://radioarg.net/assets/image/radio/' + count + '/' + this.props.image
+
         }}
       />
           </View>}

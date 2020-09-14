@@ -145,7 +145,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                     playItem: data.item,
                     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
                 })
-            }} style={{ margin: calcWidth(8), borderRadius:8 }}>
+            }} style={{ marginRight: calcWidth(16),marginBottom:calcHeight(16), borderRadius:8 }}>
             <SimpleImage size={calcWidth(98)} image={data.item.im} />
         </TouchableHighlight>
     }
@@ -158,6 +158,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {        
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+console.log(list);
 
         return (
             <SafeAreaView >
@@ -181,8 +182,8 @@ class Menu extends React.Component<IMenuProps, IState> {
                                 width:'100%',
                              flexWrap: 'wrap',
                              flexDirection:'row',
-                             paddingLeft: calcWidth(12),
-                            //   paddingRight: calcWidth(16), 
+                             paddingLeft: calcWidth(15),
+                              paddingTop:calcHeight(8),
                                justifyContent: 'center' }}
                             keyExtractor={(item: any, index: number) => item.id.toString()}
                             maxToRenderPerBatch={10}

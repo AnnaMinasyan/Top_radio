@@ -116,6 +116,9 @@ class Bottom extends React.Component<Props, IState> {
             if (Math.abs(gestureState.dx) < 20 && Math.abs(gestureState.dy) < 20) {
                 if (this.modalHeightAnim._value == this.modalHeight) {
                     this.swipeAnimationOpen()
+                    console.log("1111111111111111");
+                    this.props.onchangeswipeablePanelActive(!this.props.filterReducer.swipeablePanelActive)
+
                     this.setState({ headerHeight: false })
                     if (this.props.settingsReducer.autoPlay && !this.props.filterReducer.isPlayingMusic) {
                         this._startPlayMusic()
@@ -123,14 +126,23 @@ class Bottom extends React.Component<Props, IState> {
                     }
                 }
                 else {
+                    console.log("22222222222222222");
+
+
                     this.swipeAnimationClose()
+                    this.props.onchangeswipeablePanelActive(false)
                 }
             }
             else if (gestureState.moveY < 500) {
+                console.log("gestureState.moveY < 500");
+                this.props.onchangeswipeablePanelActive(!this.props.filterReducer.swipeablePanelActive)
+
                 this.swipeAnimationOpen()
                 this.setState({ headerHeight: false })
             }
             else {
+                console.log("gestureState.moveY < 500gestureState.moveY < 500");
+                this.props.onchangeswipeablePanelActive(false)
 
                 this.swipeAnimationClose()
                 this.setState({ headerHeight: true })
@@ -144,7 +156,7 @@ class Bottom extends React.Component<Props, IState> {
         },
     });
 
-    swipeAnimationClose() {
+    async swipeAnimationClose() {
         Animated.parallel([
             Animated.timing(                  // Animate over time
                 this.modalHeightAnim,            // The animated value to drive
@@ -397,7 +409,7 @@ class Bottom extends React.Component<Props, IState> {
 
                             }}
                             onPress={() => {
-                                this.props.onchangeswipeablePanelActive(true)
+                                this.props.onchangeswipeablePanelActive(false)
                             }}>
                             <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                         </TouchableOpacity>
@@ -543,7 +555,9 @@ class Bottom extends React.Component<Props, IState> {
     }
     renderBottomSheet() {
         return <SafeAreaView   >
-            <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'} backgroundColor={this.props.theme.backgroundColor} /><View
+            <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'} 
+            backgroundColor={this.props.filterReducer.swipeablePanelActive==true? this.props.theme.backgroundColor:'#0F1E45'} />
+            <View
                 style={{
                     backgroundColor: this.props.theme.backgroundColor,
                     height: deviceHeight, width: deviceWidth + 10
@@ -551,20 +565,28 @@ class Bottom extends React.Component<Props, IState> {
 
                 {!this.state.backBttVelosity ? this.renderBottomSheetheader() :
                     <View style={{ flexDirection: 'row' }}>
-                        <View style={[styles.bottomSheet,]}>
+                        <View
+                            {...this._panResponder.panHandlers}
+                            style={[styles.bottomSheet,]}>
                             <View
-                                {...this._panResponder.panHandlers}
+                                //   {...this._panResponder.panHandlers}
                                 style={{
-                                    paddingLeft: calcWidth(22),
+                                    paddingLeft: calcWidth(26),
                                     height: calcHeight(70),
                                     justifyContent: 'center',
-                                    width: calcWidth(80), zIndex: 1,
-                                    marginLeft: calcWidth(16)
-                                    // borderWidth:1
+                                    width: calcWidth(80),
                                 }}
-                                onTouchEnd={() => {
-                                    this.props.onchangeswipeablePanelActive(true)
-                                }}
+                            // onPress={()=>{
+                            //     this.swipeAnimationClose().then(()=>{
+                            //         this.props.onchangeswipeablePanelActive(false)
+                            //     })
+                            //     //this.props.onchangeswipeablePanelActive(false)
+                            // }}
+                            // onTouchEnd={() => {
+                            //     this.swipeAnimationClose()
+
+                            //     this.props.onchangeswipeablePanelActive(false)
+                            // }}
                             >
                                 <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                             </View>
@@ -593,8 +615,8 @@ class Bottom extends React.Component<Props, IState> {
                         onIndexChanged={(index: number) => {
                             console.log("index", index),
 
-                            this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex + 1)
-                            
+                                this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex + 1)
+
                             this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1])
                         }
 
@@ -602,7 +624,7 @@ class Bottom extends React.Component<Props, IState> {
                         {
                             this.props.menuReducer.swipeList.map((data: any) => {
                                 return <View
-                                // {...this._panResponder.panHandlers}
+                                    {...this._panResponder.panHandlers}
                                 >
                                     <View
                                         style={{ justifyContent: 'center', alignItems: 'center', }}>
@@ -883,7 +905,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.34,
         shadowRadius: 6.27,
-        elevation: 10,
+        elevation: 5,
     },
     activeNumbers: {
         height: calcHeight(28),
@@ -923,7 +945,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.37,
         shadowRadius: 7.49,
 
-        elevation: 8,
+        elevation: 4,
     },
     txtTitle: {
         fontSize: calcFontSize(15),

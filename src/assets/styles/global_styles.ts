@@ -44,4 +44,7 @@ import {
         justifyContent: 'center',
          alignItems: 'center',
         },
+        menu_icon:{
+            width:calcWidth(45)
+        }
 });

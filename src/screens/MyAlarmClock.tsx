@@ -231,8 +231,11 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           { backgroundColor: this.props.theme.backgroundColor, marginTop: calcFontSize(21), borderTopWidth: 1,
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={global_styles.menu_icon}>
+
             <PowerOffSvg height={calcHeight(34)} width={calcHeight(20)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17), width:calcWidth(220), }}>
+            </View>
+            <View style={{ width:calcWidth(220), }}>
               <Text
                 style={[global_styles.stationTexttitle,
                  { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" ,
@@ -254,8 +257,11 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
           }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={global_styles.menu_icon}>
+
             <ConnectSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View >
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Радиостанция
             </Text>
@@ -324,8 +330,11 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
            borderTopWidth: 1,
            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={global_styles.menu_icon}>
+
             <RepeatSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View >
               <Text
                 style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Повтор
@@ -346,8 +355,11 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           }}
           style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor,  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+            <View style={global_styles.menu_icon}>
             <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+
+            </View>
+            <View >
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Частота повторений
             </Text>

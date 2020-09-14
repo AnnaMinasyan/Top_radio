@@ -276,8 +276,11 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
              }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={{width:calcWidth(38)}}>
+
             <AvtoPlaySvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View >
               <Text style={[global_styles.stationTexttitle,
                  { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Автовоспроизведение</Text>
             </View>
@@ -294,8 +297,11 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
             }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={{width:calcWidth(38)}}>
+
             <HeadSetSvg height={calcHeight(23)} width={calcHeight(23)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View>
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]} numberOfLines={2} >Пауза при отключении гарнитуры</Text>
             </View>
           </View>
@@ -308,8 +314,10 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
              }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={{width:calcWidth(38)}}>
             <RefleshSvg height={calcHeight(20.4)} width={calcHeight(22)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View >
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Переподключаться</Text>
             </View>
           </View>
@@ -330,8 +338,10 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
              }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={{width:calcWidth(38)}}>
             <MyAlarmClockSvg height={calcHeight(26.88)} width={calcHeight(28)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View>
 
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Таймер сна
             </Text>
@@ -349,8 +359,10 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"
              }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={{width:calcWidth(38)}}>
             <CradSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View >
 
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Размер буфера
@@ -369,8 +381,11 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
           {backgroundColor: this.props.theme.backgroundColor,
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View style={{width:calcWidth(38)}}>
+
             <PhoneSvg height={calcHeight(24)} width={calcHeight(14.45)} fill='#B3BACE' />
-            <View style={{ marginLeft: calcWidth(17) }}>
+            </View>
+            <View >
 
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Выбрать тему
@@ -388,13 +403,13 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
            { borderBottomWidth: 1, backgroundColor: this.props.theme.backgroundColor ,
             borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
           <View style={{ alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
-           <View >
+          <View style={{width:calcWidth(38)}}>
            {this.props.filterReducer.menuType==1?
            <MenuSvg height={calcHeight(21)} width={calcHeight(21)} fill='#B3BACE'/>:
             <Menu2 height={calcHeight(21)} width={calcHeight(21)}  fill='#B3BACE' />
           }
            </View>
-            <View style={{ marginLeft: calcWidth(17) }}>
+            <View >
 
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
               Тип отображения: {this.props.filterReducer.menuType==1?"cписок":"cетка"}

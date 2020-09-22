@@ -19,7 +19,7 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
       name="Menu"
       component={Menu}
-       options={{ header: BaseHeader, headerTransparent: true, animationEnabled:false}}
+       options={{headerShown:false,  headerTransparent: false, animationEnabled:false}}
     />
     <Stack.Screen
     name="Cities"

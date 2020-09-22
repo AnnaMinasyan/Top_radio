@@ -113,10 +113,9 @@ class Bottom extends React.Component<Props, IState> {
         },
         onPanResponderTerminationRequest: (evt, gestureState) => true,
         onPanResponderRelease: (evt, gestureState) => {
-            if (Math.abs(gestureState.dx) < 20 && Math.abs(gestureState.dy) < 20) {
+            if (Math.abs(gestureState.dx) < 50 && Math.abs(gestureState.dy) < 50) {
                 if (this.modalHeightAnim._value == this.modalHeight) {
                     this.swipeAnimationOpen()
-                    console.log("1111111111111111");
                     this.props.onchangeswipeablePanelActive(!this.props.filterReducer.swipeablePanelActive)
 
                     this.setState({ headerHeight: false })
@@ -126,24 +125,17 @@ class Bottom extends React.Component<Props, IState> {
                     }
                 }
                 else {
-                    console.log("22222222222222222");
-
-
                     this.swipeAnimationClose()
-                    this.props.onchangeswipeablePanelActive(false)
+                    // this.props.onchangeswipeablePanelActive(false)
                 }
             }
-            else if (gestureState.moveY < 500) {
-                console.log("gestureState.moveY < 500");
+            else if (gestureState.moveY < 300) {
                 this.props.onchangeswipeablePanelActive(!this.props.filterReducer.swipeablePanelActive)
-
                 this.swipeAnimationOpen()
                 this.setState({ headerHeight: false })
             }
             else {
-                console.log("gestureState.moveY < 500gestureState.moveY < 500");
                 this.props.onchangeswipeablePanelActive(false)
-
                 this.swipeAnimationClose()
                 this.setState({ headerHeight: true })
             }
@@ -433,7 +425,11 @@ class Bottom extends React.Component<Props, IState> {
                         <View>
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                 {this.props.filterReducer.playListType ?
-                                    <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17), width: calcWidth(100) }}>
+                                    <Text style={{
+                                        color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                        fontSize: calcFontSize(17),
+                                        width: calcWidth(150)
+                                    }}>
                                         {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
                                     </Text> : null}
                                 {
@@ -555,26 +551,29 @@ class Bottom extends React.Component<Props, IState> {
     }
     renderBottomSheet() {
         return <SafeAreaView   >
-            <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'} 
-            backgroundColor={this.props.filterReducer.swipeablePanelActive==true? this.props.theme.backgroundColor:'#0F1E45'} />
+            <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'}
+                backgroundColor={this.props.filterReducer.swipeablePanelActive == true ? this.props.theme.backgroundColor : '#0F1E45'} />
             <View
                 style={{
                     backgroundColor: this.props.theme.backgroundColor,
-                    height: deviceHeight, width: deviceWidth + 10
+                    height: deviceHeight, width: deviceWidth + 10,
+                    zIndex: 999,
+
                 }}>
 
                 {!this.state.backBttVelosity ? this.renderBottomSheetheader() :
                     <View style={{ flexDirection: 'row' }}>
                         <View
                             {...this._panResponder.panHandlers}
-                            style={[styles.bottomSheet,]}>
+                            style={[styles.bottomSheet, { height: calcHeight(70) }]}>
                             <View
-                                //   {...this._panResponder.panHandlers}
+                                // {...this._panResponder.panHandlers}
                                 style={{
                                     paddingLeft: calcWidth(26),
                                     height: calcHeight(70),
-                                    justifyContent: 'center',
+                                    //  justifyContent: 'center',
                                     width: calcWidth(80),
+
                                 }}
                             // onPress={()=>{
                             //     this.swipeAnimationClose().then(()=>{
@@ -608,15 +607,12 @@ class Bottom extends React.Component<Props, IState> {
                         </TouchableOpacity>
                     </View>
                 }
-                <View style={{ height: calcHeight(360) }}>
+                <View style={{ height: calcHeight(360), zIndex: 0 }}>
                     <Swiper
                         showsPagination={false}
-                        index={3}
+                       // index={0}
                         onIndexChanged={(index: number) => {
-                            console.log("index", index),
-
-                                this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex + 1)
-
+                            this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex + 1)
                             this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1])
                         }
 
@@ -624,7 +620,6 @@ class Bottom extends React.Component<Props, IState> {
                         {
                             this.props.menuReducer.swipeList.map((data: any) => {
                                 return <View
-                                    {...this._panResponder.panHandlers}
                                 >
                                     <View
                                         style={{ justifyContent: 'center', alignItems: 'center', }}>
@@ -633,13 +628,13 @@ class Bottom extends React.Component<Props, IState> {
                                                 color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
                                                 fontSize: calcFontSize(24),
                                                 fontWeight: '500'
-                                            }}>{data.pa}</Text> : null}
+                                            }}>{this.props.filterReducer.playItem.pa}</Text> : null}
                                     </View>
                                     <BackGroundSvg width={deviceWidth} style={{ position: 'absolute', top: calcHeight(-120) }} />
                                     <View
 
                                         style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
-                                        <SimpleImage size={calcHeight(180)} image={data.im} />
+                                        <SimpleImage size={calcHeight(180)} image={this.props.filterReducer.playItem.im} />
                                     </View>
 
                                 </View>

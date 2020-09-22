@@ -15,7 +15,7 @@ import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 import { connect } from "react-redux"
 import { changeFavoriteType } from '../store/actions/filterAction'
-import { DrawerActions } from 'react-navigation';
+import { DrawerActions } from '@react-navigation/native';
 import { NavigationScreenProp } from 'react-navigation';
 import RedHeart from "../assets/icons/redHeart.svg"
 import SearchSvg from "../assets/icons/search.svg"
@@ -118,9 +118,18 @@ class Header extends React.Component<Props, IState> {
 
       <View style={styles.header}>
         <View style={[styles.row,]}>
-          
+        <TouchableOpacity
+          onPress={() => {
+            console.log("filterReducer", this.props.filterReducer.swipeablePanelActive)
+
+            this.props.navigation.dispatch(DrawerActions.toggleDrawer())
+          }}
+          style={styles.headerContainer}
+        >
+          <Menu fill='#FFFFFF' height={calcHeight(21)} width={calcWidth(21)} />
+        </TouchableOpacity>
        {!this.state.showSearchView?
-       <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(33), }} />:
+       <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(13), }} />:
        <View style={{
        width:calcWidth(240),
        justifyContent:'center',
@@ -211,6 +220,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: calcWidth(20),
     paddingRight: calcWidth(13.83)
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: calcHeight(56),
+
+
   },
   row: {
     flexDirection: 'row',

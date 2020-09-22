@@ -42,14 +42,15 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             return { ...state, menuData: arraymenu,swipeList:swip }
         case MenuTypes.SET_ACTIVE_INDEX:
             let swipers=[]
-            for (let index = action.payload.payload-3; index < action.payload.payload+3; index++) {
+            for (let index =0; index < action.payload.payload+3; index++) {
                
-                if (index>=0) {
+              //  if (index>=0) {
                  const element = state.menuData[index];   
                     swipers.push(element)
-                }
+               // }
             
             }
+            console.log(swipers);
             
             return { ...state, activeIndex: action.payload.payload ,swipeList:swipers}
         case MenuTypes.CHANGE_FAVORITE:
@@ -75,16 +76,16 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             for (let index = 0; index < state.menuData.length; index++) {
                 const element = state.menuData[index];
               
-                if (element.ci && element.ci.length > 0) {
+                // if (element.ci && element.ci.length > 0) {
                   
-                    element.ci.map((elem: any, key: any) => {
-                        console.log(elem, action.payload);
-                        if (elem.na == action.payload) {
-                            array.push(element)
-                        }
-                    })
-                }else if (element.ci== action.payload) {
-
+                //     element.ci.map((elem: any, key: any) => {
+                //         console.log(elem, action.payload);
+                //         if (elem.na == action.payload) {
+                //             array.push(element)
+                //         }
+                //     })
+                // }else
+                 if (element.ci== action.payload) {
                     array.push(element)
 
                 }

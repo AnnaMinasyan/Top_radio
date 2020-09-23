@@ -49,7 +49,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
         return <TouchableHighlight
         onPress={()=>{
             console.log(data.item.pa);
-            this.props.onchangeFilterData(data.item.pa)
+            this.props.onchangeFilterData(data.item.id)
             this.props.navigation.navigate('FilterMenu')
         }}
         >
@@ -59,7 +59,6 @@ class Cities extends React.Component<ICitiesProps, IState> {
   
     render() {
         const list=this.props.citiesReducer.cities.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        console.log("this.props.filterReducer.menuType",this.props.filterReducer.menuType);
 
         return (
             <SafeAreaView style={{ height: '100%' }}>

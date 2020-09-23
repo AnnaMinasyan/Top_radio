@@ -9,9 +9,8 @@ import {changeplayItem} from "../actions/menuActions"
 function* getMenuData() {
 	try {
 		const data= yield auth.getMenuDatas()
-		console.log(data);
-		
 		yield put(changeplayItem(data[0]))
+		yield put(setPlayingData(data[0]))
 		yield put(setMenuData(data))
 	} catch (ex) {
 	}

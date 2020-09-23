@@ -16,7 +16,7 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IFilterMenuProps } from "../Interface"
-import {  getMenuData, changeplayItem } from '../store/actions/menuActions'
+import {  getMenuData, changeplayItem,changePlayingData,changeActiveIndex } from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     getFavorites,
@@ -112,13 +112,16 @@ _addLookingList(data:any){
         return <TouchableOpacity
         onPress={() => {
             this.props.onchangeswipeablePanelActive(true)
-            this._addLookingList(data.item)
-            this.props.onchangeplayItem(data.item)
-            this.props.onchangePlayingMusic(false)
+                this._addLookingList(data.item)
+                this.props.onchangeplayItem(data.item)
+                this.props.onchangeActiveIndex(data.index)
+
+                this.props.onchangePlayingMusic(false)
+                this.props.onchangePlayingData(data.item)
+
             this.setState({
                 playItem: data.item,
-                activBi: data.item.st[0].bi,
-                playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
+               // activBi: data.item.st[0].bi,
             })
         }}
     >
@@ -137,10 +140,11 @@ _addLookingList(data:any){
             this._addLookingList(data.item)
             this.props.onchangeplayItem(data.item)
             this.props.onchangePlayingMusic(false)
+            this.props.onchangePlayingData(data.item)
+
             this.setState({
                 playItem: data.item,
                 activBi: data.item.st[0].bi,
-                playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
             })
         }} style={{ padding: calcWidth(8), }}>
         <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
@@ -183,14 +187,14 @@ _addLookingList(data:any){
                        bottom: 0 , 
                    }}>
                     <Bottom
-                        navigation={this.props.navigation}
-                        onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                        isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
-                        playUrl={this.state.playUrl}
-                        chnageplayUrl={(data:any)=>{
-                            this.setState({playUrl:data})
-                        }}
-                    />
+                            navigation={this.props.navigation}
+                            onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
+                            isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
+                            playUrl={this.state.playUrl}
+                            chnageplayUrl={(data: any) => {
+                                this.setState({ playUrl: data })
+                            }}
+                        />
                      </View> 
 
                 </View>
@@ -229,6 +233,12 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangePlayingMusic: (payload: any) => {
             dispatch(changePlayingMusic(payload))
+        },
+        onchangePlayingData: (payload: any) => {
+            dispatch(changePlayingData(payload))
+        },
+        onchangeActiveIndex: (payload: number) => {
+            dispatch(changeActiveIndex(payload))
         },
     }
 }

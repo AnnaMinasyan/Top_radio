@@ -40,9 +40,9 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
    }
     return (
         <SafeAreaView style={{ flex: 1, }}>
-             <StatusBar barStyle='light-content'    backgroundColor="#0F1E45"  />
+             <StatusBar barStyle='dark-content'    backgroundColor="#0F1E45"  />
             <Navigator />
-          {  init(changeActivePanel)} 
+          {/* {  init(changeActivePanel)}  */}
         </SafeAreaView>
     );
 };

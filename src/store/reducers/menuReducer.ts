@@ -71,24 +71,17 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             return { ...state, menuData: menu }
         case MenuTypes.CHANGE_FILTER_DATA:
             const array: any = []
+            console.log(action.payload);
             for (let index = 0; index < state.menuData.length; index++) {
                 const element = state.menuData[index];
-              
-                // if (element.ci && element.ci.length > 0) {
-                  
-                //     element.ci.map((elem: any, key: any) => {
-                //         console.log(elem, action.payload);
-                //         if (elem.na == action.payload) {
-                //             array.push(element)
-                //         }
-                //     })
-                // }else
-                 if (element.ci== action.payload) {
-                    array.push(element)
-
+                if (element.ci && element.ci.length > 0) {
+                    element.ci.map((elem: any, key: any) => {
+                        if (elem == action.payload) {
+                            array.push(element)
+                        }
+                    })
                 }
             }
-
             return { ...state, filterData: array }
         case MenuTypes.CHANGE_FILTER_DATA_BY_GENRE:
             const genre: any = []

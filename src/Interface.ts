@@ -36,9 +36,12 @@ export interface IFilterMenuProps {
     navigation: NavigationScreenProp<any, any>,
     filterReducer: any,
     theme:any,
+    onchangePlayingData(payload:any):void;
     onchangePlayingMusic(payload:boolean):void;
     toaddfavorite(type:any):void;
-    favorites:any
+    favorites:any,
+    onchangeActiveIndex(type:number):void;
+
 } 
 export interface IGanresProps {
     styleView:boolean;

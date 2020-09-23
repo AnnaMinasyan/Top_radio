@@ -289,13 +289,14 @@ class Bottom extends React.Component<Props, IState> {
     // }
     async _startPlayMusic() {
 
-        console.log("----------------------------",  this.props.menuReducer.playMusicData.st[0].ur);
 
         const playerState = await TrackPlayer.getState();
+        console.log("----------------------------",  playerState);
+
         if (
-            playerState == 1
+            playerState == 1 || playerState == 2
         ) {
-            console.log('destroying..');
+            console.log('destroying..',this.props.menuReducer.playMusicData.st);
             await TrackPlayer.reset();
             await TrackPlayer.add({
                 id: "local-track", 
@@ -501,58 +502,58 @@ class Bottom extends React.Component<Props, IState> {
 
         </SafeAreaView >
     }
-    onSwipeLeft(gestureState: any) {
-        // this.setState({myText: 'You swiped left!'});
-    }
+    // onSwipeLeft(gestureState: any) {
+    //     // this.setState({myText: 'You swiped left!'});
+    // }
 
-    onSwipeRight(gestureState: any) {
-        // this.setState({myText: 'You swiped right!'});
-    }
-    onSwipe(gestureName: any, gestureState: any) {
-        const { SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
-        //  this.setState({gestureName: gestureName});
-        switch (gestureName) {
+    // onSwipeRight(gestureState: any) {
+    //     // this.setState({myText: 'You swiped right!'});
+    // }
+    // onSwipe(gestureName: any, gestureState: any) {
+    //     const { SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+    //     //  this.setState({gestureName: gestureName});
+    //     switch (gestureName) {
 
-            case SWIPE_LEFT:
-                console.log("left");
-                console.log(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex+1]);
-                console.log(this.props.menuReducer.activeIndex);
-                this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex + 1)
-                this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1])
-                this.props.chnageplayUrl(Array.isArray(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st)
-                    ? this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st[0].ur : this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st)
-                if (this.props.filterReducer.isPlayingMusic) {
-                    this._pouseMusic()
-                    this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                    setTimeout(() => {
+    //         case SWIPE_LEFT:
+    //             console.log("left");
+    //             console.log(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex+1]);
+    //             console.log(this.props.menuReducer.activeIndex);
+    //             this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex + 1)
+    //             this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1])
+    //             this.props.chnageplayUrl(Array.isArray(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st)
+    //                 ? this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st[0].ur : this.props.menuReducer.menuData[this.props.menuReducer.activeIndex + 1].st)
+    //             if (this.props.filterReducer.isPlayingMusic) {
+    //                 this._pouseMusic()
+    //                 this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+    //                 setTimeout(() => {
 
-                        this._startPlayMusic()
-                        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                    }, 500);
-                }
-                break;
-            case SWIPE_RIGHT:
-                console.log("right");
+    //                     this._startPlayMusic()
+    //                     this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+    //                 }, 500);
+    //             }
+    //             break;
+    //         case SWIPE_RIGHT:
+    //             console.log("right");
 
-                if (this.props.menuReducer.activeIndex - 1 >= 0) {
-                    this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex - 1)
-                    this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1])
-                    this.props.chnageplayUrl(Array.isArray(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st)
-                        ? this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st[0].ur : this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st)
+    //             if (this.props.menuReducer.activeIndex - 1 >= 0) {
+    //                 this.props.onchangeActiveIndex(this.props.menuReducer.activeIndex - 1)
+    //                 this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1])
+    //                 this.props.chnageplayUrl(Array.isArray(this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st)
+    //                     ? this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st[0].ur : this.props.menuReducer.menuData[this.props.menuReducer.activeIndex - 1].st)
 
-                    if (this.props.filterReducer.isPlayingMusic) {
-                        this._pouseMusic()
-                        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                        setTimeout(() => {
-                            this._startPlayMusic()
-                            this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                        }, 500);
-                    }
-                }
-                //  this.setState({backgroundColor: 'yellow'});
-                break;
-        }
-    }
+    //                 if (this.props.filterReducer.isPlayingMusic) {
+    //                     this._pouseMusic()
+    //                     this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+    //                     setTimeout(() => {
+    //                         this._startPlayMusic()
+    //                         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+    //                     }, 500);
+    //                 }
+    //             }
+    //             //  this.setState({backgroundColor: 'yellow'});
+    //             break;
+    //     }
+    // }
     renderBottomSheet() {
         return <SafeAreaView   >
             <StatusBar barStyle={this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'}
@@ -617,8 +618,8 @@ class Bottom extends React.Component<Props, IState> {
                         loop={false}
                        // index={0}
                         onIndexChanged={(index: number) => {
-                            console.log("LLLLLLLLLLLLLLLLLLLLLLLLLL",this.props.menuReducer.menuData[index].id,this.props.menuReducer.playItem.id);
-                            if(this.state.activSwichItem.id==this.props.menuReducer.playItem.id){
+                            console.log("LLLLLLLLLLLLLLLLLLLLLLLLLL",index);
+                            if( this.state.activSwichItem && this.state.activSwichItem.id==this.props.menuReducer.playItem.id){
                                 console.log("truuuuu");
 
                                 this.props.onchangePlayingMusic(true)
@@ -709,9 +710,17 @@ class Bottom extends React.Component<Props, IState> {
                             onPress={() => {
                                 if(this.state.activSwichItem!=null && this.state.activSwichItem.id!=this.props.menuReducer.playItem.id){
                                     this.props.onchangePlayingData(this.state.activSwichItem)
-                                    
+                                    this._pouseMusic()
+                                    this.props.onchangeplayItem(this.state.activSwichItem)
+                                    setTimeout(() => {
+                                        this._startPlayMusic()
+                                        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+                                    }, 500);
+                                    //this.isPlaying()
+                                }else{
+                                    this.isPlaying()
                                 }
-                                this.isPlaying()
+                              
                             }}
                             style={[styles.btnPlay,
                             { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
@@ -740,7 +749,7 @@ class Bottom extends React.Component<Props, IState> {
         Dimensions.addEventListener('change', () => {
             this.isPortrait();
         });
-        console.log(this.props.menuReducer.swipeList);
+        console.log("kpofsjfjp",this.props.menuReducer.swipeList);
         
         return (
             <View

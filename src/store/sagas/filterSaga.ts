@@ -43,9 +43,6 @@ export function* watchFilterSaga() {
         FilterTypes.GET_MENU_TYPE as any,
 		onGetMenuType
     )
-    yield takeEvery(
-        FilterTypes.CHANGE_PLAY_ITEM as any,
-		onGetPlayType
-	)
+   
 }
 

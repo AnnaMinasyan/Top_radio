@@ -58,3 +58,27 @@ export const changeActiveIndex = (payload:number) => {
 	
 	};
 };
+export const changeplayItem = (payload:any) => {
+	console.log(":::::::::::::::",payload);
+	
+	return {
+		type: MenuTypes.CHANGE_PLAY_ITEM,
+		payload
+	};
+};
+export const changePlayingData= (payload:any) => {
+	console.log("icen uruhgtpegeoe",payload);
+	
+	return {
+		type: MenuTypes.CHANGE_PLAYINGDATA,
+		payload
+	};
+};
+export const setPlayingData= (payload:any) => {
+console.log("payloadpayload",payload);
+
+	return {
+		type: MenuTypes.SET_PLAYINGDATA,
+		payload
+	};
+};

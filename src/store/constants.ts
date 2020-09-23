@@ -11,6 +11,9 @@ export enum MenuTypes {
     CHANGE_FAVORITE='@menutypes/CHANGE_FAVORITE',
     CHANGE_ACTIVE_INDEX='@menutypes/CHANGE_ACTIVE_INDEX',
     SET_ACTIVE_INDEX='@menutypes/SET_ACTIVE_INDEX',
+    CHANGE_PLAY_ITEM='@menutypes/CHANGE_PLAY_ITEM',
+    SET_PLAYINGDATA='@menutypes/SET_PLAYINGDATA',
+    CHANGE_PLAYINGDATA='@menutypes/CHANGE_PLAYINGDATA',
 }
 export enum PlayListTypes {
      SET_PLAY_LIST= '@playListtypes/SET_PLAY_LIST',
@@ -28,7 +31,6 @@ export enum GanresTypes {
 export enum FilterTypes {  
     CHANGE_IS_FAVORITE= '@filterTypes/CHANGE_IS_FAVORITE',
     CHANGE_SWIPEABLEPANELACTIVE='@filterTypes/CHANGE_SWIPEABLEPANELACTIVE',
-    CHANGE_PLAY_ITEM='@filterTypes/CHANGE_PLAY_ITEM',
     CHANGE_IS_ACTIVE='@filterTypes/CHANGE_IS_ACTIVE',
     GET_FAVORITES='@filterTypes/GET_FAVORITES',
     ADD_FAVORITE='@filterTypes/ADD_FAVORITE', 

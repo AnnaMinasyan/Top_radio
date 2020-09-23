@@ -16,11 +16,11 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IFilterMenuProps } from "../Interface"
-import {  getMenuData } from '../store/actions/menuActions'
+import {  getMenuData, changeplayItem } from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     getFavorites,
-    changeplayItem,
+   
     changePlayingMusic
 } from '../store/actions/filterAction'
 import Heart from "../assets/icons/heart.svg"
@@ -185,7 +185,7 @@ _addLookingList(data:any){
                     <Bottom
                         navigation={this.props.navigation}
                         onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                        isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}
+                        isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
                         playUrl={this.state.playUrl}
                         chnageplayUrl={(data:any)=>{
                             this.setState({playUrl:data})

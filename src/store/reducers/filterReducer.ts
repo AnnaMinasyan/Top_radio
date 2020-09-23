@@ -48,8 +48,7 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
             return { ...state, swipeablePanelActive: action.payload }
         case FilterTypes.CHANGE_PLAYING_MUSIC:
             return { ...state,isPlayingMusic : action.payload }
-        case FilterTypes.CHANGE_PLAY_ITEM:
-            return { ...state, playItem: action.payload }
+    
         case FilterTypes.SET_PLAYLIST_TYPE:
             return { ...state, playListType: action.payload }
         case FilterTypes.GET_FAVORITES:

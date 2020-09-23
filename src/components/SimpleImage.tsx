@@ -27,7 +27,7 @@ class SimpleImage extends React.Component<Props, IState> {
     if (this.props.size == calcHeight(98) || this.props.size == calcHeight(257)) {
       count = 180
     }
-    //console.log(":::::",'https://top-radio.ru/assets/image/radio/' + count + '/' + this.props.image);
+   // console.log(":::::",'https://top-radio.ru/assets/image/radio/' + count + '/' + this.props.image);
     
     return (
       <View style={[styles.header,{
@@ -49,7 +49,7 @@ class SimpleImage extends React.Component<Props, IState> {
         borderRadius: 8,
       }]} 
         source={{
-          uri:'https://radioarg.net/assets/image/radio/' + count + '/' + this.props.image
+          uri:'https://top-radio.ru/assets/image/radio/' + count + '/' + this.props.image
 
         }}
       />

@@ -13,25 +13,28 @@ export interface IMenuState {
     playTrackList: any,
     favorites: any,
     activeIndex:number,
-    swipeList:any
+    swipeList:any,
+    playItem:any,
+    playMusicData:any
 }
 
 
 export const initialState: IMenuState = {
-    // styleView: true,
+    playItem: {},
     menuData: [],
     filterData: [],
     playTrackList: [],
     favorites: [],
     activeIndex:0,
-    swipeList:[]
+    swipeList:[],
+    playMusicData:{}
 }
 const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
     switch (action.type) {
         case MenuTypes.SET_MENU_DATA:
             let arraymenu = action.payload
             let swip=[]
-            for (let index = 0; index < 4; index++) {
+            for (let index = 0; index < 3; index++) {
                
                 if (index>=0) {
                  const element = action.payload[index];   
@@ -42,6 +45,7 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             return { ...state, menuData: arraymenu,swipeList:swip }
         case MenuTypes.SET_ACTIVE_INDEX:
             let swipers=[]
+           
             for (let index =0; index < action.payload.payload+3; index++) {
                
               //  if (index>=0) {
@@ -50,9 +54,10 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
                // }
             
             }
-            console.log(swipers);
             
             return { ...state, activeIndex: action.payload.payload ,swipeList:swipers}
+            case MenuTypes.CHANGE_PLAY_ITEM:
+                return { ...state, playItem: action.payload }
         case MenuTypes.CHANGE_FAVORITE:
             console.log("action.payload", action.payload);
             let menu = state.menuData
@@ -63,13 +68,6 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
                 }
 
             }
-
-            //  let arr=state.menuData
-            // // arr[action.payload].isfavorite=!arr[action.payload].isfavorite
-            // // // for (let index = 0; index <arraymenu.length; index++) {
-            // // //     const element = arraymenu[index];
-            // // //     element.isfavorite=false
-            // // // }
             return { ...state, menuData: menu }
         case MenuTypes.CHANGE_FILTER_DATA:
             const array: any = []
@@ -108,7 +106,10 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             }
             
             return { ...state, filterData: genre }
-
+            case MenuTypes.SET_PLAYINGDATA:
+               console.log( action.payload);
+               
+                return { ...state, playMusicData: action.payload }
         default:
 
             return state;

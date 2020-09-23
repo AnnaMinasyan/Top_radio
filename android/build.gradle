@@ -6,7 +6,7 @@ buildscript {
         firebaseMessagingVersion = "+" //
         buildToolsVersion = "28.0.3"
         minSdkVersion = 16
-        compileSdkVersion = 28
+        compileSdkVersion = 29
         targetSdkVersion = 28
         multiDexEnabled =true
     }

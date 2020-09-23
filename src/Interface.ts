@@ -2,6 +2,7 @@ import { NavigationScreenProp } from 'react-navigation';
 
  export interface IMenuProps {
     styleView:boolean;
+    onchangePlayingData(type:any):void;
     ongetPlayTrackList(type:any):void;
     onchnageSearchData(type:any):void;
     onchangeActiveIndex(type:number):void;

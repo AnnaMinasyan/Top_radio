@@ -6,7 +6,9 @@ import MyApp from "./src/app"
 import { storeData, getData } from "./src/utils/local_storage"
 import store from './src/store';
 import { Provider } from "react-redux"
-import { connect } from "react-redux"
+import Bugsee from 'react-native-bugsee';
+import {Platform} from 'react-native';
+
 import {changeswipeablePanelActive} from "./src/store/actions/filterAction"
 import Navigator from "./src/navigation/Navigator"
 interface Props{
@@ -21,7 +23,8 @@ class App extends React.Component<Props, any> {
     this.state = {
       
     }
-   
+    this.launchBugsee();
+
 }
   componentDidMount() {
     SplashScreen.hide()
@@ -40,6 +43,17 @@ class App extends React.Component<Props, any> {
       if(time){
       }
       })
+  }
+  async launchBugsee() {
+    let appToken;
+
+    if (Platform.OS === 'ios') {
+        appToken = '<IOS-APP-TOKEN>';
+    } else {
+        appToken = '<ANDROID-APP-TOKEN>';
+    }
+
+    await Bugsee.launch(appToken);
   }
   render() {
     return (

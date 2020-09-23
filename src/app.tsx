@@ -7,7 +7,9 @@ import { useSelector,useDispatch } from "react-redux"
 import { panelActiveSelector, playItem } from "../src/store/selector/filterSelector"
 import { initFavorites } from './store/actions/favoritesActions';
 import {initAutoPlay} from "./store/actions/settingsAcrion"
-import { changeswipeablePanelActive,changeplayItem ,changePlayingMusic,initMenuType} from './store/actions/filterAction';
+import { changeswipeablePanelActive ,changePlayingMusic,initMenuType} from './store/actions/filterAction';
+import { changeplayItem} from './store/actions/menuActions';
+
 import {init} from "./utils/createAlarmClock"
 import { getData, storeData } from "./utils/local_storage"
 import {_startPlayMusic} from "./utils/playMusic"

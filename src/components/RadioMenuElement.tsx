@@ -42,7 +42,10 @@ add(){
       
       <SimpleImage size={calcHeight(54)} image={this.props.image}/>
     
-    <Text style={[global_styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":"white"}]}>{this.props.title}</Text>
+    <Text
+    numberOfLines={1}
+     style={[global_styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":"white", marginRight:calcWidth(20)}]}>
+      {this.props.title}</Text>
       </View>
            <TouchableOpacity
            onPress={()=>{

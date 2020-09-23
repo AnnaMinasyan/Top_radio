@@ -17,10 +17,10 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { getMenuData,changeActiveIndex } from '../store/actions/menuActions'
+import { getMenuData,changeActiveIndex, changeplayItem,changePlayingData} from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
-    changeplayItem,
+   
     addFavorite,
     getFavorites,
     changeSearchData,
@@ -116,10 +116,11 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this.props.onchangeActiveIndex(data.index)
 
                     this.props.onchangePlayingMusic(false)
-         
+        this.props.onchangePlayingData(data.item)
                 this.setState({
                     playItem: data.item,
                     //  activBi: data.item.st[0].bi,
+
                     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
                 })
             }} 
@@ -158,7 +159,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {        
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-console.log(list);
+console.log(this.props.menuReducer.menuData);
 
         return (
             <SafeAreaView >
@@ -193,7 +194,7 @@ console.log(list);
                         <Bottom
                             navigation={this.props.navigation}
                             onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                            isFavorite={this.checkIsFovorite(this.props.filterReducer.playItem.id)}
+                            isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
                             playUrl={this.state.playUrl}
                             chnageplayUrl={(data: any) => {
                                 this.setState({ playUrl: data })
@@ -233,6 +234,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeActiveIndex: (payload: number) => {
             dispatch(changeActiveIndex(payload))
+        },
+        onchangePlayingData: (payload: any) => {
+            dispatch(changePlayingData(payload))
         },
     }
 }

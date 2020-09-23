@@ -27,7 +27,10 @@ import SimpleSwitch from '../components/SimpleSwitch';
 import SmoothPicker from 'react-native-smooth-picker';
 import Modal from 'react-native-modal'; // 2.4.0
 import PowerOffSvg  from "../assets/icons/powerOff.svg"
-import { changeswipeablePanelActive, changeplayItem, changeSearchData } from '../store/actions/filterAction'
+import SearchSvg from "../assets/icons/search.svg"
+import { changeplayItem,} from '../store/actions/menuActions'
+
+import { changeSearchData } from '../store/actions/filterAction'
 import { createFilter } from 'react-native-search-filter';
 const KEYS_TO_FILTERS = ['pa'];
 
@@ -122,7 +125,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       style={{ width: '100%' }}
     >
       <RadioMenuElement title={data.item.pa} image={data.item.im}
-        backColor={this.props.theme.backgroundColor}
+        backColor={'#0F1E45'}
         addInFavorite={() => this._changeInFavorite(data.item)}
         isFavorite={this.checkIsFovorite(data.item.id)} />
     </TouchableOpacity>
@@ -140,9 +143,22 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
   onRenderModalMenuRadio() {
     let list = this.props.menuReducer.menuData.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
     return <ScrollView  >
-      <View style={[styles.modalMenuRadio,{backgroundColor:this.props.theme.backgroundColor} ]}>
-        <View style={{ width: '100%',backgroundColor:this.props.theme.backgroundColor }}><Search renderSearchData={this.props.onchnageSearchData}
-        /></View>
+      <View style={[styles.modalMenuRadio,{backgroundColor:"#0F1E45"} ]}>
+        <View style={{ width: '100%',backgroundColor:'#0a1d4f',
+         flexDirection:'row', 
+        justifyContent:'center',
+        paddingLeft:calcWidth(10),
+        paddingBottom:calcHeight(5)
+        }}>
+       <View style={{borderBottomWidth:calcHeight(2),width:'10%',alignItems:'center',   justifyContent:'center',
+        borderColor:'#57678F',}}>
+                 <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />
+
+       </View>
+         <View style={{width:'90%'}}>
+         <Search renderSearchData={this.props.onchnageSearchData}  />
+         </View>
+      </View>
         <View style={{ height: calcHeight(400) }}>
           <FlatList
             style={{ marginBottom: 10, }}

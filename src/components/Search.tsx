@@ -41,7 +41,7 @@ class Search extends React.Component<Props, IState> {
         borderColor:'#57678F',
         width:'100%',
         // paddingBottom:calcHeight(13),
-         paddingHorizontal:calcWidth(3),
+       //  paddingHorizontal:calcWidth(3),
          flexDirection:'row'}}>
         {/* <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} style={{marginTop:calcHeight(20), marginRight:calcWidth(13.26)}}/> */}
         <TextInput 
@@ -63,10 +63,10 @@ export default Search;
 const styles = StyleSheet.create({
     search: {
       width:'100%',
-      backgroundColor: '#0F1E45',
+     // backgroundColor: '#0F1E45',
     // / height: calcHeight(65),
     alignItems:'center',
-    paddingHorizontal:calcWidth(21),
+    paddingRight:calcWidth(21),
     // marginTop:calcHeight(10),
     justifyContent:'center',
     flexDirection:'row'

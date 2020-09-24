@@ -13,7 +13,9 @@ export enum MenuTypes {
     SET_ACTIVE_INDEX='@menutypes/SET_ACTIVE_INDEX',
     CHANGE_PLAY_ITEM='@menutypes/CHANGE_PLAY_ITEM',
     SET_PLAYINGDATA='@menutypes/SET_PLAYINGDATA',
-    CHANGE_PLAYINGDATA='@menutypes/CHANGE_PLAYINGDATA',
+    CHANGE_PLAYINGDATA='@menutypes/CHANGE_PLAYINGDATA', 
+    CHANGE_SWIPER_DATA='@menutypes/CHANGE_SWIPER_DATA',
+    SET_SWIPER_DATA='@menutypes/SET_SWIPER_DATA',
 }
 export enum PlayListTypes {
      SET_PLAY_LIST= '@playListtypes/SET_PLAY_LIST',

@@ -34,28 +34,17 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
         case MenuTypes.SET_MENU_DATA:
             let arraymenu = action.payload
             let swip=[]
-            for (let index = 0; index < 3; index++) {
+            // for (let index = 0; index < 3; index++) {
                
-                if (index>=0) {
-                 const element = action.payload[index];   
-                   swip.push(element)
-                }
+            //     if (index>=0) {
+            //      const element = action.payload[index];   
+            //        swip.push(element)
+            //     }
             
-            }
-            return { ...state, menuData: arraymenu,swipeList:swip }
-        case MenuTypes.SET_ACTIVE_INDEX:
-            let swipers=[]
-           
-            for (let index =0; index < action.payload.payload+3; index++) {
-               
-              //  if (index>=0) {
-                 const element = state.menuData[index];   
-                    swipers.push(element)
-               // }
-            
-            }
-            
-            return { ...state, activeIndex: action.payload.payload ,swipeList:swipers}
+            // }
+            return { ...state, menuData: arraymenu}
+        case MenuTypes.SET_ACTIVE_INDEX:           
+            return { ...state, activeIndex: action.payload.payload }
             case MenuTypes.CHANGE_PLAY_ITEM:
                 return { ...state, playItem: action.payload }
         case MenuTypes.CHANGE_FAVORITE:
@@ -98,7 +87,11 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
                 }
             }
             
-            return { ...state, filterData: genre }
+            return { ...state, filterData: genre }  
+             case MenuTypes.SET_SWIPER_DATA:
+               console.log("swipeList", action.payload);
+               
+                return { ...state, swipeList: action.payload }
             case MenuTypes.SET_PLAYINGDATA:
                console.log( action.payload);
                

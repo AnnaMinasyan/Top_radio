@@ -3,7 +3,7 @@ import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setMenuData,setActiveIndex, setPlayingData} from "../actions/menuActions"
 import {setPlayItemType} from "../actions/filterAction"
-import {changeplayItem} from "../actions/menuActions"
+import {changeplayItem,setSwiperData} from "../actions/menuActions"
 
 
 function* getMenuData() {
@@ -16,6 +16,7 @@ function* getMenuData() {
 	}
 }
 function* changingActiveIndex(num:number) {
+	console.log("nuuuuuuum",num);
 	
 	try {
 		yield put(setActiveIndex(num))
@@ -35,16 +36,18 @@ function* onGetPlayType({payload}:any) {
     
 }
 function* onChangePlayingData({payload}:any) {
-    
     try {
-        console.log("icen uruhgtpegeoe",payload);
-		
 		yield put(setPlayingData(payload))
 	} catch (ex) {
 		console.log(ex);
-	
-	}
-    
+	} 
+}
+function* onChangeSwiperData({payload}:any) {
+    try {
+		yield put(setSwiperData(payload))
+	} catch (ex) {
+		console.log(ex);
+	} 
 }
 export function* watchMenuType() {
 	yield takeEvery(
@@ -62,6 +65,10 @@ export function* watchMenuType() {
 	yield takeEvery(
         MenuTypes.CHANGE_PLAYINGDATA as any,
 		onChangePlayingData
+	)
+	yield takeEvery(
+        MenuTypes.CHANGE_SWIPER_DATA as any,
+		onChangeSwiperData
 	)
 }
 

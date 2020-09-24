@@ -17,7 +17,13 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { getMenuData, changeActiveIndex, changeplayItem, changePlayingData } from '../store/actions/menuActions'
+import {
+    getMenuData,
+    changeActiveIndex,
+    changeplayItem,
+    changePlayingData,
+    changeSwiperData
+} from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
 
@@ -110,13 +116,25 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                this.props.onchangeswipeablePanelActive(true)
+                    this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
-                this.props.onchangeActiveIndex(data.index)
+                let swiper: any = []
+                if (data.index - 15 < 0) {
+                    console.log("11111111", this.props.menuReducer.menuData.slice(0, data.index + 15));
+                    swiper = this.props.menuReducer.menuData.slice(0, data.index + 15)
+                    this.props.onchangeActiveIndex(data.index)
 
+                    this.props.onchangeSwiperData(swiper)
+                } else {
+                    console.log("22222222", this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15));
+                    swiper = this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15)
+                    this.props.onchangeActiveIndex(15)
+
+                    this.props.onchangeSwiperData(swiper)
+                }
                 this.props.onchangePlayingMusic(false)
-                this.props.onchangePlayingData(data.item)
+                //this.props.onchangePlayingData(data.item)
                 this.setState({
                     playItem: data.item,
                     //  activBi: data.item.st[0].bi,
@@ -142,7 +160,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this.props.onchangeplayItem(data.item)
                 this.props.onchangePlayingMusic(false)
                 this.props.onchangeActiveIndex(data.index)
-                this.props.onchangePlayingData(data.item)
+                //this.props.onchangePlayingData(data.item)
 
                 this.setState({
                     playItem: data.item,
@@ -161,7 +179,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        console.log(this.props.menuReducer.menuData);
+        console.log(this.props.menuReducer.swipeList,"index",this.props.menuReducer.activeIndex);
 
         return (
             <SafeAreaView >
@@ -183,7 +201,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                             contentContainerStyle={{
                                 width: '100%',
-                                flexWrap: 'wrap',
+                               // flexWrap: 'wrap',
                                 flexDirection: 'row',
                                 paddingLeft: calcWidth(15),
                                 paddingTop: calcHeight(8),
@@ -202,6 +220,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             chnageplayUrl={(data: any) => {
                                 this.setState({ playUrl: data })
                             }}
+                            list={this.props.menuReducer.menuData}
                         />
                     </View>
                 </View>
@@ -237,6 +256,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeActiveIndex: (payload: number) => {
             dispatch(changeActiveIndex(payload))
+        },
+        onchangeSwiperData: (payload: any) => {
+            dispatch(changeSwiperData(payload))
         },
         onchangePlayingData: (payload: any) => {
             dispatch(changePlayingData(payload))

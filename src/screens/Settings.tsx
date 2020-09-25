@@ -230,7 +230,6 @@ this.props.onchangeBufferSize( res.title)
             <SmoothPicker
               magnet
               scrollAnimation
-              selectOnPress
               initialScrollToIndex={this.state.timeSleep}
               showsVerticalScrollIndicator={false}
               data={this.state.timeSleepList}

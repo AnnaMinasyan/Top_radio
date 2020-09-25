@@ -43,7 +43,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
         <ScrollView  style={{ backgroundColor: this.props.theme.backgroundColor}}  >
             <View style={{ backgroundColor: this.props.theme.backgroundColor}}>
 
-                <HeaderByBack title='Новое радио' onNavigate={() => { this.props.navigation.navigate('Menu') }} />
+                <HeaderByBack title={this.props.playListReducer.title} onNavigate={() => { this.props.navigation.navigate('Menu') }} />
                 <View style={styles.tabFilter}>
                     <TouchableOpacity
                         onPress={() => {

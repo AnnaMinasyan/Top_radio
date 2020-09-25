@@ -7,14 +7,16 @@ interface IReduxAction<T> {
 
 export interface IPlayListState {
     playList:any,
-    trackList:any
+    trackList:any,
+    title:string
 }
 
 
 export const initialState: IPlayListState = {
    
     playList:[],
-    trackList:[]
+    trackList:[],
+    title:""
 }
 const playListReducer = (state = initialState, action: IReduxAction<PlayListTypes>) => {
     switch (action.type) {
@@ -24,6 +26,9 @@ const playListReducer = (state = initialState, action: IReduxAction<PlayListType
         case PlayListTypes.SET_TRACK_LIST:
             
             return {...state, trackList: action.payload };
+             case PlayListTypes.SET_HEADER_TEXT:
+            
+            return {...state, title: action.payload };
         default: 
             return state;
     }

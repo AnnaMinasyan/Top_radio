@@ -16,7 +16,8 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IFilterMenuProps } from "../Interface"
-import {  getMenuData, changeplayItem,changePlayingData,changeActiveIndex } from '../store/actions/menuActions'
+import HeaderByBack from "../components/HeaderByBack"
+import {  getMenuData, changeplayItem,changePlayingData,changeActiveIndex,changeSwiperData} from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     getFavorites,
@@ -114,10 +115,23 @@ _addLookingList(data:any){
             this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
-                this.props.onchangeActiveIndex(data.index)
-
                 this.props.onchangePlayingMusic(false)
                 this.props.onchangePlayingData(data.item)
+                let swiper: any = []
+
+                if (data.index - 15 < 0) {
+                    console.log("11111111", this.props.menuReducer.filterData.slice(0, data.index + 15));
+                    swiper = this.props.menuReducer.filterData.slice(0, data.index + 15)
+                    this.props.onchangeActiveIndex(data.index)
+
+                    this.props.onchangeSwiperData(swiper)
+                } else {
+                    console.log("22222222", this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15));
+                    swiper = this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15)
+                    this.props.onchangeActiveIndex(15)
+
+                    this.props.onchangeSwiperData(swiper)
+                }
 
             this.setState({
                 playItem: data.item,
@@ -153,13 +167,13 @@ _addLookingList(data:any){
     
     render() {
  const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
- console.log(":::::::::::::::::::::",list);
  
         return (
             <SafeAreaView style={{ backgroundColor: this.props.theme.backgroundColor }}>
         {/* //    <View style={styles.container}> */}
                 <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor }]}>
-                    <Header navigation={this.props.navigation} />
+                    <Header navigation={this.props.navigation} type={true} />
+
                         {this.props.filterReducer.menuType==1 ?
 
                             <FlatList
@@ -181,7 +195,7 @@ _addLookingList(data:any){
 
                         }
                    
-                    <View style={{ position: 'absolute',
+                   {this.props.filterReducer.swipeablePanelActive!=null?    <View style={{ position: 'absolute',
                     
                       width: '100%',
                        bottom: 0 , 
@@ -194,8 +208,9 @@ _addLookingList(data:any){
                             chnageplayUrl={(data: any) => {
                                 this.setState({ playUrl: data })
                             }}
+                            list={list}
                         />
-                     </View> 
+                     </View> :null}
 
                 </View>
              
@@ -239,6 +254,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeActiveIndex: (payload: number) => {
             dispatch(changeActiveIndex(payload))
+        },
+        onchangeSwiperData: (payload: number) => {
+            dispatch(changeSwiperData(payload))
         },
     }
 }

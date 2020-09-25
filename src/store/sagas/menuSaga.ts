@@ -9,9 +9,10 @@ import {changeplayItem,setSwiperData} from "../actions/menuActions"
 function* getMenuData() {
 	try {
 		const data= yield auth.getMenuDatas()
-		yield put(changeplayItem(data[0]))
-		yield put(setPlayingData(data[0]))
+		let swiper =data.slice(0, 15)
 		yield put(setMenuData(data))
+		yield put(setSwiperData(swiper))
+		yield put(setActiveIndex(0))
 	} catch (ex) {
 	}
 }

@@ -54,7 +54,7 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
     name="FilterMenu"
     component={FilterMenu}
-    options={{ header: BaseHeader, headerTransparent: true, animationEnabled:false}}
+    options={{ headerShown:false, headerTransparent: true, animationEnabled:false}}
     />
   </Stack.Navigator>
 );

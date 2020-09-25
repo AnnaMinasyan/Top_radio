@@ -10,7 +10,7 @@ export interface IgetMenuDatasMethodResponse {
 interface IDATA {
     getMenuDatas(): Promise<any>;
     getCities(): Promise<any>,
-    getPlayLists(payload: number): Promise<any>
+    getPlayLists(payload: any): Promise<any>
 }
 class Static implements IDATA {
     async getMenuDatas() {
@@ -40,10 +40,12 @@ class Static implements IDATA {
             return Alert.alert("Error",ex)
         }
     }
-    async getPlayLists(payload: any) {
+    async getPlayLists(payload: number) {
+        console.log(";;;;;;;;;;;;;;;;;;;;;",payload);
+        
         try {
             const data = moment().format('YYYY-MM-DD')
-            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload.payload}/schedules/${data}?trackList=true`,);
+            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true`,);
             return response.data
         } catch (ex) {
             return Alert.alert("Error",ex)

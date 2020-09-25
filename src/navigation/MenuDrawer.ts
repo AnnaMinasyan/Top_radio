@@ -4,7 +4,6 @@ import CustomDrawerContentComponent from './MenuDrawerContent'
 import Menu from "../screens/RadiosList"
 import Header from "../components/Header"
 import { createAppContainer } from 'react-navigation';
-console.log("ewlaru vnipowehr tobiath");
 
 const drawerScreens = createDrawerNavigator({
  

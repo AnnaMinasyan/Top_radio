@@ -27,7 +27,6 @@ const BaseHeader: React.FunctionComponent<Props> = (props) => {
 
       setshowMenu(false)
     } else {
-      console.log("elseeeee", filterReducer.swipeablePanelActive);
 
       setshowMenu(true)
     }
@@ -37,7 +36,6 @@ const BaseHeader: React.FunctionComponent<Props> = (props) => {
       {showMenu ?
         <TouchableOpacity
           onPress={() => {
-            console.log("filterReducer", filterReducer.swipeablePanelActive)
 
             navigation.dispatch(DrawerActions.toggleDrawer())
           }}

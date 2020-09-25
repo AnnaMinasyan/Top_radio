@@ -3,7 +3,9 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler,
+  Linking
 } from 'react-native';
 import Menu from "../assets/icons/menu.svg"
 import Logo from "../assets/icons/logo.svg"
@@ -21,13 +23,16 @@ import RedHeart from "../assets/icons/redHeart.svg"
 import SearchSvg from "../assets/icons/search.svg"
 import Search from "./Search"
 import CloseSvg from "../assets/icons/close.svg"
+import Arrow from "../assets/icons/arrow_back.svg"
+
 interface Props {
   onchangeFavoriteType(): void;
   navigation: NavigationScreenProp<any, any>;
   filterReducer: any,
   onchnageSearchData(type: any): void;
   theme:any
-
+  type:boolean,
+  menuReducer:any
 }
 interface IState {
   hideMenuModal: boolean,
@@ -64,7 +69,7 @@ class Header extends React.Component<Props, IState> {
         <TouchableOpacity
           style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
-            this.setState({ hideMenuModal: false })
+            Linking.openURL('http://top-radio.ru/dobavit-radio?fbclid=IwAR2LH7GH0qQTcByNabxFiGh9yNuktf48R2dAlyYGz15_i7QegNoXYYFPnRk')
           }}
         >
           <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Предложить радиостанцию</Text>
@@ -89,7 +94,7 @@ class Header extends React.Component<Props, IState> {
         <TouchableOpacity
           style={[styles.modalView, { borderBottomWidth: 0 ,borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
-            this.setState({ hideMenuModal: false })
+          BackHandler.exitApp()
           }}
         >
           <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Выход</Text>
@@ -102,7 +107,6 @@ class Header extends React.Component<Props, IState> {
 
   }
   changeIsFavorite() {
-    console.log("iiiiiiiiii",this.props.filterReducer.isFavorite);
     if(this.props.filterReducer.isFavorite){
       this.props.navigation.navigate("Menu")
     }else{
@@ -111,25 +115,43 @@ class Header extends React.Component<Props, IState> {
     this.props.onchangeFavoriteType()
   
   }
-
+  renderTitle(){
+    return<View>
+      {this.props.type?<View>
+        <Text numberOfLines={1} style={styles.title}>{this.props.menuReducer.headertext}</Text>
+        </View>: <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(13), }} />}
+    </View>
+  }
   render() {
 
     return (
 
       <View style={styles.header}>
         <View style={[styles.row,]}>
+          {this.props.type?<View>
+            <TouchableOpacity
+                    style={[global_styles.searchbtn,{paddingHorizontal:calcWidth(0),paddingRight:calcWidth(11)  }]}
+                    onPress={()=>{
+                        this.props.navigation.goBack()
+                    }}
+                    >
+                    <Arrow height={calcHeight(23.49)} width={calcWidth(23.49)} />
+                    </TouchableOpacity>
+          </View>:
+           
         <TouchableOpacity
           onPress={() => {
-            console.log("filterReducer", this.props.filterReducer.swipeablePanelActive)
+            if(this.props.filterReducer.isFavorite){this.props.onchangeFavoriteType()}
 
             this.props.navigation.dispatch(DrawerActions.toggleDrawer())
           }}
           style={styles.headerContainer}
         >
           <Menu fill='#FFFFFF' height={calcHeight(21)} width={calcWidth(21)} />
-        </TouchableOpacity>
+        </TouchableOpacity> }
        {!this.state.showSearchView?
-       <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(13), }} />:
+      this.renderTitle()
+      :
        <View style={{
        width:calcWidth(240),
        justifyContent:'center',
@@ -145,7 +167,7 @@ class Header extends React.Component<Props, IState> {
             style={global_styles.searchbtn}
               onPress={()=>{
                 this.setState({showSearchView:!this.state.showSearchView})
-                this.props.onchnageSearchData('')
+              //  this.props.onchnageSearchData('')
               }}
           >
          {!this.state.showSearchView? <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />:
@@ -252,5 +274,12 @@ const styles = StyleSheet.create({
   modalItem: {
     fontSize: 15,
     fontWeight: '500',
-  }
+  },
+  title:{
+    color:'white',
+    fontSize:calcFontSize(20),
+    marginLeft:calcWidth(5),
+    fontWeight:'500',
+    width:calcWidth(120)
+}
 });

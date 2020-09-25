@@ -10,8 +10,17 @@ function* getGanresData() {
 		console.log('saga getCitiesData');
 
 		const data= yield auth.getGanres()
-		//console.log("dataaaa",data);
 		
+			var len = data.length;
+			for (var i = len-1; i>=0; i--){
+			  for(var j = 1; j<=i; j++){
+				if(data[j-1].co<data[j].co){
+					var temp = data[j-1];
+					data[j-1] = data[j];
+					data[j] = temp;
+				 }
+			  }
+			}
 		yield put(setGanres(data))
 	} catch (ex) {
 		console.log(ex);

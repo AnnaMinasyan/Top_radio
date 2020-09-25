@@ -142,8 +142,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
   }
   onRenderModalMenuRadio() {
     let list = this.props.menuReducer.menuData.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-    return <ScrollView  >
-      <View style={[styles.modalMenuRadio,{backgroundColor:"#0F1E45"} ]}>
+    return <View style={[styles.modalMenuRadio,{backgroundColor:"#0F1E45"} ]}>
         <View style={{ width: '100%',backgroundColor:'#0a1d4f',
          flexDirection:'row', 
         justifyContent:'center',
@@ -169,7 +168,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           />
         </View>
       </View>
-    </ScrollView>
+  
 
   }
   onRenderModalSleepTimer() {
@@ -180,12 +179,12 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           <SmoothPicker
             magnet
             scrollAnimation
-            selectOnPress
+           // selectOnPress
             showsVerticalScrollIndicator={false}
             offsetSelection={-20}
             data={this.state.timeSleepList}
             style={{ height: calcHeight(370), marginTop: calcHeight(10) }}
-            onSelected={({ item, index }) => this.handleChangeTimeSleepList(item)}
+           onSelected={({ item, index }) => this.handleChangeTimeSleepList(item)}
             renderItem={({ item, index }) => (
               <View>
                 <Text style={{
@@ -294,7 +293,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             <SmoothPicker
               magnet
               scrollAnimation
-              selectOnPress
+            //  selectOnPress
               showsVerticalScrollIndicator={false}
              // offsetSelection={-5}
               initialScrollToIndex={this.state.hours[this.state.selectedHours]}
@@ -319,7 +318,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             <SmoothPicker
               magnet
               scrollAnimation
-              selectOnPress
+           //   selectOnPress
               showsVerticalScrollIndicator={false}
             //  offsetSelection={-5}
               data={this.state.minutes}
@@ -462,11 +461,11 @@ const styles = StyleSheet.create({
     // width: calcWidth(100)
   },
   modalMenuRadio: {
-    marginTop:calcHeight(150),
-
-    height: calcHeight(400),
+    marginTop:calcHeight(50),
+paddingBottom:calcHeight(8),
+    height: calcHeight(450),
     marginHorizontal: calcWidth(45),
-    borderRadius: 5,
+  
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -1,16 +1,14 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { PlayListTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setPlayList,setTrackList} from "../actions/playlistAction"
+import {setPlayList,setTrackList,setHeaderText} from "../actions/playlistAction"
 
 
 
-function* getPlayListData(payload:number) {
+function* getPlayListData(payload:any) {
 	try {
-		
-
-		const data= yield auth.getPlayLists(payload)
-		console.log('saga PlayListTypes',data);
+		const data= yield auth.getPlayLists(payload.payload.pl)
+		yield put(setHeaderText(payload.payload.pa))
 		yield put(setPlayList(data.playList))
 		yield put(setTrackList(data.trackList))
 	} catch (ex) {

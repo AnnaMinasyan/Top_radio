@@ -48,8 +48,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
 
         return <TouchableHighlight
         onPress={()=>{
-            console.log(data.item.pa);
-            this.props.onchangeFilterData(data.item.id)
+            this.props.onchangeFilterData(data.item)
             this.props.navigation.navigate('FilterMenu')
         }}
         >

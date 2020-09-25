@@ -179,7 +179,6 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        console.log(this.props.menuReducer.swipeList,"index",this.props.menuReducer.activeIndex);
 
         return (
             <SafeAreaView >
@@ -201,8 +200,8 @@ class Menu extends React.Component<IMenuProps, IState> {
                             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                             contentContainerStyle={{
                                 width: '100%',
-                               // flexWrap: 'wrap',
-                                flexDirection: 'row',
+                               flexWrap: 'wrap',
+                               flexDirection: 'row',
                                 paddingLeft: calcWidth(15),
                                 paddingTop: calcHeight(8),
                                 justifyContent: 'center'
@@ -211,7 +210,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             maxToRenderPerBatch={10}
                         />
                     }
-                    <View style={styles.bottomView}>
+                    {this.props.filterReducer.swipeablePanelActive!=null?<View style={styles.bottomView}>
                         <Bottom
                             navigation={this.props.navigation}
                             onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
@@ -222,7 +221,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             }}
                             list={this.props.menuReducer.menuData}
                         />
-                    </View>
+                    </View>:null}
                 </View>
             </SafeAreaView>
         );
@@ -374,7 +373,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     container: {
-        height: deviceHeight - calcHeight(28.5)
+        height: deviceHeight - calcHeight(24)
     },
     box: {
         width: 50,

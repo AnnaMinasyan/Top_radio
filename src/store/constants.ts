@@ -20,6 +20,7 @@ export enum MenuTypes {
 export enum PlayListTypes {
      SET_PLAY_LIST= '@playListtypes/SET_PLAY_LIST',
      SET_TRACK_LIST= '@playListtypes/GET_TRACK_LIST',
+     SET_HEADER_TEXT= '@playListtypes/SET_HEADER_TEXT',
  GET_PLAY_LIST= '@playListtypes/GET_PLAY_LIST',
 }
 export enum CitiesTypes {  

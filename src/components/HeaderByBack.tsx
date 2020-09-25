@@ -10,17 +10,10 @@ import {
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
-
-import { IMenuProps, ICitiesConnect } from "../Interface"
-
 import { connect } from "react-redux"
 import Arrow from "../assets/icons/arrow_back.svg"
-// import TrackPlayer from 'react-native-track-player';
 
 interface IState {
-   
-
-
 }
 interface IHeaderByBackProps{
 title:string,
@@ -32,8 +25,6 @@ class HeaderByBack extends React.Component<IHeaderByBackProps, IState> {
 
         super(props)
         this.state = {
-           
-
         }
     }
     render() {

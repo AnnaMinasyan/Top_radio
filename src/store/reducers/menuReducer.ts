@@ -15,7 +15,8 @@ export interface IMenuState {
     activeIndex:number,
     swipeList:any,
     playItem:any,
-    playMusicData:any
+    playMusicData:any,
+    headertext:string
 }
 
 
@@ -27,7 +28,8 @@ export const initialState: IMenuState = {
     favorites: [],
     activeIndex:0,
     swipeList:[],
-    playMusicData:{}
+    playMusicData:{},
+    headertext:""
 }
 const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
     switch (action.type) {
@@ -60,34 +62,34 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             return { ...state, menuData: menu }
         case MenuTypes.CHANGE_FILTER_DATA:
             const array: any = []
-            console.log(action.payload);
             for (let index = 0; index < state.menuData.length; index++) {
                 const element = state.menuData[index];
                 if (element.ci && element.ci.length > 0) {
                     element.ci.map((elem: any, key: any) => {
-                        if (elem == action.payload) {
+                        if (elem == action.payload.id) {
                             array.push(element)
                         }
                     })
                 }
             }
-            return { ...state, filterData: array }
+            return { ...state, filterData: array,headertext:action.payload.pa }
         case MenuTypes.CHANGE_FILTER_DATA_BY_GENRE:
             const genre: any = []
-            console.log(state.menuData[0]);
+            console.log(" V LlehFeuh f osehfof",action.payload);
+
             
             for (let index = 0; index < state.menuData.length; index++) {
                 const element = state.menuData[index];
                 if (element.ge && element.ge.length > 0) {
                     element.ge.map((elem: any, key: any) => {
-                        if (elem == action.payload) {
+                        if (elem == action.payload.id) {
                             genre.push(element)
                         }
                     })
                 }
             }
             
-            return { ...state, filterData: genre }  
+            return { ...state, filterData: genre,headertext:action.payload.pa}  
              case MenuTypes.SET_SWIPER_DATA:
                console.log("swipeList", action.payload);
                

@@ -42,6 +42,7 @@ export interface IFilterMenuProps {
     toaddfavorite(type:any):void;
     favorites:any,
     onchangeActiveIndex(type:number):void;
+    onchangeSwiperData(payload:any):void; 
 
 } 
 export interface IGanresProps {

@@ -28,6 +28,8 @@ export const changeFilterData = (payload: any) => {
 	};
 };
 export const changeFilterDataByGenre = (payload: any) => {
+	console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",payload);
+	
 	return {
 		type: MenuTypes.CHANGE_FILTER_DATA_BY_GENRE,
 		payload
@@ -71,7 +73,6 @@ export const changePlayingData = (payload: any) => {
 	};
 };
 export const setPlayingData = (payload: any) => {
-	console.log("payloadpayload", payload);
 
 	return {
 		type: MenuTypes.SET_PLAYINGDATA,

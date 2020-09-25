@@ -53,7 +53,7 @@ class Genres extends React.Component<IGanresProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight 
         onPress={()=>{
-         this.props.onchangeFilterDataByGenre(data.item.id)
+         this.props.onchangeFilterDataByGenre(data.item)
             this.props.navigation.navigate('FilterMenu')
         }}
         >

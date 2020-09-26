@@ -41,6 +41,7 @@ import { connect } from "react-redux"
 import Bottom from "../components/Bottom"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
+
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     radioList: [],
@@ -116,7 +117,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                    this.props.onchangeswipeablePanelActive(true)
+                this.props.onchangeswipeablePanelActive(true)
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
                 let swiper: any = []

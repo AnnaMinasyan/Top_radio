@@ -6,7 +6,7 @@ import {
     ScrollView,
     TouchableOpacity,
     Animated,
-    Easing
+    Image
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
@@ -36,7 +36,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
     }
     render() {
         
-    const list= this.state.filterType=='playList'?this.props.playListReducer.playList:this.props.playListReducer.trackList
+    const list=this.props.playListReducer.playList && this.props.playListReducer.trackList? this.state.filterType=='playList'?this.props.playListReducer.playList:this.props.playListReducer.trackList:[]
     
        
     return (
@@ -60,6 +60,11 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                         <Text style={this.state.filterType == 'efir' ? styles.touchText : styles.activeTouchText}>Эфир</Text>
                     </TouchableOpacity>
                 </View>
+                { !this.props.playListReducer.playList && !this.props.playListReducer.trackList?
+                    <View style={{height:10, width:10, marginLeft:calcWidth(-40)}}>
+                    <Image 
+                     source={require('../assets/images/loading2.gif')}/>
+                    </View>:
                 
                     <View>
                         {list.map((data: any) => {
@@ -82,7 +87,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                  
                             )})}
                              
-                    </View>
+                    </View>}
             </View>
             </ScrollView>
         );

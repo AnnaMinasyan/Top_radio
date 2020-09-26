@@ -14,8 +14,8 @@ export interface IPlayListState {
 
 export const initialState: IPlayListState = {
    
-    playList:[],
-    trackList:[],
+    playList:null,
+    trackList:null,
     title:""
 }
 const playListReducer = (state = initialState, action: IReduxAction<PlayListTypes>) => {

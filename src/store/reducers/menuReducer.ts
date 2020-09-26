@@ -8,7 +8,7 @@ interface IReduxAction<T> {
 
 export interface IMenuState {
     // styleView: boolean,
-    menuData: any,
+    menuData: any |null,
     filterData: any,
     playTrackList: any,
     favorites: any,
@@ -22,7 +22,7 @@ export interface IMenuState {
 
 export const initialState: IMenuState = {
     playItem: {},
-    menuData: [],
+    menuData: null,
     filterData: [],
     playTrackList: [],
     favorites: [],

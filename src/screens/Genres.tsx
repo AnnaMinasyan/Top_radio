@@ -7,7 +7,8 @@ import {
     SafeAreaView,
     FlatList,
     TouchableOpacity,
-    TouchableHighlight
+    TouchableHighlight,
+    Image
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
@@ -68,7 +69,7 @@ class Genres extends React.Component<IGanresProps, IState> {
         } 
     }
     render() {
-        const list=this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))        
+        const list=this.props.ganresReducer.ganres?this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]      
        
         return (
             <SafeAreaView style={{ height: '100%' }}>
@@ -79,6 +80,12 @@ class Genres extends React.Component<IGanresProps, IState> {
                 onchnageSearchData={this.props.onchnageSearchData}
 
                 />
+                {!this.props.ganresReducer.ganres?
+                    <View style={{height:10, width:10, marginLeft:calcWidth(-40)}}>
+                    <Image 
+                     source={require('../assets/images/loading2.gif')}/>
+                    </View>:
+                
                      <FlatList
                      numColumns={1}
                        data={list}
@@ -86,6 +93,7 @@ class Genres extends React.Component<IGanresProps, IState> {
                         keyExtractor={(item: any, index: number) => item.id.toString()}
                         maxToRenderPerBatch={10}
                     /> 
+                }
             </View>
             </SafeAreaView>
         );

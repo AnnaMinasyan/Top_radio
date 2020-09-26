@@ -13,7 +13,7 @@ export interface ICitiesState {
 
 export const initialState: ICitiesState = {
     styleView: true,
-    cities:[]
+    cities:null
 }
 const citiesReducer = (state = initialState, action: IReduxAction<CitiesTypes>) => {
     switch (action.type) {

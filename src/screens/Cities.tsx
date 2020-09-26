@@ -6,10 +6,11 @@ import {
     ScrollView,
     SafeAreaView,
     FlatList,
-    TouchableHighlight
+    TouchableHighlight,
+    Image
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
-import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
+import { calcFontSize, calcHeight, calcWidth,deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { ICitiesProps, ICitiesConnect } from "../Interface"
@@ -57,14 +58,19 @@ class Cities extends React.Component<ICitiesProps, IState> {
     }
   
     render() {
-        const list=this.props.citiesReducer.cities.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        const list=this.props.citiesReducer.cities!=null?this.props.citiesReducer.cities.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
 
         return (
-            <SafeAreaView style={{ height: '100%' }}>
+            <SafeAreaView style={{ height: deviceHeight - calcHeight(24) }}>
                    
             <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
                 <Header  navigation={this.props.navigation}
                      onchnageSearchData={this.props.onchnageSearchData} />
+              {
+                 ! this.props.citiesReducer.cities?<View style={{height:10, width:10, marginLeft:calcWidth(-40)}}>
+                 <Image 
+                  source={require('../assets/images/loading2.gif')}/>
+                 </View>:
                 
                      <FlatList
                      numColumns={1}
@@ -73,7 +79,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
                         keyExtractor={(item: any, index: number) => item.id.toString()}
                         maxToRenderPerBatch={10}
                     /> 
-             
+                }
             </View>
             </SafeAreaView>
         );

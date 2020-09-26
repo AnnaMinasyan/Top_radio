@@ -10,7 +10,8 @@ import {
     TouchableHighlight,
     FlatList,
     SafeAreaView,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    Image
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
@@ -179,7 +180,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         }
     }
     render() {
-        const list = this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        const list = this.props.menuReducer.menuData!=null?this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
 
         return (
             <SafeAreaView >
@@ -188,29 +189,36 @@ class Menu extends React.Component<IMenuProps, IState> {
                         navigation={this.props.navigation}
                         onchnageSearchData={this.props.onchnageSearchData}
                     />
-                    {this.props.filterReducer.menuType == 1 ?
-                        <FlatList
-                            data={list}
-                            renderItem={(d) => this.renderMenuItems(d)}
-                            keyExtractor={(item: any, index: number) => item.id.toString()}
-                            maxToRenderPerBatch={10}
-                        />
-                        :
-                        <FlatList
-                            data={list}
-                            renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
-                            contentContainerStyle={{
-                                width: '100%',
-                               flexWrap: 'wrap',
-                               flexDirection: 'row',
-                                paddingLeft: calcWidth(15),
-                                paddingTop: calcHeight(8),
-                                justifyContent: 'center'
-                            }}
-                            keyExtractor={(item: any, index: number) => item.id.toString()}
-                            maxToRenderPerBatch={10}
-                        />
-                    }
+                  {
+                      !this.props.menuReducer.menuData?<View style={{ marginLeft:calcWidth(-40)}}>
+                      <Image 
+                       source={require('../assets/images/loading2.gif')}/>
+                      </View>:
+                         this.props.filterReducer.menuType == 1 ?
+                            <FlatList
+                                data={list}
+                                renderItem={(d) => this.renderMenuItems(d)}
+                                keyExtractor={(item: any, index: number) => item.id.toString()}
+                                maxToRenderPerBatch={10}
+                            />
+                            :
+                            <FlatList
+                                data={list}
+                                renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
+                                contentContainerStyle={{
+                                    width: '100%',
+                                   flexWrap: 'wrap',
+                                   flexDirection: 'row',
+                                    paddingLeft: calcWidth(15),
+                                    paddingTop: calcHeight(8),
+                                    justifyContent: 'center'
+                                }}
+                                keyExtractor={(item: any, index: number) => item.id.toString()}
+                                maxToRenderPerBatch={10}
+                            />
+                        
+                  } 
+                 
                     {this.props.filterReducer.swipeablePanelActive!=null?<View style={styles.bottomView}>
                         <Bottom
                             navigation={this.props.navigation}

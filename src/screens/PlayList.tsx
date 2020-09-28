@@ -36,7 +36,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
     }
     render() {
         
-    const list=this.props.playListReducer.playList && this.props.playListReducer.trackList? this.state.filterType=='playList'?this.props.playListReducer.playList:this.props.playListReducer.trackList:[]
+    const list=this.props.playListReducer.playList && this.props.playListReducer.trackList? this.state.filterType=='playList'?this.props.playListReducer.trackList:this.props.playListReducer.playList:[]
     
        
     return (

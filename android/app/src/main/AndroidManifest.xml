@@ -3,7 +3,9 @@ xmlns:tools="http://schemas.android.com/tools"
   package="com.or71ispolnitelmobile">
 
     <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />s
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
       android:name=".MainApplication"
@@ -50,6 +52,7 @@ xmlns:tools="http://schemas.android.com/tools"
         android:screenOrientation="fullSensor"
         android:windowSoftInputMode="adjustResize"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        
         >
         
         <intent-filter>

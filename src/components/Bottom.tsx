@@ -122,7 +122,7 @@ class Bottom extends React.Component<Props, IState> {
         },
         onPanResponderTerminationRequest: (evt, gestureState) => true,
         onPanResponderRelease: (evt, gestureState) => {
-            if (Math.abs(gestureState.dx) > 10 && Math.abs(gestureState.dy) > 10) {
+            if (Math.abs(gestureState.dx) < 50 && Math.abs(gestureState.dy) < 50) {
                 if (this.modalHeightAnim._value == this.modalHeight) {
                     this.swipeAnimationOpen()
                     this.props.onchangeswipeablePanelActive(!this.props.filterReducer.swipeablePanelActive)
@@ -389,7 +389,7 @@ class Bottom extends React.Component<Props, IState> {
         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
     }
     renderBottomSheetHorizontal() {
-console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",deviceHeight,deviceWidth);
+        console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", deviceHeight, deviceWidth);
 
         return <SafeAreaView >
             <StatusBar barStyle='light-content'
@@ -397,7 +397,7 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                 backgroundColor={this.props.theme.backgroundColor} /><View
                     style={{
                         backgroundColor: this.props.theme.backgroundColor,
-                        height: deviceHeight>deviceWidth?deviceWidth:deviceHeight, width: deviceHeight>deviceWidth?deviceHeight:deviceWidth
+                        height: deviceHeight > deviceWidth ? deviceWidth : deviceHeight, width: deviceHeight > deviceWidth ? deviceHeight : deviceWidth
                     }}>
                 <BackSvg />
                 <View ref="rootView" style={{
@@ -454,12 +454,12 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                                     </TouchableOpacity>
                                     <View>
                                         <View style={{ alignItems: 'center' }}>
-                                            
-                                                <Text style={{
-                                                    color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                                    fontSize: calcFontSize(24),
-                                                    fontWeight: '500'
-                                                }}>{data.pa}</Text> 
+
+                                            <Text style={{
+                                                color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                                fontSize: calcFontSize(24),
+                                                fontWeight: '500'
+                                            }}>{data.pa}</Text>
                                         </View>
 
                                         <View style={styles.albImg}>
@@ -484,8 +484,8 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                                                     }}>
                                                     {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
                                                 </Text> : null}
-                                                {this.renderBis()}
-                                           
+                                            {this.renderBis()}
+
                                             <View style={{
                                                 alignItems: 'center', marginTop: calcHeight(40),
                                                 flexDirection: 'row', justifyContent: 'center'
@@ -504,7 +504,7 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                                                     }
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
-                                                      onPress={() => {
+                                                    onPress={() => {
                                                         if (this.state.activSwichItem != null && this.state.activSwichItem.id != this.props.menuReducer.playItem.id) {
                                                             this.props.onchangePlayingData(this.state.activSwichItem)
                                                             this._pouseMusic()
@@ -517,7 +517,7 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                                                         } else {
                                                             this.isPlaying()
                                                         }
-                            
+
                                                     }}
                                                     style={[styles.btnPlay,
                                                     { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
@@ -526,8 +526,8 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
                                                     disabled={!this.props.menuReducer.playItem.pl}
-                                                    style={[styles.btnrecord, 
-                                                        { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                                                    style={[styles.btnrecord,
+                                                    { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
                                                     onPress={() => {
                                                         this._navigatePlayList()
                                                     }}>
@@ -537,11 +537,13 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                                         </View>
                                     </View>
                                     <TouchableOpacity
-                                        style={{ alignItems: 'center',
-                                         height: calcHeight(70),
-                                          width: calcWidth(40),
-                                           marginTop: -20, 
-                                          justifyContent: 'center' }}
+                                        style={{
+                                            alignItems: 'center',
+                                            height: calcHeight(70),
+                                            width: calcWidth(40),
+                                            marginTop: -20,
+                                            justifyContent: 'center'
+                                        }}
                                         onPress={() => {
                                             this.props.toaddfavorite(this.props.menuReducer.playItem)
                                         }}>
@@ -701,12 +703,28 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
                                         alignItems: 'center',
                                         marginHorizontal: calcWidth(20),
                                     }}>
-                                        {this.props.filterReducer.playListType ? <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
+                                        {data.pa == this.props.menuReducer.playItem.pa && this.props.filterReducer.playListType ? <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
                                             {this.props.filterReducer.playListType.artist}  {this.props.filterReducer.playListType.song}
                                         </Text> : null}
                                     </View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }
+                                    }>
+                                        {
+                                            data.st.map((item: any, index: number) => {
+                                                return <TouchableOpacity
+                                                    key={index}
+                                                    onPress={() => {
+                                                        this.changeRadioStancia(item)
 
-                                    {this.renderBis()}
+                                                    }}
+                                                    style={item.bi == this.state.activBi ? [styles.numbers, { marginRight: calcWidth(15) }] : styles.activeNumbers}
+                                                >
+                                                    <Text style={styles.activenumber}>{item.bi}</Text>
+                                                </TouchableOpacity>
+                                            })
+                                        }
+                                    </View>
+                                    {/* {this.renderBis()} */}
                                 </View>
                             })
                         }
@@ -774,7 +792,7 @@ console.log("ejffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",devic
 
             this.isPortrait();
         });
-console.log(this.state.orientation);
+        console.log(this.state.orientation);
 
         return (
             <View
@@ -985,7 +1003,7 @@ const styles = StyleSheet.create({
         marginRight: calcWidth(15),
         elevation: 5,
     },
-albImg:{ height: calcHeight(257), marginTop: calcHeight(24), justifyContent: 'center', alignItems: 'center', },
+    albImg: { height: calcHeight(257), marginTop: calcHeight(24), justifyContent: 'center', alignItems: 'center', },
     modal: {
         height: calcHeight(269.03),
         width: calcWidth(265),

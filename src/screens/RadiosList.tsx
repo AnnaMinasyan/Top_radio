@@ -119,7 +119,7 @@ class Menu extends React.Component<IMenuProps, IState> {
         return <TouchableHighlight
             onPress={() => {
                 this.props.onchangeswipeablePanelActive(true)
-                this._addLookingList(data.item)
+                //this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
                 let swiper: any = []
                 if (data.index - 15 < 0) {
@@ -136,7 +136,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                     this.props.onchangeSwiperData(swiper)
                 }
                 this.props.onchangePlayingMusic(false)
-                //this.props.onchangePlayingData(data.item)
+                this.props.onchangePlayingData(data.item)
                 this.setState({
                     playItem: data.item,
                     //  activBi: data.item.st[0].bi,

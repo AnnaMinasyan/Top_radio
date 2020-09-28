@@ -6,7 +6,7 @@ import {
     ScrollView,
     TouchableOpacity,
     Animated,
-    Image
+    ActivityIndicator
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
@@ -61,10 +61,9 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                     </TouchableOpacity>
                 </View>
                 { !this.props.playListReducer.playList && !this.props.playListReducer.trackList?
-                    <View style={{height:10, width:10, marginLeft:calcWidth(-40)}}>
-                    <Image 
-                     source={require('../assets/images/loading2.gif')}/>
-                    </View>:
+                 <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
+                 <ActivityIndicator size="large" color="#0F1E45" />
+                </View>:
                 
                     <View>
                         {list.map((data: any) => {

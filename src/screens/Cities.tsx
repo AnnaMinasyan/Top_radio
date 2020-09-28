@@ -7,7 +7,7 @@ import {
     SafeAreaView,
     FlatList,
     TouchableHighlight,
-    Image
+    ActivityIndicator
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth,deviceHeight } from "../assets/styles/dimensions"
@@ -67,10 +67,10 @@ class Cities extends React.Component<ICitiesProps, IState> {
                 <Header  navigation={this.props.navigation}
                      onchnageSearchData={this.props.onchnageSearchData} />
               {
-                 ! this.props.citiesReducer.cities?<View style={{height:10, width:10, marginLeft:calcWidth(-40)}}>
-                 <Image 
-                  source={require('../assets/images/loading2.gif')}/>
-                 </View>:
+                 ! this.props.citiesReducer.cities?
+                 <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
+                 <ActivityIndicator size="large" color="#0F1E45" />
+                </View>:
                 
                      <FlatList
                      numColumns={1}

@@ -8,7 +8,7 @@ import {
     FlatList,
     TouchableOpacity,
     TouchableHighlight,
-    Image
+    ActivityIndicator
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
@@ -81,10 +81,9 @@ class Genres extends React.Component<IGanresProps, IState> {
 
                 />
                 {!this.props.ganresReducer.ganres?
-                    <View style={{height:10, width:10, marginLeft:calcWidth(-40)}}>
-                    <Image 
-                     source={require('../assets/images/loading2.gif')}/>
-                    </View>:
+                    <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
+                    <ActivityIndicator size="large" color="#0F1E45" />
+                   </View>:
                 
                      <FlatList
                      numColumns={1}

@@ -10,7 +10,7 @@ import {
     TouchableHighlight,
     FlatList,
     SafeAreaView,
-    TouchableWithoutFeedback,
+    ActivityIndicator,
     Image
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
@@ -190,9 +190,9 @@ class Menu extends React.Component<IMenuProps, IState> {
                         onchnageSearchData={this.props.onchnageSearchData}
                     />
                   {
-                      !this.props.menuReducer.menuData?<View style={{ marginLeft:calcWidth(-40)}}>
-                      <Image 
-                       source={require('../assets/images/loading2.gif')}/>
+                      !this.props.menuReducer.menuData?
+                      <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
+                       <ActivityIndicator size="large" color="#0F1E45" />
                       </View>:
                          this.props.filterReducer.menuType == 1 ?
                             <FlatList

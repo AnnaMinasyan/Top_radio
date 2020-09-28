@@ -201,9 +201,6 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
-    compile 'com.facebook.fresco:animated-gif:1.+'
-    compile 'com.facebook.fresco:animated-webp:1.+'
-    compile 'com.facebook.fresco:webpsupport:1.+'
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }

@@ -12,6 +12,13 @@ export const setMenuData = (payload: any) => {
 
 	};
 };
+export const setFilterData = (payload: any) => {
+	return {
+		type: MenuTypes.SET_FILTER_DATA,
+		payload
+
+	};
+};
 export const setPlayList = (payload: any) => {
 	return {
 		type: MenuTypes.SET_PLAY_LIST,
@@ -28,7 +35,6 @@ export const changeFilterData = (payload: any) => {
 	};
 };
 export const changeFilterDataByGenre = (payload: any) => {
-	console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",payload);
 	
 	return {
 		type: MenuTypes.CHANGE_FILTER_DATA_BY_GENRE,
@@ -44,6 +50,8 @@ export const chnageFavorite = (payload: any) => {
 	};
 };
 export const changeActiveIndex = (payload: number) => {
+	console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",payload);
+
 	return {
 		type: MenuTypes.CHANGE_ACTIVE_INDEX,
 		payload

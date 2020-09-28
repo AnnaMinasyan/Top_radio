@@ -123,17 +123,17 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this.props.onchangeplayItem(data.item)
                 let swiper: any = []
                 if (data.index - 15 < 0) {
-                    console.log("11111111", this.props.menuReducer.menuData.slice(0, data.index + 15));
-                    swiper = this.props.menuReducer.menuData.slice(0, data.index + 15)
+                    // console.log("11111111", this.props.menuReducer.menuData.slice(0, data.index + 15));
+                    // swiper = this.props.menuReducer.menuData.slice(0, data.index + 15)
                     this.props.onchangeActiveIndex(data.index)
 
-                    this.props.onchangeSwiperData(swiper)
+                 //   this.props.onchangeSwiperData(swiper)
                 } else {
-                    console.log("22222222", this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15));
-                    swiper = this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15)
+                    // console.log("22222222", this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15));
+                    // swiper = this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15)
                     this.props.onchangeActiveIndex(15)
 
-                    this.props.onchangeSwiperData(swiper)
+                //    this.props.onchangeSwiperData(swiper)
                 }
                 this.props.onchangePlayingMusic(false)
                 this.props.onchangePlayingData(data.item)
@@ -181,6 +181,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.props.menuReducer.menuData!=null?this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
+
 
         return (
             <SafeAreaView >

@@ -1,7 +1,7 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setMenuData,setActiveIndex, setPlayingData} from "../actions/menuActions"
+import {setMenuData,setActiveIndex, setPlayingData,setFilterData} from "../actions/menuActions"
 import {setPlayItemType} from "../actions/filterAction"
 import {changeplayItem,setSwiperData} from "../actions/menuActions"
 

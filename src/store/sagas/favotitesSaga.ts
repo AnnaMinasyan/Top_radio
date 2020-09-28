@@ -14,7 +14,6 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { MenuTypes, FavoriteType } from '../constants';
 import auth from "../../services/api/auth"
-import {setMenuData,setPlayList} from "../actions/menuActions"
 import { favoritesSelector } from '../selector/favorites';
 import { setFavorites } from '../actions/favoritesActions';
 import { getData, storeData } from '../../utils/local_storage';

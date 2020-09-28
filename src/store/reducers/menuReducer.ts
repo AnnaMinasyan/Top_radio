@@ -32,10 +32,14 @@ export const initialState: IMenuState = {
     headertext:""
 }
 const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
+    console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",action.type);
+
     switch (action.type) {
+        
         case MenuTypes.SET_MENU_DATA:
             let arraymenu = action.payload
             let swip=[]
+            
             // for (let index = 0; index < 3; index++) {
                
             //     if (index>=0) {
@@ -45,6 +49,9 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             
             // }
             return { ...state, menuData: arraymenu}
+            case MenuTypes.SET_FILTER_DATA:
+                        return { ...state, filterData:action.payload}
+    
         case MenuTypes.SET_ACTIVE_INDEX:           
             return { ...state, activeIndex: action.payload.payload }
             case MenuTypes.CHANGE_PLAY_ITEM:

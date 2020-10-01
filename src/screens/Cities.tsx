@@ -14,7 +14,8 @@ import { calcFontSize, calcHeight, calcWidth,deviceHeight } from "../assets/styl
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { ICitiesProps, ICitiesConnect } from "../Interface"
-import { changeFilterData } from '../store/actions/menuActions'
+import { changeFilterData,
+    changeHeaderText } from '../store/actions/menuActions'
 import { getCitiesData } from '../store/actions/citiesAction'
 import { changeSearchData } from '../store/actions/filterAction'
 import CitiesMenuElement from "../components/CitiesMenuElement"
@@ -45,12 +46,31 @@ class Cities extends React.Component<ICitiesProps, IState> {
 
     changeViewStyle(res: boolean) {
     }
+    filterData(res:any){
+        const array: any = []
+
+        for (let index = 0; index < this.props.menuReducer.menuData.length; index++) {
+            const element = this.props.menuReducer.menuData[index];
+            if (element.ci && element.ci.length > 0) {
+                element.ci.map((elem: any, key: any) => {
+                    if (elem == res.id) {
+                        array.push(element)
+                    }
+                })
+            }
+        }
+        console.log("cityyyyyy",array);
+
+        this.props.onchangeFilterData(array)
+
+    }
     renderMenuItems(data: any) {
 
         return <TouchableHighlight
         onPress={()=>{
-            this.props.onchangeFilterData(data.item)
+            this.filterData(data.item)
             this.props.navigation.navigate('FilterMenu')
+            this.props.onchangeHeaderText(data.item.pa)
         }}
         >
             <CitiesMenuElement info={data.item} backColor={this.props.theme.backgroundColor} />
@@ -98,6 +118,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchnageSearchData: (payload: any) => {
             dispatch(changeSearchData(payload))
+        },
+        onchangeHeaderText: (payload: string) => {
+            dispatch(changeHeaderText(payload))
         },
     }
 }

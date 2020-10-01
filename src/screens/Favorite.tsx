@@ -207,9 +207,6 @@ const mapStateToProps = ({filterReducer,menuReducer,favorites,theme}:any) => {
 // });
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        ongetMenuData: () => {
-            dispatch(getMenuData())
-        },
         onchangeswipeablePanelActive: (payload: boolean) => {
             dispatch(changeswipeablePanelActive(payload))
         },

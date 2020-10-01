@@ -16,7 +16,9 @@ import Header from "../components/Header"
 import Search from "../components/Search"
 import { IGanresProps, ICitiesConnect } from "../Interface"
 import { getGanresData } from '../store/actions/ganresAction'
-import { changeFilterDataByGenre } from '../store/actions/menuActions'
+import { changeFilterData,
+    changeHeaderText
+ } from '../store/actions/menuActions'
 import { changeSearchData } from '../store/actions/filterAction'
 
 import CitiesMenuElement from "../components/CitiesMenuElement"
@@ -48,14 +50,28 @@ class Genres extends React.Component<IGanresProps, IState> {
         })
     }
 
-    changeViewStyle(res: boolean) {
-
+    filterDataByganres(res: any) {
+        const ganre: any = []
+        for (let index = 0; index < this.props.menuReducer.menuData.length; index++) {
+            const element = this.props.menuReducer.menuData[index];
+            if (element.ge && element.ge.length > 0) {
+                element.ge.map((elem: any, key: any) => {
+                    if (elem == res.id) {
+                        ganre.push(element)
+                    }
+                })
+            }
+        }
+        console.log("ganreeeeeeeeee",ganre);
+        
+        this.props.onchangeFilterDataByGenre(ganre)
     }
     renderMenuItems(data: any) {
         return <TouchableHighlight 
         onPress={()=>{
-         this.props.onchangeFilterDataByGenre(data.item)
+         this.filterDataByganres(data.item)
             this.props.navigation.navigate('FilterMenu')
+            this.props.onchangeHeaderText(data.item.pa)
         }}
         >
             <CitiesMenuElement info={data.item} backColor={this.props.theme.backgroundColor} />
@@ -107,10 +123,13 @@ const mapDispatchToProps = (dispatch: any) => {
             dispatch(getGanresData())
         },
         onchangeFilterDataByGenre:(payload: any)=>{
-            dispatch(changeFilterDataByGenre(payload))
+            dispatch(changeFilterData(payload))
         },
         onchnageSearchData: (payload: any) => {
             dispatch(changeSearchData(payload))
+        }, 
+        onchangeHeaderText: (payload: string) => {
+            dispatch(changeHeaderText(payload))
         },
     }
 }

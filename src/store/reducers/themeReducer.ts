@@ -6,7 +6,7 @@ interface IReduxAction<T> {
     payload: any;
 }
 
-export interface IFilterState {
+export interface IThemeState {
     isFavorite: boolean,
     swipeablePanelActive: boolean | null,
     playItem: any,
@@ -19,7 +19,7 @@ export interface IFilterState {
 }
 
 
-export const initialState: IFilterState = {
+export const initialState: IThemeState = {
     isFavorite: false,
     swipeablePanelActive: null,
     playItem: {},

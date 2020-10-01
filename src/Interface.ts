@@ -54,7 +54,9 @@ export interface IGanresProps {
     filterReducer: any,
     onchangeFilterDataByGenre(payload:any):void; 
     navigation: NavigationScreenProp<any, any>;
-    theme:any
+    theme:any,
+    onchangeHeaderText(type:string):void;
+
 } 
 export interface ISettings {
     styleView:boolean;
@@ -70,6 +72,7 @@ export interface ISettings {
 export interface ICitiesProps {
     styleView:boolean;
     onchangeFilterData(type:any):void;
+    onchangeHeaderText(type:string):void;
     onGetCities():void;
     citiesReducer:any,
     menuReducer:any,

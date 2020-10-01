@@ -80,7 +80,6 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
         getData('menuView').then((menuView) => {
             this.setState({ styleView: menuView })
         })
-        this.props.ongetMenuData()
     }
     checkIsFovorite(num: number) {        
         return this.props.favorites.includes(num)
@@ -120,17 +119,19 @@ _addLookingList(data:any){
                 let swiper: any = []
 
                 if (data.index - 15 < 0) {
-                    console.log("11111111", this.props.menuReducer.filterData.slice(0, data.index + 15));
-                    swiper = this.props.menuReducer.filterData.slice(0, data.index + 15)
+                    // console.log("11111111", this.props.menuReducer.filterData.slice(0, data.index + 15));
+                    // swiper = this.props.menuReducer.filterData.slice(0, data.index + 15)
+                    console.log("this.props.menuReducer.filterData",data.index);
+
                     this.props.onchangeActiveIndex(data.index)
 
-                    this.props.onchangeSwiperData(swiper)
+                    // this.props.onchangeSwiperData(swiper)
                 } else {
-                    console.log("22222222", this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15));
-                    swiper = this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15)
+                    // console.log("22222222", this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15));
+                    // swiper = this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15)
                     this.props.onchangeActiveIndex(15)
 
-                    this.props.onchangeSwiperData(swiper)
+                   // this.props.onchangeSwiperData(swiper)
                 }
 
             this.setState({

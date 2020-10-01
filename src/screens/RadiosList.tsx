@@ -39,7 +39,7 @@ import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import Bottom from "../components/Bottom"
+import Bottom1 from "../components/Bottom1"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
 
@@ -221,15 +221,15 @@ class Menu extends React.Component<IMenuProps, IState> {
                   } 
                  
                     {this.props.filterReducer.swipeablePanelActive!=null?<View style={styles.bottomView}>
-                        <Bottom
-                            navigation={this.props.navigation}
-                            onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                            isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
-                            playUrl={this.state.playUrl}
-                            chnageplayUrl={(data: any) => {
-                                this.setState({ playUrl: data })
-                            }}
-                            list={this.props.menuReducer.menuData}
+                        <Bottom1
+                            // navigation={this.props.navigation}
+                            // onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
+                            // isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
+                            // playUrl={this.state.playUrl}
+                            // chnageplayUrl={(data: any) => {
+                            //     this.setState({ playUrl: data })
+                            // }}
+                            // list={this.props.menuReducer.menuData}
                         />
                     </View>:null}
                 </View>

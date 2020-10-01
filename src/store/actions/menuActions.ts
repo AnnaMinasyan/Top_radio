@@ -34,17 +34,18 @@ export const changeFilterData = (payload: any) => {
 
 	};
 };
-export const changeFilterDataByGenre = (payload: any) => {
+export const changeHeaderText = (payload: string) => {
 	
 	return {
-		type: MenuTypes.CHANGE_FILTER_DATA_BY_GENRE,
+		type: MenuTypes.CHANGE_HEADERTEXT,
 		payload
 
 	};
 };
-export const chnageFavorite = (payload: any) => {
+export const setHeaderText = (payload: string) => {
+	
 	return {
-		type: MenuTypes.CHANGE_FAVORITE,
+		type: MenuTypes.SET_HEADERTEXT,
 		payload
 
 	};

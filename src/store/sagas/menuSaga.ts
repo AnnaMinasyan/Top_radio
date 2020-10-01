@@ -1,7 +1,7 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setMenuData,setActiveIndex, setPlayingData,setFilterData} from "../actions/menuActions"
+import {setMenuData,setActiveIndex, setPlayingData,setFilterData,setHeaderText} from "../actions/menuActions"
 import {setPlayItemType} from "../actions/filterAction"
 import {changeplayItem,setSwiperData} from "../actions/menuActions"
 
@@ -11,6 +11,7 @@ function* getMenuData() {
 		const data= yield auth.getMenuDatas()
 		let swiper =data.slice(0, 15)
 		yield put(setMenuData(data))
+		yield put(setFilterData(data))
 		yield put(setSwiperData(swiper))
 		yield put(setActiveIndex(0))
 	} catch (ex) {
@@ -50,6 +51,20 @@ function* onChangeSwiperData({payload}:any) {
 		console.log(ex);
 	} 
 }
+function* onChangeFilterData({payload}:any) {
+    try {
+		yield put(setFilterData(payload))
+	} catch (ex) {
+		console.log(ex);
+	} 
+}
+function* onChangeHeaderText({payload}:any) {
+    try {
+		yield put(setHeaderText(payload))
+	} catch (ex) {
+		console.log(ex);
+	} 
+}
 export function* watchMenuType() {
 	yield takeEvery(
 		MenuTypes.GET_MENU_DATA as any,
@@ -70,6 +85,14 @@ export function* watchMenuType() {
 	yield takeEvery(
         MenuTypes.CHANGE_SWIPER_DATA as any,
 		onChangeSwiperData
+	)
+	yield takeEvery(
+        MenuTypes.CHANGE_FILTER_DATA as any,
+		onChangeFilterData
+	)
+	yield takeEvery(
+        MenuTypes.CHANGE_HEADERTEXT as any,
+		onChangeHeaderText
 	)
 }
 

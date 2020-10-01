@@ -15,6 +15,7 @@ export const changeisActive = (payload:string) => {
 	};
 };
 export const changeswipeablePanelActive = (payload:boolean) => {
+console.log("changeswipeablePanelActive ",payload);
 
 	
 	return {

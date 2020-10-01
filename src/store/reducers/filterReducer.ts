@@ -45,6 +45,8 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
         case FilterTypes.CHANGE_SHEARCH_DATA:
             return { ...state, searchData: action.payload }
         case FilterTypes.CHANGE_SWIPEABLEPANELACTIVE:
+            console.log("action.payloadaction.payload",action.payload);
+            
             return { ...state, swipeablePanelActive: action.payload }
         case FilterTypes.CHANGE_PLAYING_MUSIC:
             return { ...state,isPlayingMusic : action.payload }

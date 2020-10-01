@@ -4,13 +4,12 @@ import Navigator from "./navigation/Navigator"
 import { NavigationScreenProp } from 'react-navigation';
 import { useEffect, useState, } from 'react';
 import { useSelector,useDispatch } from "react-redux"
-import { panelActiveSelector, playItem } from "../src/store/selector/filterSelector"
+import { swipeablePanelActiveSelector, playItemSelector } from "../src/store/selector/filterSelector"
 import { initFavorites } from './store/actions/favoritesActions';
 import {initAutoPlay} from "./store/actions/settingsAcrion"
 import { changeswipeablePanelActive ,changePlayingMusic,initMenuType} from './store/actions/filterAction';
 import { changeplayItem} from './store/actions/menuActions';
-
-import {init} from "./utils/createAlarmClock"
+import Bottom1 from "./components/Bottom1"
 import { getData, storeData } from "./utils/local_storage"
 import {_startPlayMusic} from "./utils/playMusic"
 interface Props {
@@ -21,9 +20,9 @@ interface Props {
 const MyApp: React.FunctionComponent<Props> = (props) => {
     const [animeted, setanimeted] = useState<boolean | null>(false)
      const [isPlayingMusic, setisPlayingMusic] = useState<boolean>(false)
-    const filterReducer = useSelector(panelActiveSelector)
+    const filterReducer = useSelector(swipeablePanelActiveSelector)
     const dispatch=useDispatch()
-    const item = useSelector(playItem)
+    const item = useSelector(playItemSelector)
     const bs: any = React.createRef()
     useEffect(() => {
        const data= new Date()
@@ -41,6 +40,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     return (
         <SafeAreaView style={{ flex: 1, }}>
              <StatusBar barStyle='light-content'    backgroundColor="#0F1E45"  />
+             {/* <Bottom1/> */}
             <Navigator />
           {/* {  init(changeActivePanel)}  */}
         </SafeAreaView>

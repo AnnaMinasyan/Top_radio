@@ -61,7 +61,8 @@ interface Props {
     onchangeSwiperData(payload: any): void;
     onchangeActiveIndex(payload: number): void;
     menuReducer: any
-    list: any
+    list: any,
+    favorites:any
 }
 interface IState {
     menuStyle: boolean,
@@ -270,7 +271,7 @@ class Bottom extends React.Component<Props, IState> {
                         this.props.toaddfavorite(this.props.menuReducer.playItem)
                     }}
                 >
-                    {this.props.isFavorite ?
+                    {this.checkIsFovorite(this.state.swiperactiveIndex) ?
                         <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                         <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
                 </TouchableOpacity>
@@ -543,7 +544,7 @@ class Bottom extends React.Component<Props, IState> {
                                     onPress={() => {
                                         this.props.toaddfavorite(this.props.menuReducer.playItem)
                                     }}>
-                                    {this.props.isFavorite ?
+                                    {this.checkIsFovorite(this.state.swiperactiveIndex) ?
                                         <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                                         <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                                 </TouchableOpacity>
@@ -642,6 +643,9 @@ class Bottom extends React.Component<Props, IState> {
                 break;
         }
     }
+    checkIsFovorite(num: number) {
+        return this.props.favorites.includes(num)
+    }
     renderBottomSheet() {
         const config = {
             velocityThreshold: 0.3,
@@ -692,7 +696,7 @@ class Bottom extends React.Component<Props, IState> {
                             onPress={() => {
                                 this.props.toaddfavorite(this.props.menuReducer.playItem)
                             }}>
-                            {this.props.isFavorite ?
+                            {this.checkIsFovorite(this.state.swiperactiveIndex) ?
                                 <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                                 <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                         </TouchableOpacity>
@@ -945,7 +949,7 @@ class Bottom extends React.Component<Props, IState> {
         );
     }
 };
-const mapStateToProps = ({ filterReducer, favorites, theme, settingsReducer, menuReducer }: any) => {
+const mapStateToProps = ({ filterReducer, favorites, theme, settingsReducer, menuReducer}: any) => {
     return { filterReducer, favorites, theme, settingsReducer, menuReducer }
 };
 const mapDispatchToProps = (dispatch: any) => {

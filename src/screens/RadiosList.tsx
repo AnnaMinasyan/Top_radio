@@ -11,8 +11,11 @@ import {
     FlatList,
     SafeAreaView,
     ActivityIndicator,
-    Image
+    Image,
+    Button
 } from 'react-native';
+import SlidingUpPanel from 'rn-sliding-up-panel';
+
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
@@ -220,7 +223,16 @@ class Menu extends React.Component<IMenuProps, IState> {
                         
                   } 
                  
-                    {this.props.filterReducer.swipeablePanelActive!=null?<View style={styles.bottomView}>
+                 <SlidingUpPanel  
+                 backdropStyle={{backgroundColor:'green'}}
+                    draggableRange={{top:deviceHeight-20, bottom:80}}
+                    ref={c => this._panel = c} >
+                    <View style={styles.container1}>
+                        <Text>Here is the content inside panel</Text>
+                        <Button title='Hide' onPress={() => this._panel.hide()} />
+                    </View>
+                    </SlidingUpPanel>
+                    {/* {this.props.filterReducer.swipeablePanelActive!=null?<View style={styles.bottomView}>
                         <Bottom1
                             // navigation={this.props.navigation}
                             // onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
@@ -231,7 +243,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             // }}
                             // list={this.props.menuReducer.menuData}
                         />
-                    </View>:null}
+                    </View>:null} */}
                 </View>
             </SafeAreaView>
         );
@@ -277,6 +289,12 @@ const mapDispatchToProps = (dispatch: any) => {
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 
 const styles = StyleSheet.create({
+    container1: {
+        
+        height:deviceHeight+50,
+        backgroundColor: 'red',
+       
+      },
     header: {
         backgroundColor: '#0F1E45',
         height: 60,

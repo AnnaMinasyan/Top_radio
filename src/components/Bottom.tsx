@@ -38,6 +38,8 @@ import Swiper from 'react-native-swiper'
 import { swipeDirections } from "react-native-swipe-gestures"
 import { Dimensions } from 'react-native';
 import BackSvg from "../assets/icons/backgraundHorizontal.svg"
+import SlidingUpPanel from 'rn-sliding-up-panel';
+
 TrackPlayer.registerPlaybackService(() => require('../../service'));
 
 interface Props {
@@ -239,9 +241,14 @@ class Bottom extends React.Component<Props, IState> {
             backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
         }]}>
             <View
-                {...this._panResponder.panHandlers}
-
-                style={{ height: calcHeight(86), width: calcWidth(270), backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45', }}>
+                onTouchStart={() => {
+                    this._panel.show()
+                    this.props.onchangeswipeablePanelActive(true)
+                }}
+                style={{
+                    height: calcHeight(86), width: calcWidth(270),
+                    backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+                }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
 
                     <View style={{ flexDirection: 'row' }}>
@@ -353,7 +360,7 @@ class Bottom extends React.Component<Props, IState> {
         if (this.props.filterReducer.swipeablePanelActive) {
             console.log("::::::::::::::::::::::::::::::::::::");
 
-            this.swipeAnimationOpen()
+            this._panel.show()
         }
 
         this.setState({
@@ -582,6 +589,7 @@ class Bottom extends React.Component<Props, IState> {
 
     onSwipe(gestureName: any, gestureState: any) {
         const { SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT } = swipeDirections;
+
         this.setState({ gestureName: gestureName });
         switch (gestureName) {
 
@@ -651,10 +659,14 @@ class Bottom extends React.Component<Props, IState> {
 
                 }}>
 
-                {!this.state.backBttVelosity ? this.renderBottomSheetheader() :
+                {this.props.filterReducer.swipeablePanelActive == false ? this.renderBottomSheetheader() :
                     <View style={{ flexDirection: 'row' }}>
                         <View
-                            {...this._panResponder.panHandlers}
+                            onTouchStart={() => {
+                                console.log("LLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                                
+                                this._panel.hide()
+                            }}
                             style={[styles.bottomSheet, { height: calcHeight(70) }]}>
                             <View
                                 // {...this._panResponder.panHandlers}
@@ -693,6 +705,7 @@ class Bottom extends React.Component<Props, IState> {
                     ), zIndex: 0
                 }}>
                     <GestureRecognizer
+                    
                         onSwipe={(direction, state) => this.onSwipe(direction, state)}
                         config={config}
                         style={{
@@ -702,7 +715,7 @@ class Bottom extends React.Component<Props, IState> {
                     >
                         <View
                             style={{ justifyContent: 'center', alignItems: 'center', }}>
-                            {this.state.swipeList ?
+                            {this.props.menuReducer.filterData[this.state.swiperactiveIndex] ?
                                 <Text style={{
                                     color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
                                     fontSize: calcFontSize(24),
@@ -715,9 +728,7 @@ class Bottom extends React.Component<Props, IState> {
                             style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', }}>
                             <SimpleImage size={calcHeight(257)} image={this.props.menuReducer.filterData[this.state.swiperactiveIndex].im} />
                         </View>
-                        <View style={{ flexDirection: 'row' }}>
-
-                        </View>
+                        </GestureRecognizer>
                         <View style={{
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -748,7 +759,7 @@ class Bottom extends React.Component<Props, IState> {
                             }
                         </View>
 
-                    </GestureRecognizer>
+                   
 
                     {/* <Swiper
                         showsPagination={false}
@@ -859,7 +870,7 @@ class Bottom extends React.Component<Props, IState> {
                                     this._startPlayMusic()
                                     this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
                                 }, 500);
-                                
+
                             } else {
                                 this.isPlaying()
                             }
@@ -896,27 +907,27 @@ class Bottom extends React.Component<Props, IState> {
         });
         console.log("this.props.filterReducer.swipeablePanelActive", this.props.filterReducer.swipeablePanelActive)
         return (
-            <Swiper
-                horizontal={false}
-                style={styles.wrapper}
-                showsButtons={false}>
-                <View
-                    onTouchStart={() => {
-                        console.log("onstart");
+            <SlidingUpPanel
+                onDragStart={() => {
+                    if (this.props.filterReducer.swipeablePanelActive == false) {
+                        this.props.onchangeswipeablePanelActive(true)
 
-                    }}
-                    onMagicTap={() => {
-                        console.log("onMagicTap");
+                    }
+                }}
+                allowDragging={false}
+                onBottomReached={() => {
+                    this.props.onchangeswipeablePanelActive(false)
+                }
 
-                    }}
-                    style={styles.slide1}>
-                    {this.renderBottomSheetheader()}
-                </View>
-                <View
-                >
-                    {this.renderBottomSheet()}
-                </View>
-            </Swiper>
+                }
+                backdropStyle={{ backgroundColor: 'green' }}
+                draggableRange={{ top: deviceHeight - calcHeight(21), bottom: calcHeight(86) }}
+                ref={c => this._panel = c}
+                friction={0.0001}
+            >
+                {this.renderBottomSheet()}
+
+            </SlidingUpPanel>
             // <View
             //     style={[
             //         styles.container,

@@ -42,7 +42,7 @@ import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import Bottom1 from "../components/Bottom1"
+import Bottom from "../components/Bottom"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
 
@@ -223,7 +223,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                         
                   } 
                  
-                 <SlidingUpPanel  
+                 {/* <SlidingUpPanel  
                  backdropStyle={{backgroundColor:'green'}}
                     draggableRange={{top:deviceHeight-20, bottom:80}}
                     ref={c => this._panel = c} >
@@ -231,19 +231,21 @@ class Menu extends React.Component<IMenuProps, IState> {
                         <Text>Here is the content inside panel</Text>
                         <Button title='Hide' onPress={() => this._panel.hide()} />
                     </View>
-                    </SlidingUpPanel>
-                    {/* {this.props.filterReducer.swipeablePanelActive!=null?<View style={styles.bottomView}>
-                        <Bottom1
-                            // navigation={this.props.navigation}
-                            // onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                            // isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
-                            // playUrl={this.state.playUrl}
-                            // chnageplayUrl={(data: any) => {
-                            //     this.setState({ playUrl: data })
-                            // }}
-                            // list={this.props.menuReducer.menuData}
+                    </SlidingUpPanel> */}
+                    {this.props.filterReducer.swipeablePanelActive!=null?
+                    <View style={styles.bottomView}>
+                        <Bottom
+                            navigation={this.props.navigation}
+                            onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
+                            isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
+                            playUrl={this.state.playUrl}
+                            chnageplayUrl={(data: any) => {
+                                this.setState({ playUrl: data })
+                            }}
+                            list={this.props.menuReducer.menuData}
                         />
-                    </View>:null} */}
+                    </View>
+                   :null}
                 </View>
             </SafeAreaView>
         );

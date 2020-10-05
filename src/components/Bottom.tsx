@@ -271,7 +271,7 @@ class Bottom extends React.Component<Props, IState> {
                         this.props.toaddfavorite(this.props.menuReducer.playItem)
                     }}
                 >
-                    {this.checkIsFovorite(this.state.swiperactiveIndex) ?
+                    {this.checkIsFovorite(this.props.menuReducer.filterData[this.state.swiperactiveIndex].id) ?
                         <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                         <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
                 </TouchableOpacity>
@@ -644,6 +644,8 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
     checkIsFovorite(num: number) {
+        console.log("nuuuum",this.props.favorites.includes(num),num);
+        
         return this.props.favorites.includes(num)
     }
     renderBottomSheet() {
@@ -696,7 +698,7 @@ class Bottom extends React.Component<Props, IState> {
                             onPress={() => {
                                 this.props.toaddfavorite(this.props.menuReducer.playItem)
                             }}>
-                            {this.checkIsFovorite(this.state.swiperactiveIndex) ?
+                            {this.checkIsFovorite(this.props.menuReducer.filterData[this.state.swiperactiveIndex].id) ?
                                 <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                                 <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                         </TouchableOpacity>
@@ -909,7 +911,7 @@ class Bottom extends React.Component<Props, IState> {
 
             this.isPortrait();
         });
-        console.log("this.props.filterReducer.swipeablePanelActive", this.props.filterReducer.swipeablePanelActive)
+        console.log("this.props.filterReducer.swipeablePanelActive", this.props.favorites)
         return (
             <SlidingUpPanel
                 onDragStart={() => {

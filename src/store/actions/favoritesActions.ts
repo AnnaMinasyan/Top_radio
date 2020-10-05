@@ -8,6 +8,8 @@ export const setFavorites = (payload:any) => {
 };
 
 export const addFavorites = (payload:any) => {
+	console.log("payloadpayload",payload);
+	
 	return {
 		type: FavoriteType.ADD,
 		payload

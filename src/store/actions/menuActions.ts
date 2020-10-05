@@ -68,13 +68,14 @@ export const changeActiveIndex = (payload: number) => {
 	};
 };
 export const changeplayItem = (payload: any) => {
+	console.log("onchangeplayItem");
+	
 	return {
 		type: MenuTypes.CHANGE_PLAY_ITEM,
 		payload
 	};
 };
 export const changePlayingData = (payload: any) => {
-	console.log("icen uruhgtpegeoe", payload);
 
 	return {
 		type: MenuTypes.CHANGE_PLAYINGDATA,

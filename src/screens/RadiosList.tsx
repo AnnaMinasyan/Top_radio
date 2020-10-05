@@ -245,7 +245,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             list={this.props.menuReducer.menuData}
                         />
                     </View>
-                   :null}
+                :null} 
                 </View>
             </SafeAreaView>
         );

@@ -18,7 +18,6 @@ function* getMenuData() {
 	}
 }
 function* changingActiveIndex(num:number) {
-	console.log("nuuuuuuum",num);
 	
 	try {
 		yield put(setActiveIndex(num))
@@ -26,7 +25,7 @@ function* changingActiveIndex(num:number) {
 	}
 }
 function* onGetPlayType({payload}:any) {
-    console.log(payload);
+    console.log("pppppp",payload);
 	
     try {
         const data= yield auth.getPlayItemType(payload.pl)

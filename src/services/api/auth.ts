@@ -55,7 +55,8 @@ class Static implements IDATA {
             const data = moment().format('YYYY-MM-DD')
             
             const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=1`,);
-           
+            console.log(";;;;;;;;;;;;;;;;;;;;;",response.data);
+
             return response.data
         } catch (ex) {
             return Alert.alert("Error",ex)

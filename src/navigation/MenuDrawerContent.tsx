@@ -55,7 +55,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         style={styles.item}
                         onPress={() => {
                             props.navigation.navigate('Genres')
-                            props.onchangeisActive('genres')
+                             props.onchangeisActive('genres')
 
                         }}
                     >

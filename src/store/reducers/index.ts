@@ -7,6 +7,7 @@ import playListReducer from "./playListReducer"
 import favoritesReducer from "./favoritesReducer";
 import themeReducer from "./themeReducer"
 import settingsReducer from "./settingsReducer"
+import bottomReducer from "./bottomReducer"
 const allReducers = combineReducers({
      menuReducer,
      citiesReducer,
@@ -15,7 +16,8 @@ const allReducers = combineReducers({
      playListReducer,
      favorites:favoritesReducer,
      theme:themeReducer,
-     settingsReducer
+     settingsReducer,
+     bottomReducer
     
 });
 export default allReducers;

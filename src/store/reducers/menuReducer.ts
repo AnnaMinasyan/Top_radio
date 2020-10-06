@@ -39,11 +39,8 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             return { ...state, menuData: action.payload }
         case MenuTypes.SET_FILTER_DATA:
             return { ...state, filterData: action.payload }
-
         case MenuTypes.SET_ACTIVE_INDEX:
             return { ...state, activeIndex: action.payload.payload }
-        case MenuTypes.CHANGE_PLAY_ITEM:
-            return { ...state, playItem: action.payload }
         case MenuTypes.SET_SWIPER_DATA:
             return { ...state, swipeList: action.payload }
         case MenuTypes.SET_PLAYINGDATA:

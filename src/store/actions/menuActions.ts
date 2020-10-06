@@ -51,7 +51,6 @@ export const setHeaderText = (payload: string) => {
 	};
 };
 export const changeActiveIndex = (payload: number) => {
-	console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++",payload);
 
 	return {
 		type: MenuTypes.CHANGE_ACTIVE_INDEX,
@@ -67,21 +66,8 @@ export const changeActiveIndex = (payload: number) => {
 
 	};
 };
-export const changeplayItem = (payload: any) => {
-	console.log("onchangeplayItem");
-	
-	return {
-		type: MenuTypes.CHANGE_PLAY_ITEM,
-		payload
-	};
-};
-export const changePlayingData = (payload: any) => {
 
-	return {
-		type: MenuTypes.CHANGE_PLAYINGDATA,
-		payload
-	};
-};
+
 export const setPlayingData = (payload: any) => {
 
 	return {

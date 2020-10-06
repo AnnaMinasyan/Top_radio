@@ -16,7 +16,9 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import { getMenuData,changeplayItem } from '../store/actions/menuActions'
+import {    changeplayItem,
+    changePlayingData
+} from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
     
@@ -31,21 +33,14 @@ import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import Player from "./PlaylistScreen"
-import RecordSvg from "../assets/icons/disrecording.svg"
-import DisRecordSvg from "../assets/icons/recording.svg"
-import ScrollBottomSheet from 'react-native-scroll-bottom-sheet';
-import Arrow from "../assets/icons/arrow.svg"
-import Stop from "../assets/icons/stop.svg"
-import InfoSvg from "../assets/icons/infoMenu.svg"
-import RedHeart from "../assets/icons/redHeart.svg"
-import TrackPlayer from 'react-native-track-player';
-import BottomSheet from 'reanimated-bottom-sheet'
-import menuReducer from '../store/reducers/menuReducer';
-import { ThemeColors } from 'react-navigation';
-import Bottom from "../components/Bottom"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
+import {
+    getMenuData,
+    changeActiveIndex,
+    
+    changeSwiperData
+} from '../store/actions/menuActions'
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     favoriteList:[],
@@ -70,7 +65,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
         });
 
     }
-    //bs: any = React.createRef()
     setData() {
         getData('favorites').then((favorite) => {
            this.setState({favoriteList:favorite})
@@ -104,16 +98,16 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if(this.checkIsFovorite(data.item.id))  {
             return <TouchableHighlight
             onPress={() => {
-                // this.bs.current.snapTo(0),
+                this.props.onchangePlayingData(data.item)
                 this.props.onchangeswipeablePanelActive(true)
                this._addLookingList(data.item)
-                this.props.onchangeplayItem(data.item)
-                this.props.onchangePlayingMusic(false)
-                this.setState({
-                    playItem: data.item,
-                    activBi: data.item.st[0].bi,
-                    playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
-                })
+               this.props.onchangeplayItem(data.item)
+                this.props.onchangeActiveIndex(data.index)
+
+               this.props.onchangePlayingMusic(false)
+               this.setState({
+                   playItem: data.item,
+               })
             }}
         >
             <RadioMenuElement
@@ -132,15 +126,16 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if(this.checkIsFovorite(data.item.id))  {
         return <TouchableHighlight
             onPress={() => {
+                this.props.onchangePlayingData(data.item)
                 this.props.onchangeswipeablePanelActive(true)
-                // //this._addLookingList(data.item)
-                 this.props.onchangeplayItem(data.item)
-                this.props.onchangePlayingMusic(false)
-                this.setState({
-                    playItem: data.item,
-                    activBi: data.item.st[0].bi,
-                    playUrl:Array.isArray( data.item.st) ?data.item.st[0].ur: data.item.st
-                })
+               this._addLookingList(data.item)
+               this.props.onchangeplayItem(data.item)
+                this.props.onchangeActiveIndex(data.index)
+
+               this.props.onchangePlayingMusic(false)
+               this.setState({
+                   playItem: data.item,
+               })
             }} style={{ padding: calcWidth(8), }}>
             <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
         </TouchableHighlight>
@@ -176,21 +171,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                                 maxToRenderPerBatch={10}
                             />
                         }
-                    <View style={{ position: 'absolute',
-                     height: calcHeight(86),
-                      width: '100%',
-                       bottom: 0 , 
-                   }}>
-                    {/* <Bottom
-                        navigation={this.props.navigation}
-                        onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                        isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
-                        playUrl={this.state.playUrl}
-                        chnageplayUrl={(data:any)=>{
-                            this.setState({playUrl:data})
-                        }}
-                    /> */}
-                     </View>  
+               
             </View>
             </SafeAreaView>
         );
@@ -199,12 +180,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
 const mapStateToProps = ({filterReducer,menuReducer,favorites,theme}:any) => {
     return {filterReducer,menuReducer,favorites,theme}
 };
-// const mapStateToProps = (state: any) => ({
-
-//     reducer:state
-
-
-// });
 const mapDispatchToProps = (dispatch: any) => {
     return {
         onchangeswipeablePanelActive: (payload: boolean) => {
@@ -224,6 +199,12 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangePlayingMusic: (payload: any) => {
             dispatch(changePlayingMusic(payload))
+        },
+        onchangePlayingData: (payload: any) => {
+            dispatch(changePlayingData(payload))
+        },
+        onchangeActiveIndex: (payload: number) => {
+            dispatch(changeActiveIndex(payload))
         },
     }
 }

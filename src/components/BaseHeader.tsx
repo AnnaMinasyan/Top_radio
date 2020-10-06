@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
-import { panelActiveSelector, playItem } from "../store/selector/filterSelector"
+import { swipeablePanelActiveSelector, playItem } from "../store/selector/filterSelector"
 import { useSelector, useDispatch } from "react-redux"
 import Menu from "../assets/icons/menu.svg"
 import Filter from '../assets/icons/filter-icon.svg';
@@ -19,18 +19,18 @@ interface Props {
 
 const BaseHeader: React.FunctionComponent<Props> = (props) => {
   const navigation = useNavigation();
-  const filterReducer = useSelector(panelActiveSelector)
+  const swipeablePanelActive = useSelector(swipeablePanelActiveSelector)
   const [showMenu, setshowMenu] = useState<boolean>(true)
 
   useEffect(() => {
-    if (filterReducer.swipeablePanelActive == true) {
+    if (swipeablePanelActive== true) {
 
       setshowMenu(false)
     } else {
 
       setshowMenu(true)
     }
-  }, [filterReducer.swipeablePanelActive])
+  }, [swipeablePanelActive])
   return (
     <View>
       {showMenu ?

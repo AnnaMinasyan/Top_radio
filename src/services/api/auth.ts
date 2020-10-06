@@ -40,7 +40,6 @@ class Static implements IDATA {
         }
     }
     async getPlayLists(payload: number) {
-        console.log(";;;;;;;;;;;;;;;;;;;;;",payload);
         
         try {
             const data = moment().format('YYYY-MM-DD')

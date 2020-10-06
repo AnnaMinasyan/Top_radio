@@ -12,7 +12,6 @@ export enum MenuTypes {
     CHANGE_FAVORITE='@menutypes/CHANGE_FAVORITE',
     CHANGE_ACTIVE_INDEX='@menutypes/CHANGE_ACTIVE_INDEX',
     SET_ACTIVE_INDEX='@menutypes/SET_ACTIVE_INDEX',
-    CHANGE_PLAY_ITEM='@menutypes/CHANGE_PLAY_ITEM',
     SET_PLAYINGDATA='@menutypes/SET_PLAYINGDATA',
     CHANGE_PLAYINGDATA='@menutypes/CHANGE_PLAYINGDATA', 
     CHANGE_SWIPER_DATA='@menutypes/CHANGE_SWIPER_DATA',
@@ -62,4 +61,12 @@ export enum SettingsType {
     SET_AUTO_PLAY= "@FavoriteType/SET_AUTO_PLAY", 
     SET_BUFFER_SIZE= "@FavoriteType/SET_BUFFER_SIZE",
     CHANGE_BUFFER_SIZE= "@FavoriteType/CHANGE_BUFFER_SIZE",
+}
+export enum BottomType {
+    CHANGE_PLAY_ITEM='@bottomtypes/CHANGE_PLAY_ITEM',
+    SET_PLAY_ITEM='@bottomtypes/SET_PLAY_ITEM',
+    SET_PLAY_ITEM_ARTIST_SONG='@bottomtypes/SET_PLAY_ITEM_ARTIST_SONG',
+    CHANGE_PLAYING_DATA='@bottomtypes/CHANGE_PLAYING_DATA',
+  SET_PLAYING_DATA='@bottomtypes/SET_PLAYING_DATA',
+  CHANGE_PLAY_ITEM_ARTIST_SONG='@bottomtypes/CHANGE_PLAY_ITEM_ARTIST_SONG',
 }

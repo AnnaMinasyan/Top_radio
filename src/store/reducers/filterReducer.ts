@@ -51,8 +51,8 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
         case FilterTypes.CHANGE_PLAYING_MUSIC:
             return { ...state,isPlayingMusic : action.payload }
     
-        case FilterTypes.SET_PLAYLIST_TYPE:
-            return { ...state, playListType: action.payload }
+        // case FilterTypes.SET_PLAYLIST_TYPE:
+        //     return { ...state, playListType: action.payload }
         case FilterTypes.GET_FAVORITES:
             return { ...state, favorites: action.payload };
         case FilterTypes.ADD_FAVORITE:

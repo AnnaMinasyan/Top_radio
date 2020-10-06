@@ -45,9 +45,7 @@ class Genres extends React.Component<IGanresProps, IState> {
     }
     componentDidMount() {
         this.props.ongetGanresData()
-        getData('menuView').then((menuView) => {
-
-        })
+       
     }
 
     filterDataByganres(res: any) {

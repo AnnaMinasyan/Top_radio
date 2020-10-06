@@ -17,13 +17,16 @@ import Header from "../components/Header"
 import Search from "../components/Search"
 import { IFilterMenuProps } from "../Interface"
 import HeaderByBack from "../components/HeaderByBack"
-import {  getMenuData, changeplayItem,changePlayingData,changeActiveIndex,changeSwiperData} from '../store/actions/menuActions'
+import {  getMenuData, changeActiveIndex,changeSwiperData} from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     getFavorites,
    
     changePlayingMusic
 } from '../store/actions/filterAction'
+import {    changeplayItem,
+    changePlayingData
+} from "../store/actions/bottomAction";
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
@@ -112,31 +115,14 @@ _addLookingList(data:any){
         return <TouchableOpacity
         onPress={() => {
             this.props.onchangeswipeablePanelActive(true)
-                this._addLookingList(data.item)
-                this.props.onchangeplayItem(data.item)
-                this.props.onchangePlayingMusic(false)
-                this.props.onchangePlayingData(data.item)
-                let swiper: any = []
-
-                if (data.index - 15 < 0) {
-                    // console.log("11111111", this.props.menuReducer.filterData.slice(0, data.index + 15));
-                    // swiper = this.props.menuReducer.filterData.slice(0, data.index + 15)
-                    console.log("this.props.menuReducer.filterData",data.index);
-
-                    this.props.onchangeActiveIndex(data.index)
-
-                    // this.props.onchangeSwiperData(swiper)
-                } else {
-                    // console.log("22222222", this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15));
-                    // swiper = this.props.menuReducer.filterData.slice(data.index - 15, data.index + 15)
-                    this.props.onchangeActiveIndex(15)
-
-                   // this.props.onchangeSwiperData(swiper)
-                }
-
+            this._addLookingList(data.item)
+            this.props.onchangeplayItem(data.item)
+             this.props.onchangeActiveIndex(data.index)
+            this.props.onchangePlayingMusic(false)
+            this.props.onchangePlayingData(data.item)
             this.setState({
                 playItem: data.item,
-               // activBi: data.item.st[0].bi,
+                playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
             })
         }}
     >
@@ -154,12 +140,15 @@ _addLookingList(data:any){
             this.props.onchangeswipeablePanelActive(true)
             this._addLookingList(data.item)
             this.props.onchangeplayItem(data.item)
+             this.props.onchangeActiveIndex(data.index)
+
             this.props.onchangePlayingMusic(false)
             this.props.onchangePlayingData(data.item)
-
             this.setState({
                 playItem: data.item,
-                activBi: data.item.st[0].bi,
+                //  activBi: data.item.st[0].bi,
+
+                playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
             })
         }} style={{ padding: calcWidth(8), }}>
         <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
@@ -195,7 +184,7 @@ _addLookingList(data:any){
                             />
 
                         }
-                   
+{/*                    
                    {this.props.filterReducer.swipeablePanelActive!=null?    <View style={{ position: 'absolute',
                     
                       width: '100%',
@@ -211,7 +200,7 @@ _addLookingList(data:any){
                             }}
                             list={list}
                         />
-                     </View> :null}
+                     </View> :null} */}
 
                 </View>
              

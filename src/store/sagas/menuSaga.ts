@@ -2,8 +2,7 @@ import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setMenuData,setActiveIndex, setPlayingData,setFilterData,setHeaderText} from "../actions/menuActions"
-import {setPlayItemType} from "../actions/filterAction"
-import {changeplayItem,setSwiperData} from "../actions/menuActions"
+import {setSwiperData} from "../actions/menuActions"
 
 
 function* getMenuData() {
@@ -24,19 +23,10 @@ function* changingActiveIndex(num:number) {
 	} catch (ex) {
 	}
 }
-function* onGetPlayType({payload}:any) {
-    console.log("pppppp",payload);
-	
-    try {
-        const data= yield auth.getPlayItemType(payload.pl)
-		yield put(setPlayItemType(data.playList[0]))
-	} catch (ex) {
-		console.log(ex);
-	
-	}
-    
-}
+
 function* onChangePlayingData({payload}:any) {
+	console.log("onChangePlayingData",payload);
+	
     try {
 		yield put(setPlayingData(payload))
 	} catch (ex) {
@@ -73,10 +63,7 @@ export function* watchMenuType() {
 		MenuTypes.CHANGE_ACTIVE_INDEX as any,
 		changingActiveIndex
 	)
-	yield takeEvery(
-        MenuTypes.CHANGE_PLAY_ITEM as any,
-		onGetPlayType
-	)
+	
 	yield takeEvery(
         MenuTypes.CHANGE_PLAYINGDATA as any,
 		onChangePlayingData

@@ -24,10 +24,12 @@ import { IMenuProps } from "../Interface"
 import {
     getMenuData,
     changeActiveIndex,
-    changeplayItem,
-    changePlayingData,
+    
     changeSwiperData
 } from '../store/actions/menuActions'
+import {    changeplayItem,
+    changePlayingData
+} from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
 
@@ -121,30 +123,16 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                this.props.onchangeswipeablePanelActive(true)
-                //this._addLookingList(data.item)
-                this.props.onchangeplayItem(data.item)
-                let swiper: any = []
-                if (data.index - 15 < 0) {
-                    // console.log("11111111", this.props.menuReducer.menuData.slice(0, data.index + 15));
-                    // swiper = this.props.menuReducer.menuData.slice(0, data.index + 15)
-                    this.props.onchangeActiveIndex(data.index)
-
-                 //   this.props.onchangeSwiperData(swiper)
-                } else {
-                    // console.log("22222222", this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15));
-                    // swiper = this.props.menuReducer.menuData.slice(data.index - 15, data.index + 15)
-                    this.props.onchangeActiveIndex(15)
-
-                //    this.props.onchangeSwiperData(swiper)
-                }
-                this.props.onchangePlayingMusic(false)
                 this.props.onchangePlayingData(data.item)
+                 this.props.onchangeswipeablePanelActive(true)
+                this._addLookingList(data.item)
+                this.props.onchangeplayItem(data.item)
+                 this.props.onchangeActiveIndex(data.index)
+
+                this.props.onchangePlayingMusic(false)
                 this.setState({
                     playItem: data.item,
-                    //  activBi: data.item.st[0].bi,
-
-                    playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
+                //    playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
                 })
             }}
         >
@@ -161,14 +149,15 @@ class Menu extends React.Component<IMenuProps, IState> {
 
             onPress={() => {
                 this.props.onchangeswipeablePanelActive(true)
-                this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
-                this.props.onchangePlayingMusic(false)
-                this.props.onchangeActiveIndex(data.index)
-                //this.props.onchangePlayingData(data.item)
+                let swiper: any = []
+                 this.props.onchangeActiveIndex(data.index)
 
+                this.props.onchangePlayingMusic(false)
+                this.props.onchangePlayingData(data.item)
                 this.setState({
                     playItem: data.item,
+
                     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
                 })
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
@@ -232,7 +221,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                         <Button title='Hide' onPress={() => this._panel.hide()} />
                     </View>
                     </SlidingUpPanel> */}
-                    {this.props.filterReducer.swipeablePanelActive!=null?
+                    {/* {this.props.filterReducer.swipeablePanelActive!=null?
                     <View style={styles.bottomView}>
                         <Bottom
                             navigation={this.props.navigation}
@@ -245,7 +234,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             list={this.props.menuReducer.menuData}
                         />
                     </View>
-                :null} 
+                :null}  */}
                 </View>
             </SafeAreaView>
         );

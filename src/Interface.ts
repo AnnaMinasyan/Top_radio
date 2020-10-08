@@ -20,6 +20,7 @@ import { NavigationScreenProp } from 'react-navigation';
     favorites:number[],
     theme:any,
     settingsReducer:any
+    bottomReducer:any
 
 } 
 export interface IPlayListProps {

@@ -14,8 +14,7 @@ import {
     Image,
     Button
 } from 'react-native';
-import SlidingUpPanel from 'rn-sliding-up-panel';
-
+import player from "../services/player/PlayerServices"
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
@@ -124,12 +123,11 @@ class Menu extends React.Component<IMenuProps, IState> {
         return <TouchableHighlight
             onPress={() => {
                 this.props.onchangePlayingData(data.item)
-                 this.props.onchangeswipeablePanelActive(true)
+                player.open()
                 this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
                  this.props.onchangeActiveIndex(data.index)
-
-                this.props.onchangePlayingMusic(false)
+                 this.props.onchangePlayingMusic(false)
                 this.setState({
                     playItem: data.item,
                 //    playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
@@ -174,6 +172,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     render() {
         const list = this.props.menuReducer.menuData!=null?this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
 
+console.log("this.props.bottomReducer.playItem.length",this.props.bottomReducer.playItem);
 
         return (
             <SafeAreaView >
@@ -212,36 +211,19 @@ class Menu extends React.Component<IMenuProps, IState> {
                         
                   } 
                  
-                 {/* <SlidingUpPanel  
-                 backdropStyle={{backgroundColor:'green'}}
-                    draggableRange={{top:deviceHeight-20, bottom:80}}
-                    ref={c => this._panel = c} >
-                    <View style={styles.container1}>
-                        <Text>Here is the content inside panel</Text>
-                        <Button title='Hide' onPress={() => this._panel.hide()} />
-                    </View>
-                    </SlidingUpPanel> */}
-                    {/* {this.props.filterReducer.swipeablePanelActive!=null?
-                    <View style={styles.bottomView}>
-                        <Bottom
-                            navigation={this.props.navigation}
-                            onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                            isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
-                            playUrl={this.state.playUrl}
-                            chnageplayUrl={(data: any) => {
-                                this.setState({ playUrl: data })
-                            }}
-                            list={this.props.menuReducer.menuData}
-                        />
-                    </View>
-                :null}  */}
+                
+                    {this.props.bottomReducer.playItem?
+                    //<View style={styles.bottomView}>
+                        <Bottom/>
+                   // </View>
+                :null} 
                 </View>
             </SafeAreaView>
         );
     }
 };
-const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme, settingsReducer }: any) => {
-    return { filterReducer, menuReducer, favorites, theme, settingsReducer }
+const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme, settingsReducer,bottomReducer }: any) => {
+    return { filterReducer, menuReducer, favorites, theme, settingsReducer,bottomReducer }
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {

@@ -1,5 +1,7 @@
 import {BottomType} from "../constants"
-export const changeplayItem = (payload: any) => {	
+export const changeplayItem = (payload: any) => {
+	console.log("changeplayItem");
+		
 	return {
 		type: BottomType.CHANGE_PLAY_ITEM,
 		payload

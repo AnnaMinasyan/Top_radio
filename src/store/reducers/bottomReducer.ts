@@ -15,7 +15,7 @@ export interface IBottomState {
 
 
 export const initialState: IBottomState = {
-    playItem: {},
+    playItem: null,
     playingMusicArtistSong:{},
     playMusicData:{}
     

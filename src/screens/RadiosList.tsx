@@ -146,7 +146,8 @@ class Menu extends React.Component<IMenuProps, IState> {
         return <TouchableHighlight
 
             onPress={() => {
-                this.props.onchangeswipeablePanelActive(true)
+                player.open()                
+                
                 this.props.onchangeplayItem(data.item)
                 let swiper: any = []
                  this.props.onchangeActiveIndex(data.index)

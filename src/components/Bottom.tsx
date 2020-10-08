@@ -714,7 +714,7 @@ class Bottom extends React.Component<Props, IState> {
                                     height: calcHeight(70),
                                     //  justifyContent: 'center',
                                     width: calcWidth(80),
-                                   borderWidth:1
+                                //   borderWidth:1
 
                                 }}
                             >

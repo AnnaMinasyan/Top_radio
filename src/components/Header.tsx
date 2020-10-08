@@ -78,6 +78,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
+            Linking.openURL("market://details?id=ru.topradio");
           }}
         >
           <Text style={[styles.modalItem,{color:this.props.theme.backgroundColor=='white'?'#1E2B4D':"white"}]}>Оставить отзыв</Text>

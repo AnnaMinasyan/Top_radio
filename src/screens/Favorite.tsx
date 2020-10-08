@@ -41,6 +41,8 @@ import {
     
     changeSwiperData
 } from '../store/actions/menuActions'
+import player from "../services/player/PlayerServices"
+
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     favoriteList:[],
@@ -99,10 +101,10 @@ class Favorite extends React.Component<IMenuProps, IState> {
             return <TouchableHighlight
             onPress={() => {
                 this.props.onchangePlayingData(data.item)
-                this.props.onchangeswipeablePanelActive(true)
                this._addLookingList(data.item)
                this.props.onchangeplayItem(data.item)
                 this.props.onchangeActiveIndex(data.index)
+                player.open()
 
                this.props.onchangePlayingMusic(false)
                this.setState({
@@ -127,7 +129,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
         return <TouchableHighlight
             onPress={() => {
                 this.props.onchangePlayingData(data.item)
-                this.props.onchangeswipeablePanelActive(true)
+                player.open()
                this._addLookingList(data.item)
                this.props.onchangeplayItem(data.item)
                 this.props.onchangeActiveIndex(data.index)
@@ -171,7 +173,11 @@ class Favorite extends React.Component<IMenuProps, IState> {
                                 maxToRenderPerBatch={10}
                             />
                         }
-               
+                {this.props.bottomReducer.playItem?
+                    //<View style={styles.bottomView}>
+                        <Bottom/>
+                   // </View>
+                :null} 
             </View>
             </SafeAreaView>
         );

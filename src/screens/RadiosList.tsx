@@ -173,7 +173,6 @@ class Menu extends React.Component<IMenuProps, IState> {
     render() {
         const list = this.props.menuReducer.menuData!=null?this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
 
-console.log("this.props.bottomReducer.playItem.length",this.props.bottomReducer.playItem);
 
         return (
             <SafeAreaView >

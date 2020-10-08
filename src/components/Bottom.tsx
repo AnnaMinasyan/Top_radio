@@ -8,7 +8,8 @@ import {
     Animated,
     PermissionsAndroid,
     Platform,
-    Button, PanResponderGestureState
+    Button, PanResponderGestureState,
+    Alert
 } from 'react-native';
 import AudioRecorderPlayer, {
     AVEncoderAudioQualityIOSType,
@@ -16,6 +17,7 @@ import AudioRecorderPlayer, {
     AudioEncoderAndroidType,
     AudioSet,
     AudioSourceAndroidType,
+    
 } from 'react-native-audio-recorder-player';
 import Heart from "../assets/icons/heart.svg"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight, deviceWidth } from "../assets/styles/dimensions"
@@ -135,10 +137,15 @@ class Bottom extends React.Component<Props, IState> {
             duration: '00:00:00',
             playingUrl: null
         }
+        
+    this.audioRecorderPlayer = new AudioRecorderPlayer();
+    this.audioRecorderPlayer.setSubscriptionDuration(0.09);
         this.gestureSateInterval = setInterval(() => {
 
             if (!!this.gestureSate) {
                 console.log(this.gestureSate.moveY);
+                if( this.gestureSate.moveY>(220) && this.gestureSate.moveY<calcHeight(280))
+               { }else{
                 const center: number = (deviceHeight - calcHeight(20)) / 2
                 const delta: number = this.gestureSate.moveY - center;
                 const to: number = delta < 0 ? 0 : delta / center;
@@ -147,6 +154,7 @@ class Bottom extends React.Component<Props, IState> {
                     duration: 350,
                     useNativeDriver: true
                 }).start();
+               }
             }
         }, 10)
     }
@@ -199,7 +207,7 @@ class Bottom extends React.Component<Props, IState> {
                 </View>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                {/* <TouchableOpacity
+                <TouchableOpacity
                     style={global_styles.searchbtn}
                     onPress={() => {
                         this.props.toaddfavorite(this.props.menuReducer.playItem)
@@ -208,7 +216,7 @@ class Bottom extends React.Component<Props, IState> {
                     {this.checkIsFovorite(this.props.menuReducer.filterData[this.state.swiperactiveIndex].id) ?
                         <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                         <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
-                </TouchableOpacity> */}
+                </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.player,
                     { backgroundColor: this.props.theme.backgroundColor == "white" ? 'white' : '#0D1834' }]}
@@ -236,11 +244,11 @@ class Bottom extends React.Component<Props, IState> {
 
     async _startPlayMusic() {
         const playerState = await TrackPlayer.getState();
-        console.log("----------------------------", this.props.bottomReducer.playItem.st[0].ur);
+        console.log("----------------------------",playerState, this.props.bottomReducer.playItem.st[0].ur);
         if (
-            playerState == 1 || playerState == 3
+            playerState == 1 || playerState == 3 || playerState == 2
         ) {
-            console.log('destroying..', this.props.bottomReducer.playItem.st);
+            console.log('destroying..', this.props.bottomReducer.playItem.st[0].ur);
             await TrackPlayer.reset();
             await TrackPlayer.add({
                 id: "local-track",
@@ -373,8 +381,8 @@ class Bottom extends React.Component<Props, IState> {
             }
         }
         const path = Platform.select({
-            ios: 'hello.m4a',
-            android: 'sdcard/hello.mp4',
+            ios:  `audio_record_${Date.now()}.m4a`,
+            android: `sdcard/audio_record_${Date.now()}.mp4`,
         });
         const audioSet = {
             AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
@@ -385,14 +393,14 @@ class Bottom extends React.Component<Props, IState> {
         };
         console.log('audioSet', audioSet);
         const uri = await this.audioRecorderPlayer.startRecorder(path, true, audioSet);
-        this.audioRecorderPlayer.addRecordBackListener((e: any) => {
-            this.setState({
-                recordSecs: e.current_position,
-                recordTime: this.audioRecorderPlayer.mmssss(
-                    Math.floor(e.current_position),
-                ),
-            });
-        });
+        // this.audioRecorderPlayer.addRecordBackListener((e: any) => {
+        //     this.setState({
+        //         recordSecs: e.current_position,
+        //         recordTime: this.audioRecorderPlayer.mmssss(
+        //             Math.floor(e.current_position),
+        //         ),
+        //     });
+        // });
         console.log(`uri: ${uri}`);
     };
     private onStartPlay = async () => {
@@ -424,9 +432,22 @@ class Bottom extends React.Component<Props, IState> {
 
         const result = await this.audioRecorderPlayer.stopRecorder();
         this.audioRecorderPlayer.removeRecordBackListener();
-        this.setState({
-            recordSecs: 0,
-        });
+        // this.setState({
+        //     recordSecs: 0,
+        // });
+        Alert.alert(
+            "Finish recording",
+            result,
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: false }
+          );
         console.log(result);
     };
 
@@ -441,7 +462,6 @@ class Bottom extends React.Component<Props, IState> {
             <StatusBar barStyle='light-content'
 
                 backgroundColor={this.props.theme.backgroundColor} />
-            {this.props.filterReducer.swipeablePanelActive == false ? this.renderBottomSheetheader() :
                 <View
                     style={{
                         backgroundColor: this.props.theme.backgroundColor,
@@ -546,14 +566,14 @@ class Bottom extends React.Component<Props, IState> {
                                                             this.isPlaying()
                                                         } else {
                                                             if (this.props.filterReducer.isPlayingMusic) {
+                                                                console.log("11111");
                                                                 this._pouseMusic()
-                                                                this.props.onchangeplayItem(this.props.menuReducer.filterData[this.state.swiperactiveIndex])
                                                                 setTimeout(() => {
                                                                     this._startPlayMusic()
                                                                     this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                                                                }, 1000);
+                                                                }, 1500);
                                                             } else {
-                                                                this.props.onchangeplayItem(this.props.menuReducer.filterData[this.state.swiperactiveIndex])
+                                                                console.log("22222");
                                                                 this._startPlayMusic()
                                                                 this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
                                                             }
@@ -595,7 +615,7 @@ class Bottom extends React.Component<Props, IState> {
                             </View>
                         </GestureRecognizer>
                     </View>
-                </View>}
+                </View>
         </SafeAreaView >
     }
     onSwipe(gestureName: any, gestureState: any) {
@@ -798,9 +818,9 @@ class Bottom extends React.Component<Props, IState> {
                     <TouchableOpacity
                         onPress={() => {
                             if (this.state.isRecording) {
-                                this.onStopRecord
+                                this.onStopRecord()
                             } else {
-                                this.onStartRecord
+                                this.onStartRecord()
                             }
                             this.setState({ isRecording: !this.state.isRecording })
                         }}
@@ -815,21 +835,20 @@ class Bottom extends React.Component<Props, IState> {
                     <TouchableOpacity
                         onPress={() => {
                             this.props.onchangeplayItem(this.props.menuReducer.filterData[this.state.swiperactiveIndex])
+                           
                             if (this.props.bottomReducer.playMusicData.id == this.props.bottomReducer.playItem.id) {
+                                console.log("888888888888888888888888888888");
+                                
                                 this.isPlaying()
                             } else {
-                                if (this.props.filterReducer.isPlayingMusic) {
+                                    console.log("1111111111111111111111111111");
+                                    
                                     this._pouseMusic()
-                                    this.props.onchangeplayItem(this.props.menuReducer.filterData[this.state.swiperactiveIndex])
                                     setTimeout(() => {
                                         this._startPlayMusic()
                                         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                                    }, 1000);
-                                } else {
-                                    this.props.onchangeplayItem(this.props.menuReducer.filterData[this.state.swiperactiveIndex])
-                                    this._startPlayMusic()
-                                    this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                                }
+                                    }, 3000);
+                                 
 
                             }
 
@@ -848,7 +867,9 @@ class Bottom extends React.Component<Props, IState> {
                         <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
                     </TouchableOpacity>
                 </View>
+                
             </View>
+            {/* <Intro/> */}
         </SafeAreaView >
     }
 

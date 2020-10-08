@@ -27,7 +27,6 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
         case BottomType.SET_PLAY_ITEM:
             return { ...state, playItem: action.payload }
        case BottomType.SET_PLAY_ITEM_ARTIST_SONG:
-           console.log("::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
            
             return { ...state, playingMusicArtistSong: action.payload }
        case BottomType.SET_PLAYING_DATA:

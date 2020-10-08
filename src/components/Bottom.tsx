@@ -172,7 +172,7 @@ class Bottom extends React.Component<Props, IState> {
             opacity: this.anim // Bind opacity to animated value
         }]}>
             <View
-                onTouchStart={() => {
+                onTouchEnd={() => {
                     player.open()
                     Animated.timing(this.anim, {
                         toValue: 0,
@@ -685,7 +685,7 @@ class Bottom extends React.Component<Props, IState> {
                 style={{
                     backgroundColor: this.props.theme.backgroundColor,
                     height: deviceHeight, width: deviceWidth + 10,
-                    zIndex: 999,
+                    zIndex: 1,
 
                 }}>
                 <View
@@ -740,8 +740,8 @@ class Bottom extends React.Component<Props, IState> {
                 </View>
                 <View style={{
                     height: calcHeight(460
-                    ), zIndex: 0
-                }}>
+                    ),
+                     zIndex: 10                }}>
                     <GestureRecognizer
                         onSwipe={(direction, state) => this.onSwipe(direction, state)}
                         config={config}
@@ -791,7 +791,7 @@ class Bottom extends React.Component<Props, IState> {
                             })
                             : null}
                     </View>
-                </View>
+                </View> 
                 <View style={{
                     alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
                 }}>
@@ -898,18 +898,19 @@ class Bottom extends React.Component<Props, IState> {
                 }}
                 onDragEnd={(s,k) => {
                  this.gestureSate = null
+                 Animated.timing(this.anim, {
+                    toValue: 1,
+                    duration: 50,
+                    useNativeDriver: true
+                }).start();
                     console.log("eeeeennnnnndddd",s,k);
                     
                 }}
                 onMomentumDragEnd={(position: number) => {
-                 //   this.gestureSate = null
+                  this.gestureSate = null
 
                 }}
-                onBottomReached={()=>{
-                    console.log("efoefpfjepfffjjjj");
-                    
-                }}
-              
+               
                 backdropStyle={{ backgroundColor: 'grey' }}
                 draggableRange={{ top: deviceHeight - calcHeight(20)+calcHeight(86), bottom: calcHeight(86) }}
                 ref={c => {

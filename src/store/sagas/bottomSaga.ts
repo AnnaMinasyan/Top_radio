@@ -10,9 +10,10 @@ import {setplayItem,
 
 function* onGetPlayType({payload}:any) {	
     try {
+        yield put(setplayItem(payload))	
         const data= yield auth.getPlayItemType(payload.pl)	
       yield put(setplayItemArtistandSong(data.playList[0]))
-        yield put(setplayItem(payload))	
+       
 	} catch (ex) {
 		console.log(ex);
 	}

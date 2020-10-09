@@ -144,16 +144,16 @@ class Bottom extends React.Component<Props, IState> {
 
             if (!!this.gestureSate) {
                 console.log(this.gestureSate.moveY);
-                if (this.gestureSate.moveY > (220) && this.gestureSate.moveY < calcHeight(280)) { } else {
+               
                     const center: number = (deviceHeight - calcHeight(20)) / 2
                     const delta: number = this.gestureSate.moveY - center;
                     const to: number = delta < 0 ? 0 : delta / center;
                     Animated.timing(this.anim, {
                         toValue: to,
-                        duration: 100,
+                        duration: 200,
                         useNativeDriver: true
                     }).start();
-                }
+                
             }
         }, 10)
     }
@@ -298,7 +298,7 @@ class Bottom extends React.Component<Props, IState> {
     async componentDidMount() {
         console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
 
-        this.isPortrait();
+       
         Dimensions.addEventListener('change', () => {
             this.isPortrait();
         });
@@ -329,12 +329,13 @@ class Bottom extends React.Component<Props, IState> {
 
     }
     isPlaying() {
+        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
         if (this.props.filterReducer.isPlayingMusic) {
             this._pouseMusic()
         } else {
             this._startPlayMusic()
         }
-        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+    //    this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
     }
     private onStartRecord = async () => {
         if (Platform.OS === 'android') {
@@ -505,14 +506,14 @@ class Bottom extends React.Component<Props, IState> {
                                 </TouchableOpacity>
                                 <View>
                                     <View style={{ alignItems: 'center' }}>
-                                        {this.props.bottomReducer.playMusicData ? <Text style={{
+                                        {this.props.bottomReducer.playItem ? <Text style={{
                                             color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white',
                                             fontSize: calcFontSize(24),
                                             fontWeight: '500'
-                                        }}>{this.props.bottomReducer.playMusicData.pa}</Text> : null}
+                                        }}>{this.props.bottomReducer.playItem.pa}</Text> : null}
                                     </View>
                                     <View style={styles.albImg}>
-                                        <SimpleImage size={calcHeight(257)} image={this.props.bottomReducer.playMusicData.im} />
+                                        <SimpleImage size={calcHeight(257)} image={this.props.bottomReducer.playItem.im} />
                                     </View>
                                 </View>
                             </View>
@@ -533,7 +534,7 @@ class Bottom extends React.Component<Props, IState> {
                                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }
                                         }>
                                             {this.props.bottomReducer.playItem.st ?
-                                               this.props.bottomReducer.playItemst.map((item: any, index: number) => {
+                                               this.props.bottomReducer.playItem.st.map((item: any, index: number) => {
                                                     return <TouchableOpacity
                                                         key={index}
                                                         onPress={() => {
@@ -551,20 +552,25 @@ class Bottom extends React.Component<Props, IState> {
                                             flexDirection: 'row', justifyContent: 'center'
                                         }}>
                                             <TouchableOpacity
-                                                onPress={() => {
-                                                    this.setState({ isRecording: !this.state.isRecording })
-                                                }}
+                                              onPress={() => {
+                                                if (this.state.isRecording) {
+                                                    this.onStopRecord()
+                                                } else {
+                                                    this.onStartRecord()
+                                                }
+                                                this.setState({ isRecording: !this.state.isRecording })
+                                            }}
                                                 style={[styles.btnrecord,
                                                 { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
                                             >
-                                                {this.props.bottomReducer.playItem.isRecording ?
+                                                {this.state.isRecording ?
                                                     <RecordSvg width={calcHeight(20)} height={calcHeight(20)} fill='#FF5050' /> :
                                                     <DisRecordSvg width={calcHeight(20)} height={calcHeight(20)} />
                                                 }
                                             </TouchableOpacity>
                                             <TouchableOpacity
                                                 onPress={() => {
-                                                    this.props.onchangeplayItem(this.props.bottomReducer.playItem)
+                                                   // this.props.onchangeplayItem(this.props.bottomReducer.playItem)
                                                      this.isPlaying()
                                                     // if (this.props.bottomReducer.playMusicData.id == this.props.bottomReducer.playItem.id) {
                                                     //     console.log("888888888888888888888888888888");
@@ -707,12 +713,6 @@ class Bottom extends React.Component<Props, IState> {
                     zIndex: 1,
 
                 }}>
-                <View
-                    style={{
-
-
-                        backgroundColor: this.props.theme.backgroundColor
-                    }}>
                     <View style={{ flexDirection: 'row', }}>
                         <View
 
@@ -749,14 +749,14 @@ class Bottom extends React.Component<Props, IState> {
                                 width: calcWidth(80),
                             }}
                             onPress={() => {
-                                this.props.toaddfavorite(this.props.bottomReducer.playMusicData)
+                                this.props.toaddfavorite(this.props.bottomReducer.playItem)
                             }}>
-                            {this.checkIsFovorite(this.props.bottomReducer.playMusicData.id) ?
+                            {this.checkIsFovorite(this.props.bottomReducer.playItem.id) ?
                                 <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                                 <Heart fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                         </TouchableOpacity>
                     </View>
-                </View>
+              
                 <View style={{
                     height: calcHeight(460
                     ),
@@ -834,7 +834,7 @@ class Bottom extends React.Component<Props, IState> {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.onchangeplayItem(this.props.bottomReducer.playItem)
+                          //  this.props.onchangeplayItem(this.props.bottomReducer.playItem)
                             this.isPlaying()
                             // if (this.props.bottomReducer.playMusicData.id == this.props.bottomReducer.playItem.id) {
                             //     console.log("888888888888888888888888888888");
@@ -882,7 +882,7 @@ class Bottom extends React.Component<Props, IState> {
 
             this.isPortrait();
         });
-        console.log("this.props.menuReducer.filte",this.props.bottomReducer.playItem);
+        console.log("this.props.menuReducer.filte",this.props.bottomReducer.playItem.pa);
 
         return (
             // <SlidingUpPanel

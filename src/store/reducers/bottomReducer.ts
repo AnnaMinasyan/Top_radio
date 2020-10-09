@@ -21,10 +21,12 @@ export const initialState: IBottomState = {
     
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
-
+    console.log(action.type)
     switch (action.type) {
-
+      
         case BottomType.SET_PLAY_ITEM:
+            console.log(Date.now());
+            
             return { ...state, playItem: action.payload }
        case BottomType.SET_PLAY_ITEM_ARTIST_SONG:
            

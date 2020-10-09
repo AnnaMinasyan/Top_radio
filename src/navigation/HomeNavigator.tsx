@@ -34,7 +34,7 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
     name="Favorite"
     component={Favorite}
-     options={{ header: BaseHeader, headerTransparent: true, animationEnabled:false}}
+     options={{ headerShown:false, headerTransparent: true, animationEnabled:false}}
     />
     <Stack.Screen
     name="MyAlarmClock"

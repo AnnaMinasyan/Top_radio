@@ -42,6 +42,7 @@ import {
     changeSwiperData
 } from '../store/actions/menuActions'
 import player from "../services/player/PlayerServices"
+import Bottom from "../components/Bottom"
 
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
@@ -100,7 +101,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if(this.checkIsFovorite(data.item.id))  {
             return <TouchableHighlight
             onPress={() => {
-                this.props.onchangePlayingData(data.item)
+                //this.props.onchangePlayingData(data.item)
                this._addLookingList(data.item)
                this.props.onchangeplayItem(data.item)
                 this.props.onchangeActiveIndex(data.index)
@@ -128,12 +129,12 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if(this.checkIsFovorite(data.item.id))  {
         return <TouchableHighlight
             onPress={() => {
-                this.props.onchangePlayingData(data.item)
-                player.open()
+                //this.props.onchangePlayingData(data.item)
+           
                this._addLookingList(data.item)
                this.props.onchangeplayItem(data.item)
-                this.props.onchangeActiveIndex(data.index)
-
+                this.props.onchangeActiveIndex(data.item.st[0].bi)
+                player.open()
                this.props.onchangePlayingMusic(false)
                this.setState({
                    playItem: data.item,
@@ -183,8 +184,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
         );
     }
 };
-const mapStateToProps = ({filterReducer,menuReducer,favorites,theme}:any) => {
-    return {filterReducer,menuReducer,favorites,theme}
+const mapStateToProps = ({filterReducer,menuReducer,favorites,theme,bottomReducer}:any) => {
+    return {filterReducer,menuReducer,favorites,theme,bottomReducer}
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {

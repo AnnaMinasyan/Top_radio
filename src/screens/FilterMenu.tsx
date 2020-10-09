@@ -4,7 +4,7 @@ import {
     StyleSheet,
     Text,
     ScrollView,
-    TouchableOpacity,
+    TouchableHighlight,
     Animated,
     Easing,
     TouchableWithoutFeedback,
@@ -114,18 +114,19 @@ _addLookingList(data:any){
     // }
     renderMenuItems(data: any) {
 
-        return <TouchableOpacity
+        return <TouchableHighlight
         onPress={() => {
                 player.open()                
             this._addLookingList(data.item)
+          
             this.props.onchangeplayItem(data.item)
-             this.props.onchangeActiveIndex(data.index)
+            this.props.onchangeActiveIndex(data.item.st[0].bi)
             this.props.onchangePlayingMusic(false)
-            this.props.onchangePlayingData(data.item)
-            this.setState({
-                playItem: data.item,
-                playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
-            })
+           // this.props.onchangePlayingData(data.item)
+            // this.setState({
+            //     playItem: data.item,
+            //     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
+            // })
         }}
     >
         <RadioMenuElement
@@ -134,27 +135,27 @@ _addLookingList(data:any){
              backColor={this.props.theme.backgroundColor}
             addInFavorite={() => this.props.toaddfavorite(data.item)}
             isFavorite={this.checkIsFovorite(data.item.id)} />
-    </TouchableOpacity>
+    </TouchableHighlight>
     }
     renderMenuItemsMenuStyle2(data: any) {
-        return<TouchableOpacity
+        return<TouchableHighlight
         onPress={() => {
                 player.open()                
             this._addLookingList(data.item)
             this.props.onchangeplayItem(data.item)
-             this.props.onchangeActiveIndex(data.index)
+            this.props.onchangeActiveIndex(data.item.st[0].bi)
 
             this.props.onchangePlayingMusic(false)
-            this.props.onchangePlayingData(data.item)
-            this.setState({
-                playItem: data.item,
-                //  activBi: data.item.st[0].bi,
+         //   this.props.onchangePlayingData(data.item)
+            // this.setState({
+            //     playItem: data.item,
+            //     //  activBi: data.item.st[0].bi,
 
-                playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
-            })
+            //     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
+            // })
         }} style={{ padding: calcWidth(8), }}>
         <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
-    </TouchableOpacity>
+    </TouchableHighlight>
     }
     
     render() {

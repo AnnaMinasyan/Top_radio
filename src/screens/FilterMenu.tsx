@@ -17,6 +17,8 @@ import Header from "../components/Header"
 import Search from "../components/Search"
 import { IFilterMenuProps } from "../Interface"
 import HeaderByBack from "../components/HeaderByBack"
+import player from "../services/player/PlayerServices"
+
 import {  getMenuData, changeActiveIndex,changeSwiperData} from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
@@ -114,7 +116,7 @@ _addLookingList(data:any){
 
         return <TouchableOpacity
         onPress={() => {
-            this.props.onchangeswipeablePanelActive(true)
+                player.open()                
             this._addLookingList(data.item)
             this.props.onchangeplayItem(data.item)
              this.props.onchangeActiveIndex(data.index)
@@ -137,7 +139,7 @@ _addLookingList(data:any){
     renderMenuItemsMenuStyle2(data: any) {
         return<TouchableOpacity
         onPress={() => {
-            this.props.onchangeswipeablePanelActive(true)
+                player.open()                
             this._addLookingList(data.item)
             this.props.onchangeplayItem(data.item)
              this.props.onchangeActiveIndex(data.index)
@@ -184,23 +186,11 @@ _addLookingList(data:any){
                             />
 
                         }
-{/*                    
-                   {this.props.filterReducer.swipeablePanelActive!=null?    <View style={{ position: 'absolute',
-                    
-                      width: '100%',
-                       bottom: 0 , 
-                   }}>
-                    <Bottom
-                            navigation={this.props.navigation}
-                            onCloseStart={() => this.props.onchangeswipeablePanelActive(false)}
-                            isFavorite={this.checkIsFovorite(this.props.menuReducer.playItem.id)}
-                            playUrl={this.state.playUrl}
-                            chnageplayUrl={(data: any) => {
-                                this.setState({ playUrl: data })
-                            }}
-                            list={list}
-                        />
-                     </View> :null} */}
+  {this.props.bottomReducer.playItem?
+                    //<View style={styles.bottomView}>
+                        <Bottom/>
+                   // </View>
+                :<View/>} 
 
                 </View>
              
@@ -210,8 +200,8 @@ _addLookingList(data:any){
         );
     }
 };
-const mapStateToProps = ({filterReducer,menuReducer,favorites,theme}:any) => {
-    return {filterReducer,menuReducer,favorites,theme}
+const mapStateToProps = ({filterReducer,menuReducer,favorites,theme,bottomReducer}:any) => {
+    return {filterReducer,menuReducer,favorites,theme,bottomReducer}
 };
 // const mapStateToProps = (state: any) => ({
 

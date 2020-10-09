@@ -122,16 +122,14 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                this.props.onchangePlayingData(data.item)
-                player.open()
-                this._addLookingList(data.item)
                 this.props.onchangeplayItem(data.item)
-                 this.props.onchangeActiveIndex(data.index)
+                this.props.onchangeActiveIndex(data.item.st[0].bi)
+
+               //this.props.onchangePlayingData(data.item)
+                player.open()
+                // this._addLookingList(data.item)
                  this.props.onchangePlayingMusic(false)
-                this.setState({
-                    playItem: data.item,
-                //    playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
-                })
+               
             }}
         >
             <RadioMenuElement
@@ -146,19 +144,16 @@ class Menu extends React.Component<IMenuProps, IState> {
         return <TouchableHighlight
 
             onPress={() => {
-                player.open()                
+                             
                 
                 this.props.onchangeplayItem(data.item)
+                this.props.onchangeActiveIndex(data.item.st[0].bi)
                 let swiper: any = []
-                 this.props.onchangeActiveIndex(data.index)
-
-                this.props.onchangePlayingMusic(false)
-                this.props.onchangePlayingData(data.item)
-                this.setState({
-                    playItem: data.item,
-
-                    playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
-                })
+                //  this.props.onchangeActiveIndex(data.index)
+                player.open()   
+                // this.props.onchangePlayingMusic(false)
+                // this.props.onchangePlayingData(data.item)
+               
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
             <SimpleImage size={calcWidth(98)} image={data.item.im} />
         </TouchableHighlight>
@@ -216,7 +211,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                     //<View style={styles.bottomView}>
                         <Bottom/>
                    // </View>
-                :null} 
+                :<View/>} 
                 </View>
             </SafeAreaView>
         );

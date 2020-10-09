@@ -44,7 +44,7 @@ export interface IFilterMenuProps {
     favorites:any,
     onchangeActiveIndex(type:number):void;
     onchangeSwiperData(payload:any):void; 
-
+    bottomReducer:any
 } 
 export interface IGanresProps {
     styleView:boolean;

@@ -21,9 +21,11 @@ class PlayerServices implements IDATA {
         if(this.playerRef)
             this.playerRef.show()
             else 
-            setTimeout(() => {
+       {     setTimeout(() => {
+           console.log("pppppppppppp");
+           
                 this.open()
-            }, 500);
+            }, 10);}
             
             // setTimeout(this.open, 500);
     }

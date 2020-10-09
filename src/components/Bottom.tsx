@@ -53,6 +53,9 @@ import BackSvg from "../assets/icons/backgraundHorizontal.svg"
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import Intro from "../screens/Intro"
 import player from "../services/player/PlayerServices"
+import RNFS from 'react-native-fs';
+
+
 TrackPlayer.registerPlaybackService(() => require('../../service'));
 
 interface Props {
@@ -380,10 +383,12 @@ class Bottom extends React.Component<Props, IState> {
                 return;
             }
         }
-        const path = Platform.select({
-            ios:  `audio_record_${Date.now()}.m4a`,
-            android: `sdcard/audio_record_${Date.now()}.mp4`,
-        });
+        var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
+
+        // const path = Platform.select({
+        //     ios:  `audio_record_${Date.now()}.m4a`,
+        //     android: `sdcard/audio_record_${Date.now()}.mp4`,
+        // });
         const audioSet = {
             AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
             AudioSourceAndroid: AudioSourceAndroidType.MIC,
@@ -405,10 +410,12 @@ class Bottom extends React.Component<Props, IState> {
     };
     private onStartPlay = async () => {
         console.log('onStartPlay');
-        const path = Platform.select({
-            ios: 'hello.m4a',
-            android: 'sdcard/hello.mp4',
-        });
+        var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
+
+        // const path = Platform.select({
+        //     ios: 'hello.m4a',
+        //     android: 'sdcard/hello.mp4',
+        // });
         const msg = await this.audioRecorderPlayer.startPlayer(path);
         this.audioRecorderPlayer.setVolume(1.0);
         console.log(msg);
@@ -432,22 +439,22 @@ class Bottom extends React.Component<Props, IState> {
 
         const result = await this.audioRecorderPlayer.stopRecorder();
         this.audioRecorderPlayer.removeRecordBackListener();
-        // this.setState({
-        //     recordSecs: 0,
-        // });
-        Alert.alert(
-            "Finish recording",
-            result,
-            [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ],
-            { cancelable: false }
-          );
+        this.setState({
+            recordSecs: 0,
+        });
+        // Alert.alert(
+        //     "Finish recording",
+        //     result,
+        //     [
+        //       {
+        //         text: "Cancel",
+        //         onPress: () => console.log("Cancel Pressed"),
+        //         style: "cancel"
+        //       },
+        //       { text: "OK", onPress: () => console.log("OK Pressed") }
+        //     ],
+        //     { cancelable: false }
+        //   );
         console.log(result);
     };
 

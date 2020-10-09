@@ -32,3 +32,19 @@ export const changeBufferSize= (payload:string) => {
 		payload
 	};
 };
+export const changeIsOnheadsets= (payload:boolean) => {
+	console.log("LL",payload);
+
+	return {
+		type: SettingsType.CHANGE_IS_ON_HEADSES,
+		payload
+	};
+};
+export const setIsOnheadsets= (payload:boolean) => {
+	console.log("LL",payload);
+
+	return {
+		type: SettingsType.SET_IS_ON_HEADSES,
+		payload
+	};
+};

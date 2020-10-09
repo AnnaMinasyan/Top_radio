@@ -42,7 +42,9 @@ import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
 import SmoothPicker from 'react-native-smooth-picker';
 import {ISettings} from "../Interface"
-import {changeAutoPlay,changeBufferSize} from "../store/actions/settingsAcrion"
+import {changeAutoPlay,
+  changeBufferSize,
+  changeIsOnheadsets} from "../store/actions/settingsAcrion"
 import HeadphoneDetection from 'react-native-headphone-detection';
 
 interface IState {
@@ -285,7 +287,9 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             </View>
           </View>
           <View>
-            <SimpleSwitch isEnabled={this.props.settingsReducer.autoPlay} 
+            <SimpleSwitch 
+            theme={this.props.theme}
+            isEnabled={this.props.settingsReducer.autoPlay} 
             onValueChange={()=>{
               this.chnageAutoPlay()
             }}/>
@@ -305,7 +309,12 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
             </View>
           </View>
           <View>
-            <SimpleSwitch />
+            <SimpleSwitch
+            theme={this.props.theme}
+            isEnabled={this.props.settingsReducer.isOnheadsets} 
+             onValueChange={()=>{
+              this.props.onchangeIsOnheadsets(!this.props.settingsReducer.isOnheadsets)
+            }} />
           </View>
         </View>
         <View style={[styles.radiostation,
@@ -322,6 +331,8 @@ console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.buf
           </View>
           <View>
             <SimpleSwitch 
+            theme={this.props.theme}
+
             isEnabled={true}
             onValueChange={() => {
               
@@ -467,7 +478,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onChangeMenuType: (payload: number) => {
       dispatch(getMenuType(payload))
     }, 
-    onchangeBufferSize: (payload: number) => {
+    onchangeBufferSize: (payload: string) => {
       dispatch(changeBufferSize(payload))
     },
     onchangeBackgroundColor: (payload: any) => {
@@ -475,6 +486,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     onchangeAutoPlay: (payload: boolean) => {
       dispatch(changeAutoPlay(payload))
+    },
+     onchangeIsOnheadsets: (payload: boolean) => {
+      dispatch(changeIsOnheadsets(payload))
     }
   }
 }

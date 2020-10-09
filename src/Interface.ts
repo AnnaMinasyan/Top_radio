@@ -62,7 +62,8 @@ export interface IGanresProps {
 export interface ISettings {
     styleView:boolean;
     onchangeAutoPlay(type:boolean):void;
-    onchangeBackgroundColor(type:boolean):void;
+    onchangeIsOnheadsets(type:boolean):void;
+   onchangeBackgroundColor(type:boolean):void;
     theme:any,
     navigation: NavigationScreenProp<any, any>,
     onChangeMenuType(type:number):void; 

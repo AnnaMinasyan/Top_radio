@@ -56,11 +56,14 @@ export enum FavoriteType {
     
 }
 export enum SettingsType {
-    CHANGE_AUTO_PLAY = "@FavoriteType/CHANGE_AUTO_PLAY",
-    INIT_AUTO_PLA = "@FavoriteType/INIT_AUTO_PLA",
-    SET_AUTO_PLAY= "@FavoriteType/SET_AUTO_PLAY", 
-    SET_BUFFER_SIZE= "@FavoriteType/SET_BUFFER_SIZE",
-    CHANGE_BUFFER_SIZE= "@FavoriteType/CHANGE_BUFFER_SIZE",
+    CHANGE_AUTO_PLAY = "@SettingsType/CHANGE_AUTO_PLAY",
+    INIT_AUTO_PLA = "@SettingsType/INIT_AUTO_PLA",
+    SET_AUTO_PLAY= "@SettingsType/SET_AUTO_PLAY", 
+    SET_BUFFER_SIZE= "@SettingsType/SET_BUFFER_SIZE",
+    CHANGE_BUFFER_SIZE= "@SettingsType/CHANGE_BUFFER_SIZE",
+    SET_IS_ON_HEADSES= "@SettingsType/SET_IS_ON_HEADSES",
+    CHANGE_IS_ON_HEADSES= "@SettingsType/CHANGE_IS_ON_HEADSES",
+
 }
 export enum BottomType {
     CHANGE_PLAY_ITEM='@bottomtypes/CHANGE_PLAY_ITEM',

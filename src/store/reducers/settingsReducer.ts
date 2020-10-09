@@ -5,7 +5,8 @@ interface IReduxAction<T> {
 }
 export interface ISettingsState {
    autoPlay:boolean,
-   bufferSize:IBufferSizeType[]
+   bufferSize:IBufferSizeType[],
+   isOnheadsets:boolean
 }
 interface IBufferSizeType{
     title:string,
@@ -28,12 +29,15 @@ export const initialState: ISettingsState = {
           check: false
         }
       ],
+      isOnheadsets:false
 }
 const settingsReducer = (state = initialState, action: IReduxAction<SettingsType>) => {
     
     switch (action.type) {
         case SettingsType.SET_AUTO_PLAY:
             return { ...state, autoPlay:action.payload }
+            case SettingsType.SET_IS_ON_HEADSES:
+            return { ...state, isOnheadsets:action.payload }
             case SettingsType.SET_BUFFER_SIZE:
                 let newArr = state.bufferSize
                 for (let index = 0; index < newArr.length; index++) {

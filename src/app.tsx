@@ -50,7 +50,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             {/* {animeted? */}
             {/* <Buttom/> */}
         {/* :null}   */}
-            {/* {  changeActivePanel} */}
+           {  changeActivePanel} 
         </SafeAreaView>
     );
 };

@@ -9,7 +9,8 @@ import {setplayItem,
 } from "../actions/bottomAction";
 
 import {changePlayingMusic} from "../actions/filterAction"
-
+import player from "../../services/player/PlayerServices"
+import { storeData, getData } from "../../utils/local_storage"
 
 function* onGetPlayType({payload}:any) {	
     try {
@@ -17,6 +18,15 @@ function* onGetPlayType({payload}:any) {
         yield put(setActiveBi(payload.st[0].bi))	
         const data= yield auth.getPlayItemType(payload.pl)	
       yield put(setplayItemArtistandSong(data.playList[0]))
+     const  autoplay =yield getData("autoPlay")
+    if (autoplay) {
+      yield  put(changePlayingMusic(true))
+
+        console.log("fhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        yield    player._startPlayMusic(payload,data.playList[0])
+    }
+ 
+   
 	} catch (ex) {
 		console.log(ex);
 	}

@@ -124,15 +124,25 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                console.log(data.item.pa,Date.now());
                 
                 this.props.onchangeplayItem(data.item)
               this.props.onchangeActiveIndex(data.index)
 
                //this.props.onchangePlayingData(data.item)
                 player.open()
+               // this.props.onchangePlayingMusic(false)
                 this._addLookingList(data.item)
-                 this.props.onchangePlayingMusic(false)
+                // if (this.props.settingsReducer.autoPlay) {
+                //     this.props.onchangePlayingMusic(true)
+                //     setTimeout(() => {
+                //         player._startPlayMusic(this.props.bottomReducer.playItem,this.props.bottomReducer.playingMusicArtistSong)
+                //         this.props.onchangePlayingMusic(true)
+        
+                //        }, 100);
+                // } else {
+                //     
+
+                // }
                
             }}
         >

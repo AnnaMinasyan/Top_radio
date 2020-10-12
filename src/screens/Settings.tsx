@@ -265,6 +265,7 @@ this.props.onchangeBufferSize( res.title)
   };
   chnageAutoPlay(){
     this.props.onchangeAutoPlay(!this.props.settingsReducer.autoPlay)
+    storeData("autoPlay",!this.props.settingsReducer.autoPlay)
   }
   render() {
 console.log("this.props.settingsReducer.autoPlay",this.props.settingsReducer.bufferSize.filter((item:IData) => item.check == true)[0].title);

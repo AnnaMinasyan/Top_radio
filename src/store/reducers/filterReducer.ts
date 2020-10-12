@@ -33,6 +33,7 @@ export const initialState: IFilterState = {
     playListType:{}
 }
 const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) => {
+    console.log(action.type);
     
     switch (action.type) {
         case FilterTypes.SET_MENU_TYPE:

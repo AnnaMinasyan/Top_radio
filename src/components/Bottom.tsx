@@ -9,6 +9,7 @@ import {
     PermissionsAndroid,
     Platform,
     PanResponderGestureState,
+    ActivityIndicator
 } from 'react-native';
 import AudioRecorderPlayer, {
     AVEncoderAudioQualityIOSType,
@@ -44,14 +45,13 @@ import { getPlayList } from "../store/actions/playlistAction"
 import { addFavorites } from '../store/actions/favoritesActions';
 import BackGroundSvg from "../assets/icons/background.svg"
 import global_styles from "../assets/styles/global_styles"
-import GestureRecognizer from 'react-native-swipe-gestures';
-import { swipeDirections } from "react-native-swipe-gestures"
 import { Dimensions } from 'react-native';
 import BackSvg from "../assets/icons/backgraundHorizontal.svg"
 import SlidingUpPanel from 'rn-sliding-up-panel';
 import Intro from "../screens/Intro"
 import player from "../services/player/PlayerServices"
 import RNFS from 'react-native-fs';
+import { getData } from '../utils/local_storage';
 
 
 TrackPlayer.registerPlaybackService(() => require('../../service'));
@@ -102,7 +102,8 @@ interface IState {
     currentDurationSec: number;
     playTime: string;
     duration: string;
-    playingUrl: string | null
+    playingUrl: string | null,
+    loading: boolean
 }
 class Bottom extends React.Component<Props, IState> {
     swiperRef: any
@@ -135,11 +136,14 @@ class Bottom extends React.Component<Props, IState> {
             currentDurationSec: 0,
             playTime: '00:00:00',
             duration: '00:00:00',
-            playingUrl: null
+            playingUrl: null,
+            loading: false
         }
 
         this.audioRecorderPlayer = new AudioRecorderPlayer();
         this.audioRecorderPlayer.setSubscriptionDuration(0.09);
+
+
         this.gestureSateInterval = setInterval(() => {
 
             if (!!this.gestureSate) {
@@ -241,26 +245,7 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
 
-    async _startPlayMusic() {
-        const playerState = await TrackPlayer.getState();
-        console.log("----------------------------", playerState, this.props.bottomReducer.playItem.st[0].ur);
-        if (
-            playerState != 0
-        ) {
-            console.log('destroying..', this.props.bottomReducer.playItem.st[0].ur);
-            await TrackPlayer.reset();
-            await TrackPlayer.add({
-                id: "local-track",
-                url: this.props.bottomReducer.playItem.st[0].ur,
-                title: this.props.bottomReducer.playingMusicArtistSong.song,
-                artist: this.props.bottomReducer.playingMusicArtistSong.artist,
-                artwork: 'https://top-radio.ru/assets/image/radio/180/' + this.props.bottomReducer.playItem.im,
-            });
-            await TrackPlayer.play();
-        } else {
-            this._pouseMusic()
-        }
-    };
+    
     changeRadioStancia(item: any) {
         //this.props.chnageplayUrl(item.ur)
         this.setState({
@@ -272,7 +257,7 @@ class Bottom extends React.Component<Props, IState> {
             this._pouseMusic()
             this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
             setTimeout(() => {
-                this._startPlayMusic()
+                player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
                 this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
             }, 500);
         }
@@ -338,7 +323,8 @@ class Bottom extends React.Component<Props, IState> {
         if (this.props.filterReducer.isPlayingMusic) {
             this._pouseMusic()
         } else {
-            this._startPlayMusic()
+            player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
+            this.setState({ loading: false })
         }
         //    this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
     }
@@ -600,19 +586,19 @@ class Bottom extends React.Component<Props, IState> {
                                                 } else {
                                                     console.log("1111111111111111111111111111");
                                                     this._pouseMusic()
-                                                     setTimeout(() => {
-                                                    this._startPlayMusic()
-                                                    this.setState({ swiperIndex: this.props.bottomReducer.activeIndex })
-                    
-                                                     }, 300);
+                                                    setTimeout(() => {
+                                                        this._startPlayMusic()
+                                                        this.setState({ swiperIndex: this.props.bottomReducer.activeIndex })
+
+                                                    }, 300);
                                                     this.props.onchangePlayingMusic(true)
-                    
+
                                                 }
-                    
+
                                             }}
                                             style={[styles.btnPlay,
                                             { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
-                                            {this.props.filterReducer.isPlayingMusic ? <Stop width={calcHeight(24)} height={calcHeight(27)} fill='white' /> :
+                                            {this.isPlayingMusic() ? <Stop width={calcHeight(24)} height={calcHeight(27)} fill='white' /> :
                                                 <PlaySvG width={calcHeight(26.66)} height={calcHeight(37)} fill='white' />}
                                         </TouchableOpacity>
                                         <TouchableOpacity
@@ -624,7 +610,7 @@ class Bottom extends React.Component<Props, IState> {
                                             }}>
                                             <InfoSvg width={calcHeight(29.91)} height={calcHeight(24.22)} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={{ height: 50, width: 50, marginLeft:calcWidth(20)}}
+                                        <TouchableOpacity style={{ height: 50, width: 50, marginLeft: calcWidth(20) }}
                                             disabled={this.props.bottomReducer.activeIndex == this.props.menuReducer.menuData.length - 1}
                                             onPress={() => {
                                                 console.log("right");
@@ -673,12 +659,43 @@ class Bottom extends React.Component<Props, IState> {
         this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex - 1)
 
         this.props.onchangePlayingMusic(this.state.swiperIndex == this.props.bottomReducer.activeIndex - 1)
+        if (this.props.settingsReducer.autoPlay) {
+            this.setState({
+                swiperIndex: this.props.bottomReducer.activeIndex - 1,
+                loading: true
+            })
+
+        } else {
+            this.setState({ loading: true })
+
+        }
+
     }
     swipeRight() {
+
         this.props.onchangeplayItem(this.props.menuReducer.filterData[this.props.bottomReducer.activeIndex + 1])
         //this.props.onchangeActiveIndex(this.props.menuReducer.menuData[this.props.bottomReducer.activeIndex + 1].st[0].bi)
         this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex + 1)
         this.props.onchangePlayingMusic(this.state.swiperIndex == this.props.bottomReducer.activeIndex + 1)
+
+        if (this.props.settingsReducer.autoPlay) {
+            this.setState({
+                swiperIndex: this.props.bottomReducer.activeIndex + 1,
+
+            })
+
+        }
+
+
+    }
+    isPlayingMusic() {
+        if (this.props.filterReducer.isPlayingMusic && this.state.swiperIndex == this.props.bottomReducer.activeIndex) {
+            return true
+        } else if (this.props.filterReducer.isPlayingMusic && this.props.settingsReducer.autoPlay) {
+            return true
+        } else {
+            return false
+        }
     }
     renderBottomSheet() {
         const config = {
@@ -847,31 +864,45 @@ class Bottom extends React.Component<Props, IState> {
                             <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} />
                         }
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
-                            //  this.props.onchangeplayItem(this.props.bottomReducer.playItem)
-                            // this.isPlaying()
-                            if (this.state.swiperIndex == this.props.bottomReducer.activeIndex) {
-                                console.log("888888888888888888888888888888");
-                                this.isPlaying()
-                            } else {
-                                console.log("1111111111111111111111111111");
-                                this._pouseMusic()
-                                setTimeout(() => {
-                                this._startPlayMusic()
-                                this.setState({ swiperIndex: this.props.bottomReducer.activeIndex })
+                    {
+                        this.state.loading ?
+                            <View
 
-                                }, 300);
-                                this.props.onchangePlayingMusic(true)
+                                style={[styles.btnPlay,
+                                { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
+                                <ActivityIndicator size="large" color="white" />
+                            </View>
 
-                            }
+                            :
+                            <TouchableOpacity
+                                onPress={() => {
+                                    //  this.props.onchangeplayItem(this.props.bottomReducer.playItem)
+                                    // this.isPlaying()
+                                    if (this.state.swiperIndex == this.props.bottomReducer.activeIndex) {
+                                        console.log("888888888888888888888888888888");
+                                        this.isPlaying()
+                                    } else {
 
-                        }}
-                        style={[styles.btnPlay,
-                        { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
-                        {this.props.filterReducer.isPlayingMusic && this.state.swiperIndex == this.props.bottomReducer.activeIndex ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
-                            <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
-                    </TouchableOpacity>
+                                        this.setState({ loading: true })
+                                        console.log("1111111111111111111111111111");
+                                        this._pouseMusic()
+                                        setTimeout(() => {
+                                            player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
+                                            this.setState({ swiperIndex: this.props.bottomReducer.activeIndex, loading: false })
+
+                                        }, 500);
+                                        this.props.onchangePlayingMusic(true)
+
+                                    }
+
+                                }}
+                                style={[styles.btnPlay,
+                                { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
+                                {this.isPlayingMusic() ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
+                                    <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
+                            </TouchableOpacity>
+                    }
+
                     <TouchableOpacity
                         disabled={!this.props.bottomReducer.playItem.pl}
                         style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
@@ -900,7 +931,7 @@ class Bottom extends React.Component<Props, IState> {
 
             this.isPortrait();
         });
-        console.log("this.props.menuReducer.filte", this.props.filterReducer.isPlayingMusic, this.state.swiperIndex == this.props.bottomReducer.activeIndex);
+        console.log("this.props.menuReducer.filte", this.props.filterReducer.isPlayingMusic, this.state.swiperIndex, this.props.bottomReducer.activeIndex);
 
         return (
             // <SlidingUpPanel

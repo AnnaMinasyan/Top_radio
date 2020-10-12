@@ -600,11 +600,11 @@ class Bottom extends React.Component<Props, IState> {
                                                 } else {
                                                     console.log("1111111111111111111111111111");
                                                     this._pouseMusic()
-                                                    // setTimeout(() => {
+                                                     setTimeout(() => {
                                                     this._startPlayMusic()
                                                     this.setState({ swiperIndex: this.props.bottomReducer.activeIndex })
                     
-                                                    //  }, 500);
+                                                     }, 300);
                                                     this.props.onchangePlayingMusic(true)
                     
                                                 }
@@ -857,11 +857,11 @@ class Bottom extends React.Component<Props, IState> {
                             } else {
                                 console.log("1111111111111111111111111111");
                                 this._pouseMusic()
-                                // setTimeout(() => {
+                                setTimeout(() => {
                                 this._startPlayMusic()
                                 this.setState({ swiperIndex: this.props.bottomReducer.activeIndex })
 
-                                //  }, 500);
+                                }, 300);
                                 this.props.onchangePlayingMusic(true)
 
                             }

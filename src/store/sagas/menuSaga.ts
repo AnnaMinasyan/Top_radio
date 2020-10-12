@@ -1,7 +1,7 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setMenuData,setActiveIndex, setPlayingData,setFilterData,setHeaderText} from "../actions/menuActions"
+import {setMenuData, setPlayingData,setFilterData,setHeaderText} from "../actions/menuActions"
 import {setSwiperData} from "../actions/menuActions"
 
 
@@ -12,17 +12,11 @@ function* getMenuData() {
 		yield put(setMenuData(data))
 		yield put(setFilterData(data))
 		yield put(setSwiperData(swiper))
-		yield put(setActiveIndex(0))
-	} catch (ex) {
-	}
-}
-function* changingActiveIndex(num:number) {
 	
-	try {
-		yield put(setActiveIndex(num))
 	} catch (ex) {
 	}
 }
+
 
 function* onChangePlayingData({payload}:any) {
 	console.log("onChangePlayingData",payload);
@@ -59,11 +53,6 @@ export function* watchMenuType() {
 		MenuTypes.GET_MENU_DATA as any,
 		getMenuData
 	)
-	yield takeEvery(
-		MenuTypes.CHANGE_ACTIVE_INDEX as any,
-		changingActiveIndex
-	)
-	
 	yield takeEvery(
         MenuTypes.CHANGE_PLAYINGDATA as any,
 		onChangePlayingData

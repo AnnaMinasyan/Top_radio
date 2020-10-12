@@ -22,12 +22,14 @@ import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import {
     getMenuData,
-    changeActiveIndex,
     
     changeSwiperData
 } from '../store/actions/menuActions'
 import {    changeplayItem,
-    changePlayingData
+    changePlayingData,
+    changeActiveIndex,
+        changeActiveBi,
+
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
@@ -125,7 +127,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 console.log(data.item.pa,Date.now());
                 
                 this.props.onchangeplayItem(data.item)
-              this.props.onchangeActiveIndex(data.item.st[0].bi)
+              this.props.onchangeActiveIndex(data.index)
 
                //this.props.onchangePlayingData(data.item)
                 player.open()
@@ -149,11 +151,11 @@ class Menu extends React.Component<IMenuProps, IState> {
                              
                 
                 this.props.onchangeplayItem(data.item)
-                this.props.onchangeActiveIndex(data.item.st[0].bi)
+            /// this.props.onchangeActiveIndex(data.item.st[0].bi)
                 let swiper: any = []
-                //  this.props.onchangeActiveIndex(data.index)
+                this.props.onchangeActiveIndex(data.index)
                 player.open()   
-                // this.props.onchangePlayingMusic(false)
+                 this.props.onchangePlayingMusic(false)
                 // this.props.onchangePlayingData(data.item)
                
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
@@ -244,6 +246,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangePlayingMusic: (payload: any) => {
             dispatch(changePlayingMusic(payload))
+        },
+        onchangeActiveBi: (payload: number) => {
+            dispatch(changeActiveBi(payload))
         },
         onchangeActiveIndex: (payload: number) => {
             dispatch(changeActiveIndex(payload))

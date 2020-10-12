@@ -50,22 +50,7 @@ export const setHeaderText = (payload: string) => {
 
 	};
 };
-export const changeActiveIndex = (payload: number) => {
 
-	return {
-		type: MenuTypes.CHANGE_ACTIVE_INDEX,
-		payload
-
-	};
-}; export const setActiveIndex = (payload: number) => {
-
-
-	return {
-		type: MenuTypes.SET_ACTIVE_INDEX,
-		payload
-
-	};
-};
 
 
 export const setPlayingData = (payload: any) => {

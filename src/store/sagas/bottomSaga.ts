@@ -3,17 +3,20 @@ import { BottomType } from '../constants';
 import auth from "../../services/api/auth"
 import {setplayItem,
     setplayItemArtistandSong,
-    setPlayingData
-} from "../actions/bottomAction"
+    setPlayingData,
+    setActiveIndex,
+    setActiveBi
+} from "../actions/bottomAction";
 
+import {changePlayingMusic} from "../actions/filterAction"
 
 
 function* onGetPlayType({payload}:any) {	
     try {
-        yield put(setplayItem(payload))	
+        yield put(setplayItem(payload))
+        yield put(setActiveBi(payload.st[0].bi))	
         const data= yield auth.getPlayItemType(payload.pl)	
       yield put(setplayItemArtistandSong(data.playList[0]))
-       
 	} catch (ex) {
 		console.log(ex);
 	}
@@ -35,6 +38,14 @@ function* onChangeplayItemArtistandSon({payload}:any) {
 		console.log(ex);
 	}
 }
+function* onchangeActiveIndex({payload}:any) {	
+    try {
+
+        yield put(setActiveIndex(payload))	
+	} catch (ex) {
+		console.log(ex);
+	}
+}
 export function* watchBottomType() {
 	yield takeEvery(
         BottomType.CHANGE_PLAY_ITEM as any,
@@ -47,6 +58,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_PLAY_ITEM_ARTIST_SONG as any,
 		onChangeplayItemArtistandSon
+    ) 
+    yield takeEvery(
+        BottomType.CHANGE_ACTIVE_INDEX as any,
+		onchangeActiveIndex
 	)
 }
 

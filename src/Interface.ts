@@ -6,6 +6,8 @@ import { NavigationScreenProp } from 'react-navigation';
     ongetPlayTrackList(type:any):void;
     onchnageSearchData(type:any):void;
     onchangeActiveIndex(type:number):void;
+    onchangeActiveBi(type:number):void;
+
     toaddfavorite(type:any):void;
     ongetMenuData():void;
     onchangeSwiperData(payload:any):void; 

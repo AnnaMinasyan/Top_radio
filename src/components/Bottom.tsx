@@ -148,8 +148,13 @@ class Bottom extends React.Component<Props, IState> {
         this.gestureSateInterval = setInterval(() => {
 
             if (!!this.gestureSate) {
-                console.log(this.gestureSate.moveY);
+                console.log(this.gestureSate.dy,this.gestureSate.dx);
+               if (this.gestureSate.dy>-10 && this.gestureSate.dy<10  || this.gestureSate.dx>-10 && this.gestureSate.dx<10 ) {
+                console.log(this.gestureSate.dy,this.gestureSate.dx);
 
+               } else{
+               console.log("------------------------------------------------------------");
+                   
                 const center: number = (deviceHeight - calcHeight(20)) / 2
                 const delta: number = this.gestureSate.moveY - center;
                 const to: number = delta < 0 ? 0 : delta / center;
@@ -157,9 +162,13 @@ class Bottom extends React.Component<Props, IState> {
                     toValue: to,
                     duration: 200,
                     useNativeDriver: true
-                }).start();
+                }).start(); 
+               }
+                   
 
-            }
+                }
+
+            
         }, 10)
     }
     componentWillUnmount() {
@@ -178,13 +187,13 @@ class Bottom extends React.Component<Props, IState> {
     };
     renderBottomSheetheader = () => {
         return <Animated.View style={[styles.bottomHeader, {
-            backgroundColor:this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+            backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
 
         }, {
             opacity: this.anim // Bind opacity to animated value
         }]}>
             <View
-            
+
                 onTouchEnd={() => {
                     if (this.anim) {
                         player.open()
@@ -193,12 +202,12 @@ class Bottom extends React.Component<Props, IState> {
                             duration: 150,
                             useNativeDriver: true
                         }).start();
-                          
+
                     }
-                        
+
                 }}
                 style={{
-                    height:  calcHeight(86), width: calcWidth(270),
+                    height: calcHeight(86), width: calcWidth(270),
                     backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
                 }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
@@ -239,7 +248,7 @@ class Bottom extends React.Component<Props, IState> {
                 </TouchableOpacity>
             </View>
         </Animated.View>
-       
+
     }
     async _pouseMusic() {
         const playerState = await TrackPlayer.getState();
@@ -252,25 +261,25 @@ class Bottom extends React.Component<Props, IState> {
         }
     }
 
-    
+
     changeRadioStancia(item: any) {
         //this.props.chnageplayUrl(item.ur)
         this.setState({
             playingUrl: item.ur,
-            
+
         })
         this.props.onchangeActiveBi(item.bi)
         this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
 
         //this.setState({ activBi: item.bi })
         if (this.props.filterReducer.isPlayingMusic) {
-            this.setState({loading:true})
+            this.setState({ loading: true })
 
             this._pouseMusic()
             setTimeout(() => {
                 player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
                 this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
-                this.setState({loading:false})
+                this.setState({ loading: false })
             }, 500);
         }
 
@@ -594,19 +603,19 @@ class Bottom extends React.Component<Props, IState> {
                                                     console.log("888888888888888888888888888888");
                                                     this.isPlaying()
                                                 } else {
-            
+
                                                     this.setState({ loading: true })
                                                     console.log("1111111111111111111111111111");
                                                     this._pouseMusic()
                                                     setTimeout(() => {
                                                         player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
                                                         this.setState({ swiperIndex: this.props.bottomReducer.activeIndex, loading: false })
-            
+
                                                     }, 500);
                                                     this.props.onchangePlayingMusic(true)
-            
+
                                                 }
-            
+
                                             }}
                                             style={[styles.btnPlay,
                                             { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
@@ -718,7 +727,7 @@ class Bottom extends React.Component<Props, IState> {
         return <SafeAreaView   >
             <StatusBar barStyle={this.props.filterReducer.swipeablePanelActive == true && this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'}
                 backgroundColor={'#0F1E45'} />
-               {this.renderBottomSheetheader()}
+            {this.renderBottomSheetheader()}
             <View
                 style={{
                     backgroundColor: this.props.theme.backgroundColor,
@@ -943,7 +952,7 @@ class Bottom extends React.Component<Props, IState> {
 
             this.isPortrait();
         });
-        console.log("this.props.menuReducer.filte", this.anim );
+        console.log("this.props.menuReducer.filte", this.anim);
 
         return (
             // <SlidingUpPanel
@@ -967,7 +976,7 @@ class Bottom extends React.Component<Props, IState> {
             //     </SlidingUpPanel>
             <SlidingUpPanel
                 backdropOpacity={1}
-                friction={0.0018}
+                friction={0.918}
                 // allowDragging={this.state.headerHeight}
                 onDragStart={(p, t) => {
                     this.gestureSate = t;
@@ -996,7 +1005,7 @@ class Bottom extends React.Component<Props, IState> {
                 }}
             >
                 <View>
-                    
+
                     {this.state.orientation == 'landscape' ? this.renderBottomSheetHorizontal() : this.renderBottomSheet()}
 
                 </View>

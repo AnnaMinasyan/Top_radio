@@ -224,7 +224,12 @@ this.props.onchangeBufferSize( res.title)
           </View>
         </View>
         <View>
-          <SimpleSwitch />
+          <SimpleSwitch 
+           theme={this.props.theme}
+            isEnabled={this.props.settingsReducer.autoPlay} 
+            onValueChange={()=>{
+             // this.changeTimeSleep(item)
+            }}/>
         </View>
       </View>
       <View style={{justifyContent:'center',flexDirection: 'row',  alignItems:'center', }}>

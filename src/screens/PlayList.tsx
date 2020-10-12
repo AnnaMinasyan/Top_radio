@@ -67,6 +67,8 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                 
                     <View>
                         {list.map((data: any) => {
+                            //return console.log(data);
+                            
                             return (
                                 <View style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
                                     <View style={styles.elementsRow}>
@@ -76,8 +78,9 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                                     <View>
                                         {
                                             this.state.filterType == 'playList'? 
-                                            <Text style={styles.elementCount}>{data.date.split(' ')[1]}</Text>:
-                                            <Text style={styles.elementCount}>{data.count}</Text>
+                                            <Text style={styles.elementCount}>{data.count}</Text>:
+                                            <Text style={styles.elementCount}>{data.date.split(' ')[1]}</Text>
+                                            
                                         }
                                        
                                     </View>

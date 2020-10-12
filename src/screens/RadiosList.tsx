@@ -213,7 +213,9 @@ class Menu extends React.Component<IMenuProps, IState> {
                 
                     {this.props.bottomReducer.playItem?
                     //<View style={styles.bottomView}>
-                        <Bottom/>
+                        <Bottom
+                        navigation={this.props.navigation}
+                        />
                    // </View>
                 :<View/>} 
                 </View>

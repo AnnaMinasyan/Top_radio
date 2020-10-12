@@ -56,6 +56,14 @@ function* onchangeActiveIndex({payload}:any) {
 		console.log(ex);
 	}
 }
+function* onchangeActiveBi({payload}:any) {	
+    try {
+
+        yield put(setActiveBi(payload))	
+	} catch (ex) {
+		console.log(ex);
+	}
+}
 export function* watchBottomType() {
 	yield takeEvery(
         BottomType.CHANGE_PLAY_ITEM as any,
@@ -72,6 +80,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_ACTIVE_INDEX as any,
 		onchangeActiveIndex
+    )
+    yield takeEvery(
+        BottomType.CHANGE_ACTIVE_BI as any,
+		onchangeActiveBi
 	)
 }
 

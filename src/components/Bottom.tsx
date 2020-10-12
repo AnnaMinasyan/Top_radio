@@ -34,12 +34,13 @@ import {
     changeplayItem,
     changePlayingData,
     chnageplayItemArtistandSong,
-    changeActiveIndex
+    changeActiveIndex,
+    changeActiveBi
 } from "../store/actions/bottomAction";
 import Arrow from "../assets/icons/arrow.svg"
 import RecordSvg from "../assets/icons/disrecording.svg"
 import DisRecordSvg from "../assets/icons/recording.svg"
-import TrackPlayer from 'react-native-track-player';
+import TrackPlayer, { play } from 'react-native-track-player';
 import InfoSvg from "../assets/icons/infoMenu.svg"
 import { getPlayList } from "../store/actions/playlistAction"
 import { addFavorites } from '../store/actions/favoritesActions';
@@ -72,7 +73,7 @@ interface Props {
     settingsReducer: any,
     activeIndex: number,
     onchangeplayItem(payload: any): void;
-    onchangeSwiperData(payload: any): void;
+    onchangeActiveBi(payload: any): void;
     onchangeArtist_Song(payload: any): void;
     onchangeActiveIndex(payload: number): void;
     menuReducer: any
@@ -177,22 +178,27 @@ class Bottom extends React.Component<Props, IState> {
     };
     renderBottomSheetheader = () => {
         return <Animated.View style={[styles.bottomHeader, {
-            backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+            backgroundColor:this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
 
         }, {
             opacity: this.anim // Bind opacity to animated value
         }]}>
             <View
+            
                 onTouchEnd={() => {
-                    player.open()
-                    Animated.timing(this.anim, {
-                        toValue: 0,
-                        duration: 150,
-                        useNativeDriver: true
-                    }).start();
+                    if (this.anim) {
+                        player.open()
+                        Animated.timing(this.anim, {
+                            toValue: 0,
+                            duration: 150,
+                            useNativeDriver: true
+                        }).start();
+                          
+                    }
+                        
                 }}
                 style={{
-                    height: calcHeight(86), width: calcWidth(270),
+                    height:  calcHeight(86), width: calcWidth(270),
                     backgroundColor: this.props.theme.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
                 }}>
                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
@@ -233,6 +239,7 @@ class Bottom extends React.Component<Props, IState> {
                 </TouchableOpacity>
             </View>
         </Animated.View>
+       
     }
     async _pouseMusic() {
         const playerState = await TrackPlayer.getState();
@@ -249,16 +256,21 @@ class Bottom extends React.Component<Props, IState> {
     changeRadioStancia(item: any) {
         //this.props.chnageplayUrl(item.ur)
         this.setState({
-            playingUrl: item.ur
+            playingUrl: item.ur,
+            
         })
-        this.props.onchangeActiveIndex(item.bi)
+        this.props.onchangeActiveBi(item.bi)
+        this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+
         //this.setState({ activBi: item.bi })
         if (this.props.filterReducer.isPlayingMusic) {
+            this.setState({loading:true})
+
             this._pouseMusic()
-            this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
             setTimeout(() => {
                 player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
                 this.props.onchangePlayingMusic(!this.props.filterReducer.isPlayingMusic)
+                this.setState({loading:false})
             }, 500);
         }
 
@@ -578,23 +590,23 @@ class Bottom extends React.Component<Props, IState> {
                                         </TouchableOpacity>
                                         <TouchableOpacity
                                             onPress={() => {
-                                                //  this.props.onchangeplayItem(this.props.bottomReducer.playItem)
-                                                // this.isPlaying()
                                                 if (this.state.swiperIndex == this.props.bottomReducer.activeIndex) {
                                                     console.log("888888888888888888888888888888");
                                                     this.isPlaying()
                                                 } else {
+            
+                                                    this.setState({ loading: true })
                                                     console.log("1111111111111111111111111111");
                                                     this._pouseMusic()
                                                     setTimeout(() => {
-                                                        this._startPlayMusic()
-                                                        this.setState({ swiperIndex: this.props.bottomReducer.activeIndex })
-
-                                                    }, 300);
+                                                        player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
+                                                        this.setState({ swiperIndex: this.props.bottomReducer.activeIndex, loading: false })
+            
+                                                    }, 500);
                                                     this.props.onchangePlayingMusic(true)
-
+            
                                                 }
-
+            
                                             }}
                                             style={[styles.btnPlay,
                                             { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
@@ -705,7 +717,8 @@ class Bottom extends React.Component<Props, IState> {
 
         return <SafeAreaView   >
             <StatusBar barStyle={this.props.filterReducer.swipeablePanelActive == true && this.props.theme.backgroundColor == "white" ? 'dark-content' : 'light-content'}
-                backgroundColor={this.props.filterReducer.swipeablePanelActive == true ? this.props.theme.backgroundColor : '#0F1E45'} />
+                backgroundColor={'#0F1E45'} />
+               {this.renderBottomSheetheader()}
             <View
                 style={{
                     backgroundColor: this.props.theme.backgroundColor,
@@ -914,7 +927,6 @@ class Bottom extends React.Component<Props, IState> {
                 </View>
 
             </View>
-            {/* <Intro/> */}
         </SafeAreaView >
     }
 
@@ -931,7 +943,7 @@ class Bottom extends React.Component<Props, IState> {
 
             this.isPortrait();
         });
-        console.log("this.props.menuReducer.filte", this.props.filterReducer.isPlayingMusic, this.state.swiperIndex, this.props.bottomReducer.activeIndex);
+        console.log("this.props.menuReducer.filte", this.anim );
 
         return (
             // <SlidingUpPanel
@@ -984,7 +996,7 @@ class Bottom extends React.Component<Props, IState> {
                 }}
             >
                 <View>
-                    {this.renderBottomSheetheader()}
+                    
                     {this.state.orientation == 'landscape' ? this.renderBottomSheetHorizontal() : this.renderBottomSheet()}
 
                 </View>
@@ -1060,8 +1072,8 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangePlayingData: (payload: any) => {
             dispatch(changePlayingData(payload))
         },
-        onchangeSwiperData: (payload: any) => {
-            dispatch(changeSwiperData(payload))
+        onchangeActiveBi: (payload: any) => {
+            dispatch(changeActiveBi(payload))
         },
         onchangeArtist_Song: (payload: any) => {
             dispatch(chnageplayItemArtistandSong(payload))

@@ -55,6 +55,8 @@ export const changeActiveIndex = (payload: number) => {
 	};
 };
 export const changeActiveBi = (payload: number) => {
+	console.log("payloadpayloadpayload",payload);
+	
 
 	return {
 		type: BottomType.CHANGE_ACTIVE_BI,

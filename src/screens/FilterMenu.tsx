@@ -19,7 +19,7 @@ import { IFilterMenuProps } from "../Interface"
 import HeaderByBack from "../components/HeaderByBack"
 import player from "../services/player/PlayerServices"
 
-import {  getMenuData, changeActiveIndex,changeSwiperData} from '../store/actions/menuActions'
+import {  getMenuData,changeSwiperData} from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
     getFavorites,
@@ -27,7 +27,8 @@ import {
     changePlayingMusic
 } from '../store/actions/filterAction'
 import {    changeplayItem,
-    changePlayingData
+    changePlayingData,
+    changeActiveIndex
 } from "../store/actions/bottomAction";
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
@@ -116,17 +117,14 @@ _addLookingList(data:any){
 
         return <TouchableHighlight
         onPress={() => {
-                player.open()                
-            this._addLookingList(data.item)
-          
+                 
             this.props.onchangeplayItem(data.item)
-            this.props.onchangeActiveIndex(data.item.st[0].bi)
-            this.props.onchangePlayingMusic(false)
-           // this.props.onchangePlayingData(data.item)
-            // this.setState({
-            //     playItem: data.item,
-            //     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
-            // })
+            this.props.onchangeActiveIndex(data.index)
+
+             //this.props.onchangePlayingData(data.item)
+              player.open()
+              this._addLookingList(data.item)
+               this.props.onchangePlayingMusic(false)
         }}
     >
         <RadioMenuElement
@@ -140,12 +138,14 @@ _addLookingList(data:any){
     renderMenuItemsMenuStyle2(data: any) {
         return<TouchableHighlight
         onPress={() => {
-                player.open()                
-            this._addLookingList(data.item)
+               
             this.props.onchangeplayItem(data.item)
-            this.props.onchangeActiveIndex(data.item.st[0].bi)
+            this.props.onchangeActiveIndex(data.index)
 
-            this.props.onchangePlayingMusic(false)
+             //this.props.onchangePlayingData(data.item)
+              player.open()
+              this._addLookingList(data.item)
+               this.props.onchangePlayingMusic(false)
          //   this.props.onchangePlayingData(data.item)
             // this.setState({
             //     playItem: data.item,

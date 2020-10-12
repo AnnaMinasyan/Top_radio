@@ -25,7 +25,7 @@ export const initialState: IBottomState = {
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
-    console.log(action.type)
+   // console.log(action.type)
     switch (action.type) {
 
         case BottomType.SET_PLAY_ITEM:

@@ -668,14 +668,14 @@ class Bottom extends React.Component<Props, IState> {
         return this.props.favorites.includes(num)
     }
     swipeLeft() {
-        this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.bottomReducer.activeIndex - 1])
+        this.props.onchangeplayItem(this.props.menuReducer.filterData[this.props.bottomReducer.activeIndex - 1])
         ///this.props.onchangeActiveBi(this.props.menuReducer.menuData[this.props.bottomReducer.activeIndex - 1].st[0].bi)
         this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex - 1)
 
         this.props.onchangePlayingMusic(this.state.swiperIndex == this.props.bottomReducer.activeIndex - 1)
     }
     swipeRight() {
-        this.props.onchangeplayItem(this.props.menuReducer.menuData[this.props.bottomReducer.activeIndex + 1])
+        this.props.onchangeplayItem(this.props.menuReducer.filterData[this.props.bottomReducer.activeIndex + 1])
         //this.props.onchangeActiveIndex(this.props.menuReducer.menuData[this.props.bottomReducer.activeIndex + 1].st[0].bi)
         this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex + 1)
         this.props.onchangePlayingMusic(this.state.swiperIndex == this.props.bottomReducer.activeIndex + 1)

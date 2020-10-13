@@ -148,7 +148,7 @@ class Bottom extends React.Component<Props, IState> {
         this.gestureSateInterval = setInterval(() => {
 
             if (!!this.gestureSate) {
-                console.log(this.gestureSate.dy,this.gestureSate.dx);
+                console.log(this.gestureSate.vy,this.gestureSate.vx);
                if (this.gestureSate.dy>-10 && this.gestureSate.dy<10  || this.gestureSate.dx>-10 && this.gestureSate.dx<10 ) {
                 console.log(this.gestureSate.dy,this.gestureSate.dx);
 
@@ -686,11 +686,7 @@ class Bottom extends React.Component<Props, IState> {
                 loading: true
             })
 
-        } else {
-            this.setState({ loading: true })
-
-        }
-
+        } 
     }
     swipeRight() {
 
@@ -702,9 +698,7 @@ class Bottom extends React.Component<Props, IState> {
         if (this.props.settingsReducer.autoPlay) {
             this.setState({
                 swiperIndex: this.props.bottomReducer.activeIndex + 1,
-
             })
-
         }
 
 
@@ -980,7 +974,7 @@ class Bottom extends React.Component<Props, IState> {
                 // allowDragging={this.state.headerHeight}
                 onDragStart={(p, t) => {
                     this.gestureSate = t;
-                    console.log("lllllllllllllllllll");
+                    console.log("lllllllllllllllllll",t.moveX ,t.moveY);
 
                 }}
                 onDragEnd={(s, k) => {

@@ -55,7 +55,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             {/* <Buttom/> */}
         {/* :null}   */}
            { init(changeActivePanel) } 
-           {initTimerSleep(timerSleep)}
+           {/* {initTimerSleep(timerSleep)} */}
         </SafeAreaView>
     );
 };

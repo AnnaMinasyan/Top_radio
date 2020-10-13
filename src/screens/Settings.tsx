@@ -48,7 +48,7 @@ import {
   changeIsOnheadsets
 } from "../store/actions/settingsAcrion"
 import HeadphoneDetection from 'react-native-headphone-detection';
-import {initTimerSleep} from "../utils/timer_sleep"
+import { initTimerSleep } from "../utils/timer_sleep"
 import player from "../services/player/PlayerServices"
 interface IState {
   data: any,
@@ -90,7 +90,7 @@ class Settings extends React.Component<ISettings, IState> {
         }
       ],
       timeSleepList: [
-        0, 2,10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+        0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
 
       ],
       timeSleep: 10,
@@ -281,23 +281,25 @@ class Settings extends React.Component<ISettings, IState> {
     BackHandler.exitApp()
 
     console.log("iiiiiiiiiiiiiiiiiiiiiiiii");
-    
- }
+
+  }
   changeTimeSleep = (index: number) => {
     this.setState({
       timeSleep: index
     });
-    if (this.state.ontimerSleep) { 
-     let time=new Date(Date.now() + this.state.timeSleep * 60000)
-    
-      storeData("timerSleep",time) }
-      initTimerSleep(this.timerSleep)
+    if (this.state.ontimerSleep) {
+      let time = new Date(Date.now() + this.state.timeSleep * 60000)
+
+      storeData("timerSleep", time)
+    }
+    initTimerSleep(this.timerSleep)
   };
   createTimerSleep() {
-    if (!this.state.ontimerSleep) { 
-      let time=new Date(Date.now() + this.state.timeSleep * 60000)
-     
-       storeData("timerSleep",time) }
+    if (!this.state.ontimerSleep) {
+      let time = new Date(Date.now() + this.state.timeSleep * 60000)
+
+      storeData("timerSleep", time)
+    }
 
     this.setState({ ontimerSleep: !this.state.ontimerSleep })
     initTimerSleep(this.timerSleep)
@@ -377,6 +379,7 @@ class Settings extends React.Component<ISettings, IState> {
 
               isEnabled={true}
               onValueChange={() => {
+                console.log("dsahnofuh");
 
               }} />
           </View>

@@ -10,6 +10,7 @@ interface IDATA {
     init(value: any): void;
     open(): void
     close(): void,
+    stopPlayer(): void,
     _startPlayMusic(a:any,b:any):void
     isopenpanel:boolean
 }
@@ -62,6 +63,9 @@ class PlayerServices implements IDATA {
     async _pouseMusic() {
             await TrackPlayer.pause();
         
+    }
+    async stopPlayer(){
+        await TrackPlayer.stop()
     }
     
    

@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
-   
+   shadowColor:'red',
     shadowOffset: {
       width: 0,
       height: 3,

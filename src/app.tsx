@@ -12,8 +12,9 @@ import { changeswipeablePanelActive, changePlayingMusic, initMenuType } from './
 import { changeplayItem } from './store/actions/bottomAction';
 import Intro from "./screens/Intro"
 import Buttom from './components/Bottom';
-
 import SlidingUpPanel from 'rn-sliding-up-panel';
+import {init} from './utils/createAlarmClock'
+import {initTimerSleep} from  './utils/timer_sleep'
 import { getData, storeData } from "./utils/local_storage"
 import { _startPlayMusic } from "./utils/playMusic"
 interface Props {
@@ -40,7 +41,10 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             dispatch(changePlayingMusic(true))
         })
     }
-  
+    const timerSleep = () => {
+       console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk");
+       
+    }
     return (
         <SafeAreaView style={{ flex: 1, }}>
             <StatusBar barStyle='light-content' backgroundColor="#0F1E45" />
@@ -50,7 +54,8 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             {/* {animeted? */}
             {/* <Buttom/> */}
         {/* :null}   */}
-           {/* {  changeActivePanel}  */}
+           { init(changeActivePanel) } 
+           {initTimerSleep(timerSleep)}
         </SafeAreaView>
     );
 };

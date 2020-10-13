@@ -1,5 +1,5 @@
 import { getData, storeData } from "./local_storage"
-import { _startPlayMusic } from "./playMusic"
+import  player  from "../services/player/PlayerServices"
 export const init = (toAlert: () => void) => {
     let minute = 0
     let hours = 0
@@ -31,8 +31,9 @@ export const init = (toAlert: () => void) => {
             const interval = setInterval(() => {
 
                 if (now > alertTime ) {
+                   
                     clearTimeout(interval);
-                    _startPlayMusic(playItem)
+                    player._startPlayMusic(playItem, {song:"",artist:""})
                     alertIsRun=true
                     toAlert()
                     if (repeat && repeat > 0) {

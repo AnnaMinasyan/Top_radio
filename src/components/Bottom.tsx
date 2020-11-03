@@ -9,7 +9,9 @@ import {
     PermissionsAndroid,
     Platform,
     PanResponderGestureState,
-    ActivityIndicator
+    ActivityIndicator,
+  Alert
+
 } from 'react-native';
 import AudioRecorderPlayer, {
     AVEncoderAudioQualityIOSType,
@@ -53,7 +55,10 @@ import Intro from "../screens/Intro"
 import player from "../services/player/PlayerServices"
 import RNFS from 'react-native-fs';
 import { getData } from '../utils/local_storage';
+import FileViewer from 'react-native-file-viewer';
+var RNFileManager = require('react-native-file-manager');
 
+import BottomSheet from '@gorhom/bottom-sheet';
 
 TrackPlayer.registerPlaybackService(() => require('../../service'));
 
@@ -148,12 +153,10 @@ class Bottom extends React.Component<Props, IState> {
         this.gestureSateInterval = setInterval(() => {
 
             if (!!this.gestureSate) {
-                console.log(this.gestureSate.vy,this.gestureSate.vx);
+               // console.log(this.gestureSate.vy,this.gestureSate.vx);
                if (this.gestureSate.dy>-10 && this.gestureSate.dy<10  || this.gestureSate.dx>-10 && this.gestureSate.dx<10 ) {
-                console.log(this.gestureSate.dy,this.gestureSate.dx);
 
                } else{
-               console.log("------------------------------------------------------------");
                    
                 const center: number = (deviceHeight - calcHeight(20)) / 2
                 const delta: number = this.gestureSate.moveY - center;
@@ -173,7 +176,6 @@ class Bottom extends React.Component<Props, IState> {
     }
     componentWillUnmount() {
         clearInterval(this.gestureSateInterval)
-        console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
 
     }
 
@@ -231,7 +233,7 @@ class Bottom extends React.Component<Props, IState> {
                         this.props.toaddfavorite(this.props.bottomReducer.playItem)
                     }}
                 >
-                    {this.checkIsFovorite(this.props.menuReducer.filterData[this.state.swiperactiveIndex].id) ?
+                    {this.checkIsFovorite(this.props.bottomReducer.playItem.id) ?
                         <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
                         <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
                 </TouchableOpacity>
@@ -304,7 +306,6 @@ class Bottom extends React.Component<Props, IState> {
 
 
     async componentDidMount() {
-        console.log("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
 
 
         Dimensions.addEventListener('change', () => {
@@ -392,12 +393,12 @@ class Bottom extends React.Component<Props, IState> {
                 return;
             }
         }
-        var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
 
-        // const path = Platform.select({
-        //     ios:  `audio_record_${Date.now()}.m4a`,
-        //     android: `sdcard/audio_record_${Date.now()}.mp4`,
-        // });
+        // create a path you want to write to
+        var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
+        
+     console.log(RNFileManager.MainBundlePath);
+     
         const audioSet = {
             AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
             AudioSourceAndroid: AudioSourceAndroidType.MIC,
@@ -407,19 +408,21 @@ class Bottom extends React.Component<Props, IState> {
         };
         console.log('audioSet', audioSet);
         const uri = await this.audioRecorderPlayer.startRecorder(path, true, audioSet);
-        // this.audioRecorderPlayer.addRecordBackListener((e: any) => {
-        //     this.setState({
-        //         recordSecs: e.current_position,
-        //         recordTime: this.audioRecorderPlayer.mmssss(
-        //             Math.floor(e.current_position),
-        //         ),
-        //     });
-        // });
-        console.log(`uri: ${uri}`);
-    };
+        
+        this.audioRecorderPlayer.addRecordBackListener((e: any) => {
+            this.setState({
+                recordSecs: e.current_position,
+                recordTime: this.audioRecorderPlayer.mmssss(
+                    Math.floor(e.current_position),
+                ),
+            });
+        });
+        console.log(`uri: ${uri}`,);
+    }
+    
     private onStartPlay = async () => {
         console.log('onStartPlay');
-        var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
+        var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.mp4saacp`;
 
         // const path = Platform.select({
         //     ios: 'hello.m4a',
@@ -451,6 +454,21 @@ class Bottom extends React.Component<Props, IState> {
         this.setState({
             recordSecs: 0,
         });
+        const dest = `${result}`;
+        // RNFS.copyFileAssets(result, dest)
+        // .then(() => {
+        //     console.log("opeeeeeeeeeeeeeeeeeeeen");
+            
+        //     FileViewer.open(dest)
+        // })
+        // .then(() => {
+        //    // success
+        // })
+        // .catch(error => {
+        //    /* */
+        //    console.log(error);
+           
+        // });
         // Alert.alert(
         //     "Finish recording",
         //     result,
@@ -468,7 +486,6 @@ class Bottom extends React.Component<Props, IState> {
     };
 
     renderBottomSheetHorizontal() {
-        console.log(":dijdioofihffoih");
 
         const config = {
             velocityThreshold: 0.3,
@@ -517,19 +534,21 @@ class Bottom extends React.Component<Props, IState> {
                                     }}>
                                     <Arrow fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    disabled={this.props.bottomReducer.activeIndex == 0}
-                                    onPress={() => {
-                                        console.log("left");
+                                {this.props.bottomReducer.activeIndex>0 &&
+                                 <TouchableOpacity
+                                 disabled={this.props.bottomReducer.activeIndex == 0}
+                                 onPress={() => {
+                                     console.log("left");
 
-                                        this.swipeLeft()
-                                    }}
-                                    style={{ height: 50, width: 50, marginTop: calcHeight(100), marginLeft: calcWidth(20) }}
-                                >
-                                    <Text style={{ fontSize: calcFontSize(40), justifyContent: 'center' }}>
-                                        {"<"}
-                                    </Text>
-                                </TouchableOpacity>
+                                     this.swipeLeft()
+                                 }}
+                                 style={{ height: 50, width: 50, marginTop: calcHeight(100), marginLeft: calcWidth(20) }}
+                             >
+                                 <Text style={{ fontSize: calcFontSize(40), justifyContent: 'center' }}>
+                                     {"<"}
+                                 </Text>
+                             </TouchableOpacity>}
+                               
                             </View>
                             <View>
                                 <View style={{ alignItems: 'center' }}>
@@ -801,6 +820,7 @@ class Bottom extends React.Component<Props, IState> {
                     <View
                         style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                     >
+                       {this.props.bottomReducer.activeIndex > 0 &&
                         <TouchableOpacity
                             disabled={this.props.bottomReducer.activeIndex == 0}
                             onPress={() => {
@@ -813,12 +833,13 @@ class Bottom extends React.Component<Props, IState> {
                             <Text style={{ fontSize: calcFontSize(40), justifyContent: 'center' }}>
                                 {"<"}
                             </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                         <View
                             style={{ height: calcHeight(323), justifyContent: 'center', alignItems: 'center', marginHorizontal: calcWidth(30) }}>
 
                             <SimpleImage size={calcHeight(257)} image={this.props.bottomReducer.playItem.im} />
                         </View>
+                        {this.props.bottomReducer.activeIndex < this.props.menuReducer.menuData.length - 1 &&
                         <TouchableOpacity style={{ height: 50, width: 50 }}
                             disabled={this.props.bottomReducer.activeIndex == this.props.menuReducer.menuData.length - 1}
                             onPress={() => {
@@ -830,7 +851,7 @@ class Bottom extends React.Component<Props, IState> {
                             <Text style={{ fontSize: calcFontSize(40), justifyContent: 'center' }}>
                                 {">"}
                             </Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity>}
                     </View>
                     {/* </GestureRecognizer> */}
                     <View style={{
@@ -861,8 +882,9 @@ class Bottom extends React.Component<Props, IState> {
                     </View>
                 </View>
                 <View style={{
-                    alignItems: 'center', marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
+                    marginTop: calcHeight(20), flexDirection: 'row', justifyContent: 'center',
                 }}>
+                    <View style={{ marginTop:calcHeight(11)}}>
                     <TouchableOpacity
                         onPress={() => {
                             if (this.state.isRecording) {
@@ -873,19 +895,23 @@ class Bottom extends React.Component<Props, IState> {
                             this.setState({ isRecording: !this.state.isRecording })
                         }}
                         style={[styles.btnrecord,
-                        { zIndex: 0, backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                        { zIndex: 0, backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45',}]}
                     >
                         {this.state.isRecording ?
                             <RecordSvg width={calcWidth(20)} height={calcWidth(20)} fill='#FF5050' /> :
                             <DisRecordSvg width={calcWidth(20)} height={calcWidth(20)} />
                         }
                     </TouchableOpacity>
+                    <Text style={[styles.recordingTime,{color:this.props.theme.backgroundColor == "white"?'#0F1E45':'white', }]}>
+                        {this.state.recordSecs>0?this.state.recordTime:''}
+                    </Text>
+                    </View>
                     {
                         this.state.loading ?
                             <View
 
                                 style={[styles.btnPlay,
-                                { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
+                                { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45',marginTop:calcHeight(5) }]}>
                                 <ActivityIndicator size="large" color="white" />
                             </View>
 
@@ -913,7 +939,7 @@ class Bottom extends React.Component<Props, IState> {
 
                                 }}
                                 style={[styles.btnPlay,
-                                { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
+                                { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45',marginTop:calcHeight(5)  }]}>
                                 {this.isPlayingMusic() ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
                                     <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
                             </TouchableOpacity>
@@ -921,7 +947,7 @@ class Bottom extends React.Component<Props, IState> {
 
                     <TouchableOpacity
                         disabled={!this.props.bottomReducer.playItem.pl}
-                        style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
+                        style={[styles.btnrecord, { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45',marginTop:calcHeight(10) }]}
                         onPress={() => {
                             this._navigatePlayList()
                         }}>
@@ -945,8 +971,8 @@ class Bottom extends React.Component<Props, IState> {
             console.log("chnageee");
 
             this.isPortrait();
-        });
-        console.log("this.props.menuReducer.filte", this.anim);
+        })
+        console.log(this.state.recordTime)
 
         return (
             // <SlidingUpPanel
@@ -974,7 +1000,6 @@ class Bottom extends React.Component<Props, IState> {
                 // allowDragging={this.state.headerHeight}
                 onDragStart={(p, t) => {
                     this.gestureSate = t;
-                    console.log("lllllllllllllllllll",t.moveX ,t.moveY);
 
                 }}
                 onDragEnd={(s, k) => {
@@ -984,7 +1009,6 @@ class Bottom extends React.Component<Props, IState> {
                         duration: 50,
                         useNativeDriver: true
                     }).start();
-                    console.log("eeeeennnnnndddd", s, k);
 
                 }}
                 onMomentumDragEnd={(position: number) => {
@@ -1307,5 +1331,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: calcWidth(80), zIndex: 1,
 
+    },
+    recordingTime:{
+        marginTop:calcHeight(10)
     }
 });

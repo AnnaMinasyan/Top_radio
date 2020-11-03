@@ -97,22 +97,27 @@ class Menu extends React.Component<IMenuProps, IState> {
         this.props.onchangeswipeablePanelActive(false)
     }
     checkIsFovorite(num: number) {
+        
         return this.props.favorites.includes(num)
     }
     _addLookingList(data: any) {
         getData("isLooking").then((lookList) => {
             let count = true
-            if (lookList) {
-                for (let index = 0; index < lookList.length; index++) {
-                    const element = lookList[index];
-                    if (element.id == data.id) {
-                        count = false
-                        break
-                    }
-                }
-                if (count) {
-                    lookList.push(data)
-                }
+            if (lookList.length>0) {
+                console.log(lookList);
+             for (let index = 0; index < lookList.length; index++) {
+                 const element = lookList[index];
+                 console.log(element.id==data.id);
+                 if(element.id==data.id){
+                     
+                     console.log(lookList.splice(index,1));
+                     
+                 }
+             }
+             lookList.push(data)
+ 
+            }else{
+                lookList.push(data)
             }
 
             storeData("isLooking", lookList).then(() => {
@@ -150,7 +155,8 @@ class Menu extends React.Component<IMenuProps, IState> {
                 title={data.item.pa}
                 image={data.item.im}
                 backColor={this.props.theme.backgroundColor}
-                addInFavorite={() => this.props.toaddfavorite(data.item)}
+                addInFavorite={() =>{ console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                 this.props.toaddfavorite(data.item)}}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableHighlight >
     }
@@ -174,7 +180,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     chouseList() {
         if (this.props.filterReducer.isActive == "looking") {
-            return this.state.lookingList
+            return this.state.lookingList.reverse()
         } else {
             return this.props.menuReducer.menuData
         }

@@ -60,7 +60,6 @@ class Genres extends React.Component<IGanresProps, IState> {
                 })
             }
         }
-        console.log("ganreeeeeeeeee",ganre);
         
         this.props.onchangeFilterDataByGenre(ganre)
     }
@@ -92,7 +91,7 @@ class Genres extends React.Component<IGanresProps, IState> {
                 <Header  
                 navigation={this.props.navigation}
                 onchnageSearchData={this.props.onchnageSearchData}
-
+              title={'Жанры'} 
                 />
                 {!this.props.ganresReducer.ganres?
                     <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>

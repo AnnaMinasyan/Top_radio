@@ -57,7 +57,7 @@ class App extends React.Component<Props, any> {
   }
   render() {
     return (
-      <Provider store={store}>
+      <Provider  store={store}>
        {/* <Navigator/> */}
    <MyApp/> 
       </Provider>

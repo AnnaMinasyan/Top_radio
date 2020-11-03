@@ -41,10 +41,6 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             dispatch(changePlayingMusic(true))
         })
     }
-    const timerSleep = () => {
-       console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk");
-       
-    }
     return (
         <SafeAreaView style={{ flex: 1, }}>
             <StatusBar barStyle='light-content' backgroundColor="#0F1E45" />

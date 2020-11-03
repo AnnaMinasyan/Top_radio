@@ -22,7 +22,6 @@ function* onGetPlayType({payload}:any) {
     if (autoplay) {
       yield  put(changePlayingMusic(true))
 
-        console.log("fhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         yield    player._startPlayMusic(payload,data.playList[0])
     }
  

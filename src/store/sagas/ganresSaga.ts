@@ -7,7 +7,6 @@ import {setGanres} from "../actions/ganresAction"
 
 function* getGanresData() {
 	try {
-		console.log('saga getCitiesData');
 
 		const data= yield auth.getGanres()
 		

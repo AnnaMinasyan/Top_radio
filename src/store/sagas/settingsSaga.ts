@@ -29,7 +29,6 @@ function* changingBufferSize(payload:any) {
     
 }
 function* changeIsOnheadsets(payload:any) {
-    console.log(" changingBufferSize(payload:string)",payload);
     
         yield put(setIsOnheadsets(payload.payload));
     

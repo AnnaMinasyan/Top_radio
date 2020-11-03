@@ -7,7 +7,6 @@ import {setCities} from "../actions/citiesAction"
 
 function* getCitiesData() {
 	try {
-		console.log('saga getCitiesData');
 
 		const data= yield auth.getCities()
 		//console.log("dataaaa",data);

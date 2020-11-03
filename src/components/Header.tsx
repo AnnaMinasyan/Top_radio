@@ -4,8 +4,9 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  BackHandler,
-  Linking
+  
+  Linking,
+
 } from 'react-native';
 import Menu from "../assets/icons/menu.svg"
 import Logo from "../assets/icons/logo.svg"
@@ -32,7 +33,8 @@ interface Props {
   onchnageSearchData(type: any): void;
   theme:any
   type:boolean,
-  menuReducer:any
+  menuReducer:any,
+  title?:string
 }
 interface IState {
   hideMenuModal: boolean,
@@ -50,11 +52,13 @@ class Header extends React.Component<Props, IState> {
     }
 
   }
-
+ 
   hideMenuModal() {
     return <Modal
-      style={{ position: 'absolute', top: calcHeight(30), right: calcWidth(8), backgroundColor: 'rgba(0, 0, 0, 0.25)' }}
+      style={{ position: 'absolute', top: calcHeight(30), right: calcWidth(8),  }}
       onBackdropPress={() => { this.setState({ hideMenuModal: false }) }}
+      onRequestClose={() => this.setState({ hideMenuModal: false })}
+
       isVisible={this.state.hideMenuModal}>
       <View style={[styles.modal,{backgroundColor:this.props.theme.backgroundColor,}]}>
         <TouchableOpacity
@@ -117,9 +121,10 @@ class Header extends React.Component<Props, IState> {
   
   }
   renderTitle(){
+    
     return<View>
-      {this.props.type?<View>
-        <Text numberOfLines={1} style={styles.title}>{this.props.menuReducer.headertext}</Text>
+      {this.props.type || this.props.title?<View>
+        <Text numberOfLines={1} style={[styles.title,{marginLeft:this.props.title?calcWidth(20):0}]}>{this.props.title?this.props.title:this.props.menuReducer.headertext}</Text>
         </View>: <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(13), }} />}
     </View>
   }

@@ -15,8 +15,7 @@ import { IPlayListProps, ICitiesConnect } from "../Interface"
 import { getPlayList } from '../store/actions/playlistAction'
 import HeaderByBack from "../components/HeaderByBack"
 import { connect } from "react-redux"
-import Arrow from "../assets/icons/arrow_back.svg"
-// import TrackPlayer from 'react-native-track-player';
+import moment from 'moment-timezone';
 
 interface IState {
     filterType: string
@@ -37,8 +36,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
     render() {
         
     const list=this.props.playListReducer.playList && this.props.playListReducer.trackList? this.state.filterType=='playList'?this.props.playListReducer.trackList:this.props.playListReducer.playList:[]
-    
-       
+
     return (
         <ScrollView  style={{ backgroundColor: this.props.theme.backgroundColor}}  >
             <View style={{ backgroundColor: this.props.theme.backgroundColor}}>
@@ -66,11 +64,14 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                 </View>:
                 
                     <View>
-                        {list.map((data: any) => {
-                            //return console.log(data);
+                        {list.map((data: any,index:number) => {
+                            //return 
+                            console.log(    data.date
+                                
+                            );
                             
                             return (
-                                <View style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
+                                <View key={index} style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
                                     <View style={styles.elementsRow}>
                                         <Text style={[styles.elementTitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>{data.song}</Text>
                                         <Text style={styles.elementAuther}>{data.artist}</Text>
@@ -79,7 +80,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                                         {
                                             this.state.filterType == 'playList'? 
                                             <Text style={styles.elementCount}>{data.count}</Text>:
-                                            <Text style={styles.elementCount}>{data.date.split(' ')[1]}</Text>
+                                            <Text style={styles.elementCount}>{moment.utc(data.date).local().format("HH:mm")}</Text>
                                             
                                         }
                                        

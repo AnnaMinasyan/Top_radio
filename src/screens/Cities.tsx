@@ -85,6 +85,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
                    
             <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
                 <Header  navigation={this.props.navigation}
+                title={'Города'} 
                      onchnageSearchData={this.props.onchnageSearchData} />
               {
                  ! this.props.citiesReducer.cities?

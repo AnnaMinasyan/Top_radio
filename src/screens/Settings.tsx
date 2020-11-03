@@ -74,7 +74,7 @@ class Settings extends React.Component<ISettings, IState> {
       data: new Date(1598051730000),
       isEnabled: true,
       visibleModal: null,
-      theme: 'Светлая',
+      
       bufferSize: [
         {
           title: '500 ms',
@@ -109,7 +109,7 @@ class Settings extends React.Component<ISettings, IState> {
           this.props.onchangeBackgroundColor(true)
           this.setState({
             visibleModal: null,
-            theme: 'Тёмная'
+          
           })
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -123,7 +123,7 @@ class Settings extends React.Component<ISettings, IState> {
           this.props.onchangeBackgroundColor(false)
           this.setState({
             visibleModal: null,
-            theme: 'Светлая'
+        
           })
         }}
         style={[styles.modalThemeBtn, { backgroundColor: 'white' }]}
@@ -449,7 +449,7 @@ class Settings extends React.Component<ISettings, IState> {
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Выбрать тему
             </Text>
-              <Text style={[global_styles.stationComment]}>{this.state.theme}</Text>
+              <Text style={[global_styles.stationComment]}>{this.props.theme.backgroundColor=='white'?'Светлая':'Тёмная'}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />

@@ -29,7 +29,6 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
     switch (action.type) {
 
         case BottomType.SET_PLAY_ITEM:
-            console.log(Date.now());
 
             return { ...state, playItem: action.payload,activeBi:action.payload.st[0].bi }
         case BottomType.SET_PLAY_ITEM_ARTIST_SONG:

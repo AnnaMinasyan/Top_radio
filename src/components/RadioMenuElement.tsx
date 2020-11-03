@@ -51,7 +51,7 @@ add(){
            onPress={()=>{
               this.add()
            }}
-           style={{ height:calcHeight(50),width:calcWidth(70),justifyContent:'center', alignItems:'center'}}
+           style={{ height:calcHeight(50),width:calcWidth(70),justifyContent:'center', alignItems:'center',}}
            >
            {this.props.isFavorite?
     

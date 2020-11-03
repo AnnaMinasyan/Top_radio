@@ -7,7 +7,6 @@ export const initTimerSleep = (toDo: () => void) => {
     let repeat = 0
     getData('timerSleep').then((data) => {
         if (data) {
-            console.log(data);
              let f = new Date(data);
          
 

@@ -22,7 +22,7 @@ class PlayerServices implements IDATA {
     }
     open() {
         if(this.playerRef)
-            this.playerRef.show()
+            this.playerRef.showFull()
             else 
        {     setTimeout(() => {
            console.log("pppppppppppp");
@@ -33,7 +33,7 @@ class PlayerServices implements IDATA {
             // setTimeout(this.open, 500);
     }
     close() {
-        this.playerRef.hide()
+        this.playerRef.showMini()
     
     }
     changeopenpanel(){

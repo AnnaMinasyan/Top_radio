@@ -75,4 +75,5 @@ export enum BottomType {
     SET_ACTIVE_INDEX = '@bottomtypes/SET_ACTIVE_INDEX',
     SET_ACTIVE_BI = '@bottomtypes/SET_ACTIVE_BI',
     CHANGE_ACTIVE_BI = '@bottomtypes/CHANGE_ACTIVE_BI',
+    GET_SONG_DATA = '@bottomtypes/GET_SONG_DATA',
 }

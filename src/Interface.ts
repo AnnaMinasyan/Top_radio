@@ -7,11 +7,12 @@ import { NavigationScreenProp } from 'react-navigation';
     onchnageSearchData(type:any):void;
     onchangeActiveIndex(type:number):void;
     onchangeActiveBi(type:number):void;
-
+    get_songData(payload: any): void;
     toaddfavorite(type:any):void;
     ongetMenuData():void;
     onchangeSwiperData(payload:any):void; 
     onchangeplayItem(payload:any):void; 
+    get_songData(payload:any):void; 
     ongetFavorites(payload:any):void; 
     onchangeswipeablePanelActive(payload:boolean):void; 
     onchangePlayingMusic(payload:boolean):void;

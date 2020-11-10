@@ -16,16 +16,20 @@ function* onGetPlayType({payload}:any) {
     try {
         yield put(setplayItem(payload))
         yield put(setActiveBi(payload.st[0].bi))	
-        const data= yield auth.getPlayItemType(payload.pl)	
+	} catch (ex) {
+		console.log(ex);
+	}
+}
+function* onGetSongData({payload}:any) {	
+    try {
+            const data= yield auth.getPlayItemType(payload.pl)	
       yield put(setplayItemArtistandSong(data.playList[0]))
      const  autoplay =yield getData("autoPlay")
-    if (autoplay) {
-      yield  put(changePlayingMusic(true))
-
-        yield    player._startPlayMusic(payload,data.playList[0])
-    }
+     if (autoplay) {
+       yield  put(changePlayingMusic(true))
  
-   
+         yield    player._startPlayMusic(payload,data.playList[0])
+     }
 	} catch (ex) {
 		console.log(ex);
 	}
@@ -83,6 +87,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_ACTIVE_BI as any,
 		onchangeActiveBi
+    )
+    yield takeEvery(
+        BottomType.GET_SONG_DATA as any,
+		onGetSongData
 	)
 }
 

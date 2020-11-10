@@ -1,6 +1,5 @@
 import {BottomType} from "../constants"
 export const changeplayItem = (payload: any) => {
-	console.log("changeplayItem",payload);
 		
 	return {
 		type: BottomType.CHANGE_PLAY_ITEM,
@@ -68,6 +67,16 @@ export const changeActiveBi = (payload: number) => {
 
 	return {
 		type: BottomType.SET_ACTIVE_BI,
+		payload
+
+	};
+};
+export const getSongData = (payload: any) => {
+console.log('payload',payload);
+
+
+	return {
+		type: BottomType.GET_SONG_DATA,
 		payload
 
 	};

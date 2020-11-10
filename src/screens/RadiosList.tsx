@@ -29,7 +29,7 @@ import {    changeplayItem,
     changePlayingData,
     changeActiveIndex,
         changeActiveBi,
-
+        getSongData
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
@@ -132,7 +132,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 
                 this.props.onchangeplayItem(data.item)
               this.props.onchangeActiveIndex(data.index)
-
+this.props.get_songData(data.item)
                //this.props.onchangePlayingData(data.item)
                 player.open()
                // this.props.onchangePlayingMusic(false)
@@ -165,7 +165,8 @@ class Menu extends React.Component<IMenuProps, IState> {
 
             onPress={() => {
                              
-                
+                this.props.get_songData(data.item)
+
                 this.props.onchangeplayItem(data.item)
             /// this.props.onchangeActiveIndex(data.item.st[0].bi)
                 let swiper: any = []
@@ -276,6 +277,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangePlayingData: (payload: any) => {
             dispatch(changePlayingData(payload))
+        },
+        get_songData: (payload: any) => {
+            dispatch(getSongData(payload))
         },
     }
 }

@@ -28,7 +28,8 @@ import {
 } from '../store/actions/filterAction'
 import {    changeplayItem,
     changePlayingData,
-    changeActiveIndex
+    changeActiveIndex,
+    getSongData
 } from "../store/actions/bottomAction";
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
@@ -120,6 +121,7 @@ _addLookingList(data:any){
                  
             this.props.onchangeplayItem(data.item)
             this.props.onchangeActiveIndex(data.index)
+            this.props.get_songData(data.item)
 
              //this.props.onchangePlayingData(data.item)
               player.open()
@@ -141,7 +143,7 @@ _addLookingList(data:any){
                
             this.props.onchangeplayItem(data.item)
             this.props.onchangeActiveIndex(data.index)
-
+this.props.get_songData(data.item)
              //this.props.onchangePlayingData(data.item)
               player.open()
               this._addLookingList(data.item)
@@ -238,6 +240,10 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeSwiperData: (payload: number) => {
             dispatch(changeSwiperData(payload))
+        },
+        
+        get_songData: (payload: any) => {
+            dispatch(getSongData(payload))
         },
     }
 }

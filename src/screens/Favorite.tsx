@@ -17,7 +17,8 @@ import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import {    changeplayItem,
-    changePlayingData
+    changePlayingData,
+    getSongData
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
@@ -37,7 +38,7 @@ import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
 import {
     getMenuData,
-    changeActiveIndex,
+  
     
     changeSwiperData
 } from '../store/actions/menuActions'
@@ -104,6 +105,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 //this.props.onchangePlayingData(data.item)
                this._addLookingList(data.item)
                this.props.onchangeplayItem(data.item)
+               this.props.get_songData(data.item)
                 this.props.onchangeActiveIndex(data.index)
                 player.open()
 
@@ -133,6 +135,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
            
                this._addLookingList(data.item)
                this.props.onchangeplayItem(data.item)
+               this.props.get_songData(data.item)
+
                 this.props.onchangeActiveIndex(data.item.st[0].bi)
                 player.open()
                this.props.onchangePlayingMusic(false)
@@ -210,8 +214,9 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangePlayingData: (payload: any) => {
             dispatch(changePlayingData(payload))
         },
-        onchangeActiveIndex: (payload: number) => {
-            dispatch(changeActiveIndex(payload))
+       
+        get_songData: (payload: any) => {
+            dispatch(getSongData(payload))
         },
     }
 }

@@ -419,9 +419,7 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    onchangeplayItem: (payload: boolean) => {
-      dispatch(changeplayItem(payload))
-    },
+   
     onchnageSearchData: (payload: any) => {
       dispatch(changeSearchData(payload))
     },

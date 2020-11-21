@@ -7,13 +7,18 @@ import {
     PanResponder,
     Dimensions,
     LayoutAnimation,
-    TouchableOpacity
+    TouchableOpacity,
+    Animated,
+    ImageBackground
 } from 'react-native';
 
 import Arrow from "../assets/icons/arrow.svg"
 import RedHeart from "../assets/icons/redHeart.svg"
 import Heart from "../assets/icons/heart.svg"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight, deviceWidth } from "../assets/styles/dimensions"
+import auth from '../services/api/auth';
+import SimpleImage from "../components/SimpleImage"
+import BackSvg from "../assets/icons/backgraundHorizontal.svg"
 
 const MARGIN_TOP = Platform.OS === 'ios' ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get('window').height - MARGIN_TOP;
@@ -31,7 +36,8 @@ type Props = {
     checkIsFovorite?: () => void,
     backgroundColor: String,
     bottomReducer: any,
-    animation?: 'linear' | 'spring' | 'easeInEaseOut' | 'none'
+    animation?: 'linear' | 'spring' | 'easeInEaseOut' | 'none',
+    orientation:String
 };
 export default class SwipeUpDown extends Component<Props> {
     static defautProps = {
@@ -43,7 +49,7 @@ export default class SwipeUpDown extends Component<Props> {
             collapsed: true
         };
         this.disablePressToShow = props.disablePressToShow;
-        this.SWIPE_HEIGHT = props.swipeHeight || 60;
+        this.SWIPE_HEIGHT = props.swipeHeight ;
         this._panResponder = null;
         this.top = this.SWIPE_HEIGHT;
         this.height = this.SWIPE_HEIGHT;
@@ -150,69 +156,123 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     render() {
+        console.log("this.props.checkIsFovorite()",this.props.checkIsFovorite());
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (
             <View
                 ref={ref => (this.viewRef = ref)}
-               
+
                 style={[
                     styles.wrapSwipe,
                     {
-                        height: this.SWIPE_HEIGHT,
-                        marginTop: MARGIN_TOP
+                        height: calcHeight(86),
+                        marginTop: MARGIN_TOP,
                     },
                     !itemMini && collapsed && { marginBottom: -200 },
                     style
                 ]}
             >
+                <View >
 
-                {collapsed ? (
-                    itemMini ? (
 
-                        itemMini
+                    <View >
+                        <Animated.View style={[styles.bottomHeader, {
+                            backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
 
-                    ) : null
-                ) : (
-                        null
-                    )}
-                {  <View
-                    style={{
-                        backgroundColor: this.props.backgroundColor,
-                        height: deviceHeight + 10, width: deviceWidth + 10,
-                        zIndex: 1,
-
-                    }}>
-                    <View style={{ flexDirection: 'row',width:'100%', justifyContent:'space-between' }}
-                        onTouchEnd={() => {
-                            console.log("sdpkawspfjep'''''''jjjjjjjjjjjjjjjjjjjjjjj");
-                            this.props.closed()
-
-                        }}>
-                        <View
- {...this._panResponder.panHandlers}
-                            style={[styles.bottomSheet, { height: calcHeight(50), }]}>
-                            <TouchableOpacity
-
+                        }, {
+                            opacity: this.props.anim // Bind opacity to animated value
+                        }]}>
+                            <View
+                                {...this._panResponder.panHandlers}
+                                onTouchStart={() => { }}
                                 style={{
-                                    paddingLeft: calcWidth(26),
-                                    height: calcHeight(80),
-                                    //  justifyContent: 'center',
-                                    width: calcWidth(80),
-                                    //   borderWidth:1
+                                    height: calcHeight(86), width: '70%',
 
-                                }}
+                                    backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+                                }}>
+                                <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
+
+                                    <View style={{ flexDirection: 'row', }}  >
+                                        <SimpleImage size={calcWidth(47)} image={this.props.bottomReducer.selectedRadioStation.data.im} />
+                                        <View style={{ marginLeft: calcHeight(15) }}>
+                                            <Text style={[styles.txtTitle, { color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white', }]}>{this.props.bottomReducer.selectedRadioStation.data.pa}</Text>
+                                            {this.props.bottomReducer.selectedRadioStation.playingSong ? <Text
+                                                style={[styles.txtTitle,
+                                                { fontSize: calcFontSize(12), marginTop: calcHeight(5), width: calcWidth(200), color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>
+                                                {this.props.bottomReducer.selectedRadioStation.playingSong.artist} {this.props.bottomReducer.selectedRadioStation.playingSong.song}</Text> : null}
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                            {itemMini}
+                        </Animated.View>
+                    </View>
+
+
+                </View>
+
+                { this.props.orientation=="landscape" ?
+                <ImageBackground
+                resizeMode='stretch'
+
+                style={{ 
+                    backgroundColor: this.props.backgroundColor,
+                    alignItems:'center',height:60
+                
+         }}
+                source={require('../assets/images/img1.png')}>
+              
+                      <View  {...this._panResponder.panHandlers} style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55,}}
+                       >
+                        <View
+                            onTouchEnd={() => {
+                                console.log("sdpkawspfjep'''''''jjjjjjjjjjjjjjjjjjjjjjj");
+                                this.showMini() 
+                            
+                            }}
+                            style={[styles.bottomSheet, { height: calcHeight(40),width:calcWidth(50) }]}>
+                            <TouchableOpacity
+ 
+                                style={styles.bottomSheet}
                             >
                                 <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
                             </TouchableOpacity>
 
                         </View>
+                        <View style={{ width: '60%', flexDirection:'row'}}  >
+                        <View style={{ alignItems: 'center' }}>
+                                    {this.props.bottomReducer.swiperShowRadiostation ? <Text 
+                                    numberOfLines={1} style={{
+                                        color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                        fontSize: calcFontSize(20),
+                                        fontWeight: '500',
+                                        width:calcWidth(200),
+                                    }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
+                                </View>
+                                {this.props.bottomReducer.playingMusicArtistSong ?
+                                        <Text
+
+                                            style={{
+                                                color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                                fontSize: calcFontSize(15),
+                                              width:calcWidth(300),
+                                                alignItems: 'center',
+                                                paddingLeft: calcWidth(25),
+                                                justifyContent:'center',
+                                                paddingTop:calcHeight(5),
+                                                backgroundColor:'red'
+                                            }}>
+                                            {this.props.bottomReducer.playingMusicArtistSong.artist}  {this.props.bottomReducer.playingMusicArtistSong.song}
+                                        </Text> : null}
+                        </View>
                         <TouchableOpacity
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                height: calcHeight(70),
-                                width: calcWidth(80),
+                                height: calcHeight(40),
+                                width: '15%',
+                                borderWidth:1
                             }}
                             onPress={() => {
                                 this.props.toaddfavorite()
@@ -222,8 +282,69 @@ export default class SwipeUpDown extends Component<Props> {
                                 <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                         </TouchableOpacity>
                     </View>
-                    {itemFull}
+             
+                </ImageBackground>
+                :<View
+
+                    style={{
+                        backgroundColor: this.props.backgroundColor,
+                      
+                        zIndex: 1,
+
+                    }}>
+                    <View  {...this._panResponder.panHandlers} style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', }}
+                       >
+                        <View
+                            onTouchEnd={() => {
+                                console.log("sdpkawspfjep'''''''jjjjjjjjjjjjjjjjjjjjjjj");
+                                this.showMini() 
+                            
+                            }}
+                            style={[styles.bottomSheet, { height: calcHeight(50), backgroundColor: this.props.backgroundColor }]}>
+                            <TouchableOpacity
+ 
+                                style={styles.bottomSheet}
+                            >
+                                <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
+                            </TouchableOpacity>
+
+                        </View>
+                        <View style={{ width: '55%', backgroundColor:this.props.backgroundColor }}  >
+                        </View>
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: calcHeight(70),
+                                width: '20%',
+                                borderWidth:1
+                            }}
+                            onPress={() => {
+                                console.log("::::::::::::::::::::::::::::::::::::::");
+                                this.props.toaddfavorite()
+                            }}>
+                            {this.props.checkIsFovorite() ?
+                                <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
+                                <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
+                        </TouchableOpacity>
+                    </View>
+                    <View
+
+                        style={{ justifyContent: 'center', alignItems: 'center', }}>
+                        {this.props.bottomReducer.swiperShowRadiostation ?
+                            <Text
+                            numberOfLines={1}
+                             style={{
+                                color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                fontSize: calcFontSize(24),
+                                fontWeight: '500',
+                              width:calcWidth(250),
+                              textAlign:'center'
+                            }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
+                    </View>
+                    
                 </View>}
+                {itemFull}
             </View>
         );
     }
@@ -234,16 +355,32 @@ const styles = StyleSheet.create({
 
         backgroundColor: '#ccc',
         position: 'absolute',
-        bottom: -20,
+        bottom: 0,
         left: 0,
         right: 0
     },
     bottomSheet: {
-        height: calcHeight(30),
+        height: calcHeight(50),
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: calcHeight(20),
-        width: '80%'
+        justifyContent: 'center',
+paddingTop:calcHeight(5),
+        width: '15%'
     },
+    bottomHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: calcWidth(12),
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 9,
+        },
+        shadowOpacity: 0.50,
+        shadowRadius: 12.35,
+        elevation: 25,
+        marginTop: calcHeight(-28),
+      //  paddingTop:calcHeight(10)
+    },
+
 });

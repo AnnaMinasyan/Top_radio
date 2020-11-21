@@ -1,96 +1,151 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { BottomType } from '../constants';
 import auth from "../../services/api/auth"
-import {setplayItem,
+import {
+    setplayItem,
     setplayItemArtistandSong,
     setPlayingData,
     setActiveIndex,
-    setActiveBi
+
+    setSelectedRadioStation,
+    setSelectedRadioStationPlaying,
+    setSwiperShowStation,
+    setSwiperPlayingSong,
+    setSwiperActiveBi
 } from "../actions/bottomAction";
 
-import {changePlayingMusic} from "../actions/filterAction"
+import { changePlayingMusic } from "../actions/filterAction"
 import player from "../../services/player/PlayerServices"
 import { storeData, getData } from "../../utils/local_storage"
 
-function* onGetPlayType({payload}:any) {	
+function* onGetPlayType({ payload }: any) {
     try {
         yield put(setplayItem(payload))
-        yield put(setActiveBi(payload.st[0].bi))	
-	} catch (ex) {
-		console.log(ex);
-	}
+    } catch (ex) {
+        console.log(ex);
+    }
 }
-function* onGetSongData({payload}:any) {	
+function* addselectedRadioStation({ payload }: any) {
     try {
-            const data= yield auth.getPlayItemType(payload.pl)	
-      yield put(setplayItemArtistandSong(data.playList[0]))
-     const  autoplay =yield getData("autoPlay")
-     if (autoplay) {
-       yield  put(changePlayingMusic(true))
- 
-         yield    player._startPlayMusic(payload,data.playList[0])
-     }
-	} catch (ex) {
-		console.log(ex);
-	}
-}
-function* onChangePlayingData({payload}:any) {	
-    try {
-       	
-        yield put(setPlayingData(payload))	
-	} catch (ex) {
-		console.log(ex);
-	}
-}
-function* onChangeplayItemArtistandSon({payload}:any) {	
-    try {
-        const data= yield auth.getPlayItemType(payload.pl)	
+        const data = yield auth.getPlayItemType(payload.data.pl)
+        console.log(data);
+        let station = payload
+        station.activeBi=payload.data.st[0]
+        station.playingSong = data.playList[0]
+        console.log("station", station);
 
-        yield put(setplayItemArtistandSong(data.playList[0]))	
-	} catch (ex) {
-		console.log(ex);
-	}
+        yield put(setSelectedRadioStation(station))
+
+    } catch (ex) {
+        console.log(ex);
+    }
 }
-function* onchangeActiveIndex({payload}:any) {	
+function* changeSelectedRadioStationPlaying({ payload }: any) {
+    try {
+        yield put(setSelectedRadioStationPlaying(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
+}
+function* changeSwiperActiveBi({ payload }: any) {
+    try {
+        yield put(setSelectedRadioStationPlaying(false))
+        yield put(setSwiperActiveBi(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
+}
+function* onGetSongData({ payload }: any) {
+    try {
+        const res = yield auth.getPlayItemType(payload.data.pl)
+     
+       yield put(setSwiperPlayingSong(res.playList[0]))
+        const autoplay = yield getData("autoPlay")
+
+        if (autoplay) {
+            yield put(changePlayingMusic(true))
+
+            yield player._startPlayMusic(payload, data.playList[0])
+        }
+    } catch (ex) {
+        console.log(ex);
+    }
+}
+function* onChangePlayingData({ payload }: any) {
     try {
 
-        yield put(setActiveIndex(payload))	
-	} catch (ex) {
-		console.log(ex);
-	}
+        yield put(setPlayingData(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
 }
-function* onchangeActiveBi({payload}:any) {	
+function* onChangeplayItemArtistandSon({ payload }: any) {
+    try {
+        const data = yield auth.getPlayItemType(payload.pl)
+
+        yield put(setplayItemArtistandSong(data.playList[0]))
+    } catch (ex) {
+        console.log(ex);
+    }
+}
+function* onchangeActiveIndex({ payload }: any) {
     try {
 
-        yield put(setActiveBi(payload))	
-	} catch (ex) {
-		console.log(ex);
-	}
+        yield put(setActiveIndex(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
 }
+function* changeSwiperShowStation({ payload }: any) {
+    try {
+
+        yield put(setSwiperShowStation(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
+}
+
 export function* watchBottomType() {
-	yield takeEvery(
+    yield takeEvery(
         BottomType.CHANGE_PLAY_ITEM as any,
-		onGetPlayType
-	)
-	yield takeEvery(
+        onGetPlayType
+    )
+    yield takeEvery(
         BottomType.CHANGE_PLAYING_DATA as any,
-		onChangePlayingData
+        onChangePlayingData
     )
     yield takeEvery(
         BottomType.CHANGE_PLAY_ITEM_ARTIST_SONG as any,
-		onChangeplayItemArtistandSon
-    ) 
+        onChangeplayItemArtistandSon
+    )
     yield takeEvery(
         BottomType.CHANGE_ACTIVE_INDEX as any,
-		onchangeActiveIndex
+        onchangeActiveIndex
     )
-    yield takeEvery(
-        BottomType.CHANGE_ACTIVE_BI as any,
-		onchangeActiveBi
-    )
+    
     yield takeEvery(
         BottomType.GET_SONG_DATA as any,
-		onGetSongData
-	)
+        onGetSongData
+    )
+    yield takeEvery(
+        BottomType.CHANGE_SELECTED_RADIOSTATION as any,
+        addselectedRadioStation
+    )
+    yield takeEvery(
+        BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC as any,
+        changeSelectedRadioStationPlaying
+    )
+    yield takeEvery(
+        BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC as any,
+        changeSelectedRadioStationPlaying
+    )
+    yield takeEvery(
+        BottomType.CHANGE_SWIPERSHOW_RADIOSTATION as any,
+        changeSwiperShowStation
+    )
+    yield takeEvery(
+        BottomType.CHANGE_SWIPERSHOW_RADIOSTATION_ACTIVEBI as any,
+        changeSwiperActiveBi
+    )
 }
 

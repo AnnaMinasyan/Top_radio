@@ -13,45 +13,47 @@ import { changeplayItem } from './store/actions/bottomAction';
 import Intro from "./screens/Intro"
 import Buttom from './components/Bottom';
 import SlidingUpPanel from 'rn-sliding-up-panel';
-import {init} from './utils/createAlarmClock'
-import {initTimerSleep} from  './utils/timer_sleep'
+import { init } from './utils/createAlarmClock'
+import { initTimerSleep } from './utils/timer_sleep'
 import { getData, storeData } from "./utils/local_storage"
 import { _startPlayMusic } from "./utils/playMusic"
+import { Dimensions } from 'react-native';
 interface Props {
     onchangeswipeablePanelActive(payload: boolean): void;
     filterReducer: any,
     navigation: NavigationScreenProp<any, any>,
 }
 const MyApp: React.FunctionComponent<Props> = (props) => {
-    const [animeted, setanimeted] = useState<boolean | null>(false)
-    const [isPlayingMusic, setisPlayingMusic] = useState<boolean>(false)
-    const activeitem = useSelector(playItemSelector)
     const dispatch = useDispatch()
-    const bs: any = React.createRef()
+    const [width, setWidth] = useState<number>(Dimensions.get('window').width)
+    const [height, setHeight] = useState<number>(Dimensions.get('window').height)
     useEffect(() => {
-        const data = new Date()
         dispatch(initFavorites())
         dispatch(initMenuType())
         dispatch(initAutoPlay())
     }, [])
     const changeActivePanel = () => {
         getData('alarmClock').then((time) => {
-            dispatch(changeswipeablePanelActive(false))
             dispatch(changeplayItem(time.playItem))
             dispatch(changePlayingMusic(true))
         })
     }
+    Dimensions.addEventListener('change', (value: any) => {
+      
+        setHeight(value.window.height)
+        setWidth(value.window.width)
+    })
+    useEffect(()=>{
+        console.log(width,height);
+    },[width,height])
+
+    
     return (
         <SafeAreaView style={{ flex: 1, }}>
             <StatusBar barStyle='light-content' backgroundColor="#0F1E45" />
-           
-            {/* <Intro/> */}
             <Navigator />
-            {/* {animeted? */}
-            {/* <Buttom/> */}
-        {/* :null}   */}
-           { init(changeActivePanel) } 
-           {/* {initTimerSleep(timerSleep)} */}
+            { init(changeActivePanel)}
+            {/* {initTimerSleep(timerSleep)} */}
         </SafeAreaView>
     );
 };

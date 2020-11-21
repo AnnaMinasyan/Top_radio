@@ -155,7 +155,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
         console.log(list);
         
         return (
-            <SafeAreaView >
             <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
                 
                     <Header 
@@ -184,7 +183,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
                    // </View>
                 :null} 
             </View>
-            </SafeAreaView>
         );
     }
 };

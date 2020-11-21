@@ -39,19 +39,19 @@ class PlayerServices implements IDATA {
     changeopenpanel(){
        this.isopenpanel=true
     }
-    async _startPlayMusic(music:any,title:any) {
+    async _startPlayMusic(music:any,activeBi:any) {
         const playerState = await TrackPlayer.getState();
-        console.log("----------------------------", playerState, music.st[0].ur);
+        console.log("----------------------------", activeBi);
         if (
             playerState != 0
         ) {
-            console.log('destroying..', music.st[0].ur);
+            console.log('destroying..', music.st);
             await TrackPlayer.reset();
             await TrackPlayer.add({
                 id: "local-track",
-                url: music.st[0].ur,
-                title: title.song,
-                artist: title.artist,
+                url: activeBi.ur,
+                title: music.pa,
+                artist: '',
                 artwork: 'https://top-radio.ru/assets/image/radio/180/' + music.im,
             });
             await TrackPlayer.play();

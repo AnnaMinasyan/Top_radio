@@ -38,7 +38,7 @@ import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import { addFavorites } from '../store/actions/favoritesActions';
-import Bottom from "../components/Bottom"
+import BottomSwiper from "../components/BottomSwiper"
 
 
 interface IState {
@@ -164,8 +164,8 @@ this.props.get_songData(data.item)
  const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
  
         return (
-            <SafeAreaView style={{ backgroundColor: this.props.theme.backgroundColor }}>
-        {/* //    <View style={styles.container}> */}
+            
+    
                 <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor }]}>
                     <Header navigation={this.props.navigation} type={true} />
 
@@ -191,15 +191,14 @@ this.props.get_songData(data.item)
                         }
   {this.props.bottomReducer.playItem?
                     //<View style={styles.bottomView}>
-                        <Bottom/>
+                        <BottomSwiper/>
                    // </View>
                 :<View/>} 
 
                 </View>
              
 
-            {/* </View> */}
-            </SafeAreaView>
+         
         );
     }
 };

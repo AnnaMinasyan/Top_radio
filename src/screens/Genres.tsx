@@ -85,7 +85,7 @@ class Genres extends React.Component<IGanresProps, IState> {
         const list=this.props.ganresReducer.ganres?this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]      
        
         return (
-            <SafeAreaView style={{ height: '100%' }}>
+           
 
             <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
                 <Header  
@@ -107,7 +107,7 @@ class Genres extends React.Component<IGanresProps, IState> {
                     /> 
                 }
             </View>
-            </SafeAreaView>
+           
         );
     }
 };

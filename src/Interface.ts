@@ -1,7 +1,8 @@
 import { NavigationScreenProp } from 'react-navigation';
 
  export interface IMenuProps {
-    styleView:boolean;
+    styleView:boolean;  
+    onchangeSelectedRadioStation(payload:any):void; 
     onchangePlayingData(type:any):void;
     ongetPlayTrackList(type:any):void;
     onchnageSearchData(type:any):void;

@@ -5,14 +5,23 @@ interface IReduxAction<T> {
     type: T;
     payload: any;
 }
-
+interface ISelectedRadioStation {
+    data: any,
+    isPlayingMusic: boolean,
+    activeBi: any,
+    id: number,
+    playingSong: any
+}
 export interface IBottomState {
 
     playItem: any,
     playingMusicArtistSong: any,
     playMusicData: any,
     activeIndex: number,
-    activeBi:number
+    activeBi: number,
+
+    selectedRadioStation: ISelectedRadioStation | null,
+    swiperShowRadiostation: ISelectedRadioStation | null,
 }
 
 
@@ -21,16 +30,43 @@ export const initialState: IBottomState = {
     playingMusicArtistSong: {},
     playMusicData: {},
     activeIndex: 0,
-    activeBi:0
+    activeBi: 0,
+    selectedRadioStation: null,
+    swiperShowRadiostation: null
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
-   // console.log(action.type)
+    
     switch (action.type) {
+        case BottomType.SET_SELECTED_RADIOSTATION:
+            console.log('action.payload');
+
+            return { ...state, selectedRadioStation: action.payload, swiperShowRadiostation: action.payload }
+        case BottomType.SET_SWIPERSHOW_RADIOSTATION:
+
+            return { ...state, swiperShowRadiostation: action.payload }
+        case BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC:
+
+            return { ...state, selectedRadioStation: { ...state.selectedRadioStation, isPlayingMusic: action.payload } }
+        case BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG:
+
+            return { ...state, swiperShowRadiostation: { ...state.swiperShowRadiostation, playingSong: action.payload } }
+
+        case BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI:
+console.log("action.payload,",action.payload);
+
+            return { ...state, selectedRadioStation: { ...state.selectedRadioStation, activeBi: action.payload } }
+
+
+
+
+
+
+
 
         case BottomType.SET_PLAY_ITEM:
 
-            return { ...state, playItem: action.payload,activeBi:action.payload.st[0].bi }
+            return { ...state, playItem: action.payload, activeBi: action.payload.st[0].bi }
         case BottomType.SET_PLAY_ITEM_ARTIST_SONG:
 
             return { ...state, playingMusicArtistSong: action.payload }
@@ -39,9 +75,9 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
 
         case BottomType.SET_ACTIVE_INDEX:
             return { ...state, activeIndex: action.payload }
-            case BottomType.SET_ACTIVE_BI:
-                return { ...state, activeBi: action.payload }
-    
+        case BottomType.SET_ACTIVE_BI:
+            return { ...state, activeBi: action.payload }
+
         default:
 
             return state;

@@ -12,7 +12,8 @@ import {
     SafeAreaView,
     ActivityIndicator,
     Image,
-    Button
+    Button,
+    Dimensions
 } from 'react-native';
 import player from "../services/player/PlayerServices"
 import global_styles from "../assets/styles/global_styles"
@@ -22,14 +23,16 @@ import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import {
     getMenuData,
-    
+
     changeSwiperData
 } from '../store/actions/menuActions'
-import {    changeplayItem,
+import {
+    changeplayItem,
     changePlayingData,
     changeActiveIndex,
-        changeActiveBi,
-        getSongData
+    changeActiveBi,
+    getSongData,
+    changeSelectedRadioStation
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
@@ -37,7 +40,8 @@ import {
     addFavorite,
     getFavorites,
     changeSearchData,
-    changePlayingMusic
+    changePlayingMusic,
+
 } from '../store/actions/filterAction'
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
@@ -45,7 +49,7 @@ import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import Bottom from "../components/Bottom"
+import BottomSwiper from "../components/BottomSwiper"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
 
@@ -97,26 +101,26 @@ class Menu extends React.Component<IMenuProps, IState> {
         this.props.onchangeswipeablePanelActive(false)
     }
     checkIsFovorite(num: number) {
-        
+
         return this.props.favorites.includes(num)
     }
     _addLookingList(data: any) {
         getData("isLooking").then((lookList) => {
             let count = true
-            if (lookList.length>0) {
+            if (lookList.length > 0) {
                 console.log(lookList);
-             for (let index = 0; index < lookList.length; index++) {
-                 const element = lookList[index];
-                 console.log(element.id==data.id);
-                 if(element.id==data.id){
-                     
-                     console.log(lookList.splice(index,1));
-                     
-                 }
-             }
-             lookList.push(data)
- 
-            }else{
+                for (let index = 0; index < lookList.length; index++) {
+                    const element = lookList[index];
+                    console.log(element.id == data.id);
+                    if (element.id == data.id) {
+
+                        console.log(lookList.splice(index, 1));
+
+                    }
+                }
+                lookList.push(data)
+
+            } else {
                 lookList.push(data)
             }
 
@@ -127,36 +131,50 @@ class Menu extends React.Component<IMenuProps, IState> {
         })
     }
     renderMenuItems(data: any) {
+
+
         return <TouchableHighlight
             onPress={() => {
-                
-                this.props.onchangeplayItem(data.item)
-              this.props.onchangeActiveIndex(data.index)
-this.props.get_songData(data.item)
-               //this.props.onchangePlayingData(data.item)
-                player.open()
-               // this.props.onchangePlayingMusic(false)
-                this._addLookingList(data.item)
-                // if (this.props.settingsReducer.autoPlay) {
-                //     this.props.onchangePlayingMusic(true)
-                //     setTimeout(() => {
-                //         player._startPlayMusic(this.props.bottomReducer.playItem,this.props.bottomReducer.playingMusicArtistSong)
-                //         this.props.onchangePlayingMusic(true)
-        
-                //        }, 100);
-                // } else {
-                //     
+                let radioStation = {
+                    data: data.item,
+                    isPlayingMusic: false,
+                    activeBi:data.item.st[0],
+                    id: data.item.id
+                }
+                console.log(radioStation);
 
-                // }
-               
+                this.props.onchangeSelectedRadioStation(radioStation)
+                player.open()
+                this.props.onchangeActiveIndex(data.index)
+                //                 this.props.onchangeplayItem(data.item)
+
+                // this.props.get_songData(data.item)
+                //                //this.props.onchangePlayingData(data.item)
+                //                 player.open()
+                //                // this.props.onchangePlayingMusic(false)
+                //                 this._addLookingList(data.item)
+                //                 // if (this.props.settingsReducer.autoPlay) {
+                //                 //     this.props.onchangePlayingMusic(true)
+                //                 //     setTimeout(() => {
+                //                 //         player._startPlayMusic(this.props.bottomReducer.playItem,this.props.bottomReducer.playingMusicArtistSong)
+                //                 //         this.props.onchangePlayingMusic(true)
+
+                //                 //        }, 100);
+                //                 // } else {
+                //                 //     
+
+                //                 // }
+
             }}
         >
             <RadioMenuElement
                 title={data.item.pa}
                 image={data.item.im}
                 backColor={this.props.theme.backgroundColor}
-                addInFavorite={() =>{ console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                 this.props.toaddfavorite(data.item)}}
+                addInFavorite={() => {
+                    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    this.props.toaddfavorite(data.item)
+                }}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableHighlight >
     }
@@ -164,17 +182,17 @@ this.props.get_songData(data.item)
         return <TouchableHighlight
 
             onPress={() => {
-                             
+
                 this.props.get_songData(data.item)
 
                 this.props.onchangeplayItem(data.item)
-            /// this.props.onchangeActiveIndex(data.item.st[0].bi)
+                /// this.props.onchangeActiveIndex(data.item.st[0].bi)
                 let swiper: any = []
                 this.props.onchangeActiveIndex(data.index)
-                player.open()   
-                 this.props.onchangePlayingMusic(false)
+                player.open()
+                this.props.onchangePlayingMusic(false)
                 // this.props.onchangePlayingData(data.item)
-               
+
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
             <SimpleImage size={calcWidth(98)} image={data.item.im} />
         </TouchableHighlight>
@@ -187,22 +205,22 @@ this.props.get_songData(data.item)
         }
     }
     render() {
-        const list = this.props.menuReducer.menuData!=null?this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
+        const list = this.props.menuReducer.menuData != null ? this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)) : []
 
 
         return (
-            <SafeAreaView >
-                <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
-                    <Header
-                        navigation={this.props.navigation}
-                        onchnageSearchData={this.props.onchnageSearchData}
-                    />
-                  {
-                      !this.props.menuReducer.menuData?
-                      <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
-                       <ActivityIndicator size="large" color="#0F1E45" />
-                      </View>:
-                         this.props.filterReducer.menuType == 1 ?
+
+            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').width }]}>
+                <Header
+                    navigation={this.props.navigation}
+                    onchnageSearchData={this.props.onchnageSearchData}
+                />
+                {
+                    !this.props.menuReducer.menuData ?
+                        <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: calcHeight(150) }}>
+                            <ActivityIndicator size="large" color="#0F1E45" />
+                        </View> :
+                        this.props.filterReducer.menuType == 1 ?
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
@@ -215,8 +233,8 @@ this.props.get_songData(data.item)
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{
                                     width: '100%',
-                                   flexWrap: 'wrap',
-                                   flexDirection: 'row',
+                                    flexWrap: 'wrap',
+                                    flexDirection: 'row',
                                     paddingLeft: calcWidth(15),
                                     paddingTop: calcHeight(8),
                                     justifyContent: 'center'
@@ -224,24 +242,23 @@ this.props.get_songData(data.item)
                                 keyExtractor={(item: any, index: number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             />
-                        
-                  } 
-                 
-                
-                    {this.props.bottomReducer.playItem?
-                    //<View style={styles.bottomView}>
-                        <Bottom
+
+                }
+
+
+                {this.props.bottomReducer.selectedRadioStation ?
+                     
+                    <BottomSwiper
                         navigation={this.props.navigation}
-                        />
-                   // </View>
-                :<View/>} 
-                </View>
-            </SafeAreaView>
+                    />
+                
+                    : <View />}
+            </View>
         );
     }
 };
-const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme, settingsReducer,bottomReducer }: any) => {
-    return { filterReducer, menuReducer, favorites, theme, settingsReducer,bottomReducer }
+const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme, settingsReducer, bottomReducer }: any) => {
+    return { filterReducer, menuReducer, favorites, theme, settingsReducer, bottomReducer }
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {
@@ -281,17 +298,20 @@ const mapDispatchToProps = (dispatch: any) => {
         get_songData: (payload: any) => {
             dispatch(getSongData(payload))
         },
+        onchangeSelectedRadioStation: (payload: any) => {
+            dispatch(changeSelectedRadioStation(payload))
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 
 const styles = StyleSheet.create({
     container1: {
-        
-        height:deviceHeight+50,
+
+        flex: 1,
         backgroundColor: 'red',
-       
-      },
+
+    },
     header: {
         backgroundColor: '#0F1E45',
         height: 60,
@@ -301,10 +321,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     bottomView: {
-        position: 'absolute',
-
-        width: '100%',
-        bottom: 0,
+        backgroundColor: 'red',
+        height: calcHeight(100)
     },
     row: {
         flexDirection: 'row',

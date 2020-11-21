@@ -30,7 +30,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
     constructor(props: IPlayListProps) {
         super(props)
         this.state = {
-            filterType: 'playList'
+            filterType: 'efir'
         }
     }
     render() {

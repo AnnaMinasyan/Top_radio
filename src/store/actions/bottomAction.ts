@@ -81,3 +81,83 @@ console.log('payload',payload);
 
 	};
 };
+export const setSelectedRadioStation = (payload: any) => {
+		return {
+			type: BottomType.SET_SELECTED_RADIOSTATION,
+			payload
+	
+		};
+	};
+	export const changeSelectedRadioStation = (payload: any) => {
+		return {
+			type: BottomType.CHANGE_SELECTED_RADIOSTATION,
+			payload
+	
+		};
+	};
+	export const setSelectedRadioStationPlaying = (payload: any) => {
+		console.log("action");
+		
+		return {
+			type: BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC,
+			payload
+	
+		};
+	};
+	export const changeSelectedRadioStationPlaying = (payload: any) => {
+		console.log("ppppppppppppppp",payload);
+		
+		return {
+			type: BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC,
+			payload
+	
+		};
+	};
+	export const setSwiperShowStation = (payload: any) => {
+		console.log("action");
+		
+		return {
+			type: BottomType.SET_SWIPERSHOW_RADIOSTATION,
+			payload
+	
+		};
+	};
+	export const changeSwiperShowStation = (payload: any) => {
+		return {
+			type: BottomType.CHANGE_SWIPERSHOW_RADIOSTATION,
+			payload
+	
+		};
+	};
+	export const setSwiperPlayingSong= (payload: any) => {
+		console.log("action");
+		
+		return {
+			type: BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG,
+			payload
+	
+		};
+	};
+	export const changeSwiperPlayingSong = (payload: any) => {
+		return {
+			type: BottomType.CHANGE_SWIPERSHOW_RADIOSTATION_PLAYINGSONG,
+			payload
+	
+		};
+	};
+	export const setSwiperActiveBi= (payload: any) => {
+		console.log("action",payload);
+		
+		return {
+			type: BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI,
+			payload
+	
+		};
+	};
+	export const changeSwiperActiveBi = (payload: any) => {
+		return {
+			type: BottomType.CHANGE_SWIPERSHOW_RADIOSTATION_ACTIVEBI,
+			payload
+	
+		};
+	};

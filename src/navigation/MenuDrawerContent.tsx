@@ -32,7 +32,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
     
     return (<View>
         <ScrollView style={{ backgroundColor: '#0F1E45', }}>
-            <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+            <View style={styles.container} >
 
                 <View style={styles.header}>
                     <Logo height={calcHeight(30)} width={calcWidth(164)} />
@@ -96,7 +96,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                 <View style={{position:'absolute', bottom:0}} >
                     <BackImage />
                 </View>
-            </SafeAreaView>
+            </View>
         </ScrollView>
       
     </View>

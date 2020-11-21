@@ -81,7 +81,6 @@ class Cities extends React.Component<ICitiesProps, IState> {
         const list=this.props.citiesReducer.cities!=null?this.props.citiesReducer.cities.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
 
         return (
-            <SafeAreaView style={{ height: deviceHeight - calcHeight(24) }}>
                    
             <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
                 <Header  navigation={this.props.navigation}
@@ -102,7 +101,6 @@ class Cities extends React.Component<ICitiesProps, IState> {
                     /> 
                 }
             </View>
-            </SafeAreaView>
         );
     }
 };

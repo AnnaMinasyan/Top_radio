@@ -24,7 +24,7 @@ class SimpleImage extends React.Component<Props, IState> {
   render() {
 
     let count = 100
-    if (this.props.size == calcHeight(98) || this.props.size == calcHeight(257)) {
+    if (this.props.size == 98 || this.props.size == 180) {
       count = 180
     }
    // console.log(":::::",'https://top-radio.ru/assets/image/radio/' + count + '/' + this.props.image);
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   letter: {
     color: '#FFFFFF',
-    fontSize: calcFontSize(24),
+    fontSize: 24,
     fontWeight: 'bold'
   }
 

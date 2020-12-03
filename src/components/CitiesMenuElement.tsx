@@ -36,7 +36,7 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
                 borderBottomColor:this.props.backColor=="white"?'#F3F4F5':'#1E2B4D',
             }]}>
                 <View style={styles.row}>
-                    <SimpleImage size={calcHeight(54)} title={this.props.info.pa} 
+                    <SimpleImage size={54} title={this.props.info.pa} 
                  color={this.state.colors[this.props.info.id %5]}  
                //   color={'yellow'}
                     />
@@ -44,7 +44,7 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
                     <Text style={[styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":'white'}]}>{this.props.info.pa}</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                    <ConnectSvg height={calcHeight(20)} width={calcHeight(20)} fill='#B3BACE' />
+                    <ConnectSvg height={20} width={20} fill='#B3BACE' />
                     <Text style={[styles.countTxt,{color:this.props.backColor=="white"?"#1E2B4D":'white'}]}>
                     {this.props.info.co}
                     </Text>
@@ -60,20 +60,20 @@ export default CitiesMenuElement;
 const styles = StyleSheet.create({
     body: {
         backgroundColor: 'white',
-        height: calcHeight(74),
-        borderBottomWidth: calcHeight(1),
+        height: 74,
+        borderBottomWidth: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingHorizontal: calcWidth(29),
+        paddingHorizontal: 29,
 
     },
     txtTitle: {
-        fontSize: calcFontSize(17),
+        fontSize: 17,
         fontWeight: '500',
         fontFamily: 'Roboto',
         color: '#1E2B4D',
-        marginLeft: calcWidth(34)
+        marginLeft:34
     },
     row: {
         flexDirection: 'row',
@@ -82,9 +82,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     countTxt: {
-        fontSize: calcFontSize(15),
+        fontSize: 15,
         color: '#1E2B4D',
-        marginLeft: calcWidth(14)
+        marginLeft:14
     }
 
 });

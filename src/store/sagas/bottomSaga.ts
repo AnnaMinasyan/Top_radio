@@ -11,7 +11,8 @@ import {
     setSelectedRadioStationPlaying,
     setSwiperShowStation,
     setSwiperPlayingSong,
-    setSwiperActiveBi
+    setSwiperActiveBi,
+    setActiveArrow
 } from "../actions/bottomAction";
 
 import { changePlayingMusic } from "../actions/filterAction"
@@ -27,6 +28,8 @@ function* onGetPlayType({ payload }: any) {
 }
 function* addselectedRadioStation({ payload }: any) {
     try {
+        console.log("payloadpayload",payload);
+        
         const data = yield auth.getPlayItemType(payload.data.pl)
         console.log(data);
         let station = payload
@@ -104,7 +107,14 @@ function* changeSwiperShowStation({ payload }: any) {
         console.log(ex);
     }
 }
+function* changeActiveArrow({ payload }: any) {
+    try {
 
+        yield put(setActiveArrow(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
+}
 export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_PLAY_ITEM as any,
@@ -146,6 +156,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_SWIPERSHOW_RADIOSTATION_ACTIVEBI as any,
         changeSwiperActiveBi
+    )
+    yield takeEvery(
+        BottomType.CHANGE_ACTIVEARROW as any,
+        changeActiveArrow
     )
 }
 

@@ -20,11 +20,11 @@ import {
 
     },
     txtTitle:{
-        fontSize:calcFontSize(17),
+        fontSize:17,
         fontWeight:'500',
         fontFamily:'Roboto',
         color:'#1E2B4D',
-        marginLeft:calcWidth(34)
+        marginLeft:34
     },
     stationTexttitle: {
         fontSize:calcFontSize(15),

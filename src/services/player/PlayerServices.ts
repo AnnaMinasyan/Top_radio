@@ -17,7 +17,9 @@ interface IDATA {
 class PlayerServices implements IDATA {
     playerRef: any=null;
     isopenpanel:boolean=false;
-    init(value: any) {        
+    init(value: any) {      
+       
+          
         this.playerRef = value
     }
     open() {
@@ -33,7 +35,7 @@ class PlayerServices implements IDATA {
             // setTimeout(this.open, 500);
     }
     close() {
-        this.playerRef.showMini()
+        this.playerRef&&    this.playerRef.showMini()
     
     }
     changeopenpanel(){

@@ -22,6 +22,7 @@ export interface IBottomState {
 
     selectedRadioStation: ISelectedRadioStation | null,
     swiperShowRadiostation: ISelectedRadioStation | null,
+    activeArrow:boolean
 }
 
 
@@ -32,11 +33,12 @@ export const initialState: IBottomState = {
     activeIndex: 0,
     activeBi: 0,
     selectedRadioStation: null,
-    swiperShowRadiostation: null
+    swiperShowRadiostation: null,
+    activeArrow:true
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
-    
+
     switch (action.type) {
         case BottomType.SET_SELECTED_RADIOSTATION:
             console.log('action.payload');
@@ -53,12 +55,13 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
             return { ...state, swiperShowRadiostation: { ...state.swiperShowRadiostation, playingSong: action.payload } }
 
         case BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI:
-console.log("action.payload,",action.payload);
+            console.log("action.payload,", action.payload);
 
             return { ...state, selectedRadioStation: { ...state.selectedRadioStation, activeBi: action.payload } }
 
+        case BottomType.SET_ACTIVEARROW:
 
-
+  return { ...state,  activeArrow:action.payload}
 
 
 

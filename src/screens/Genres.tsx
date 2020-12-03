@@ -20,7 +20,7 @@ import { changeFilterData,
     changeHeaderText
  } from '../store/actions/menuActions'
 import { changeSearchData } from '../store/actions/filterAction'
-
+import BottomSwiper from "../components/BottomSwiper"
 import CitiesMenuElement from "../components/CitiesMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
@@ -28,26 +28,20 @@ import { connect } from "react-redux"
 import { createFilter } from 'react-native-search-filter';
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
-
     colors:string[],
     searchData:any |null
 }
-
 class Genres extends React.Component<IGanresProps, IState> {
     constructor(props: IGanresProps) {
-
         super(props)
         this.state = {
             colors:['#4F67A6','#41A1BF','#42B39E','#49BE7F','#7C59C5'],
             searchData:null,
         }
-
     }
     componentDidMount() {
         this.props.ongetGanresData()
-       
     }
-
     filterDataByganres(res: any) {
         const ganre: any = []
         for (let index = 0; index < this.props.menuReducer.menuData.length; index++) {
@@ -56,11 +50,7 @@ class Genres extends React.Component<IGanresProps, IState> {
                 element.ge.map((elem: any, key: any) => {
                     if (elem == res.id) {
                         ganre.push(element)
-                    }
-                })
-            }
-        }
-        
+                    }})}}
         this.props.onchangeFilterDataByGenre(ganre)
     }
     renderMenuItems(data: any) {
@@ -69,8 +59,7 @@ class Genres extends React.Component<IGanresProps, IState> {
          this.filterDataByganres(data.item)
             this.props.navigation.navigate('FilterMenu')
             this.props.onchangeHeaderText(data.item.pa)
-        }}
-        >
+        }}>
             <CitiesMenuElement info={data.item} backColor={this.props.theme.backgroundColor} />
         </TouchableHighlight>
     }
@@ -83,11 +72,8 @@ class Genres extends React.Component<IGanresProps, IState> {
     }
     render() {
         const list=this.props.ganresReducer.ganres?this.props.ganresReducer.ganres.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]      
-       
         return (
-           
-
-            <View style={{ backgroundColor: this.props.theme.backgroundColor }}>
+            <View style={{ backgroundColor: this.props.theme.backgroundColor,flex:1 }}>
                 <Header  
                 navigation={this.props.navigation}
                 onchnageSearchData={this.props.onchnageSearchData}
@@ -97,7 +83,6 @@ class Genres extends React.Component<IGanresProps, IState> {
                     <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
                     <ActivityIndicator size="large" color="#0F1E45" />
                    </View>:
-                
                      <FlatList
                      numColumns={1}
                        data={list}
@@ -106,8 +91,12 @@ class Genres extends React.Component<IGanresProps, IState> {
                         maxToRenderPerBatch={10}
                     /> 
                 }
+                 {this.props.bottomReducer.selectedRadioStation ? 
+                     <BottomSwiper
+                     isSwiper={false}
+                         navigation={this.props.navigation}
+                     /> : <View />}
             </View>
-           
         );
     }
 };

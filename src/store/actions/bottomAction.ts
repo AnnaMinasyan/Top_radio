@@ -161,3 +161,19 @@ export const setSelectedRadioStation = (payload: any) => {
 	
 		};
 	};
+	export const changeActiveArrow= (payload: any) => {
+		console.log("action",payload);
+		
+		return {
+			type: BottomType.CHANGE_ACTIVEARROW,
+			payload
+	
+		};
+	};
+	export const setActiveArrow = (payload: any) => {
+		return {
+			type: BottomType.SET_ACTIVEARROW,
+			payload
+	
+		};
+	};

@@ -123,16 +123,12 @@ class Menu extends React.Component<IMenuProps, IState> {
             } else {
                 lookList.push(data)
             }
-
             storeData("isLooking", lookList).then(() => {
                 this.setState({ lookingList: lookList })
             })
-
         })
     }
     renderMenuItems(data: any) {
-
-
         return <TouchableHighlight
             onPress={() => {
                 let radioStation = {
@@ -141,38 +137,17 @@ class Menu extends React.Component<IMenuProps, IState> {
                     activeBi:data.item.st[0],
                     id: data.item.id
                 }
-                console.log(radioStation);
-
+                this._addLookingList(data.item)
                 this.props.onchangeSelectedRadioStation(radioStation)
                 player.open()
                 this.props.onchangeActiveIndex(data.index)
-                //                 this.props.onchangeplayItem(data.item)
-
-                // this.props.get_songData(data.item)
-                //                //this.props.onchangePlayingData(data.item)
-                //                 player.open()
-                //                // this.props.onchangePlayingMusic(false)
-                //                 this._addLookingList(data.item)
-                //                 // if (this.props.settingsReducer.autoPlay) {
-                //                 //     this.props.onchangePlayingMusic(true)
-                //                 //     setTimeout(() => {
-                //                 //         player._startPlayMusic(this.props.bottomReducer.playItem,this.props.bottomReducer.playingMusicArtistSong)
-                //                 //         this.props.onchangePlayingMusic(true)
-
-                //                 //        }, 100);
-                //                 // } else {
-                //                 //     
-
-                //                 // }
-
-            }}
-        >
+            }}>
             <RadioMenuElement
                 title={data.item.pa}
                 image={data.item.im}
+                theme={this.props.theme}
                 backColor={this.props.theme.backgroundColor}
                 addInFavorite={() => {
-                    console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                     this.props.toaddfavorite(data.item)
                 }}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
@@ -180,19 +155,17 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     renderMenuItemsMenuStyle2(data: any) {
         return <TouchableHighlight
-
             onPress={() => {
-
-                this.props.get_songData(data.item)
-
-                this.props.onchangeplayItem(data.item)
-                /// this.props.onchangeActiveIndex(data.item.st[0].bi)
-                let swiper: any = []
-                this.props.onchangeActiveIndex(data.index)
+                let radioStation = {
+                    data: data.item,
+                    isPlayingMusic: false,
+                    activeBi:data.item.st[0],
+                    id: data.item.id
+                }
+                this._addLookingList(data.item)
+                this.props.onchangeSelectedRadioStation(radioStation)
                 player.open()
-                this.props.onchangePlayingMusic(false)
-                // this.props.onchangePlayingData(data.item)
-
+                this.props.onchangeActiveIndex(data.index)
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
             <SimpleImage size={calcWidth(98)} image={data.item.im} />
         </TouchableHighlight>
@@ -206,17 +179,12 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.props.menuReducer.menuData != null ? this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)) : []
-
-
         return (
-
-            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').width }]}>
+            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height }]}>
                 <Header
                     navigation={this.props.navigation}
-                    onchnageSearchData={this.props.onchnageSearchData}
-                />
-                {
-                    !this.props.menuReducer.menuData ?
+                    onchnageSearchData={this.props.onchnageSearchData}/>
+                {!this.props.menuReducer.menuData ?
                         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: calcHeight(150) }}>
                             <ActivityIndicator size="large" color="#0F1E45" />
                         </View> :
@@ -226,8 +194,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                                 renderItem={(d) => this.renderMenuItems(d)}
                                 keyExtractor={(item: any, index: number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
-                            />
-                            :
+                            />:
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
@@ -241,18 +208,12 @@ class Menu extends React.Component<IMenuProps, IState> {
                                 }}
                                 keyExtractor={(item: any, index: number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
-                            />
-
-                }
-
-
-                {this.props.bottomReducer.selectedRadioStation ?
-                     
+                            /> }
+                {/* {this.props.bottomReducer.selectedRadioStation ?
                     <BottomSwiper
+                    isSwiper={true}
                         navigation={this.props.navigation}
-                    />
-                
-                    : <View />}
+                    />: <View />} */}
             </View>
         );
     }

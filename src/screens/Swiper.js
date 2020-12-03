@@ -46,7 +46,8 @@ export default class SwipeUpDown extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            collapsed: true
+            collapsed: true,
+            fadeAnim: new Animated.Value(0)
         };
         this.disablePressToShow = props.disablePressToShow;
         this.SWIPE_HEIGHT = props.swipeHeight ;
@@ -63,7 +64,21 @@ export default class SwipeUpDown extends Component<Props> {
         this.checkCollapsed = true;
         this.showFull = this.showFull.bind(this);
     }
+    fadeIn = () => {
+        // Will change fadeAnim value to 1 in 5 seconds
+        Animated.timing(this.state.fadeAnim, {
+            toValue: 1,
+            duration: 500
+        }).start();
+    };
 
+    fadeOut = () => {
+        // Will change fadeAnim value to 0 in 5 seconds
+        Animated.timing(this.state.fadeAnim, {
+            toValue: 0,
+            duration: 500
+        }).start();
+    };
     componentWillMount() {
         this._panResponder = PanResponder.create({
             onMoveShouldSetPanResponder: (event, gestureState) => true,
@@ -95,6 +110,8 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderMove(event, gestureState) {
+        console.log("222222222")
+        this.fadeOut()
         if (gestureState.dy > 50 && !this.checkCollapsed) {
             // SWIPE DOWN
 
@@ -123,6 +140,8 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderRelease(event, gestureState) {
+        console.log("111111")
+        this.fadeIn()
         if (gestureState.dy < -100 || gestureState.dy < 100) {
             this.showFull();
         } else {
@@ -131,6 +150,7 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     showFull() {
+        this.fadeOut()
         const { onShowFull } = this.props;
         this.customStyle.style.top = 0;
         this.customStyle.style.height = DEVICE_HEIGHT;
@@ -140,9 +160,11 @@ export default class SwipeUpDown extends Component<Props> {
         this.state.collapsed && this.setState({ collapsed: false });
         this.checkCollapsed = false;
         onShowFull && onShowFull();
+
     }
 
     showMini() {
+        this.fadeIn()
         const { onShowMini, itemMini } = this.props;
         this.customStyle.style.top = itemMini
             ? DEVICE_HEIGHT - this.SWIPE_HEIGHT
@@ -156,7 +178,6 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     render() {
-        console.log("this.props.checkIsFovorite()",this.props.checkIsFovorite());
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (
@@ -166,7 +187,7 @@ export default class SwipeUpDown extends Component<Props> {
                 style={[
                     styles.wrapSwipe,
                     {
-                        height: calcHeight(86),
+                        height:86,
                         marginTop: MARGIN_TOP,
                     },
                     !itemMini && collapsed && { marginBottom: -200 },
@@ -181,15 +202,15 @@ export default class SwipeUpDown extends Component<Props> {
                             backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
 
                         }, {
-                            opacity: this.props.anim // Bind opacity to animated value
+                            opacity: this.state.fadeAnim // Bind opacity to animated value
                         }]}>
                             <View
                                 {...this._panResponder.panHandlers}
                                 onTouchStart={() => { }}
                                 style={{
                                     height: calcHeight(86), width: '70%',
-
-                                    backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+                                    //backgroundColor:'red'
+                                   backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
                                 }}>
                                 <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
 
@@ -212,7 +233,7 @@ export default class SwipeUpDown extends Component<Props> {
 
                 </View>
 
-                { this.props.orientation=="landscape" ?
+                { this.props.orientation?
                 <ImageBackground
                 resizeMode='stretch'
 
@@ -223,31 +244,30 @@ export default class SwipeUpDown extends Component<Props> {
          }}
                 source={require('../assets/images/img1.png')}>
               
-                      <View  {...this._panResponder.panHandlers} style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55,}}
+                      <View  style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55,backgroundColor:'red'}}
                        >
                         <View
                             onTouchEnd={() => {
-                                console.log("sdpkawspfjep'''''''jjjjjjjjjjjjjjjjjjjjjjj");
                                 this.showMini() 
                             
                             }}
-                            style={[styles.bottomSheet, { height: calcHeight(40),width:calcWidth(50) }]}>
+                            style={[styles.bottomSheet, { height: 40,width:50 }]}>
                             <TouchableOpacity
  
                                 style={styles.bottomSheet}
                             >
-                                <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
+                                <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={10.59} width={19.8} />
                             </TouchableOpacity>
 
                         </View>
                         <View style={{ width: '60%', flexDirection:'row'}}  >
-                        <View style={{ alignItems: 'center' }}>
+                        <View  {...this._panResponder.panHandlers} style={{ alignItems: 'center' }}>
                                     {this.props.bottomReducer.swiperShowRadiostation ? <Text 
                                     numberOfLines={1} style={{
                                         color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                        fontSize: calcFontSize(20),
+                                        fontSize: 20,
                                         fontWeight: '500',
-                                        width:calcWidth(200),
+                                        width:200,
                                     }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
                                 </View>
                                 {this.props.bottomReducer.playingMusicArtistSong ?
@@ -255,13 +275,12 @@ export default class SwipeUpDown extends Component<Props> {
 
                                             style={{
                                                 color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                                fontSize: calcFontSize(15),
-                                              width:calcWidth(300),
+                                                fontSize: 15,
+                                              width:300,
                                                 alignItems: 'center',
-                                                paddingLeft: calcWidth(25),
+                                                paddingLeft:25,
                                                 justifyContent:'center',
-                                                paddingTop:calcHeight(5),
-                                                backgroundColor:'red'
+                                                paddingTop:5,
                                             }}>
                                             {this.props.bottomReducer.playingMusicArtistSong.artist}  {this.props.bottomReducer.playingMusicArtistSong.song}
                                         </Text> : null}
@@ -270,7 +289,7 @@ export default class SwipeUpDown extends Component<Props> {
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                height: calcHeight(40),
+                                height: 40,
                                 width: '15%',
                                 borderWidth:1
                             }}
@@ -278,8 +297,8 @@ export default class SwipeUpDown extends Component<Props> {
                                 this.props.toaddfavorite()
                             }}>
                             {this.props.checkIsFovorite() ?
-                                <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
-                                <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
+                                <RedHeart fill='#FF5050' height={19} width={21} /> :
+                                <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={21.01} width={23.61} />}
                         </TouchableOpacity>
                     </View>
              
@@ -288,11 +307,11 @@ export default class SwipeUpDown extends Component<Props> {
 
                     style={{
                         backgroundColor: this.props.backgroundColor,
-                      
+
                         zIndex: 1,
 
                     }}>
-                    <View  {...this._panResponder.panHandlers} style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', }}
+                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}
                        >
                         <View
                             onTouchEnd={() => {
@@ -309,7 +328,7 @@ export default class SwipeUpDown extends Component<Props> {
                             </TouchableOpacity>
 
                         </View>
-                        <View style={{ width: '55%', backgroundColor:this.props.backgroundColor }}  >
+                        <View  {...this._panResponder.panHandlers}  style={{ width: '55%', backgroundColor:this.props.backgroundColor }}  >
                         </View>
                         <TouchableOpacity
                             style={{
@@ -317,7 +336,7 @@ export default class SwipeUpDown extends Component<Props> {
                                 alignItems: 'center',
                                 height: calcHeight(70),
                                 width: '20%',
-                                borderWidth:1
+                            //    borderWidth:1
                             }}
                             onPress={() => {
                                 console.log("::::::::::::::::::::::::::::::::::::::");
@@ -330,13 +349,13 @@ export default class SwipeUpDown extends Component<Props> {
                     </View>
                     <View
 
-                        style={{ justifyContent: 'center', alignItems: 'center', }}>
+                        style={{ justifyContent: 'center', alignItems: 'center',height:50}}>
                         {this.props.bottomReducer.swiperShowRadiostation ?
                             <Text
                             numberOfLines={1}
                              style={{
                                 color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                fontSize: calcFontSize(24),
+                                fontSize: 24,
                                 fontWeight: '500',
                               width:calcWidth(250),
                               textAlign:'center'
@@ -364,7 +383,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-paddingTop:calcHeight(5),
+paddingTop:10,
         width: '15%'
     },
     bottomHeader: {
@@ -379,7 +398,7 @@ paddingTop:calcHeight(5),
         shadowOpacity: 0.50,
         shadowRadius: 12.35,
         elevation: 25,
-        marginTop: calcHeight(-28),
+        marginTop: -28,
       //  paddingTop:calcHeight(10)
     },
 

@@ -29,7 +29,8 @@ import {
 import {    changeplayItem,
     changePlayingData,
     changeActiveIndex,
-    getSongData
+    getSongData,
+    changeSelectedRadioStation
 } from "../store/actions/bottomAction";
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
@@ -119,14 +120,18 @@ _addLookingList(data:any){
         return <TouchableHighlight
         onPress={() => {
                  
-            this.props.onchangeplayItem(data.item)
+            let radioStation = {
+                data: data.item,
+                isPlayingMusic: false,
+                activeBi:data.item.st[0],
+                id: data.item.id
+            }
+            player.open()
+            this._addLookingList(data.item)
+            this.props.onchangeSelectedRadioStation(radioStation)
+          
             this.props.onchangeActiveIndex(data.index)
-            this.props.get_songData(data.item)
-
-             //this.props.onchangePlayingData(data.item)
-              player.open()
-              this._addLookingList(data.item)
-               this.props.onchangePlayingMusic(false)
+          
         }}
     >
         <RadioMenuElement
@@ -141,20 +146,17 @@ _addLookingList(data:any){
         return<TouchableHighlight
         onPress={() => {
                
-            this.props.onchangeplayItem(data.item)
+            let radioStation = {
+                data: data.item,
+                isPlayingMusic: false,
+                activeBi:data.item.st[0],
+                id: data.item.id
+            }
+            player.open()
+            this._addLookingList(data.item)
+            this.props.onchangeSelectedRadioStation(radioStation)
+           
             this.props.onchangeActiveIndex(data.index)
-this.props.get_songData(data.item)
-             //this.props.onchangePlayingData(data.item)
-              player.open()
-              this._addLookingList(data.item)
-               this.props.onchangePlayingMusic(false)
-         //   this.props.onchangePlayingData(data.item)
-            // this.setState({
-            //     playItem: data.item,
-            //     //  activBi: data.item.st[0].bi,
-
-            //     playUrl: Array.isArray(data.item.st) ? data.item.st[0].ur : data.item.st
-            // })
         }} style={{ padding: calcWidth(8), }}>
         <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
     </TouchableHighlight>
@@ -166,7 +168,7 @@ this.props.get_songData(data.item)
         return (
             
     
-                <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor }]}>
+                <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor,height:'100%' }]}>
                     <Header navigation={this.props.navigation} type={true} />
 
                         {this.props.filterReducer.menuType==1 ?
@@ -189,11 +191,11 @@ this.props.get_songData(data.item)
                             />
 
                         }
-  {this.props.bottomReducer.playItem?
+  {/* {this.props.bottomReducer.playItem?
                     //<View style={styles.bottomView}>
                         <BottomSwiper/>
                    // </View>
-                :<View/>} 
+                :<View/>}  */}
 
                 </View>
              
@@ -243,6 +245,9 @@ const mapDispatchToProps = (dispatch: any) => {
         
         get_songData: (payload: any) => {
             dispatch(getSongData(payload))
+        },
+        onchangeSelectedRadioStation:(payload: any) => {
+            dispatch(changeSelectedRadioStation(payload))
         },
     }
 }

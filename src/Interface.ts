@@ -48,7 +48,8 @@ export interface IFilterMenuProps {
     favorites:any,
     onchangeActiveIndex(type:number):void;
     onchangeSwiperData(payload:any):void; 
-    bottomReducer:any
+    bottomReducer:any,
+    onchangeSelectedRadioStation(payload:any):void; 
 } 
 export interface IGanresProps {
     styleView:boolean;
@@ -61,6 +62,7 @@ export interface IGanresProps {
     navigation: NavigationScreenProp<any, any>;
     theme:any,
     onchangeHeaderText(type:string):void;
+    bottomReducer:any
 
 } 
 export interface ISettings {
@@ -93,7 +95,7 @@ export interface IRadioMenuElementProps {
     addInFavorite():void,
     isFavorite:boolean,
     backColor:string,
-    //theme:any
+    theme:any
 }
 export interface ICitiesMenuElementProps {
     info:ICitiesConnect,

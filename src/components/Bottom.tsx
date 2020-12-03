@@ -264,7 +264,7 @@ class Bottom extends React.Component<Props, IState> {
         // } else
         if (this.props.bottomReducer.playItem.pl) {
             this.props.ongetPlayList(this.props.bottomReducer.playItem)
-            this.props.navigation.navigate('PlayList')
+        //    this.props.navigation.navigate('PlayList')
 
             // player.close()
             //this.props.onchangeswipeablePanelActive(false)
@@ -493,7 +493,7 @@ class Bottom extends React.Component<Props, IState> {
                                         </Text>
                                     </TouchableOpacity>:<View  style={[styles.arrow, { marginLeft: calcWidth(20), marginTop: deviceWidth / 4 }]}/>}
 
-                                    <SimpleImage size={calcHeight(257)} image={this.props.bottomReducer.playItem.im} />
+                                    <SimpleImage size={calcHeight(180)} image={this.props.bottomReducer.playItem.im} />
                         <View style={{  flexDirection: 'row' , marginLeft:calcHeight(30), marginTop:10}}>
                             <View>
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -696,7 +696,7 @@ class Bottom extends React.Component<Props, IState> {
                         <View
                             style={{ height: calcHeight(280), justifyContent: 'center', alignItems: 'center', }}>
 
-                            <SimpleImage size={calcHeight(257)} image={this.props.bottomReducer.playItem.im} />
+                            {/*<SimpleImage size={calcHeight(180)} image={this.props.bottomReducer.playItem.im} />*/}
                         </View>
                         {this.props.bottomReducer.activeIndex < this.props.menuReducer.menuData.length - 1 ?
                             <TouchableOpacity style={styles.arrow}
@@ -713,16 +713,16 @@ class Bottom extends React.Component<Props, IState> {
                             </TouchableOpacity>:<View style={styles.arrow}/>}
                     </View>
 
-                    <View style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginHorizontal: calcWidth(20),
-                    }}>
-                        {this.props.bottomReducer.playingMusicArtistSong ?
-                            <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>
-                                {this.props.bottomReducer.playingMusicArtistSong.artist}  {this.props.bottomReducer.playingMusicArtistSong.song}
-                            </Text> : null}
-                    </View>
+                    {/*<View style={{*/}
+                    {/*    justifyContent: 'center',*/}
+                    {/*    alignItems: 'center',*/}
+                    {/*    marginHorizontal: calcWidth(20),*/}
+                    {/*}}>*/}
+                    {/*    {this.props.bottomReducer.playingMusicArtistSong ?*/}
+                    {/*        <Text style={{ color: this.props.theme.backgroundColor == "white" ? '#1E2B4D' : 'white', fontSize: calcFontSize(17) }}>*/}
+                    {/*            {this.props.bottomReducer.playingMusicArtistSong.artist}  {this.props.bottomReducer.playingMusicArtistSong.song}*/}
+                    {/*        </Text> : null}*/}
+                    {/*</View>*/}
                     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: calcHeight(23) }
                     }>
                         {this.props.bottomReducer.playItem ?

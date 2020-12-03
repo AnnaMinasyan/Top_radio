@@ -24,12 +24,12 @@ const HomeNavigator: React.FunctionComponent = () => (
     <Stack.Screen
     name="Cities"
     component={Cities}
-     options={{ header: BaseHeader, headerTransparent: true,animationEnabled:false }}
+    options={{headerShown:false,  headerTransparent: false, animationEnabled:false}}
     /> 
     <Stack.Screen
     name="Genres"
     component={Genres}
-     options={{ header: BaseHeader, headerTransparent: true,animationEnabled:false }}
+    options={{headerShown:false,  headerTransparent: false, animationEnabled:false}}
     /> 
     <Stack.Screen
     name="Favorite"

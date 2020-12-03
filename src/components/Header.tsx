@@ -15,7 +15,7 @@ import MenuDots from "../assets/icons/menu_dots.svg"
 import Heart from "../assets/icons/heart.svg"
 import Modal from 'react-native-modal';
 import global_styles from "../assets/styles/global_styles"
-import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
+import { calcFontSize } from "../assets/styles/dimensions"
 import { connect } from "react-redux"
 import { changeFavoriteType } from '../store/actions/filterAction'
 import { DrawerActions } from '@react-navigation/native';
@@ -55,14 +55,14 @@ class Header extends React.Component<Props, IState> {
  
   hideMenuModal() {
     return <Modal
-      style={{ position: 'absolute', top: calcHeight(30), right: calcWidth(8),  }}
+      style={{ position: 'absolute', top: (30), right: (8),  }}
       onBackdropPress={() => { this.setState({ hideMenuModal: false }) }}
       onRequestClose={() => this.setState({ hideMenuModal: false })}
 
       isVisible={this.state.hideMenuModal}>
       <View style={[styles.modal,{backgroundColor:this.props.theme.backgroundColor,}]}>
         <TouchableOpacity
-          style={[styles.modalView, { marginTop: calcHeight(6),  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}
+          style={[styles.modalView, { marginTop: (6),  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
            this.props.navigation.navigate("MyAlarmClock")
@@ -124,8 +124,8 @@ class Header extends React.Component<Props, IState> {
     
     return<View>
       {this.props.type || this.props.title?<View>
-        <Text numberOfLines={1} style={[styles.title,{marginLeft:this.props.title?calcWidth(20):0}]}>{this.props.title?this.props.title:this.props.menuReducer.headertext}</Text>
-        </View>: <Logo height={calcHeight(21)} width={calcHeight(113)} style={{ marginLeft: calcWidth(13), }} />}
+        <Text numberOfLines={1} style={[styles.title,{marginLeft:this.props.title?(20):0}]}>{this.props.title?this.props.title:this.props.menuReducer.headertext}</Text>
+        </View>: <Logo height={(21)} width={(113)} style={{ marginLeft: (13), }} />}
     </View>
   }
   render() {
@@ -136,12 +136,12 @@ class Header extends React.Component<Props, IState> {
         <View style={[styles.row,]}>
           {this.props.type?<View>
             <TouchableOpacity
-                    style={[global_styles.searchbtn,{paddingHorizontal:calcWidth(0),paddingRight:calcWidth(11)  }]}
+                    style={[global_styles.searchbtn,{paddingHorizontal:(0),paddingRight:(11)  }]}
                     onPress={()=>{
                         this.props.navigation.goBack()
                     }}
                     >
-                    <Arrow height={calcHeight(23.49)} width={calcWidth(23.49)} />
+                    <Arrow height={(23.49)} width={(23.49)} />
                     </TouchableOpacity>
           </View>:
            
@@ -153,16 +153,16 @@ class Header extends React.Component<Props, IState> {
           }}
           style={styles.headerContainer}
         >
-          <Menu fill='#FFFFFF' height={calcHeight(21)} width={calcWidth(21)} />
+          <Menu fill='#FFFFFF' height={(21)} width={(21)} />
         </TouchableOpacity> }
        {!this.state.showSearchView?
       this.renderTitle()
       :
        <View style={{
-       width:calcWidth(240),
+       width:(240),
        justifyContent:'center',
        alignItems:'center',
-        marginLeft:calcWidth(20),}}>
+        marginLeft:(20),}}>
          <Search 
        renderSearchData={this.props.onchnageSearchData}
        />
@@ -176,11 +176,11 @@ class Header extends React.Component<Props, IState> {
               //  this.props.onchnageSearchData('')
               }}
           >
-         {!this.state.showSearchView? <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />:
+         {!this.state.showSearchView? <SearchSvg width={(14.48)} height={(15)} />:
         <TouchableOpacity
        // onPress={()=>this.props.onchnageSearchData('')}
         >
-        <CloseSvg width={calcWidth(15.48)} height={calcHeight(15)} fill='#B3BACE'/>
+        <CloseSvg width={(15.48)} height={(15)} fill='#B3BACE'/>
         </TouchableOpacity>}
           </TouchableOpacity>
           <TouchableOpacity
@@ -189,9 +189,9 @@ class Header extends React.Component<Props, IState> {
               this.changeIsFavorite()
 
             }}
-           // style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
+           // style={{ height: (56), justifyContent: 'center', alignItems: 'center' }}
           >
-          {this.props.filterReducer.isFavorite?<RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)}/>: <Heart fill='#FFFFFF' height={calcHeight(21)} width={calcWidth(23.61)} />} 
+          {this.props.filterReducer.isFavorite?<RedHeart fill='#FF5050' height={(19)} width={(21)}/>: <Heart fill='#FFFFFF' height={(21)} width={(23.61)} />} 
           </TouchableOpacity>
 
           {/* {this.state.menuStyle ?
@@ -200,7 +200,7 @@ class Header extends React.Component<Props, IState> {
             style={global_styles.searchbtn}
               onPress={() => { this.chnageMenuType() }}
             >
-              <Menu2 height={calcHeight(21)} width={calcHeight(21)}  />
+              <Menu2 height={(21)} width={(21)}  />
             </TouchableOpacity>
 
             :
@@ -208,16 +208,16 @@ class Header extends React.Component<Props, IState> {
             style={global_styles.searchbtn}
               onPress={() => { this.chnageMenuType() }}
             >
-              <MenuSvg height={calcHeight(21)} width={calcHeight(21)} style={{ marginLeft: calcWidth(22), marginRight: calcWidth(19) }} />
+              <MenuSvg height={(21)} width={(21)} style={{ marginLeft: (22), marginRight: (19) }} />
             </TouchableOpacity>} */}
           <TouchableOpacity
              style={global_styles.searchbtn}
             onPress={() => {
               this.setState({ hideMenuModal: true })
             }}
-           // style={{ height: calcHeight(56), justifyContent: 'center', alignItems: 'center' }}
+           // style={{ height: (56), justifyContent: 'center', alignItems: 'center' }}
           >
-            <MenuDots height={calcHeight(6.88)} width={calcWidth(26.33)} />
+            <MenuDots height={(6.88)} width={(26.33)} />
           </TouchableOpacity>
         </View>
 
@@ -242,18 +242,18 @@ export default connect(mapStateToProps, mapDispatchToProps)(Header);
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#0F1E45',
-    height: calcHeight(56),
+    height: 56,
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingLeft: calcWidth(20),
-    paddingRight: calcWidth(13.83)
+    paddingLeft: 20,
+    paddingRight: 13.83
   },
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: calcHeight(56),
+    height: 56,
 
 
   },
@@ -263,14 +263,14 @@ const styles = StyleSheet.create({
 
   },
   modal: {
-    height: calcHeight(269.03),
-    width: calcWidth(265),
-    borderRadius: calcWidth(8),
+    height: 269.03,
+    width: 265,
+    borderRadius: 8,
   },
  
 
   modalView: {
-    height: calcHeight(50),
+    height: 50,
     justifyContent: 'center',
     alignItems: 'flex-start',
     borderBottomWidth: 1,
@@ -283,9 +283,9 @@ const styles = StyleSheet.create({
   },
   title:{
     color:'white',
-    fontSize:calcFontSize(20),
-    marginLeft:calcWidth(5),
+    fontSize:20,
+    marginLeft:5,
     fontWeight:'500',
-    width:calcWidth(120)
+    width:120
 }
 });

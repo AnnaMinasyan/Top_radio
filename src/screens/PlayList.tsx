@@ -91,6 +91,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                             )})}
                              
                     </View>}
+                    
             </View>
             </ScrollView>
         );

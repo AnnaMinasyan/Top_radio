@@ -40,22 +40,22 @@ add(){
       }]}>
       <View style={styles.row}>
       
-      <SimpleImage size={calcHeight(54)} image={this.props.image}/>
+      <SimpleImage size={54} image={this.props.image}/>
     
     <Text
     numberOfLines={1}
-     style={[global_styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":"white", marginRight:calcWidth(20)}]}>
+     style={[global_styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":"white", marginRight:20,}]}>
       {this.props.title}</Text>
       </View>
            <TouchableOpacity
            onPress={()=>{
               this.add()
            }}
-           style={{ height:calcHeight(50),width:calcWidth(70),justifyContent:'center', alignItems:'center',}}
+           style={{ height:50,width:70,justifyContent:'center', alignItems:'center',}}
            >
            {this.props.isFavorite?
     
-    <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)}/>: <Heart fill='#B3BACE'  height={calcHeight(18.54)} width={calcWidth(20.83)}/>} 
+    <RedHeart fill='#FF5050' height={19} width={21}/>: <Heart fill='#B3BACE'  height={18.54} width={20.83}/>} 
            </TouchableOpacity>
      
       </View>
@@ -67,13 +67,13 @@ export default RadioMenuElement;
 const styles = StyleSheet.create({
   body: {
   
-   height:calcHeight(74),
+   height:74,
 
-   borderBottomWidth:calcHeight(1),
+   borderBottomWidth:1,
    flexDirection:'row',
    alignItems:'center',
     justifyContent:'space-between',
-    paddingLeft:calcWidth(25)
+    paddingLeft:25
     //paddingLeft:calcWidth(29),
    
   },

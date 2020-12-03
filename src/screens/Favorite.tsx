@@ -16,9 +16,12 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
-import {    changeplayItem,
+import {
+    changeplayItem,
     changePlayingData,
-    getSongData
+    getSongData,
+    changeActiveIndex, changeSelectedRadioStation,
+
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
@@ -26,7 +29,8 @@ import {
     addFavorite,
     getFavorites,
     changeSearchData,
-    changePlayingMusic
+    changePlayingMusic,
+
 } from '../store/actions/filterAction'
 import Heart from "../assets/icons/heart.svg"
 import PlaySvG from "../assets/icons/play.svg"
@@ -102,17 +106,16 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if(this.checkIsFovorite(data.item.id))  {
             return <TouchableHighlight
             onPress={() => {
-                //this.props.onchangePlayingData(data.item)
-               this._addLookingList(data.item)
-               this.props.onchangeplayItem(data.item)
-               this.props.get_songData(data.item)
-                this.props.onchangeActiveIndex(data.index)
+                let radioStation = {
+                    data: data.item,
+                    isPlayingMusic: false,
+                    activeBi: data.item.st[0],
+                    id: data.item.id
+                }
+                this._addLookingList(data.item)
+                this.props.onchangeSelectedRadioStation(radioStation)
                 player.open()
-
-               this.props.onchangePlayingMusic(false)
-               this.setState({
-                   playItem: data.item,
-               })
+                this.props.onchangeActiveIndex(data.index)
             }}
         >
             <RadioMenuElement
@@ -131,18 +134,16 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if(this.checkIsFovorite(data.item.id))  {
         return <TouchableHighlight
             onPress={() => {
-                //this.props.onchangePlayingData(data.item)
-           
-               this._addLookingList(data.item)
-               this.props.onchangeplayItem(data.item)
-               this.props.get_songData(data.item)
-
-                this.props.onchangeActiveIndex(data.item.st[0].bi)
+                let radioStation = {
+                    data: data.item,
+                    isPlayingMusic: false,
+                    activeBi:data.item.st[0],
+                    id: data.item.id
+                }
+                this._addLookingList(data.item)
+                this.props.onchangeSelectedRadioStation(radioStation)
                 player.open()
-               this.props.onchangePlayingMusic(false)
-               this.setState({
-                   playItem: data.item,
-               })
+                this.props.onchangeActiveIndex(data.index)
             }} style={{ padding: calcWidth(8), }}>
             <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
         </TouchableHighlight>
@@ -212,9 +213,14 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangePlayingData: (payload: any) => {
             dispatch(changePlayingData(payload))
         },
-       
+        onchangeActiveIndex: (payload: any) => {
+            dispatch(changeActiveIndex(payload))
+        },
         get_songData: (payload: any) => {
             dispatch(getSongData(payload))
+        },
+        onchangeSelectedRadioStation: (payload: any) => {
+            dispatch(changeSelectedRadioStation(payload))
         },
     }
 }

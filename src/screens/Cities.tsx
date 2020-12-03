@@ -88,7 +88,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
                      onchnageSearchData={this.props.onchnageSearchData} />
               {
                  ! this.props.citiesReducer.cities?
-                 <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
+                 <View style={{ justifyContent:'center', alignItems:'center', marginTop:150}}>
                  <ActivityIndicator size="large" color="#0F1E45" />
                 </View>:
                 

@@ -4,27 +4,17 @@ import {
   View,
   StyleSheet,
   Text,
-  ScrollView,
   TouchableOpacity,
-  Animated,
-  Easing,
   TouchableHighlight,
   BackHandler
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceWidth } from "../assets/styles/dimensions"
-import Header from "../components/Header"
-import Search from "../components/Search"
-import { IMenuProps } from "../Interface"
 import { getMenuType } from '../store/actions/filterAction'
 import { changeBackgroundColor } from "../store/actions/themeAction"
 import HeaderByBack from "../components/HeaderByBack"
-import PlaySvG from "../assets/icons/play.svg"
-import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
-import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import ConnectSvg from "../assets/icons/connect.svg"
 import ArrowLeft from "../assets/icons/arrow_right.svg"
 import MyAlarmClockSvg from "../assets/icons/alarmClock.svg"
 import Menu2 from "../assets/icons/menu_2.svg"
@@ -47,7 +37,6 @@ import {
   changeBufferSize,
   changeIsOnheadsets
 } from "../store/actions/settingsAcrion"
-import HeadphoneDetection from 'react-native-headphone-detection';
 import { initTimerSleep } from "../utils/timer_sleep"
 import player from "../services/player/PlayerServices"
 interface IState {
@@ -61,11 +50,6 @@ interface IState {
   autoPlay: boolean,
   ontimerSleep: boolean
 }
-interface ITimeSleepList {
-  time: number,
-  select: boolean
-}
-
 class Settings extends React.Component<ISettings, IState> {
   constructor(props: ISettings) {
 
@@ -182,18 +166,8 @@ class Settings extends React.Component<ISettings, IState> {
     </View>
   }
   _changeBufferSize(res: IData) {
-    // let newArr = this.state.bufferSize
-    // for (let index = 0; index < newArr.length; index++) {
-    //   const element = newArr[index];
-    //   if (element.title == res.title) {
-    //     newArr[index].check = true
-    //   } else {
-    //     newArr[index].check = false
-    //   }
-    // }
     this.props.onchangeBufferSize(res.title)
     this.setState({
-      //bufferSize: newArr,
       visibleModal: null,
     })
   }
@@ -279,9 +253,6 @@ class Settings extends React.Component<ISettings, IState> {
   timerSleep = () => {
     player.stopPlayer()
     BackHandler.exitApp()
-
-    console.log("iiiiiiiiiiiiiiiiiiiiiiiii");
-
   }
   changeTimeSleep = (index: number) => {
     this.setState({

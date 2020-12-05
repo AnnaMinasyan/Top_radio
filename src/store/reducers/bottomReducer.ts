@@ -19,10 +19,10 @@ export interface IBottomState {
     playMusicData: any,
     activeIndex: number,
     activeBi: number,
-
     selectedRadioStation: ISelectedRadioStation | null,
     swiperShowRadiostation: ISelectedRadioStation | null,
-    activeArrow:boolean
+    activeArrow:boolean,
+    miniScreenData:ISelectedRadioStation | null,
 }
 
 
@@ -34,7 +34,8 @@ export const initialState: IBottomState = {
     activeBi: 0,
     selectedRadioStation: null,
     swiperShowRadiostation: null,
-    activeArrow:true
+    activeArrow:true,
+    miniScreenData:null
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
@@ -49,10 +50,13 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
             return { ...state, swiperShowRadiostation: action.payload }
         case BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC:
 
-            return { ...state, selectedRadioStation: { ...state.selectedRadioStation, isPlayingMusic: action.payload } }
+            return { ...state, selectedRadioStation: { ...state.selectedRadioStation, isPlayingMusic: action.payload },
+                miniScreenData: { ...state.miniScreenData, isPlayingMusic: action.payload }
+            }
         case BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG:
 
-            return { ...state, swiperShowRadiostation: { ...state.swiperShowRadiostation, playingSong: action.payload } }
+            return { ...state, swiperShowRadiostation: { ...state.swiperShowRadiostation, playingSong: action.payload },
+                miniScreenData: { ...state.miniScreenData, playingSong: action.payload } }
 
         case BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI:
             console.log("action.payload,", action.payload);
@@ -62,11 +66,9 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
         case BottomType.SET_ACTIVEARROW:
 
   return { ...state,  activeArrow:action.payload}
+        case BottomType.SET_MINI_SCREENDATA:
 
-
-
-
-
+            return { ...state,  miniScreenData:action.payload}
         case BottomType.SET_PLAY_ITEM:
 
             return { ...state, playItem: action.payload, activeBi: action.payload.st[0].bi }

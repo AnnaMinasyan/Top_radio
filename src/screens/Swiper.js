@@ -16,9 +16,7 @@ import Arrow from "../assets/icons/arrow.svg"
 import RedHeart from "../assets/icons/redHeart.svg"
 import Heart from "../assets/icons/heart.svg"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight, deviceWidth } from "../assets/styles/dimensions"
-import auth from '../services/api/auth';
 import SimpleImage from "../components/SimpleImage"
-import BackSvg from "../assets/icons/backgraundHorizontal.svg"
 
 const MARGIN_TOP = Platform.OS === 'ios' ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get('window').height - MARGIN_TOP;
@@ -47,7 +45,8 @@ export default class SwipeUpDown extends Component<Props> {
         super(props);
         this.state = {
             collapsed: true,
-            fadeAnim: new Animated.Value(0)
+            fadeAnim: new Animated.Value(0),
+            visible:false
         };
         this.disablePressToShow = props.disablePressToShow;
         this.SWIPE_HEIGHT = props.swipeHeight ;
@@ -65,19 +64,28 @@ export default class SwipeUpDown extends Component<Props> {
         this.showFull = this.showFull.bind(this);
     }
     fadeIn = () => {
+        this.setState({visible:true})
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(this.state.fadeAnim, {
             toValue: 1,
-            duration: 500
-        }).start();
+            duration: 500,
+            useNativeDriver: true
+        }).start(
+
+        );
     };
 
     fadeOut = () => {
         // Will change fadeAnim value to 0 in 5 seconds
         Animated.timing(this.state.fadeAnim, {
             toValue: 0,
-            duration: 500
-        }).start();
+            duration: 500,
+            useNativeDriver: true
+        }).start(
+
+
+        );
+     //this.setState({visible:false})
     };
     componentWillMount() {
         this._panResponder = PanResponder.create({
@@ -110,7 +118,7 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderMove(event, gestureState) {
-        console.log("222222222")
+
         this.fadeOut()
         if (gestureState.dy > 50 && !this.checkCollapsed) {
             // SWIPE DOWN
@@ -140,13 +148,15 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderRelease(event, gestureState) {
-        console.log("111111")
+
         this.fadeIn()
         if (gestureState.dy < -100 || gestureState.dy < 100) {
             this.showFull();
+
         } else {
             this.showMini();
         }
+
     }
 
     showFull() {
@@ -161,6 +171,7 @@ export default class SwipeUpDown extends Component<Props> {
         this.checkCollapsed = false;
         onShowFull && onShowFull();
 
+        this.setState({visible:false})
     }
 
     showMini() {
@@ -178,73 +189,98 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     render() {
+        console.log("wdpa[d",this.props.bottomReducer.selectedRadioStation.isPlayingMusic)
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (
-            <View
+            <Animated.View
+
                 ref={ref => (this.viewRef = ref)}
 
                 style={[
                     styles.wrapSwipe,
                     {
-                        height:86,
+                        height:0,
                         marginTop: MARGIN_TOP,
                     },
-                    !itemMini && collapsed && { marginBottom: -200 },
+                    !itemMini && collapsed && { marginBottom: -100 },
                     style
                 ]}
             >
-                <View >
 
 
-                    <View >
-                        <Animated.View style={[styles.bottomHeader, {
+                {this.state.visible?
+                    <View style={{ height:120, marginTop:-35}}>
+                    <Animated.View
+
+                    style={[styles.bottomHeader, {
+                        backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+
+                    }, {
+                        opacity: this.state.fadeAnim // Bind opacity to animated value
+                    }]}>
+                    <View
+                        {...this._panResponder.panHandlers}
+                        onTouchStart={() => {
+                        }}
+                        style={{
+                            height:86, width: '70%',
+                            //backgroundColor:'red'
                             backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+                        }}>
+                        <View style={{
+                            flexDirection: 'row',
+                            paddingTop: (15),
+                            paddingLeft: (25),
+                            justifyContent: 'space-between',
+                            paddingRight: (12)
+                        }}>
 
-                        }, {
-                            opacity: this.state.fadeAnim // Bind opacity to animated value
-                        }]}>
-                            <View
-                                {...this._panResponder.panHandlers}
-                                onTouchStart={() => { }}
-                                style={{
-                                    height: calcHeight(86), width: '70%',
-                                    //backgroundColor:'red'
-                                   backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
-                                }}>
-                                <View style={{ flexDirection: 'row', paddingTop: calcHeight(15), paddingLeft: calcWidth(25), justifyContent: 'space-between', paddingRight: calcWidth(12) }}>
+                            <View style={{flexDirection: 'row',}}>
+                                <SimpleImage size={57}
+                                             image={this.props.bottomReducer.miniScreenData.data.im}/>
+                                <View style={{marginLeft: (15)}}>
+                                    <Text
+                                        style={[styles.txtTitle, {color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white',}]}>
+                                        {this.props.bottomReducer.miniScreenData.data.pa
+                                        }</Text>
+                                    {this.props.bottomReducer.miniScreenData.playingSong && <Text
+                                        style={[styles.txtTitle,
+                                            {
+                                                fontSize: (12),
+                                                marginTop: (5),
+                                                width: (200),
+                                                color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white'
+                                            }]}>
 
-                                    <View style={{ flexDirection: 'row', }}  >
-                                        <SimpleImage size={calcWidth(47)} image={this.props.bottomReducer.selectedRadioStation.data.im} />
-                                        <View style={{ marginLeft: calcHeight(15) }}>
-                                            <Text style={[styles.txtTitle, { color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white', }]}>{this.props.bottomReducer.selectedRadioStation.data.pa}</Text>
-                                            {this.props.bottomReducer.selectedRadioStation.playingSong ? <Text
-                                                style={[styles.txtTitle,
-                                                { fontSize: calcFontSize(12), marginTop: calcHeight(5), width: calcWidth(200), color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white' }]}>
-                                                {this.props.bottomReducer.selectedRadioStation.playingSong.artist} {this.props.bottomReducer.selectedRadioStation.playingSong.song}</Text> : null}
-                                        </View>
-                                    </View>
+                                        {this.props.bottomReducer.miniScreenData.playingSong.artist}
+                                        {this.props.bottomReducer.miniScreenData.playingSong.song }</Text> }
+
                                 </View>
                             </View>
-                            {itemMini}
-                        </Animated.View>
+                        </View>
                     </View>
+                    {itemMini}
+                </Animated.View>
+                    </View>
+                        :<View>
 
 
-                </View>
+
+
 
                 { this.props.orientation?
                 <ImageBackground
                 resizeMode='stretch'
 
-                style={{ 
-                    backgroundColor: this.props.backgroundColor,
-                    alignItems:'center',height:60
-                
+                style={{backgroundColor: this.props.backgroundColor,
+                    alignItems:'center',height:70,
+                    paddingTop:15
+
          }}
                 source={require('../assets/images/img1.png')}>
-              
-                      <View  style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55,backgroundColor:'red'}}
+
+                      <View  style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55}}
                        >
                         <View
                             onTouchEnd={() => {
@@ -291,7 +327,7 @@ export default class SwipeUpDown extends Component<Props> {
                                 alignItems: 'center',
                                 height: 40,
                                 width: '15%',
-                                borderWidth:1
+                               // borderWidth:1
                             }}
                             onPress={() => {
                                 this.props.toaddfavorite()
@@ -307,8 +343,8 @@ export default class SwipeUpDown extends Component<Props> {
 
                     style={{
                         backgroundColor: this.props.backgroundColor,
+                      marginTop:50
 
-                        zIndex: 1,
 
                     }}>
                     <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}
@@ -362,12 +398,12 @@ export default class SwipeUpDown extends Component<Props> {
                             }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
                     </View>
                     
-                </View>}
+                    </View>}</View>}
                 {itemFull}
-            </View>
+            </Animated.View>
         );
     }
-}
+};
 
 const styles = StyleSheet.create({
     wrapSwipe: {
@@ -383,13 +419,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-paddingTop:10,
+//paddingTop:10,
         width: '15%'
     },
     bottomHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingRight: calcWidth(12),
+        paddingRight: (12),
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -398,7 +434,8 @@ paddingTop:10,
         shadowOpacity: 0.50,
         shadowRadius: 12.35,
         elevation: 25,
-        marginTop: -28,
+   //     marginTop: -28,
+        zIndex:1,
       //  paddingTop:calcHeight(10)
     },
 

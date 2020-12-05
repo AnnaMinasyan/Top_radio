@@ -4,18 +4,14 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  
   Linking,
-
 } from 'react-native';
 import Menu from "../assets/icons/menu.svg"
 import Logo from "../assets/icons/logo.svg"
-import Menu2 from "../assets/icons/menu_2.svg"
 import MenuDots from "../assets/icons/menu_dots.svg"
 import Heart from "../assets/icons/heart.svg"
 import Modal from 'react-native-modal';
 import global_styles from "../assets/styles/global_styles"
-import { calcFontSize } from "../assets/styles/dimensions"
 import { connect } from "react-redux"
 import { changeFavoriteType } from '../store/actions/filterAction'
 import { DrawerActions } from '@react-navigation/native';
@@ -25,7 +21,6 @@ import SearchSvg from "../assets/icons/search.svg"
 import Search from "./Search"
 import CloseSvg from "../assets/icons/close.svg"
 import Arrow from "../assets/icons/arrow_back.svg"
-
 interface Props {
   onchangeFavoriteType(): void;
   navigation: NavigationScreenProp<any, any>;
@@ -159,7 +154,7 @@ class Header extends React.Component<Props, IState> {
       this.renderTitle()
       :
        <View style={{
-       width:(240),
+       width:'50%',
        justifyContent:'center',
        alignItems:'center',
         marginLeft:(20),}}>

@@ -4,12 +4,8 @@ import {
     ScrollView,
     View,
     Text,
-    Animated,
     TouchableOpacity,
-    Image
 } from 'react-native'
-import { SafeAreaView } from 'react-navigation';
-import { bindActionCreators } from "redux"
 import { connect } from 'react-redux';
 import Logo from "../assets/icons/logo.svg"
 import Guitar from "../assets/icons/guitar.svg"
@@ -31,8 +27,6 @@ interface Props {
     filterReducer: any
 }
 const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
-    
-    
     return (<View style={{height:'100%'}}>
         <ScrollView style={{ backgroundColor: '#0F1E45', height:deviceHeight}}>
             <View style={styles.container} >

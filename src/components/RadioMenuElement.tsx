@@ -3,19 +3,12 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  Image
+  TouchableOpacity
 } from 'react-native';
-import Menu from "../assets/icons/menu.svg"
-import Logo from "../assets/icons/logo.svg"
-import Menu2 from "../assets/icons/menu_2.svg"
-import MenuDots from "../assets/icons/menu_dots.svg"
 import Heart from "../assets/icons/heart.svg"
 import SimpleImage from "./SimpleImage"
 import RedHeart from "../assets/icons/redHeart.svg"
-//import MenuSvg from "../assets/icons/menu_icon.svg"
 import global_styles from "../assets/styles/global_styles"
-import {calcFontSize,calcHeight,calcWidth} from "../assets/styles/dimensions"
 import {IRadioMenuElementProps} from "../Interface"
 interface IState {
     isFavorite:boolean

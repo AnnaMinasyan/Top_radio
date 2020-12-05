@@ -4,11 +4,7 @@ import {
   View,
   StyleSheet,
   Text,
-  ScrollView,
   TouchableOpacity,
-  Animated,
-  Easing,
-  TouchableWithoutFeedback,
   FlatList
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
@@ -28,8 +24,6 @@ import SmoothPicker from 'react-native-smooth-picker';
 import Modal from 'react-native-modal'; // 2.4.0
 import PowerOffSvg  from "../assets/icons/powerOff.svg"
 import SearchSvg from "../assets/icons/search.svg"
-import { changeplayItem,} from '../store/actions/bottomAction'
-
 import { changeSearchData } from '../store/actions/filterAction'
 import { createFilter } from 'react-native-search-filter';
 const KEYS_TO_FILTERS = ['pa'];

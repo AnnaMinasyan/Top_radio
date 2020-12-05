@@ -2,50 +2,32 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Text,
-    ScrollView,
-    TouchableOpacity,
-    Animated,
-    Easing,
     TouchableHighlight,
     FlatList,
-    SafeAreaView
 } from 'react-native';
-import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
-import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import {
     changeplayItem,
     changePlayingData,
     getSongData,
-    changeActiveIndex, changeSelectedRadioStation,
-
+    changeActiveIndex, changeMiniScreenData,
+    changeSelectedRadioStation
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
-    
-    addFavorite,
     getFavorites,
     changeSearchData,
     changePlayingMusic,
 
 } from '../store/actions/filterAction'
-import Heart from "../assets/icons/heart.svg"
-import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
-import {
-    getMenuData,
-  
-    
-    changeSwiperData
-} from '../store/actions/menuActions'
 import player from "../services/player/PlayerServices"
 import Bottom from "../components/Bottom"
 
@@ -114,6 +96,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 }
                 this._addLookingList(data.item)
                 this.props.onchangeSelectedRadioStation(radioStation)
+                this.props.get_songData(radioStation)
+                this.props.onchangeMiniScreenData(radioStation)
                 player.open()
                 this.props.onchangeActiveIndex(data.index)
             }}
@@ -142,6 +126,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 }
                 this._addLookingList(data.item)
                 this.props.onchangeSelectedRadioStation(radioStation)
+                this.props.get_songData(radioStation)
+                this.props.onchangeMiniScreenData(radioStation)
                 player.open()
                 this.props.onchangeActiveIndex(data.index)
             }} style={{ padding: calcWidth(8), }}>
@@ -153,7 +139,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.state.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        console.log(list);
         
         return (
             <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
@@ -221,6 +206,8 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeSelectedRadioStation: (payload: any) => {
             dispatch(changeSelectedRadioStation(payload))
+        }, onchangeMiniScreenData: (payload: any) => {
+            dispatch(changeMiniScreenData(payload))
         },
     }
 }

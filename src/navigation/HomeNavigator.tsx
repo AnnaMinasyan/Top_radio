@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect,useState} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import BaseHeader from "../components/BaseHeader"
 import Menu from "../screens/RadiosList" 
@@ -9,12 +9,15 @@ import MyAlarmClock from "../screens/MyAlarmClock"
 import FilterMenu from "../screens/FilterMenu"
 import Settings from "../screens/Settings"
 import Favorite from "../screens/Favorite"
+import navigationService from "./NavigationService";
+import {NavigationContainer} from "@react-navigation/native";
 const Stack = createStackNavigator();
+
 const HomeNavigator: React.FunctionComponent = () => (
-  <Stack.Navigator 
 
+  <Stack.Navigator
 
-  initialRouteName="Menu">
+  initialRouteName='Menu'>
   
     <Stack.Screen
       name="Menu"

@@ -6,7 +6,7 @@ import {
     setplayItemArtistandSong,
     setPlayingData,
     setActiveIndex,
-
+    setMiniScreenData,
     setSelectedRadioStation,
     setSelectedRadioStationPlaying,
     setSwiperShowStation,
@@ -28,14 +28,15 @@ function* onGetPlayType({ payload }: any) {
 }
 function* addselectedRadioStation({ payload }: any) {
     try {
-        console.log("payloadpayload",payload);
-        
+        console.log("====================================================================");
+        player.open()
+        yield put(setSelectedRadioStation(payload))
         const data = yield auth.getPlayItemType(payload.data.pl)
-        console.log(data);
+
         let station = payload
         station.activeBi=payload.data.st[0]
         station.playingSong = data.playList[0]
-        console.log("station", station);
+
 
         yield put(setSelectedRadioStation(station))
 
@@ -68,7 +69,6 @@ function* onGetSongData({ payload }: any) {
         if (autoplay) {
             yield put(changePlayingMusic(true))
 
-            yield player._startPlayMusic(payload, data.playList[0])
         }
     } catch (ex) {
         console.log(ex);
@@ -111,6 +111,14 @@ function* changeActiveArrow({ payload }: any) {
     try {
 
         yield put(setActiveArrow(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
+}
+function* changeMiniScreenData({ payload }: any) {
+    try {
+
+        yield put(setMiniScreenData(payload))
     } catch (ex) {
         console.log(ex);
     }
@@ -160,6 +168,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_ACTIVEARROW as any,
         changeActiveArrow
+    )
+    yield takeEvery(
+        BottomType.CHANGE_MINI_SCREENDATA as any,
+        changeMiniScreenData
     )
 }
 

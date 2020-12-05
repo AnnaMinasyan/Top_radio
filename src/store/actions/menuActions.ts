@@ -72,3 +72,15 @@ export const changeSwiperData = (payload: any) => {
 		payload
 	};
 };
+export const changeInitialRouteName = (payload: any) => {
+	return {
+		type: MenuTypes.CHANGE_ACTIVE_INITIALROUTE_NAME,
+		payload
+	};
+};
+export const setInitialRouteName = (payload: any) => {
+	return {
+		type: MenuTypes.SET_ACTIVE_INITIALROUTE_NAME,
+		payload
+	};
+};

@@ -2,28 +2,19 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Text,
-    ScrollView,
-    SafeAreaView,
     FlatList,
-    TouchableOpacity,
     TouchableHighlight,
     ActivityIndicator
 } from 'react-native';
-import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 import Header from "../components/Header"
-import Search from "../components/Search"
-import { IGanresProps, ICitiesConnect } from "../Interface"
+import { IGanresProps } from "../Interface"
 import { getGanresData } from '../store/actions/ganresAction'
 import { changeFilterData,
     changeHeaderText
  } from '../store/actions/menuActions'
 import { changeSearchData } from '../store/actions/filterAction'
-import BottomSwiper from "../components/BottomSwiper"
 import CitiesMenuElement from "../components/CitiesMenuElement"
-import { storeData, getData } from "../utils/local_storage"
-import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import { createFilter } from 'react-native-search-filter';
 const KEYS_TO_FILTERS = ['pa'];
@@ -91,11 +82,7 @@ class Genres extends React.Component<IGanresProps, IState> {
                         maxToRenderPerBatch={10}
                     /> 
                 }
-                 {this.props.bottomReducer.selectedRadioStation ? 
-                     <BottomSwiper
-                     isSwiper={false}
-                         navigation={this.props.navigation}
-                     /> : <View />}
+
             </View>
         );
     }

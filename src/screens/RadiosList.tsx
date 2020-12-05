@@ -2,28 +2,17 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Text,
-    ScrollView,
-    TouchableOpacity,
-    Animated,
-    Easing,
     TouchableHighlight,
     FlatList,
-    SafeAreaView,
     ActivityIndicator,
-    Image,
-    Button,
     Dimensions
 } from 'react-native';
 import player from "../services/player/PlayerServices"
-import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
-import Search from "../components/Search"
 import { IMenuProps } from "../Interface"
 import {
     getMenuData,
-
     changeSwiperData
 } from '../store/actions/menuActions'
 import {
@@ -32,24 +21,19 @@ import {
     changeActiveIndex,
     changeActiveBi,
     getSongData,
-    changeSelectedRadioStation
+    changeSelectedRadioStation,
+    changeMiniScreenData
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
-
-    addFavorite,
     getFavorites,
     changeSearchData,
     changePlayingMusic,
-
 } from '../store/actions/filterAction'
-import Heart from "../assets/icons/heart.svg"
-import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import BottomSwiper from "../components/BottomSwiper"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
 
@@ -131,15 +115,16 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
+                console.log("onpress")
                 let radioStation = {
                     data: data.item,
                     isPlayingMusic: false,
                     activeBi:data.item.st[0],
                     id: data.item.id
                 }
-                this._addLookingList(data.item)
                 this.props.onchangeSelectedRadioStation(radioStation)
-                player.open()
+                this.props.onchangeMiniScreenData(radioStation)
+               this.setState({swipeablePanelActive:true})
                 this.props.onchangeActiveIndex(data.index)
             }}>
             <RadioMenuElement
@@ -164,6 +149,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 }
                 this._addLookingList(data.item)
                 this.props.onchangeSelectedRadioStation(radioStation)
+                this.props.onchangeMiniScreenData(radioStation)
                 player.open()
                 this.props.onchangeActiveIndex(data.index)
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
@@ -209,11 +195,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                                 keyExtractor={(item: any, index: number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
                             /> }
-                {/* {this.props.bottomReducer.selectedRadioStation ?
-                    <BottomSwiper
-                    isSwiper={true}
-                        navigation={this.props.navigation}
-                    />: <View />} */}
+
             </View>
         );
     }
@@ -261,6 +243,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeSelectedRadioStation: (payload: any) => {
             dispatch(changeSelectedRadioStation(payload))
+        },
+        onchangeMiniScreenData: (payload: any) => {
+            dispatch(changeMiniScreenData(payload))
         },
     }
 }

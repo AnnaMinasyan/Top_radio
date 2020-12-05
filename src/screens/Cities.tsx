@@ -2,33 +2,23 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Text,
-    ScrollView,
-    SafeAreaView,
     FlatList,
     TouchableHighlight,
     ActivityIndicator
 } from 'react-native';
-import global_styles from "../assets/styles/global_styles"
-import { calcFontSize, calcHeight, calcWidth,deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
-import Search from "../components/Search"
-import { ICitiesProps, ICitiesConnect } from "../Interface"
+import { ICitiesProps } from "../Interface"
 import { changeFilterData,
     changeHeaderText } from '../store/actions/menuActions'
 import { getCitiesData } from '../store/actions/citiesAction'
 import { changeSearchData } from '../store/actions/filterAction'
 import CitiesMenuElement from "../components/CitiesMenuElement"
-import { storeData, getData } from "../utils/local_storage"
-import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createFilter } from 'react-native-search-filter';
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     colors: string[]
 }
-
 class Cities extends React.Component<ICitiesProps, IState> {
     constructor(props: ICitiesProps) {
 
@@ -43,9 +33,6 @@ class Cities extends React.Component<ICitiesProps, IState> {
     componentDidMount() {
         this.props.onGetCities()
     }
-
-    changeViewStyle(res: boolean) {
-    }
     filterData(res:any){
         const array: any = []
 
@@ -59,7 +46,6 @@ class Cities extends React.Component<ICitiesProps, IState> {
                 })
             }
         }
-        console.log("cityyyyyy",array);
 
         this.props.onchangeFilterData(array)
 
@@ -91,7 +77,6 @@ class Cities extends React.Component<ICitiesProps, IState> {
                  <View style={{ justifyContent:'center', alignItems:'center', marginTop:150}}>
                  <ActivityIndicator size="large" color="#0F1E45" />
                 </View>:
-                
                      <FlatList
                      numColumns={1}
                         data={list}

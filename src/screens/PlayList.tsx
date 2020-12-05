@@ -5,26 +5,16 @@ import {
     Text,
     ScrollView,
     TouchableOpacity,
-    Animated,
     ActivityIndicator
 } from 'react-native';
-import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
-
-import { IPlayListProps, ICitiesConnect } from "../Interface"
+import { IPlayListProps} from "../Interface"
 import { getPlayList } from '../store/actions/playlistAction'
 import HeaderByBack from "../components/HeaderByBack"
 import { connect } from "react-redux"
 import moment from 'moment-timezone';
-
 interface IState {
     filterType: string
-}
-interface IPlayListState {
-    title: string,
-    count: number,
-    auther: string,
-    type: string
 }
 class PlayList extends React.Component<IPlayListProps, IState> {
     constructor(props: IPlayListProps) {

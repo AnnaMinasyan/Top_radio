@@ -11,8 +11,6 @@ interface Props {
   color?: string,
   image?: any
 }
-import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
-import keys from "../services/keys";
 
 interface IState { }
 class SimpleImage extends React.Component<Props, IState> {
@@ -27,8 +25,7 @@ class SimpleImage extends React.Component<Props, IState> {
     if (this.props.size == 98 || this.props.size == 180) {
       count = 180
     }
-   // console.log(":::::",'https://top-radio.ru/assets/image/radio/' + count + '/' + this.props.image);
-    
+
     return (
       <View style={[styles.header,{
         height: this.props.size,

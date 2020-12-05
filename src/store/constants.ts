@@ -16,6 +16,8 @@ export enum MenuTypes {
     CHANGE_SWIPER_DATA = '@menutypes/CHANGE_SWIPER_DATA',
     SET_SWIPER_DATA = '@menutypes/SET_SWIPER_DATA',
     SET_FILTER_DATA = '@menutypes/SET_FILTER_DATA',
+    SET_ACTIVE_INITIALROUTE_NAME= '@menutypes/SET_ACTIVE_INITIALROUTE_NAME',
+   CHANGE_ACTIVE_INITIALROUTE_NAME= '@menutypes/CHANGE_ACTIVE_INITIALROUTE_NAME',
 }
 export enum PlayListTypes {
     SET_PLAY_LIST = '@playListtypes/SET_PLAY_LIST',
@@ -76,7 +78,9 @@ export enum BottomType {
     SET_ACTIVE_INDEX = '@bottomtypes/SET_ACTIVE_INDEX',
     SET_ACTIVE_BI = '@bottomtypes/SET_ACTIVE_BI',
     CHANGE_ACTIVE_BI = '@bottomtypes/CHANGE_ACTIVE_BI',
-    GET_SONG_DATA = '@bottomtypes/GET_SONG_DATA',  
+    GET_SONG_DATA = '@bottomtypes/GET_SONG_DATA',
+    SET_MINI_SCREENDATA= '@bottomtypes/SET_MINI_SCREENDATA',
+    CHANGE_MINI_SCREENDATA= '@bottomtypes/CHANGE_MINI_SCREENDATA',
    
 
     SET_SELECTED_RADIOSTATION = '@bottomtypes/SET_SELECTED_RADIOSTATION',

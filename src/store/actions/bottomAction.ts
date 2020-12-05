@@ -72,7 +72,7 @@ export const changeActiveBi = (payload: number) => {
 	};
 };
 export const getSongData = (payload: any) => {
-console.log('payload',payload);
+
 
 
 	return {
@@ -96,7 +96,7 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const setSelectedRadioStationPlaying = (payload: any) => {
-		console.log("action");
+
 		
 		return {
 			type: BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC,
@@ -105,7 +105,7 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const changeSelectedRadioStationPlaying = (payload: any) => {
-		console.log("ppppppppppppppp",payload);
+
 		
 		return {
 			type: BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC,
@@ -114,8 +114,7 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const setSwiperShowStation = (payload: any) => {
-		console.log("action");
-		
+
 		return {
 			type: BottomType.SET_SWIPERSHOW_RADIOSTATION,
 			payload
@@ -130,8 +129,8 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const setSwiperPlayingSong= (payload: any) => {
-		console.log("action");
-		
+
+		console.log("__________________________________________________________________________________")
 		return {
 			type: BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG,
 			payload
@@ -146,7 +145,7 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const setSwiperActiveBi= (payload: any) => {
-		console.log("action",payload);
+
 		
 		return {
 			type: BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI,
@@ -162,7 +161,7 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const changeActiveArrow= (payload: any) => {
-		console.log("action",payload);
+
 		
 		return {
 			type: BottomType.CHANGE_ACTIVEARROW,
@@ -177,3 +176,17 @@ export const setSelectedRadioStation = (payload: any) => {
 	
 		};
 	};
+	export const changeMiniScreenData = (payload: any) => {
+	return {
+		type: BottomType.CHANGE_MINI_SCREENDATA,
+		payload
+
+	};
+};
+export const setMiniScreenData = (payload: any) => {
+	return {
+		type: BottomType.SET_MINI_SCREENDATA,
+		payload
+
+	};
+};

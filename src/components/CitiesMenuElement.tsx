@@ -2,15 +2,10 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Text,
-    TouchableOpacity
+    Text
 } from 'react-native';
-
 import SimpleImage from "./SimpleImage"
 import ConnectSvg from "../assets/icons/connect.svg"
-//import MenuSvg from "../assets/icons/menu_icon.svg"
-import global_styles from "../assets/styles/global_styles"
-import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 import { ICitiesMenuElementProps, ICitiesConnect } from "../Interface"
 interface IState {
     isFavorite: boolean,
@@ -23,24 +18,17 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
             isFavorite: false,
             colors:['#4F67A6','#41A1BF','#42B39E','#49BE7F','#7C59C5']
         }
-
     }
-
     render() {
-        
         return (
-
-
             <View style={[styles.body,
             {backgroundColor:this.props.backColor,
                 borderBottomColor:this.props.backColor=="white"?'#F3F4F5':'#1E2B4D',
             }]}>
                 <View style={styles.row}>
                     <SimpleImage size={54} title={this.props.info.pa} 
-                 color={this.state.colors[this.props.info.id %5]}  
-               //   color={'yellow'}
+                 color={this.state.colors[this.props.info.id %5]}
                     />
-
                     <Text style={[styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":'white'}]}>{this.props.info.pa}</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
@@ -49,8 +37,6 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
                     {this.props.info.co}
                     </Text>
                 </View>
-
-
             </View>
         );
     }

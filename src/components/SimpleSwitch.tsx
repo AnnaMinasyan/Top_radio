@@ -3,15 +3,7 @@ import React from 'react'
 import {
   View,
   StyleSheet,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Animated,
-  Easing,
-  TouchableWithoutFeedback,
-
 } from 'react-native';
-import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 
 import { connect } from "react-redux"

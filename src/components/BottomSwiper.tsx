@@ -3,8 +3,7 @@ import {
     View,
     StyleSheet,
     Text,
-    TouchableOpacity, SafeAreaView,
-    StatusBar,
+    TouchableOpacity,
     Animated,
     PermissionsAndroid,
     Platform,
@@ -31,20 +30,19 @@ import SimpleImage from "./SimpleImage"
 import PlaySvG from "../assets/icons/play.svg"
 import Stop from "../assets/icons/stop.svg"
 import { changeswipeablePanelActive } from '../store/actions/filterAction'
-import { changeSwiperData } from '../store/actions/menuActions'
 import {
     changeplayItem,
     changePlayingData,
     chnageplayItemArtistandSong,
     changeActiveIndex,
-    changeActiveBi,
+    changeMiniScreenData,
     getSongData,
     changeSelectedRadioStationPlaying,
     changeSwiperShowStation,
     changeSelectedRadioStation,
     changeSwiperActiveBi
 } from "../store/actions/bottomAction";
-import Arrow from "../assets/icons/arrow.svg"
+import {changeInitialRouteName} from "../store/actions/menuActions"
 import RecordSvg from "../assets/icons/disrecording.svg"
 import DisRecordSvg from "../assets/icons/recording.svg"
 import TrackPlayer, { play } from 'react-native-track-player';
@@ -53,21 +51,12 @@ import { getPlayList } from "../store/actions/playlistAction"
 import { addFavorites } from '../store/actions/favoritesActions';
 import BackGroundSvg from "../assets/icons/background.svg"
 import global_styles from "../assets/styles/global_styles"
-import { Dimensions } from 'react-native';
-import BackSvg from "../assets/icons/backgraundHorizontal.svg"
-import SlidingUpPanel from 'rn-sliding-up-panel';
-import Intro from "../screens/Intro"
 import player from "../services/player/PlayerServices"
 import RNFS from 'react-native-fs';
-import { getData } from '../utils/local_storage';
-import FileViewer from 'react-native-file-viewer';
+import navigationService from "../navigation/NavigationService"
 var RNFileManager = require('react-native-file-manager');
-
-import BottomSheet from '@gorhom/bottom-sheet';
 import SwipeUpDown from '../screens/Swiper';
-
 TrackPlayer.registerPlaybackService(() => require('../../service'));
-
 interface Props {
     onCloseStart(): void;
     navigation: NavigationScreenProp<any, any>;
@@ -95,7 +84,9 @@ interface Props {
     onchangeSelectedRadioStationPlaying(payload: any): void;
     onchangeSwiperShowStation(payload: any): void;
     onchangeSelectedRadioStation(payload: any): void;
-    isSwiper: boolean
+    isSwiper: boolean,
+    onchangeMiniScreenData(payload:any):void;
+onchangeInitialRouteName(payload:any):void;
 }
 interface IState {
     menuStyle: boolean,
@@ -120,7 +111,8 @@ interface IState {
     playTime: string;
     duration: string;
     playingUrl: string | null,
-    loading: boolean
+    loading: boolean,
+    loadingStation:boolean
 }
 class BottomSwiper extends React.Component<Props, IState> {
     swiperRef: any
@@ -157,7 +149,8 @@ class BottomSwiper extends React.Component<Props, IState> {
             playTime: '00:00:00',
             duration: '00:00:00',
             playingUrl: null,
-            loading: false
+            loading: false,
+            loadingStation:false
         }
     }
     async componentDidMount() {
@@ -203,6 +196,7 @@ class BottomSwiper extends React.Component<Props, IState> {
     lastClickData = Date.now()
     swipeLeft() {
         console.log(this.count);
+        this.setState({loadingStation:true, loading:true})
         if (this.count > 0) {
             let radiostation = {
                 data: this.props.menuReducer.filterData[this.count - 1],
@@ -215,8 +209,11 @@ class BottomSwiper extends React.Component<Props, IState> {
             }
             this.timerHandle = setTimeout(() => {
                 this.props.onchangeSwiperShowStation(radiostation)
+                if(!this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+                    this.props.onchangeMiniScreenData(radiostation)
+                }
                 this.props.get_songData(radiostation)
-
+                this.setState({loadingStation:false, loading:false})
             }, 500)
 
             if (this.props.settingsReducer.autoPlay) {
@@ -229,7 +226,7 @@ class BottomSwiper extends React.Component<Props, IState> {
 
     swipeRight() {
         console.log(this.count);
-
+        this.setState({loadingStation:true, loading:true})
         let radiostation = {
             data: this.props.menuReducer.filterData[this.count + 1],
             isPlayingMusic: false,
@@ -239,10 +236,16 @@ class BottomSwiper extends React.Component<Props, IState> {
         if (this.timerHandle) {
             clearTimeout(this.timerHandle);
         }
+        this.props.onchangeSwiperShowStation(radiostation)
+        if(!this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+            this.props.onchangeMiniScreenData(radiostation)
+        }
         this.timerHandle = setTimeout(() => {
-            this.props.onchangeSwiperShowStation(radiostation)
-            this.props.get_songData(radiostation)
 
+
+
+            this.props.get_songData(radiostation)
+            this.setState({loadingStation:false,loading:false})
         }, 500)
 
         if (this.props.settingsReducer.autoPlay) {
@@ -251,34 +254,54 @@ class BottomSwiper extends React.Component<Props, IState> {
             })
         }
     }
+    chooseList(){
+        if(this.props.bottomReducer.selectedRadioStation && this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
+            return this.props.bottomReducer.selectedRadioStation.id
+        }else if(this.props.bottomReducer.selectedRadioStation==null && this.props.bottomReducer.swiperShowRadiostation) {
+            return this.props.bottomReducer.swiperShowRadiostation.id
+        }
+    }
     renderBottomSheetheader() {
         return <View style={{ flexDirection: 'row', alignItems: 'center', }}>
             <TouchableOpacity
                 style={global_styles.searchbtn}
                 onPress={() => {
-                    this.props.toaddfavorite(this.props.bottomReducer.selectedRadioStation.data)
+                    this.props.toaddfavorite(this.props.bottomReducer.miniScreenData.data)
                 }}
             >
-                {this.checkIsFovorite(this.props.bottomReducer.selectedRadioStation.id) ?
-                    <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
-                    <Heart fill='#B3BACE' height={calcHeight(18.54)} width={calcWidth(20.83)} />}
+                {this.checkIsFovorite(this.props.bottomReducer.miniScreenData.id) ?
+                    <RedHeart fill='#FF5050' height={(19)} width={(21)} /> :
+                    <Heart fill='#B3BACE' height={(18.54)} width={(20.83)} />}
             </TouchableOpacity>
             <TouchableOpacity
                 style={[styles.player,
                 { backgroundColor: this.props.theme.backgroundColor == "white" ? 'white' : '#0D1834' }]}
                 onPress={() => {
-                    this.isPlaying()
+                    if (this.props.bottomReducer.selectedRadioStation?.id == this.props.bottomReducer.miniScreenData.id) {
+                        this.isPlaying()
+                    } else {
+                        player._pouseMusic()
+                        this.setState({ loading: true })
+                        let d = this.props.bottomReducer.miniScreenData
+                        d.isPlayingMusic = true
+                        this.props.onchangeSelectedRadioStation(d)
+                        setTimeout(() => {
+                            player._startPlayMusic(this.props.bottomReducer.miniScreenData.data, this.props.bottomReducer.miniScreenData.data.st[0])
+                            this.setState({ swiperIndex: this.count, loading: false })
+
+                        }, 500);
+                    }
                 }}
             >
-                {this.props.bottomReducer.selectedRadioStation.isPlayingMusic ? <Stop width={calcWidth(16)} height={calcHeight(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
-                    <PlaySvG width={calcWidth(16)} height={calcHeight(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} />}
+                {this.props.bottomReducer.miniScreenData.isPlayingMusic ? <Stop width={(16)} height={(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
+                    <PlaySvG width={calcWidth(16)} height={(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} />}
             </TouchableOpacity>
         </View>
     }
     _navigatePlayList() {
         if (this.props.bottomReducer.swiperShowRadiostation.data.pl) {
             this.props.ongetPlayList(this.props.bottomReducer.swiperShowRadiostation.data)
-            this.props.navigation.navigate('PlayList')
+            navigationService.navigate('PlayList')
         }
     }
 
@@ -430,6 +453,7 @@ class BottomSwiper extends React.Component<Props, IState> {
         }
     }
     renderBottomSheet() {
+
         return <View style={{
             height: deviceHeight, paddingBottom: 250, backgroundColor: this.props.theme.backgroundColor
         }}>
@@ -457,10 +481,13 @@ class BottomSwiper extends React.Component<Props, IState> {
                                 {"<"}
                             </Text>
                         </TouchableOpacity> : <View style={styles.arrow} />}
+
                     <View
                         style={{ justifyContent: 'center', alignItems: 'center', marginRight: 15 }}>
-
-                        <SimpleImage size={180} image={this.props.bottomReducer.swiperShowRadiostation.data.im} />
+                        {this.state.loadingStation?<View  style={styles.swiperImage}>
+                            <ActivityIndicator size={100} color="#EBEEF7"  />
+                        </View>:
+                        <SimpleImage size={180} image={this.props.bottomReducer.swiperShowRadiostation.data.im} />}
                     </View>
                     {this.props.bottomReducer.activeArrow && this.count < this.props.menuReducer.menuData.length - 1 ?
                         <TouchableOpacity style={styles.arrow}
@@ -548,6 +575,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                                 let d = this.props.bottomReducer.swiperShowRadiostation
                                 d.isPlayingMusic = true
                                 this.props.onchangeSelectedRadioStation(d)
+                               // this.props.onchangeMiniScreenData(d)
                                 setTimeout(() => {
                                     player._startPlayMusic(this.props.bottomReducer.swiperShowRadiostation.data, this.props.bottomReducer.swiperShowRadiostation.data.st[0])
                                     this.setState({ swiperIndex: this.count, loading: false })
@@ -557,7 +585,8 @@ class BottomSwiper extends React.Component<Props, IState> {
                         }}
                         style={[styles.btnPlay,
                         { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', marginTop: calcHeight(5) }]}>
-                        {this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation.id && this.props.bottomReducer.selectedRadioStation.isPlayingMusic ? <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
+                        {this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation.id && this.props.bottomReducer.selectedRadioStation.isPlayingMusic ?
+                            <Stop width={calcWidth(24)} height={calcHeight(27)} fill='white' /> :
                             <PlaySvG width={calcWidth(26.66)} height={calcHeight(37)} fill='white' />}
                     </TouchableOpacity>
                 }
@@ -580,7 +609,7 @@ class BottomSwiper extends React.Component<Props, IState> {
             style={{
                 backgroundColor: this.props.theme.backgroundColor,
                 alignItems: 'center',
-                height: '65%',
+                height: '75%',
             }}
         >
             <View ref="rootView" style={{
@@ -602,8 +631,10 @@ class BottomSwiper extends React.Component<Props, IState> {
                         {"<"}
                     </Text>
                 </TouchableOpacity> : <View style={[styles.arrow, { marginLeft: 20, marginTop: deviceWidth / 4 }]} />}
-
-                <SimpleImage size={180} image={this.props.bottomReducer.swiperShowRadiostation.data.im} />
+                {this.state.loadingStation?<View  style={styles.swiperImage}>
+                        <ActivityIndicator size={100} color="#EBEEF7"  />
+                    </View>:
+                <SimpleImage size={180} image={this.props.bottomReducer.swiperShowRadiostation.data.im} />}
                 <View style={{ flexDirection: 'row', marginLeft: 30, marginTop: 10 }}>
                     <View>
                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
@@ -697,7 +728,7 @@ class BottomSwiper extends React.Component<Props, IState> {
     }
 
     render() {
-        console.log('rendeeeeeeeeeeeeeeeeeeeeeer');
+        console.log('rendeeeeeeeeeeeeeeeeeeeeeer', this.state.loading);
 
         return (
 
@@ -794,11 +825,33 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeSelectedRadioStation: (payload: any) => {
             dispatch(changeSelectedRadioStation(payload))
         },
+        onchangeMiniScreenData: (payload: any) => {
+            dispatch(changeMiniScreenData(payload))
+        },
+        onchangeInitialRouteName: (payload: any) => {
+            dispatch(changeInitialRouteName(payload))
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(BottomSwiper);
 
 const styles = StyleSheet.create({
+    swiperImage: {
+        backgroundColor: 'white',
+        borderRadius: 8,
+        shadowColor:'red',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.19,
+        shadowRadius: 4.65,
+        height: 180,
+        width:180,
+        elevation: 4,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     container: {
         position: 'absolute',
         width: '100%',
@@ -978,12 +1031,12 @@ const styles = StyleSheet.create({
     },
     player: {
         backgroundColor: 'white',
-        width: calcHeight(54),
-        height: calcHeight(54),
+        width: (54),
+        height: (54),
         borderRadius: 30,
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: calcWidth(5),
+        marginLeft: (5),
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

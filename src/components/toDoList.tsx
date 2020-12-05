@@ -10,7 +10,6 @@ interface Props {
   interface IState {
    status:boolean,
   }
-  //export const ToDoTask = (): React.ReactElement => {
   class ToDo extends React.Component<Props, IState> {
     constructor(props: Props) {
         super(props)

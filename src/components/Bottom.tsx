@@ -157,7 +157,7 @@ class Bottom extends React.Component<Props, IState> {
         this.gestureSateInterval = setInterval(() => {
 
             if (!!this.gestureSate) {
-                // console.log(this.gestureSate.vy,this.gestureSate.vx);
+
                 if (this.gestureSate.dy > -10 && this.gestureSate.dy < 10 || this.gestureSate.dx > -10 && this.gestureSate.dx < 10) {
 
                 } else {

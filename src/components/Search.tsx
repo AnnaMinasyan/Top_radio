@@ -2,16 +2,10 @@ import React from 'react';
 import {
   View,
   StyleSheet,
-  Text,
-  ScrollView,TouchableOpacity,
   TextInput
 } from 'react-native';
-import SearchSvg from "../assets/icons/search.svg"
-import MenuSvg from "../assets/icons/menu_icon.svg"
-import global_styles from "../assets/styles/global_styles"
-import {calcFontSize,calcHeight,calcWidth} from "../assets/styles/dimensions"
-import SearchInput, { createFilter } from 'react-native-search-filter';
-const KEYS_TO_FILTERS = ['pa'];
+import {calcHeight,calcWidth} from "../assets/styles/dimensions"
+import { createFilter } from 'react-native-search-filter';
 
 interface Props {
   renderSearchData(type:any):void;
@@ -25,7 +19,6 @@ class Search extends React.Component<Props, IState> {
     this.state = {
       searchTerm: ''
     }
-
   }
   searchUpdated(term:any) {
     this.setState({ searchTerm: term })
@@ -40,10 +33,8 @@ class Search extends React.Component<Props, IState> {
         style={{borderBottomWidth:calcHeight(2),
         borderColor:'#57678F',
         width:'100%',
-        // paddingBottom:calcHeight(13),
-       //  paddingHorizontal:calcWidth(3),
          flexDirection:'row'}}>
-        {/* <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} style={{marginTop:calcHeight(20), marginRight:calcWidth(13.26)}}/> */}
+
         <TextInput 
           onChangeText={(term) => { this.searchUpdated(term),
              this.props.renderSearchData(term) }} 

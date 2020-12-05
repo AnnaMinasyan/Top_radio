@@ -2,23 +2,15 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Text,
-    ScrollView,
     TouchableHighlight,
     Animated,
-    Easing,
-    TouchableWithoutFeedback,
     FlatList,
-    SafeAreaView
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
-import Search from "../components/Search"
 import { IFilterMenuProps } from "../Interface"
-import HeaderByBack from "../components/HeaderByBack"
 import player from "../services/player/PlayerServices"
-
 import {  getMenuData,changeSwiperData} from '../store/actions/menuActions'
 import {
     changeswipeablePanelActive,
@@ -26,22 +18,18 @@ import {
    
     changePlayingMusic
 } from '../store/actions/filterAction'
-import {    changeplayItem,
+import {
+    changeplayItem,
     changePlayingData,
     changeActiveIndex,
     getSongData,
-    changeSelectedRadioStation
+    changeMiniScreenData, changeSwiperShowStation
 } from "../store/actions/bottomAction";
-import Heart from "../assets/icons/heart.svg"
-import PlaySvG from "../assets/icons/play.svg"
 import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import { addFavorites } from '../store/actions/favoritesActions';
-import BottomSwiper from "../components/BottomSwiper"
-
-
 interface IState {
     radioList: [],
     styleView: boolean,
@@ -119,17 +107,18 @@ _addLookingList(data:any){
 
         return <TouchableHighlight
         onPress={() => {
-                 
+           player.open()
             let radioStation = {
                 data: data.item,
                 isPlayingMusic: false,
                 activeBi:data.item.st[0],
                 id: data.item.id
             }
-            player.open()
+
             this._addLookingList(data.item)
-            this.props.onchangeSelectedRadioStation(radioStation)
-          
+            this.props.onchangeSwiperShowStation(radioStation)
+            this.props.get_songData(radioStation)
+            this.props.onchangeMiniScreenData(radioStation)
             this.props.onchangeActiveIndex(data.index)
           
         }}
@@ -145,17 +134,17 @@ _addLookingList(data:any){
     renderMenuItemsMenuStyle2(data: any) {
         return<TouchableHighlight
         onPress={() => {
-               
+            player.open()
             let radioStation = {
                 data: data.item,
                 isPlayingMusic: false,
                 activeBi:data.item.st[0],
                 id: data.item.id
             }
-            player.open()
             this._addLookingList(data.item)
-            this.props.onchangeSelectedRadioStation(radioStation)
-           
+            this.props.onchangeSwiperShowStation(radioStation)
+            this.props.get_songData(radioStation)
+            this.props.onchangeMiniScreenData(radioStation)
             this.props.onchangeActiveIndex(data.index)
         }} style={{ padding: calcWidth(8), }}>
         <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
@@ -246,8 +235,11 @@ const mapDispatchToProps = (dispatch: any) => {
         get_songData: (payload: any) => {
             dispatch(getSongData(payload))
         },
-        onchangeSelectedRadioStation:(payload: any) => {
-            dispatch(changeSelectedRadioStation(payload))
+        onchangeSwiperShowStation:(payload: any) => {
+            dispatch(changeSwiperShowStation(payload))
+        },
+        onchangeMiniScreenData:(payload: any) => {
+            dispatch(changeMiniScreenData(payload))
         },
     }
 }

@@ -1,7 +1,8 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setMenuData, setPlayingData,setFilterData,setHeaderText} from "../actions/menuActions"
+import {setMenuData, setPlayingData,setFilterData,setHeaderText,
+	setInitialRouteName} from "../actions/menuActions"
 import {setSwiperData} from "../actions/menuActions"
 
 
@@ -16,10 +17,16 @@ function* getMenuData() {
 	} catch (ex) {
 	}
 }
+function* changeInitialRouteName({payload}:any) {
 
+	try {
+		yield put(setInitialRouteName(payload))
+	} catch (ex) {
+		console.log(ex);
+	}
+}
 
 function* onChangePlayingData({payload}:any) {
-	console.log("onChangePlayingData",payload);
 	
     try {
 		yield put(setPlayingData(payload))
@@ -68,6 +75,10 @@ export function* watchMenuType() {
 	yield takeEvery(
         MenuTypes.CHANGE_HEADERTEXT as any,
 		onChangeHeaderText
+	)
+	yield takeEvery(
+		MenuTypes.CHANGE_ACTIVE_INITIALROUTE_NAME as any,
+		changeInitialRouteName
 	)
 }
 

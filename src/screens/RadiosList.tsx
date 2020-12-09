@@ -36,7 +36,7 @@ import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
-
+import navigationService from "../navigation/NavigationService"
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     radioList: [],
@@ -81,6 +81,11 @@ class Menu extends React.Component<IMenuProps, IState> {
         })
         this.props.ongetMenuData()
     }
+    componentDidMount() {
+        console.log(this.props.navigation)
+        navigationService.setNavigator(this.props.navigation)
+    }
+
     closePanel() {
         this.props.onchangeswipeablePanelActive(false)
     }
@@ -123,7 +128,10 @@ class Menu extends React.Component<IMenuProps, IState> {
                     id: data.item.id
                 }
                 this.props.onchangeSelectedRadioStation(radioStation)
-                this.props.onchangeMiniScreenData(radioStation)
+               //
+                if(this.props.bottomReducer.selectedRadioStation && !this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
+                    this.props.onchangeMiniScreenData(radioStation)
+                }
                this.setState({swipeablePanelActive:true})
                 this.props.onchangeActiveIndex(data.index)
             }}>
@@ -149,7 +157,9 @@ class Menu extends React.Component<IMenuProps, IState> {
                 }
                 this._addLookingList(data.item)
                 this.props.onchangeSelectedRadioStation(radioStation)
-                this.props.onchangeMiniScreenData(radioStation)
+                if(this.props.bottomReducer.selectedRadioStation && !this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
+                    this.props.onchangeMiniScreenData(radioStation)
+                }
                 player.open()
                 this.props.onchangeActiveIndex(data.index)
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>

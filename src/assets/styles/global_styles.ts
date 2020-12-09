@@ -40,9 +40,10 @@ import {
     searchbtn:{ 
         height: calcHeight(56), 
         paddingHorizontal:calcWidth(11),
-        //width:calcWidth(40),
+        width:calcWidth(40),
         justifyContent: 'center',
          alignItems: 'center',
+
         },
         menu_icon:{
             width:calcWidth(45)

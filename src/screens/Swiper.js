@@ -200,8 +200,8 @@ export default class SwipeUpDown extends Component<Props> {
                 style={[
                     styles.wrapSwipe,
                     {
-                        height:0,
-                        marginTop: MARGIN_TOP,
+                        height:86,
+                        marginTop: MARGIN_TOP+56,
                     },
                     !itemMini && collapsed && { marginBottom: -100 },
                     style
@@ -210,7 +210,10 @@ export default class SwipeUpDown extends Component<Props> {
 
 
                 {this.state.visible?
-                    <View style={{ height:120, marginTop:-35}}>
+                    <View style={{ height:120,
+                        paddingTop:35,
+                      //  marginTop:-35,
+                       }}>
                     <Animated.View
 
                     style={[styles.bottomHeader, {
@@ -245,11 +248,12 @@ export default class SwipeUpDown extends Component<Props> {
                                         {this.props.bottomReducer.miniScreenData.data.pa
                                         }</Text>
                                     {this.props.bottomReducer.miniScreenData.playingSong && <Text
+                                        numberOfLines={1}
                                         style={[styles.txtTitle,
                                             {
                                                 fontSize: (12),
                                                 marginTop: (5),
-                                                width: (200),
+                                                width: 170,
                                                 color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white'
                                             }]}>
 
@@ -264,10 +268,6 @@ export default class SwipeUpDown extends Component<Props> {
                 </Animated.View>
                     </View>
                         :<View>
-
-
-
-
 
                 { this.props.orientation?
                 <ImageBackground
@@ -318,7 +318,7 @@ export default class SwipeUpDown extends Component<Props> {
                                                 justifyContent:'center',
                                                 paddingTop:5,
                                             }}>
-                                            {this.props.bottomReducer.playingMusicArtistSong.artist}  {this.props.bottomReducer.playingMusicArtistSong.song}
+                                            {this.props.bottomReducer.swiperShowRadiostation.playingSong.artist}  {this.props.bottomReducer.swiperShowRadiostation.playingSong.song}
                                         </Text> : null}
                         </View>
                         <TouchableOpacity
@@ -343,7 +343,7 @@ export default class SwipeUpDown extends Component<Props> {
 
                     style={{
                         backgroundColor: this.props.backgroundColor,
-                      marginTop:50
+                     // marginTop:50
 
 
                     }}>
@@ -351,8 +351,7 @@ export default class SwipeUpDown extends Component<Props> {
                        >
                         <View
                             onTouchEnd={() => {
-                                console.log("sdpkawspfjep'''''''jjjjjjjjjjjjjjjjjjjjjjj");
-                                this.showMini() 
+                                this.showMini()
                             
                             }}
                             style={[styles.bottomSheet, { height: calcHeight(50), backgroundColor: this.props.backgroundColor }]}>
@@ -364,7 +363,10 @@ export default class SwipeUpDown extends Component<Props> {
                             </TouchableOpacity>
 
                         </View>
-                        <View  {...this._panResponder.panHandlers}  style={{ width: '55%', backgroundColor:this.props.backgroundColor }}  >
+                        <View  {...this._panResponder.panHandlers}   onTouchEnd={() => {
+                            this.showMini()
+
+                        }} style={{ width: '55%', backgroundColor:this.props.backgroundColor }}  >
                         </View>
                         <TouchableOpacity
                             style={{
@@ -375,7 +377,6 @@ export default class SwipeUpDown extends Component<Props> {
                             //    borderWidth:1
                             }}
                             onPress={() => {
-                                console.log("::::::::::::::::::::::::::::::::::::::");
                                 this.props.toaddfavorite()
                             }}>
                             {this.props.checkIsFovorite() ?
@@ -383,22 +384,23 @@ export default class SwipeUpDown extends Component<Props> {
                                 <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
                         </TouchableOpacity>
                     </View>
-                    <View
+                        <View
 
-                        style={{ justifyContent: 'center', alignItems: 'center',height:50}}>
-                        {this.props.bottomReducer.swiperShowRadiostation ?
-                            <Text
-                            numberOfLines={1}
-                             style={{
-                                color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                fontSize: 24,
-                                fontWeight: '500',
-                              width:calcWidth(250),
-                              textAlign:'center'
-                            }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
-                    </View>
-                    
+                            style={{ justifyContent: 'center', alignItems: 'center',height:50, backgroundColor:this.props.backgroundColor}}>
+                            {this.props.bottomReducer.swiperShowRadiostation ?
+                                <Text
+                                    numberOfLines={1}
+                                    style={{
+                                        color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                        fontSize: 24,
+                                        fontWeight: '500',
+                                        width:200,
+                                        textAlign:'center'
+                                    }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
+                        </View>
+
                     </View>}</View>}
+
                 {itemFull}
             </Animated.View>
         );
@@ -410,7 +412,7 @@ const styles = StyleSheet.create({
 
         backgroundColor: '#ccc',
         position: 'absolute',
-        bottom: 0,
+        bottom:0,
         left: 0,
         right: 0
     },

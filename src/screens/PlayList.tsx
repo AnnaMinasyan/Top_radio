@@ -35,18 +35,19 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                 <View style={styles.tabFilter}>
                     <TouchableOpacity
                         onPress={() => {
-                            this.setState({ filterType: 'playList' })
-                        }}
-                        style={this.state.filterType == 'playList' ? [styles.activeTouch, styles.touch] : styles.activeTouch}>
-                        <Text style={this.state.filterType == 'playList' ? styles.touchText : styles.activeTouchText}>Kоличество</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => {
                             this.setState({ filterType: 'efir' })
                         }}
                         style={this.state.filterType == 'efir' ? [styles.activeTouch, styles.touch] : styles.activeTouch}>
                         <Text style={this.state.filterType == 'efir' ? styles.touchText : styles.activeTouchText}>Эфир</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.setState({ filterType: 'playList' })
+                        }}
+                        style={this.state.filterType == 'playList' ? [styles.activeTouch, styles.touch] : styles.activeTouch}>
+                        <Text style={this.state.filterType == 'playList' ? styles.touchText : styles.activeTouchText}>Kоличество</Text>
+                    </TouchableOpacity>
+
                 </View>
                 { !this.props.playListReducer.playList && !this.props.playListReducer.trackList?
                  <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
@@ -55,11 +56,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                 
                     <View>
                         {list.map((data: any,index:number) => {
-                            //return 
-                            console.log(    data.date
-                                
-                            );
-                            
+
                             return (
                                 <View key={index} style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
                                     <View style={styles.elementsRow}>

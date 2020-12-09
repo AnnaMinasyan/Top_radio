@@ -7,8 +7,11 @@ import {setPlayList,setTrackList,setHeaderText} from "../actions/playlistAction"
 
 function* getPlayListData(payload:any) {
 	try {
-		const data= yield auth.getPlayLists(payload.payload.pl)
 		yield put(setHeaderText(payload.payload.pa))
+		yield put(setPlayList(null))
+		yield put(setTrackList(null))
+		const data= yield auth.getPlayLists(payload.payload.pl)
+
 		yield put(setPlayList(data.playList))
 		yield put(setTrackList(data.trackList))
 	} catch (ex) {

@@ -21,6 +21,8 @@ import SearchSvg from "../assets/icons/search.svg"
 import Search from "./Search"
 import CloseSvg from "../assets/icons/close.svg"
 import Arrow from "../assets/icons/arrow_back.svg"
+import {changeActiveArrow} from '../store/actions/bottomAction'
+import player from "../services/player/PlayerServices"
 interface Props {
   onchangeFavoriteType(): void;
   navigation: NavigationScreenProp<any, any>;
@@ -29,7 +31,8 @@ interface Props {
   theme:any
   type:boolean,
   menuReducer:any,
-  title?:string
+  title?:string,
+  onchangeActiveArrow(type: boolean): void;
 }
 interface IState {
   hideMenuModal: boolean,
@@ -108,8 +111,12 @@ class Header extends React.Component<Props, IState> {
   }
   changeIsFavorite() {
     if(this.props.filterReducer.isFavorite){
+      this.props.onchangeActiveArrow(true)
+
       this.props.navigation.navigate("Menu")
     }else{
+      player.close()
+      this.props.onchangeActiveArrow(false)
       this.props.navigation.navigate("Favorite")
     }
     this.props.onchangeFavoriteType()
@@ -154,7 +161,7 @@ class Header extends React.Component<Props, IState> {
       this.renderTitle()
       :
        <View style={{
-       width:'50%',
+       width:'48%',
        justifyContent:'center',
        alignItems:'center',
         marginLeft:(20),}}>
@@ -173,7 +180,7 @@ class Header extends React.Component<Props, IState> {
           >
          {!this.state.showSearchView? <SearchSvg width={(14.48)} height={(15)} />:
         <TouchableOpacity
-       // onPress={()=>this.props.onchnageSearchData('')}
+       onPress={()=>this.props.onchnageSearchData('')}
         >
         <CloseSvg width={(15.48)} height={(15)} fill='#B3BACE'/>
         </TouchableOpacity>}
@@ -229,6 +236,9 @@ const mapDispatchToProps = (dispatch: any) => {
   return {
     onchangeFavoriteType: () => {
       dispatch(changeFavoriteType())
+    },
+    onchangeActiveArrow: (payload:boolean) => {
+      dispatch(changeActiveArrow(payload))
     }
   }
 }

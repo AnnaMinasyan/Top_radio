@@ -43,7 +43,7 @@ class Static implements IDATA {
         
         try {
             const data = moment().format('YYYY-MM-DD')
-            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true`,);
+            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=100`,);
             return response.data
         } catch (ex) {
             return Alert.alert("Error",ex)

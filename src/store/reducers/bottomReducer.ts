@@ -42,14 +42,13 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
 
     switch (action.type) {
         case BottomType.SET_SELECTED_RADIOSTATION:
-            console.log('action.payload');
-
+            console.log("action.payloadaction.payload",action.payload.isPlayingMusic)
             return { ...state, selectedRadioStation: action.payload, swiperShowRadiostation: action.payload }
         case BottomType.SET_SWIPERSHOW_RADIOSTATION:
 
             return { ...state, swiperShowRadiostation: action.payload }
         case BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC:
-
+            console.log('action.payload',action.payload)
             return { ...state, selectedRadioStation: { ...state.selectedRadioStation, isPlayingMusic: action.payload },
                 miniScreenData: { ...state.miniScreenData, isPlayingMusic: action.payload }
             }

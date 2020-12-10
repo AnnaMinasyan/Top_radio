@@ -42,11 +42,11 @@ class PlayerServices implements IDATA {
     }
     async _startPlayMusic(music:any,activeBi:any) {
         const playerState = await TrackPlayer.getState();
-        console.log("----------------------------", activeBi);
+       // console.log("----------------------------", activeBi);
         if (
             playerState != 0
         ) {
-            console.log('destroying..', music.st);
+           // console.log('destroying..', music.st);
             await TrackPlayer.reset();
             await TrackPlayer.add({
                 id: "local-track",

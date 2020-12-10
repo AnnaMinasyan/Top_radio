@@ -9,6 +9,7 @@ import { createFilter } from 'react-native-search-filter';
 
 interface Props {
   renderSearchData(type:any):void;
+    value:string
 }
 interface IState {
   searchTerm:any
@@ -41,6 +42,7 @@ class Search extends React.Component<Props, IState> {
           style={styles.searchInput}
          placeholderTextColor='white'
          placeholder="Поиск"
+         value={this.props.value}
          autoFocus={true}
           />
         </View>

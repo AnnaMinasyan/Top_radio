@@ -26,9 +26,26 @@ function* onGetPlayType({ payload }: any) {
         console.log(ex);
     }
 }
+function* changeselectedSatationbyBi({ payload }: any) {
+    try {
+        yield put(setSwiperActiveBi(payload.activeBi))
+        yield put(setSelectedRadioStation(payload))
+
+        const data = yield auth.getPlayItemType(payload.data.pl)
+
+        let station = payload
+        station.playingSong = data.playList[0]
+
+        yield put(setMiniScreenData(station))
+        yield put(setSelectedRadioStation(station))
+
+    } catch (ex) {
+        console.log(ex);
+    }
+}
 function* addselectedRadioStation({ payload }: any) {
     try {
-        console.log("====================================================================");
+       // console.log("====================================================================");
         player.open()
         yield put(setSelectedRadioStation(payload))
         const data = yield auth.getPlayItemType(payload.data.pl)
@@ -172,6 +189,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_MINI_SCREENDATA as any,
         changeMiniScreenData
+    )
+    yield takeEvery(
+        BottomType.CHANGE_SELECTED_STATION_BY_BI as any,
+        changeselectedSatationbyBi
     )
 }
 

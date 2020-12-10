@@ -189,7 +189,7 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     render() {
-        console.log("wdpa[d",this.props.bottomReducer.selectedRadioStation.isPlayingMusic)
+       // console.log("wdpa[d",this.props.bottomReducer.selectedRadioStation.isPlayingMusic)
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (
@@ -253,7 +253,7 @@ export default class SwipeUpDown extends Component<Props> {
                                             {
                                                 fontSize: (12),
                                                 marginTop: (5),
-                                                width: 170,
+                                                width: 160,
                                                 color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white'
                                             }]}>
 
@@ -274,11 +274,11 @@ export default class SwipeUpDown extends Component<Props> {
                 resizeMode='stretch'
 
                 style={{backgroundColor: this.props.backgroundColor,
-                    alignItems:'center',height:70,
+                    alignItems:'center',height:'90%',
                     paddingTop:15
 
          }}
-                source={require('../assets/images/img1.png')}>
+                source={require('../assets/images/img.png')}>
 
                       <View  style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55}}
                        >
@@ -304,7 +304,7 @@ export default class SwipeUpDown extends Component<Props> {
                                         fontSize: 20,
                                         fontWeight: '500',
                                         width:200,
-                                    }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
+                                    }}>{this.props.bottomReducer.swiperShowRadiostation?.data.pa}</Text> : null}
                                 </View>
                                 {this.props.bottomReducer.playingMusicArtistSong ?
                                         <Text
@@ -318,7 +318,7 @@ export default class SwipeUpDown extends Component<Props> {
                                                 justifyContent:'center',
                                                 paddingTop:5,
                                             }}>
-                                            {this.props.bottomReducer.swiperShowRadiostation.playingSong.artist}  {this.props.bottomReducer.swiperShowRadiostation.playingSong.song}
+                                            {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.artist}  {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.song}
                                         </Text> : null}
                         </View>
                         <TouchableOpacity
@@ -337,9 +337,9 @@ export default class SwipeUpDown extends Component<Props> {
                                 <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={21.01} width={23.61} />}
                         </TouchableOpacity>
                     </View>
-             
+                    {itemFull}
                 </ImageBackground>
-                :<View
+                :<View><View
 
                     style={{
                         backgroundColor: this.props.backgroundColor,
@@ -399,7 +399,9 @@ export default class SwipeUpDown extends Component<Props> {
                                     }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
                         </View>
 
-                    </View>}</View>}
+                    </View>
+                {itemFull}
+                </View>}</View>}
 
                 {itemFull}
             </Animated.View>

@@ -190,3 +190,10 @@ export const setMiniScreenData = (payload: any) => {
 
 	};
 };
+export const changeSelectedSatationbyBi = (payload: any) => {
+	return {
+		type: BottomType.CHANGE_SELECTED_STATION_BY_BI,
+		payload
+
+	};
+};

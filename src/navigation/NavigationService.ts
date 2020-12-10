@@ -31,7 +31,7 @@ class NavigationService {
 	}
 
 	setNavigator(value: any) {
-		console.log("Valuuee", value)
+
 		this._navigator = value;
 	}
 

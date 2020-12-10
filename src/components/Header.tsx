@@ -165,7 +165,8 @@ class Header extends React.Component<Props, IState> {
        justifyContent:'center',
        alignItems:'center',
         marginLeft:(20),}}>
-         <Search 
+         <Search
+             value={this.props.filterReducer.searchData}
        renderSearchData={this.props.onchnageSearchData}
        />
          </View>}   

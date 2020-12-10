@@ -22,7 +22,8 @@ import {
     changeActiveBi,
     getSongData,
     changeSelectedRadioStation,
-    changeMiniScreenData
+    changeMiniScreenData,
+    changeSwiperShowStation
 } from "../store/actions/bottomAction";
 import {
     changeswipeablePanelActive,
@@ -120,7 +121,29 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                console.log("onpress")
+                console.log("ooooo",this.props.bottomReducer.selectedRadioStation && this.props.bottomReducer.selectedRadioStation.id==data.item.id)
+
+                if(this.props.bottomReducer.selectedRadioStation ){
+                let radioStation = {
+                    data: data.item,
+                    isPlayingMusic: false,
+                    activeBi:data.item.st[0],
+                    id: data.item.id
+                }
+                player.open()
+                this.props.onchangeSwiperShowStation(radioStation)
+                //
+                    // console.log("!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic",!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic)
+                // if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
+                //     console.log(";;;;;;;;;;;;;;;;;")
+                //     this.props.onchangeMiniScreenData(radioStation)
+                //     this.props.onchangeSwiperShowStation(radioStation)
+                // }else{
+                //
+                // }
+                this.setState({swipeablePanelActive:true})
+                this.props.onchangeActiveIndex(data.index)
+            }else{
                 let radioStation = {
                     data: data.item,
                     isPlayingMusic: false,
@@ -128,12 +151,19 @@ class Menu extends React.Component<IMenuProps, IState> {
                     id: data.item.id
                 }
                 this.props.onchangeSelectedRadioStation(radioStation)
-               //
-                if(this.props.bottomReducer.selectedRadioStation && !this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
-                    this.props.onchangeMiniScreenData(radioStation)
-                }
-               this.setState({swipeablePanelActive:true})
+                //
+                console.log("!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic",!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic)
+                // if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
+                //     console.log(";;;;;;;;;;;;;;;;;")
+                //     this.props.onchangeMiniScreenData(radioStation)
+                //     this.props.onchangeSwiperShowStation(radioStation)
+                // }else{
+                //
+                // }
+                this.setState({swipeablePanelActive:true})
                 this.props.onchangeActiveIndex(data.index)
+            }
+
             }}>
             <RadioMenuElement
                 title={data.item.pa}
@@ -253,6 +283,9 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeSelectedRadioStation: (payload: any) => {
             dispatch(changeSelectedRadioStation(payload))
+        },
+        onchangeSwiperShowStation: (payload: any) => {
+            dispatch(changeSwiperShowStation(payload))
         },
         onchangeMiniScreenData: (payload: any) => {
             dispatch(changeMiniScreenData(payload))

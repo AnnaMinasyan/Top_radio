@@ -25,8 +25,7 @@ import RedHeart from "../assets/icons/redHeart.svg"
 import SimpleImage from "./SimpleImage"
 import PlaySvG from "../assets/icons/play.svg"
 import Stop from "../assets/icons/stop.svg"
-import { changeswipeablePanelActive } from '../store/actions/filterAction'
-import { changeActiveIndex, changeplayItem, changePlayingData, changeSwiperData } from '../store/actions/menuActions'
+
 import Arrow from "../assets/icons/arrow.svg"
 import RecordSvg from "../assets/icons/disrecording.svg"
 import DisRecordSvg from "../assets/icons/recording.svg"
@@ -59,7 +58,6 @@ interface Props {
   // navigation: NavigationScreenProp<any, any>;
   // filterReducer: any,
   // toaddfavorite(type: any): void;
-  // onchangeswipeablePanelActive(type: any): void;
   // onchangePlayingData(type: any): void;
   // isFavorite: boolean,
   // playUrl: string,
@@ -157,7 +155,7 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
     //     if (this.state.activSwichItem.pl) {
     //         this.props.ongetPlayList(this.state.activSwichItem)
     //         this.props.navigation.navigate('PlayList')
-    //         this.props.onchangeswipeablePanelActive(false)
+
     //     }
 
     // } else if (this.props.menuReducer.playItem.pl) {

@@ -13,6 +13,7 @@ import { getPlayList } from '../store/actions/playlistAction'
 import HeaderByBack from "../components/HeaderByBack"
 import { connect } from "react-redux"
 import moment from 'moment-timezone';
+import player from "../services/player/PlayerServices"
 interface IState {
     filterType: string
 }
@@ -31,7 +32,8 @@ class PlayList extends React.Component<IPlayListProps, IState> {
         <ScrollView  style={{ backgroundColor: this.props.theme.backgroundColor}}  >
             <View style={{ backgroundColor: this.props.theme.backgroundColor}}>
 
-                <HeaderByBack title={this.props.playListReducer.title} onNavigate={() => { this.props.navigation.navigate('Menu') }} />
+                <HeaderByBack title={this.props.playListReducer.title}
+                              onNavigate={() => { this.props.navigation.navigate('Menu'),player.open() }} />
                 <View style={styles.tabFilter}>
                     <TouchableOpacity
                         onPress={() => {

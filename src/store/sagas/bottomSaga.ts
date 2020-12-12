@@ -45,11 +45,11 @@ function* changeselectedSatationbyBi({ payload }: any) {
 }
 function* addselectedRadioStation({ payload }: any) {
     try {
-       // console.log("====================================================================");
+        console.log("====================================================================",payload);
         player.open()
         yield put(setSelectedRadioStation(payload))
         const data = yield auth.getPlayItemType(payload.data.pl)
-
+        console.log( data)
         let station = payload
         station.activeBi=payload.data.st[0]
         station.playingSong = data.playList[0]

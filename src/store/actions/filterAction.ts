@@ -14,15 +14,7 @@ export const changeisActive = (payload:string) => {
 		payload
 	};
 };
-export const changeswipeablePanelActive = (payload:boolean) => {
-console.log("changeswipeablePanelActive ",payload);
 
-	
-	return {
-		type: FilterTypes.CHANGE_SWIPEABLEPANELACTIVE,
-		payload
-	};
-};
 export const changePlayingMusic = (payload:boolean) => {
 	return {
 		type: FilterTypes.CHANGE_PLAYING_MUSIC,

@@ -30,8 +30,6 @@ import RedHeart from "../assets/icons/redHeart.svg"
 import SimpleImage from "./SimpleImage"
 import PlaySvG from "../assets/icons/play.svg"
 import Stop from "../assets/icons/stop.svg"
-import { changeswipeablePanelActive } from '../store/actions/filterAction'
-import { changeSwiperData } from '../store/actions/menuActions'
 import {
     changeplayItem,
     changePlayingData,
@@ -55,11 +53,8 @@ import SlidingUpPanel from 'rn-sliding-up-panel';
 import Intro from "../screens/Intro"
 import player from "../services/player/PlayerServices"
 import RNFS from 'react-native-fs';
-import { getData } from '../utils/local_storage';
-import FileViewer from 'react-native-file-viewer';
 var RNFileManager = require('react-native-file-manager');
 
-import BottomSheet from '@gorhom/bottom-sheet';
 import SwipeUpDown from '../screens/Swiper';
 
 TrackPlayer.registerPlaybackService(() => require('../../service'));
@@ -69,7 +64,6 @@ interface Props {
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
     toaddfavorite(type: any): void;
-    onchangeswipeablePanelActive(type: any): void;
     onchangePlayingData(type: any): void;
     isFavorite: boolean,
     playUrl: string,
@@ -258,7 +252,6 @@ class Bottom extends React.Component<Props, IState> {
         //     if (this.state.activSwichItem.pl) {
         //         this.props.ongetPlayList(this.state.activSwichItem)
         //         this.props.navigation.navigate('PlayList')
-        //         this.props.onchangeswipeablePanelActive(false)
         //     }
 
         // } else
@@ -267,7 +260,6 @@ class Bottom extends React.Component<Props, IState> {
         //    this.props.navigation.navigate('PlayList')
 
             // player.close()
-            //this.props.onchangeswipeablePanelActive(false)
         }
     }
 

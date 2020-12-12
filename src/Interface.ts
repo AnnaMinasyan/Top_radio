@@ -14,8 +14,8 @@ import { NavigationScreenProp } from 'react-navigation';
     onchangeSwiperData(payload:any):void; 
     onchangeplayItem(payload:any):void; 
     get_songData(payload:any):void; 
-    ongetFavorites(payload:any):void; 
-    onchangeswipeablePanelActive(payload:boolean):void; 
+    ongetFavorites(payload:any):void;
+     onchangeLookingList(payload:boolean):void;
     onchangePlayingMusic(payload:boolean):void;
     menuReducer:any,
     navigation: NavigationScreenProp<any, any>,

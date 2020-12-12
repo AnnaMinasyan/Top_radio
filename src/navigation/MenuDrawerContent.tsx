@@ -86,7 +86,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         style={styles.item}
                         onPress={() => {
                             props.onchangeisActive('looking')
-                            props.navigation.navigate('Menu')
+                            props.navigation.navigate('LookingMenu')
                             props.onchangeActiveArrow(false)
 
                         }}

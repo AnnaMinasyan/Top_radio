@@ -16,7 +16,6 @@ import {
     changeSelectedRadioStation
 } from "../store/actions/bottomAction";
 import {
-    changeswipeablePanelActive,
     getFavorites,
     changeSearchData,
     changePlayingMusic,

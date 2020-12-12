@@ -14,7 +14,7 @@ import Settings from "../screens/Settings";
 import PlayList from "../screens/PlayList";
 import FilterMenu from "../screens/FilterMenu";
 const Drawer = createDrawerNavigator();
-
+import LookingMenu from "../screens/lookingMenu"
 const Navigator: React.FunctionComponent = (props:any) => (
 
   <NavigationContainer
@@ -57,7 +57,7 @@ const Navigator: React.FunctionComponent = (props:any) => (
               name="FilterMenu"
               component={FilterMenu}
           />
-          {/*<Drawer.Screen name="HomeNavigator" component={HomeNavigator} />*/}
+          <Drawer.Screen name="LookingMenu" component={LookingMenu} />
 
       </Drawer.Navigator>
   </NavigationContainer>

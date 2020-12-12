@@ -13,7 +13,8 @@ import Header from "../components/Header"
 import { IMenuProps } from "../Interface"
 import {
     getMenuData,
-    changeSwiperData
+    changeSwiperData,
+    changeLookingList
 } from '../store/actions/menuActions'
 import {
     changeplayItem,
@@ -23,10 +24,11 @@ import {
     getSongData,
     changeSelectedRadioStation,
     changeMiniScreenData,
-    changeSwiperShowStation
+    changeSwiperShowStation,
+
 } from "../store/actions/bottomAction";
 import {
-    changeswipeablePanelActive,
+
     getFavorites,
     changeSearchData,
     changePlayingMusic,
@@ -66,7 +68,6 @@ class Menu extends React.Component<IMenuProps, IState> {
             playUrl: '',
             activBi: 0,
             favoriteList: [],
-            lookingList: [],
             searchData: null
         }
         const unsubscribe = props.navigation.addListener('focus', () => {
@@ -78,7 +79,8 @@ class Menu extends React.Component<IMenuProps, IState> {
             this.setState({ styleView: menuView })
         })
         getData('isLooking').then((looking) => {
-            this.setState({ lookingList: looking })
+            this.props.onchangeLookingList(looking)
+
         })
         this.props.ongetMenuData()
     }
@@ -87,9 +89,6 @@ class Menu extends React.Component<IMenuProps, IState> {
         navigationService.setNavigator(this.props.navigation)
     }
 
-    closePanel() {
-        this.props.onchangeswipeablePanelActive(false)
-    }
     checkIsFovorite(num: number) {
 
         return this.props.favorites.includes(num)
@@ -114,15 +113,14 @@ class Menu extends React.Component<IMenuProps, IState> {
                 lookList.push(data)
             }
             storeData("isLooking", lookList).then(() => {
-                this.setState({ lookingList: lookList })
+                this.props.onchangeLookingList(lookList)
             })
         })
     }
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                console.log("ooooo",this.props.bottomReducer.selectedRadioStation && this.props.bottomReducer.selectedRadioStation.id==data.item.id)
-
+                this._addLookingList(data.item)
                 if(this.props.bottomReducer.selectedRadioStation ){
                 let radioStation = {
                     data: data.item,
@@ -132,15 +130,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 }
                 player.open()
                 this.props.onchangeSwiperShowStation(radioStation)
-                //
-                    // console.log("!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic",!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic)
-                // if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
-                //     console.log(";;;;;;;;;;;;;;;;;")
-                //     this.props.onchangeMiniScreenData(radioStation)
-                //     this.props.onchangeSwiperShowStation(radioStation)
-                // }else{
-                //
-                // }
+
                 this.setState({swipeablePanelActive:true})
                 this.props.onchangeActiveIndex(data.index)
             }else{
@@ -151,15 +141,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                     id: data.item.id
                 }
                 this.props.onchangeSelectedRadioStation(radioStation)
-                //
-                console.log("!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic",!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic)
-                // if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
-                //     console.log(";;;;;;;;;;;;;;;;;")
-                //     this.props.onchangeMiniScreenData(radioStation)
-                //     this.props.onchangeSwiperShowStation(radioStation)
-                // }else{
-                //
-                // }
+
                 this.setState({swipeablePanelActive:true})
                 this.props.onchangeActiveIndex(data.index)
             }
@@ -193,21 +175,22 @@ class Menu extends React.Component<IMenuProps, IState> {
                 player.open()
                 this.props.onchangeActiveIndex(data.index)
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
-            <SimpleImage size={calcWidth(98)} image={data.item.im} />
+            <SimpleImage size={98} image={data.item.im} />
         </TouchableHighlight>
     }
     chouseList() {
         if (this.props.filterReducer.isActive == "looking") {
-            return this.state.lookingList.reverse()
+            return this.props.menuReducer.lookingList.reverse()
         } else {
             return this.props.menuReducer.menuData
         }
     }
     render() {
-        const list = this.props.menuReducer.menuData != null ? this.chouseList().filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)) : []
+        const list =this.props.menuReducer.menuData? this.props.menuReducer.menuData.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)) : []
         return (
             <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height }]}>
                 <Header
+
                     navigation={this.props.navigation}
                     onchnageSearchData={this.props.onchnageSearchData}/>
                 {!this.props.menuReducer.menuData ?
@@ -248,8 +231,8 @@ const mapDispatchToProps = (dispatch: any) => {
         ongetMenuData: () => {
             dispatch(getMenuData())
         },
-        onchangeswipeablePanelActive: (payload: boolean) => {
-            dispatch(changeswipeablePanelActive(payload))
+        onchangeLookingList:(payload:any) => {
+            dispatch(changeLookingList(payload))
         },
         onchangeplayItem: (payload: boolean) => {
             dispatch(changeplayItem(payload))
@@ -294,7 +277,7 @@ const mapDispatchToProps = (dispatch: any) => {
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 
-const styles = StyleSheet.create({
+ export const styles = StyleSheet.create({
     container1: {
 
         flex: 1,

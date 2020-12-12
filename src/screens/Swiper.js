@@ -9,7 +9,8 @@ import {
     LayoutAnimation,
     TouchableOpacity,
     Animated,
-    ImageBackground
+    ImageBackground,
+    Image
 } from 'react-native';
 
 import Arrow from "../assets/icons/arrow.svg"
@@ -270,17 +271,18 @@ export default class SwipeUpDown extends Component<Props> {
                         :<View>
 
                 { this.props.orientation?
-                <ImageBackground
-                resizeMode='stretch'
+                <View
+                    style={{height:'100%', backgroundColor: this.props.backgroundColor}}
+              >
+                <Image
+                    style={{backgroundColor: this.props.backgroundColor,
+                        alignItems:'center',
+                        height:222,
+                        resizeMode:'stretch'
 
-                style={{backgroundColor: this.props.backgroundColor,
-                    alignItems:'center',height:'90%',
-                    paddingTop:15
-
-         }}
-                source={require('../assets/images/img.png')}>
-
-                      <View  style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55}}
+                    }}
+                    source={require('../assets/images/img.png')}/>
+                      <View  style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55, position:'absolute', top:30}}
                        >
                         <View
                             onTouchEnd={() => {
@@ -306,20 +308,21 @@ export default class SwipeUpDown extends Component<Props> {
                                         width:200,
                                     }}>{this.props.bottomReducer.swiperShowRadiostation?.data.pa}</Text> : null}
                                 </View>
-                                {this.props.bottomReducer.playingMusicArtistSong ?
+                                {this.props.bottomReducer.playingMusicArtistSong &&
+                                    <View style={{justifyContent:'center', alignItems:'center', width:300}}>
                                         <Text
-
+                                            numberOfLines={1}
                                             style={{
                                                 color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                                fontSize: 15,
-                                              width:300,
+                                                fontSize: 17,
+
                                                 alignItems: 'center',
-                                                paddingLeft:25,
-                                                justifyContent:'center',
+                                              maxWidth:300,
+                                              //  justifyContent:'center',
                                                 paddingTop:5,
-                                            }}>
-                                            {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.artist}  {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.song}
-                                        </Text> : null}
+
+                                            }}>{this.props.bottomReducer.swiperShowRadiostation?.playingSong?.artist}  {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.song}
+                                        </Text></View> }
                         </View>
                         <TouchableOpacity
                             style={{
@@ -338,7 +341,7 @@ export default class SwipeUpDown extends Component<Props> {
                         </TouchableOpacity>
                     </View>
                     {itemFull}
-                </ImageBackground>
+                </View>
                 :<View><View
 
                     style={{

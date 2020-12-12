@@ -3,7 +3,7 @@ import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setMenuData, setPlayingData,setFilterData,setHeaderText,
 	setInitialRouteName} from "../actions/menuActions"
-import {setSwiperData} from "../actions/menuActions"
+import {setSwiperData,setLookingList} from "../actions/menuActions"
 
 
 function* getMenuData() {
@@ -25,7 +25,14 @@ function* changeInitialRouteName({payload}:any) {
 		console.log(ex);
 	}
 }
+function* changeLookingList({payload}:any) {
 
+	try {
+		yield put(setLookingList(payload.reverse()))
+	} catch (ex) {
+		console.log(ex);
+	}
+}
 function* onChangePlayingData({payload}:any) {
 	
     try {
@@ -79,6 +86,10 @@ export function* watchMenuType() {
 	yield takeEvery(
 		MenuTypes.CHANGE_ACTIVE_INITIALROUTE_NAME as any,
 		changeInitialRouteName
+	)
+	yield takeEvery(
+		MenuTypes.CHANGE_LOOKING_LIST as any,
+		changeLookingList
 	)
 }
 

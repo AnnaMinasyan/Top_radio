@@ -63,6 +63,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView, { marginTop: (6),  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
+            player.close()
            this.props.navigation.navigate("MyAlarmClock")
           }}
         >
@@ -71,6 +72,7 @@ class Header extends React.Component<Props, IState> {
         <TouchableOpacity
           style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
+            player.close()
             Linking.openURL('http://top-radio.ru/dobavit-radio?fbclid=IwAR2LH7GH0qQTcByNabxFiGh9yNuktf48R2dAlyYGz15_i7QegNoXYYFPnRk')
           }}
         >
@@ -80,6 +82,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
+            player.close()
             Linking.openURL("market://details?id=ru.topradio");
           }}
         >
@@ -89,6 +92,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
+            player.close()
             this.props.navigation.navigate('Settings')
           }}
         >
@@ -97,6 +101,7 @@ class Header extends React.Component<Props, IState> {
         <TouchableOpacity
           style={[styles.modalView, { borderBottomWidth: 0 ,borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
+            player.close()
           BackHandler.exitApp()
           }}
         >
@@ -176,7 +181,6 @@ class Header extends React.Component<Props, IState> {
             style={global_styles.searchbtn}
               onPress={()=>{
                 this.setState({showSearchView:!this.state.showSearchView})
-              //  this.props.onchnageSearchData('')
               }}
           >
          {!this.state.showSearchView? <SearchSvg width={(14.48)} height={(15)} />:
@@ -192,33 +196,15 @@ class Header extends React.Component<Props, IState> {
               this.changeIsFavorite()
 
             }}
-           // style={{ height: (56), justifyContent: 'center', alignItems: 'center' }}
           >
           {this.props.filterReducer.isFavorite?<RedHeart fill='#FF5050' height={(19)} width={(21)}/>: <Heart fill='#FFFFFF' height={(21)} width={(23.61)} />} 
           </TouchableOpacity>
 
-          {/* {this.state.menuStyle ?
-            <TouchableOpacity
-            
-            style={global_styles.searchbtn}
-              onPress={() => { this.chnageMenuType() }}
-            >
-              <Menu2 height={(21)} width={(21)}  />
-            </TouchableOpacity>
-
-            :
-            <TouchableOpacity
-            style={global_styles.searchbtn}
-              onPress={() => { this.chnageMenuType() }}
-            >
-              <MenuSvg height={(21)} width={(21)} style={{ marginLeft: (22), marginRight: (19) }} />
-            </TouchableOpacity>} */}
           <TouchableOpacity
              style={global_styles.searchbtn}
             onPress={() => {
               this.setState({ hideMenuModal: true })
             }}
-           // style={{ height: (56), justifyContent: 'center', alignItems: 'center' }}
           >
             <MenuDots height={(6.88)} width={(26.33)} />
           </TouchableOpacity>

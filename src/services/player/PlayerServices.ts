@@ -42,10 +42,8 @@ class PlayerServices implements IDATA {
     }
     async _startPlayMusic(music:any,activeBi:any) {
         const playerState = await TrackPlayer.getState();
-       // console.log("----------------------------", activeBi);
-        if (
-            playerState != 0
-        ) {
+     console.log("----------------------------", playerState);
+
            // console.log('destroying..', music.st);
             await TrackPlayer.reset();
             await TrackPlayer.add({
@@ -56,9 +54,7 @@ class PlayerServices implements IDATA {
                 artwork: 'https://top-radio.ru/assets/image/radio/180/' + music.im,
             });
             await TrackPlayer.play();
-        } else {
-            this._pouseMusic()
-        }
+
        
     }
     async _pouseMusic() {

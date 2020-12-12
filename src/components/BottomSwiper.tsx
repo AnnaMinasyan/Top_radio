@@ -29,7 +29,6 @@ import RedHeart from "../assets/icons/redHeart.svg"
 import SimpleImage from "./SimpleImage"
 import PlaySvG from "../assets/icons/play.svg"
 import Stop from "../assets/icons/stop.svg"
-import { changeswipeablePanelActive } from '../store/actions/filterAction'
 import {
     changeplayItem,
     changePlayingData,
@@ -43,7 +42,7 @@ import {
     changeSwiperActiveBi,
     changeSelectedSatationbyBi
 } from "../store/actions/bottomAction";
-import {changeInitialRouteName} from "../store/actions/menuActions"
+import {changeInitialRouteName, changeLookingList} from "../store/actions/menuActions"
 import RecordSvg from "../assets/icons/disrecording.svg"
 import DisRecordSvg from "../assets/icons/recording.svg"
 import TrackPlayer, { play } from 'react-native-track-player';
@@ -57,13 +56,14 @@ import RNFS from 'react-native-fs';
 import navigationService from "../navigation/NavigationService"
 var RNFileManager = require('react-native-file-manager');
 import SwipeUpDown from '../screens/Swiper';
+import {getData, storeData} from "../utils/local_storage";
 TrackPlayer.registerPlaybackService(() => require('../../service'));
 interface Props {
     onCloseStart(): void;
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
     toaddfavorite(type: any): void;
-    onchangeswipeablePanelActive(type: any): void;
+    onchangeLookingList(type: any): void;
     onchangePlayingData(type: any): void;
     isFavorite: boolean,
     playUrl: string,
@@ -89,6 +89,7 @@ interface Props {
     onchangeMiniScreenData(payload:any):void;
 onchangeInitialRouteName(payload:any):void;
     onchangeSelectedSatationbyBi(payload:any):void;
+
 }
 interface IState {
     menuStyle: boolean,
@@ -157,6 +158,25 @@ class BottomSwiper extends React.Component<Props, IState> {
     }
     async componentDidMount() {
 
+        TrackPlayer.addEventListener('remote-stop', async () => {
+            console.log('stop')
+            this.props.onchangeSelectedRadioStationPlaying(false)
+
+            await TrackPlayer.stop()
+        });
+        TrackPlayer.addEventListener('remote-play', async () => {
+            console.log('play')
+            this.props.onchangeSelectedRadioStationPlaying(true)
+
+            await TrackPlayer.play()
+        });
+
+        TrackPlayer.addEventListener('remote-pause', async () => {
+            console.log('pause')
+            this.props.onchangeSelectedRadioStationPlaying(false)
+
+            await TrackPlayer.pause()
+        });
         await TrackPlayer.setupPlayer();
         TrackPlayer.updateOptions({
             stopWithApp: true,
@@ -180,6 +200,30 @@ class BottomSwiper extends React.Component<Props, IState> {
     checkIsFovorite(num: number) {
         return this.props.favorites.includes(num)
     }
+    _addLookingList(data: any) {
+        getData("isLooking").then((lookList) => {
+            let count = true
+            if (lookList.length > 0) {
+                console.log(lookList);
+                for (let index = 0; index < lookList.length; index++) {
+                    const element = lookList[index];
+                    console.log(element.id == data.id);
+                    if (element.id == data.id) {
+
+                        console.log(lookList.splice(index, 1));
+
+                    }
+                }
+                lookList.push(data)
+
+            } else {
+                lookList.push(data)
+            }
+            storeData("isLooking", lookList).then(() => {
+                this.props.onchangeLookingList(lookList)
+            })
+        })
+    }
     isPlaying() {
         //console.log('his.props.bottomReducer.selectedRadioStation', this.props.bottomReducer.selectedRadioStation);
 
@@ -188,7 +232,7 @@ class BottomSwiper extends React.Component<Props, IState> {
             this.props.onchangeSelectedRadioStationPlaying(false)
         } else {
             console.log("this.props.bottomReducer.selectedRadioStation.activBi", this.props.bottomReducer.selectedRadioStation.activeBi);
-
+            this._addLookingList(this.props.bottomReducer.selectedRadioStation.data)
             player._startPlayMusic(this.props.bottomReducer.selectedRadioStation.data, this.props.bottomReducer.selectedRadioStation.activeBi)
             this.props.onchangeSelectedRadioStationPlaying(true)
         }
@@ -288,6 +332,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                         let d = this.props.bottomReducer.miniScreenData
                         d.isPlayingMusic = true
                         this.props.onchangeSelectedRadioStation(d)
+                        this._addLookingList(this.props.bottomReducer.miniScreenData.data)
                         setTimeout(() => {
 
                             this.props.bottomReducer.miniScreenData &&  player._startPlayMusic(this.props.bottomReducer.miniScreenData.data, this.props.bottomReducer.miniScreenData.data.st[0])
@@ -332,6 +377,7 @@ data.isPlayingMusic=true
            // this.props.onchangeSelectedRadioStation(data)
 
             setTimeout(() => {
+                this._addLookingList(this.props.bottomReducer.swiperShowRadiostation.data)
                 player._startPlayMusic(this.props.bottomReducer.swiperShowRadiostation.data, this.props.bottomReducer.swiperShowRadiostation.activeBi)
                 this.props.onchangeSelectedRadioStationPlaying(true)
                 this.setState({ loading: false })
@@ -587,6 +633,7 @@ data.isPlayingMusic=true
                                 this.props.onchangeSelectedRadioStation(d)
                                 this.props.onchangeMiniScreenData(d)
                                 setTimeout(() => {
+                                    this._addLookingList(this.props.bottomReducer.swiperShowRadiostation.data)
                                     player._startPlayMusic(this.props.bottomReducer.swiperShowRadiostation?.data, this.props.bottomReducer.swiperShowRadiostation?.data.st[0])
                                     this.setState({ swiperIndex: this.count, loading: false })
 
@@ -618,15 +665,17 @@ data.isPlayingMusic=true
                 justifyContent: 'space-between',
                 //backgroundColor: this.props.theme.backgroundColor,
                 height: this.props.theme.height + 10,
-            }}>{this.props.bottomReducer.activeArrowr && this.count > 0 ?
-                <TouchableOpacity
+            position:'absolute',
+            top:80
+            }}>{this.props.bottomReducer.activeArrow && this.props.bottomReducer.activeIndex> 0?
+        <TouchableOpacity
                     disabled={this.count == 0}
                     onPress={() => {
                         console.log("left");
                         this.count -= 1
                         this.swipeLeft()
                     }}
-                    style={[styles.arrow, { marginLeft: 20, marginTop: 75 }]}
+                    style={[styles.arrow, { marginLeft: 20, marginTop: 30 }]}
                 >
                     <Text style={{ fontSize: 40, justifyContent: 'center' }}>
                         {"<"}
@@ -637,10 +686,10 @@ data.isPlayingMusic=true
                     </View>:
                 <SimpleImage size={180} image={this.props.bottomReducer.swiperShowRadiostation.data.im} />}
                 <View style={{ flexDirection: 'row', marginLeft: 30, marginTop: 10 }}>
-                    <View>
-                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <View >
+                        <View style={{ justifyContent: 'center', alignItems: 'center'  }}>
 
-                            <View style={{ flexDirection: 'row', marginTop: 23, width: 200, marginLeft: -150, justifyContent: 'center' }
+                            <View style={{ flexDirection: 'row', marginTop: 23, width: 200, justifyContent: 'center' }
                             }>
 
                                 {this.props.bottomReducer.swiperShowRadiostation.data.st.map((item: any, index: number) => {
@@ -659,7 +708,8 @@ data.isPlayingMusic=true
                             <View style={{
                                 alignItems: 'center',
                                 flexDirection: 'row', justifyContent: 'center',
-                                marginTop: 20, marginLeft: 10
+                                marginTop: 20, marginLeft: 10,
+
                             }}>
                                 <TouchableOpacity
                                     onPress={() => {
@@ -680,7 +730,7 @@ data.isPlayingMusic=true
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        if (this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation.id) {
+                                        if (this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation?.id) {
                                             this.isPlaying()
                                         } else {
                                             player._pouseMusic()
@@ -688,16 +738,21 @@ data.isPlayingMusic=true
                                             let d = this.props.bottomReducer.swiperShowRadiostation
                                             d.isPlayingMusic = true
                                             this.props.onchangeSelectedRadioStation(d)
+                                            this.props.onchangeMiniScreenData(d)
                                             setTimeout(() => {
-                                                player._startPlayMusic(this.props.bottomReducer.swiperShowRadiostation.data, this.props.bottomReducer.swiperShowRadiostation.data.st[0])
+                                                this._addLookingList(this.props.bottomReducer.swiperShowRadiostation.data)
+
+                                                player._startPlayMusic(this.props.bottomReducer.swiperShowRadiostation?.data, this.props.bottomReducer.swiperShowRadiostation?.data.st[0])
                                                 this.setState({ swiperIndex: this.count, loading: false })
+
                                             }, 500);
                                         }
                                     }}
                                     style={[styles.btnPlay,
                                     { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
-                                    {this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation.id && this.props.bottomReducer.selectedRadioStation.isPlayingMusic ? <Stop width={calcHeight(24)} height={calcHeight(27)} fill='white' /> :
-                                        <PlaySvG width={16.66} height={37} fill='white' />}
+                                    {this.props.bottomReducer.selectedRadioStation?.id == this.props.bottomReducer.swiperShowRadiostation?.id && this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ?
+                                        <Stop width={26.66} height={37} fill='white' /> :
+                                        <PlaySvG width={26.66} height={37} fill='white' />}
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     disabled={!this.props.bottomReducer.swiperShowRadiostation.data.pl}
@@ -708,21 +763,24 @@ data.isPlayingMusic=true
                                     }}>
                                     <InfoSvg width={29.91} height={24.22} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
                                 </TouchableOpacity>
-                                {this.props.bottomReducer.activeArrow && this.count < this.props.menuReducer.menuData.length - 1 && <TouchableOpacity style={[styles.arrow,]}
-                                    disabled={this.props.bottomReducer.activeIndex == this.props.menuReducer.menuData.length - 1}
-                                    onPress={() => {
-                                        console.log("right");
-                                        this.count += 1
-                                        this.swipeRight()
-                                    }}
-                                >
-                                    <Text style={{ fontSize: 40, justifyContent: 'center' }}>
-                                        {">"}
-                                    </Text>
-                                </TouchableOpacity>}
+
                             </View>
                         </View>
+
                     </View>
+                    {this.props.bottomReducer.activeArrow && this.count < this.props.menuReducer.menuData.length - 1 && <TouchableOpacity
+                        style={[styles.arrow,{marginTop:20}]}
+                      disabled={this.props.bottomReducer.activeIndex == this.props.menuReducer.menuData.length - 1}
+                      onPress={() => {
+                      console.log("right");
+                       this.count += 1
+                       this.swipeRight()
+                       }}
+                    >
+                        <Text style={{ fontSize: 40, justifyContent: 'center' }}>
+                            {">"}
+                        </Text>
+                    </TouchableOpacity>}
                 </View>
             </View>
 
@@ -795,9 +853,6 @@ const mapDispatchToProps = (dispatch: any) => {
         toaddfavorite: (payload: any) => {
             dispatch(addFavorites(payload))
         },
-        onchangeswipeablePanelActive: (payload: boolean) => {
-            dispatch(changeswipeablePanelActive(payload))
-        },
         ongetPlayList: (payload: any) => {
             dispatch(getPlayList(payload))
         },
@@ -837,8 +892,8 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeSelectedSatationbyBi: (payload: any) => {
             dispatch(changeSelectedSatationbyBi(payload))
         },
-        onchangeInitialRouteName: (payload: any) => {
-            dispatch(changeInitialRouteName(payload))
+        onchangeLookingList:(payload:any) => {
+            dispatch(changeLookingList(payload))
         },
     }
 }

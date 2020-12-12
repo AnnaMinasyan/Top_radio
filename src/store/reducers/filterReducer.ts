@@ -44,27 +44,7 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
             return { ...state, isActive:  action.payload  }
         case FilterTypes.CHANGE_SHEARCH_DATA:
             return { ...state, searchData: action.payload }
-        case FilterTypes.CHANGE_SWIPEABLEPANELACTIVE:
-            console.log("action.payloadaction.payload",action.payload);
-            
-            return { ...state, swipeablePanelActive: action.payload }
-        case FilterTypes.CHANGE_PLAYING_MUSIC:
-            return { ...state,isPlayingMusic : action.payload }
-    
-        // case FilterTypes.SET_PLAYLIST_TYPE:
-        //     return { ...state, playListType: action.payload }
-        case FilterTypes.GET_FAVORITES:
-            return { ...state, favorites: action.payload };
-        case FilterTypes.ADD_FAVORITE:
-            const newArr = [...state.favorites]
-            let storageFavorite: any = []
-            const index = newArr.indexOf(action.payload.id);
-            if(index==-1){
-                newArr.push(action.payload.id)
-            }else{
-                newArr.splice(index,1);
-            }
-            return { ...state, favorites: newArr }
+
 
 
         default:

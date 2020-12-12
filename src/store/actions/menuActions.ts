@@ -84,3 +84,15 @@ export const setInitialRouteName = (payload: any) => {
 		payload
 	};
 };
+export const setLookingList = (payload: any) => {
+	return {
+		type: MenuTypes.SET_LOOKING_LIST,
+		payload
+	};
+};
+export const changeLookingList = (payload: any) => {
+	return {
+		type: MenuTypes.CHANGE_LOOKING_LIST,
+		payload
+	};
+};

@@ -13,7 +13,7 @@ import { IFilterMenuProps } from "../Interface"
 import player from "../services/player/PlayerServices"
 import {  getMenuData,changeSwiperData} from '../store/actions/menuActions'
 import {
-    changeswipeablePanelActive,
+
     getFavorites,
    
     changePlayingMusic
@@ -206,9 +206,6 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         ongetMenuData: () => {
             dispatch(getMenuData())
-        },
-        onchangeswipeablePanelActive: (payload:boolean) => {
-            dispatch(changeswipeablePanelActive(payload))
         },
         toaddfavorite: (payload: any) => {
             dispatch(addFavorites(payload))

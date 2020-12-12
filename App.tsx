@@ -9,10 +9,9 @@ import { Provider } from "react-redux"
 import Bugsee from 'react-native-bugsee';
 import {Platform} from 'react-native';
 
-import {changeswipeablePanelActive} from "./src/store/actions/filterAction"
 import Navigator from "./src/navigation/Navigator"
 interface Props{
-  onchangeswipeablePanelActive(payload:boolean):void;
+
 
 }
 enableScreens();

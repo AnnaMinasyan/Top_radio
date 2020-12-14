@@ -81,7 +81,6 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
         this.props.ongetMenuData()
     }
     componentDidMount() {
-        console.log(this.props.navigation)
         navigationService.setNavigator(this.props.navigation)
     }
 
@@ -94,7 +93,6 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
         getData("isLooking").then((lookList) => {
             let count = true
             if (lookList.length > 0) {
-                console.log(lookList);
                 for (let index = 0; index < lookList.length; index++) {
                     const element = lookList[index];
                     console.log(element.id == data.id);

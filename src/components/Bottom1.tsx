@@ -94,8 +94,7 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
   const swiperRef=useRef(null)
   useEffect(() => {
     if (ispanelActive) {
-      console.log(swiperRef);
-      
+
     }
   }, [ispanelActive])
   console.log(
@@ -183,7 +182,7 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
     } else {
        // this._startPlayMusic()
     }
-    console.log("changePlayingMusic",isPlayingMusic);
+    // console.log("changePlayingMusic",isPlayingMusic);
     
     dispatch(changePlayingMusic(!isPlayingMusic))
 }

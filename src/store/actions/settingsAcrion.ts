@@ -17,7 +17,7 @@ export const initAutoPlay= () => {
 	};
 };
 export const setBufferSize = (payload:string) => {
-	console.log("xxxx",payload);
+
 	
 	return {
         type: SettingsType.SET_BUFFER_SIZE,
@@ -25,7 +25,7 @@ export const setBufferSize = (payload:string) => {
 	};
 };
 export const changeBufferSize= (payload:string) => {
-	console.log("LL",payload);
+
 
 	return {
 		type: SettingsType.CHANGE_BUFFER_SIZE,
@@ -33,7 +33,7 @@ export const changeBufferSize= (payload:string) => {
 	};
 };
 export const changeIsOnheadsets= (payload:boolean) => {
-	console.log("LL",payload);
+
 
 	return {
 		type: SettingsType.CHANGE_IS_ON_HEADSES,
@@ -41,7 +41,7 @@ export const changeIsOnheadsets= (payload:boolean) => {
 	};
 };
 export const setIsOnheadsets= (payload:boolean) => {
-	console.log("LL",payload);
+
 
 	return {
 		type: SettingsType.SET_IS_ON_HEADSES,

@@ -51,7 +51,7 @@ export const initMenuType = () => {
 	};
 };
 export const getMenuType = (payload:number) => {
-	console.log("payload",payload);
+	//console.log("payload",payload);
 	
 	return {
 		type: FilterTypes.GET_MENU_TYPE,

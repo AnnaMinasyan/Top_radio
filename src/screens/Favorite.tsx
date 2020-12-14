@@ -83,7 +83,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
 
         })
     }
-    renderMenuItems(data: any) { 
+    renderMenuItems(data: any) {
+        console.log("ddddddddddddd",data.item.id)
         if(this.checkIsFovorite(data.item.id))  {
             return <TouchableHighlight
             onPress={() => {
@@ -138,7 +139,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.state.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        
+        console.log("list")
         return (
             <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
                 

@@ -356,7 +356,7 @@ class Bottom extends React.Component<Props, IState> {
         // create a path you want to write to
         var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
 
-        console.log(RNFileManager.MainBundlePath);
+    //    console.log(RNFileManager.MainBundlePath);
 
         const audioSet = {
             AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
@@ -365,7 +365,7 @@ class Bottom extends React.Component<Props, IState> {
             AVNumberOfChannelsKeyIOS: 2,
             AVFormatIDKeyIOS: AVEncodingOption.aac,
         };
-        console.log('audioSet', audioSet);
+       // console.log('audioSet', audioSet);
         const uri = await this.audioRecorderPlayer.startRecorder(path, true, audioSet);
 
         this.audioRecorderPlayer.addRecordBackListener((e: any) => {
@@ -376,7 +376,7 @@ class Bottom extends React.Component<Props, IState> {
                 ),
             });
         });
-        console.log(`uri: ${uri}`,);
+        //console.log(`uri: ${uri}`,);
     }
 
     private onStartPlay = async () => {
@@ -389,7 +389,7 @@ class Bottom extends React.Component<Props, IState> {
         // });
         const msg = await this.audioRecorderPlayer.startPlayer(path);
         this.audioRecorderPlayer.setVolume(1.0);
-        console.log(msg);
+       // console.log(msg);
         this.audioRecorderPlayer.addPlayBackListener((e: any) => {
             if (e.current_position === e.duration) {
                 console.log('finished');
@@ -441,7 +441,7 @@ class Bottom extends React.Component<Props, IState> {
         //     ],
         //     { cancelable: false }
         //   );
-        console.log(result);
+      //  console.log(result);
     };
 
     renderBottomSheetHorizontal() {
@@ -474,7 +474,6 @@ class Bottom extends React.Component<Props, IState> {
                                     <TouchableOpacity
                                         disabled={this.props.bottomReducer.activeIndex == 0}
                                         onPress={() => {
-                                            console.log("left");
                                             this.count -= 1
                                             this.swipeLeft()
                                         }}
@@ -531,12 +530,10 @@ class Bottom extends React.Component<Props, IState> {
                                         <TouchableOpacity
                                             onPress={() => {
                                                 if (this.state.swiperIndex == this.props.bottomReducer.activeIndex) {
-                                                    console.log("888888888888888888888888888888");
                                                     this.isPlaying()
                                                 } else {
 
                                                     this.setState({ loading: true })
-                                                    console.log("1111111111111111111111111111");
                                                     this._pouseMusic()
                                                     setTimeout(() => {
                                                         player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)
@@ -597,7 +594,6 @@ class Bottom extends React.Component<Props, IState> {
         this.lastClickData = Date.now()
         setTimeout(() => {
             if (Date.now() - this.lastClickData > 450) {
-                console.log(":::::::::::::::::");
 
                 this.props.get_songData(this.props.menuReducer.filterData[this.count])
             }
@@ -623,7 +619,7 @@ class Bottom extends React.Component<Props, IState> {
         this.lastClickData = Date.now()
         setTimeout(() => {
             if (Date.now() - this.lastClickData > 450) {
-                console.log(":::::::::::::::::");
+
 
                 this.props.get_songData(this.props.menuReducer.filterData[this.count])
             }
@@ -771,12 +767,10 @@ class Bottom extends React.Component<Props, IState> {
                                     //  this.props.onchangeplayItem(this.props.bottomReducer.playItem)
                                     // this.isPlaying()
                                     if (this.state.swiperIndex == this.props.bottomReducer.activeIndex) {
-                                        console.log("888888888888888888888888888888");
                                         this.isPlaying()
                                     } else {
 
                                         this.setState({ loading: true })
-                                        console.log("1111111111111111111111111111");
                                         this._pouseMusic()
                                         setTimeout(() => {
                                             player._startPlayMusic(this.props.bottomReducer.playItem, this.props.bottomReducer.playingMusicArtistSong)

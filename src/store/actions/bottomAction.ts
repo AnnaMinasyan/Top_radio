@@ -54,7 +54,7 @@ export const changeActiveIndex = (payload: number) => {
 	};
 };
 export const changeActiveBi = (payload: number) => {
-	console.log("payloadpayloadpayload",payload);
+
 	
 
 	return {
@@ -82,6 +82,7 @@ export const getSongData = (payload: any) => {
 	};
 };
 export const setSelectedRadioStation = (payload: any) => {
+	console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
 		return {
 			type: BottomType.SET_SELECTED_RADIOSTATION,
 			payload
@@ -130,7 +131,6 @@ export const setSelectedRadioStation = (payload: any) => {
 	};
 	export const setSwiperPlayingSong= (payload: any) => {
 
-		console.log("__________________________________________________________________________________")
 		return {
 			type: BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG,
 			payload

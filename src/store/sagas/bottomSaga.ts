@@ -44,25 +44,32 @@ function* changeselectedSatationbyBi({ payload }: any) {
     }
 }
 function* addselectedRadioStation({ payload }: any) {
+    console.log("====================================================================",payload);
+
     try {
-        console.log("====================================================================",payload);
+      console.log("+++++++++++++++++=",payload.data.pl);
         player.open()
         yield put(setSelectedRadioStation(payload))
-        const data = yield auth.getPlayItemType(payload.data.pl)
-        console.log( data)
-        let station = payload
-        station.activeBi=payload.data.st[0]
-        station.playingSong = data.playList[0]
+      if(payload.data.pl) {
+          const data = yield auth.getPlayItemType(payload.data.pl)
+          let station = payload
+          station.activeBi=payload.data.st[0]
+          station.playingSong = data.playList[0]
 
 
-        yield put(setSelectedRadioStation(station))
+          yield put(setSelectedRadioStation(station))
+      }
+       // console.log( data)
+
 
     } catch (ex) {
         console.log(ex);
     }
 }
 function* changeSelectedRadioStationPlaying({ payload }: any) {
+    console.log("payloadddddddd,",payload)
     try {
+
         yield put(setSelectedRadioStationPlaying(payload))
     } catch (ex) {
         console.log(ex);

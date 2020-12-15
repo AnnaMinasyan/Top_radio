@@ -18,6 +18,9 @@ import RedHeart from "../assets/icons/redHeart.svg"
 import Heart from "../assets/icons/heart.svg"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight, deviceWidth } from "../assets/styles/dimensions"
 import SimpleImage from "../components/SimpleImage"
+import Modal from "react-native-modal";
+import NetInfo from "@react-native-community/netinfo";
+
 
 const MARGIN_TOP = Platform.OS === 'ios' ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get('window').height - MARGIN_TOP;
@@ -36,7 +39,8 @@ type Props = {
     backgroundColor: String,
     bottomReducer: any,
     animation?: 'linear' | 'spring' | 'easeInEaseOut' | 'none',
-    orientation:String
+    orientation:String,
+    onchangeIsConnected:(v)=>void
 };
 export default class SwipeUpDown extends Component<Props> {
     static defautProps = {
@@ -188,9 +192,40 @@ export default class SwipeUpDown extends Component<Props> {
         this.checkCollapsed = true;
         onShowMini && onShowMini();
     }
+    renderDisConectModal(){
+        return <Modal
+            isVisible={!this.props.backgroundColor.isConnected}
+            animationIn={'slideInLeft'}
+            animationOut={'slideOutRight'}
+            backdropOpacity={0.2}
+            onBackdropPress={() => {this.setState({visibleModal:false})} } >
+            {<View style={{backgroundColor:'white', height:150,padding:10}}>
+                <Text style={{fontSize:22, fontWeight:'bold', marginBottom:8}}>Нет подключения к интернету </Text>
+                <Text style={{fontSize:16,lineHeight:20}}>Подключите соединение или мобильный интернет для прослушивания радиостанций </Text>
+                <TouchableOpacity
+                    onPress={()=>{
 
+                        this.props.onchangeIsConnected(true)
+                        setTimeout(()=>{
+                            NetInfo.fetch().then(state => {
+                                    console.log("Connection type", state.type);
+                                    console.log("Is connected?", state.isConnected);
+                                    this.props.onchangeIsConnected(state.isConnected)
+                            },
+                            50000);
+
+
+                    })}}
+                    style={{marginTop:25, width:'100%', alignItems:'flex-end'}}
+                >
+                    <Text style={{color:'green',fontSize:17}}>Перепадключится</Text>
+                </TouchableOpacity>
+            </View>}
+        </Modal>
+    }
     render() {
        // console.log("wdpa[d",this.props.bottomReducer.selectedRadioStation.isPlayingMusic)
+        console.log(this.props.backgroundColor.isConnected)
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (
@@ -407,6 +442,7 @@ export default class SwipeUpDown extends Component<Props> {
                 </View>}</View>}
 
                 {itemFull}
+
             </Animated.View>
         );
     }
@@ -416,7 +452,7 @@ const styles = StyleSheet.create({
     wrapSwipe: {
 
         backgroundColor: '#ccc',
-        position: 'absolute',
+       position:'absolute',
         bottom:0,
         left: 0,
         right: 0

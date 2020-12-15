@@ -160,6 +160,7 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
 
             }}>
             <RadioMenuElement
+                showFavoriteHeart={true}
                 title={data.item.pa}
                 image={data.item.im}
                 theme={this.props.theme}

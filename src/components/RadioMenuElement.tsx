@@ -25,7 +25,7 @@ add(){
   this.props.addInFavorite()
 }
   render() {
-  
+
     return (
       <View style={[styles.body,
       { backgroundColor:this.props.backColor,
@@ -40,6 +40,7 @@ add(){
      style={[global_styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":"white", marginRight:20,}]}>
       {this.props.title}</Text>
       </View>
+          {this.props.showFavoriteHeart &&
            <TouchableOpacity
            onPress={()=>{
               this.add()
@@ -50,7 +51,7 @@ add(){
     
     <RedHeart fill='#FF5050' height={19} width={21}/>: <Heart fill='#B3BACE'  height={18.54} width={20.83}/>} 
            </TouchableOpacity>
-     
+          }
       </View>
     );
   }

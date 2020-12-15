@@ -29,6 +29,7 @@ import RedHeart from "../assets/icons/redHeart.svg"
 import SimpleImage from "./SimpleImage"
 import PlaySvG from "../assets/icons/play.svg"
 import Stop from "../assets/icons/stop.svg"
+import {changeIsConnected} from "../store/actions/bottomAction";
 import {
     changeplayItem,
     changePlayingData,
@@ -57,6 +58,8 @@ import navigationService from "../navigation/NavigationService"
 var RNFileManager = require('react-native-file-manager');
 import SwipeUpDown from '../screens/Swiper';
 import {getData, storeData} from "../utils/local_storage";
+import Modal from "react-native-modal";
+import NetInfo from "@react-native-community/netinfo";
 TrackPlayer.registerPlaybackService(() => require('../../service'));
 interface Props {
     onCloseStart(): void;
@@ -89,7 +92,7 @@ interface Props {
     onchangeMiniScreenData(payload:any):void;
 onchangeInitialRouteName(payload:any):void;
     onchangeSelectedSatationbyBi(payload:any):void;
-
+onchangeIsConnected(payload:any):void;
 }
 interface IState {
     menuStyle: boolean,
@@ -115,7 +118,8 @@ interface IState {
     duration: string;
     playingUrl: string | null,
     loading: boolean,
-    loadingStation:boolean
+    loadingStation:boolean,
+    visibleModal:boolean
 }
 class BottomSwiper extends React.Component<Props, IState> {
     swiperRef: any
@@ -153,7 +157,8 @@ class BottomSwiper extends React.Component<Props, IState> {
             duration: '00:00:00',
             playingUrl: null,
             loading: false,
-            loadingStation:false
+            loadingStation:false,
+            visibleModal:false
         }
     }
     async componentDidMount() {
@@ -307,6 +312,7 @@ class BottomSwiper extends React.Component<Props, IState> {
     }
     renderBottomSheetheader() {
         return <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+
             <TouchableOpacity
                 style={global_styles.searchbtn}
                 onPress={() => {
@@ -321,23 +327,29 @@ class BottomSwiper extends React.Component<Props, IState> {
                 style={[styles.player,
                 { backgroundColor: this.props.theme.backgroundColor == "white" ? 'white' : '#0D1834' }]}
                 onPress={() => {
-                    if (this.props.bottomReducer.selectedRadioStation?.id == this.props.bottomReducer.miniScreenData.id) {
-                        this.isPlaying()
-                    } else {
-                        player._pouseMusic()
-                        this.setState({ loading: true })
-                        let d = this.props.bottomReducer.miniScreenData
-                        d.isPlayingMusic = true
-                        this.props.onchangeSelectedRadioStation(d)
-                        this._addLookingList(this.props.bottomReducer.miniScreenData.data)
-                        setTimeout(() => {
+                    if(this.props.bottomReducer.isConnected){
+                        if (this.props.bottomReducer.selectedRadioStation?.id == this.props.bottomReducer.miniScreenData.id) {
+                            this.isPlaying()
+                        } else {
+                            player._pouseMusic()
+                            this.setState({ loading: true })
+                            let d = this.props.bottomReducer.miniScreenData
+                            d.isPlayingMusic = true
+                            this.props.onchangeSelectedRadioStation(d)
+                            this._addLookingList(this.props.bottomReducer.miniScreenData.data)
+                            setTimeout(() => {
 
-                            this.props.bottomReducer.miniScreenData &&  player._startPlayMusic(this.props.bottomReducer.miniScreenData.data, this.props.bottomReducer.miniScreenData.data.st[0])
-                            this.setState({ swiperIndex: this.count, loading: false })
+                                this.props.bottomReducer.miniScreenData &&  player._startPlayMusic(this.props.bottomReducer.miniScreenData.data, this.props.bottomReducer.miniScreenData.data.st[0])
+                                this.setState({ swiperIndex: this.count, loading: false })
 
-                        }, 500);
+                            }, 500);
+                        }
+                    }else{
+                        this.setState({visibleModal:true})
                     }
-                }}
+                }
+                    }
+
             >
                 {this.props.bottomReducer.miniScreenData && this.props.bottomReducer.miniScreenData.isPlayingMusic ? <Stop width={(16)} height={(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} /> :
                     <PlaySvG width={calcWidth(16)} height={(22)} fill={this.props.theme.backgroundColor == "white" ? '#101C3B' : 'white'} />}
@@ -366,7 +378,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                 }, 500);
         }else{
             let data=this.props.bottomReducer.swiperShowRadiostation
-data.isPlayingMusic=true
+            data.isPlayingMusic=true
             data.activeBi=item
 
             player._pouseMusic()
@@ -446,7 +458,7 @@ data.isPlayingMusic=true
             AVNumberOfChannelsKeyIOS: 2,
             AVFormatIDKeyIOS: AVEncodingOption.aac,
         };
-      //  console.log('audioSet', audioSet);
+   console.log('audioSet', audioSet);
         const uri = await this.audioRecorderPlayer.startRecorder(path, true, audioSet);
 
         this.audioRecorderPlayer.addRecordBackListener((e: any) => {
@@ -459,6 +471,7 @@ data.isPlayingMusic=true
         });
 
     }
+
     private onStopRecord = async () => {
         console.log("stoppppppppp");
 
@@ -619,6 +632,7 @@ data.isPlayingMusic=true
                     :
                     <TouchableOpacity
                         onPress={() => {
+                            if(this.props.bottomReducer.isConnected){
                             if (this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation?.id) {
                                 this.isPlaying()
                             } else {
@@ -635,8 +649,10 @@ data.isPlayingMusic=true
                                     this.setState({ swiperIndex: this.count, loading: false })
 
                                 }, 500);
-                            }
-                        }}
+                            }}else{
+                                console.log(";;;;;;;;;;;;;;;;;;;;")
+                                this.props.onchangeIsConnected(false)
+                            }}}
                         style={[styles.btnPlay,
                         { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', marginTop: calcHeight(5) }]}>
                         {this.props.bottomReducer.selectedRadioStation?.id == this.props.bottomReducer.swiperShowRadiostation?.id && this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ?
@@ -654,8 +670,10 @@ data.isPlayingMusic=true
                     <InfoSvg width={calcWidth(29.91)} height={calcHeight(24.22)} fill={this.props.theme.backgroundColor == 'white' ? '#1E2B4D' : 'white'} />
                 </TouchableOpacity>
             </View>
+
         </View>
     }
+
     renderBottomSheetHorizontal() {
         return <View ref="rootView" style={{
                 flexDirection: 'row',
@@ -664,7 +682,9 @@ data.isPlayingMusic=true
                 height: this.props.theme.height + 10,
             position:'absolute',
             top:80
-            }}>{this.props.bottomReducer.activeArrow && this.props.bottomReducer.activeIndex> 0?
+            }}>
+
+            {this.props.bottomReducer.activeArrow && this.props.bottomReducer.activeIndex> 0?
         <TouchableOpacity
                     disabled={this.count == 0}
                     onPress={() => {
@@ -712,10 +732,12 @@ data.isPlayingMusic=true
                                     onPress={() => {
                                         if (this.state.isRecording) {
                                             this.onStopRecord()
+                                            this.setState({ isRecording: false })
                                         } else {
                                             this.onStartRecord()
+                                            this.setState({ isRecording: true})
                                         }
-                                        this.setState({ isRecording: !this.state.isRecording })
+
                                     }}
                                     style={[styles.btnrecord,
                                     { backgroundColor: this.props.theme.backgroundColor == 'white' ? 'white' : '#0F1E45', }]}
@@ -727,6 +749,7 @@ data.isPlayingMusic=true
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     onPress={() => {
+                                        if(this.props.bottomReducer.isConnected){
                                         if (this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation?.id) {
                                             this.isPlaying()
                                         } else {
@@ -743,8 +766,12 @@ data.isPlayingMusic=true
                                                 this.setState({ swiperIndex: this.count, loading: false })
 
                                             }, 500);
+                                        }}else{
+                                            this.setState({visibleModal:true})
+
                                         }
-                                    }}
+                                    }
+                                    }
                                     style={[styles.btnPlay,
                                     { backgroundColor: this.props.theme.backgroundColor == 'white' ? '#101C3B' : '#0F1E45', }]}>
                                     {this.props.bottomReducer.selectedRadioStation?.id == this.props.bottomReducer.swiperShowRadiostation?.id && this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ?
@@ -780,62 +807,61 @@ data.isPlayingMusic=true
                     </TouchableOpacity>}
                 </View>
             </View>
-
     }
-
     render() {
-
         return (
+<View style={{backgroundColor:'red', height:100, position:'absolute', bottom:0}}>
+    <Text>dafhwaf;</Text>
+</View>
+            // <SwipeUpDown
+            //     hasRef={(ref: any) => {
+            //
+            //         if (!this.state.headerHeight) {
+            //
+            //             player.init(ref)
+            //             this.setState({ headerHeight: true })
+            //         }
+            //     }}
+            //     anim={this.anim}
+            //     animation={'linear'}
+            //     onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}
+            //     orientation={this.props.theme.albomeMode}
+            //     itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
+            //     itemFull={this.props.theme.albomeMode ? this.renderBottomSheetHorizontal() : this.renderBottomSheet()} // Pass props component when show full
+            //     onShowMini={() => {
+            //
+            //         Animated.timing(this.anim, {
+            //             toValue: 1,
+            //             duration: 50,
+            //             useNativeDriver: true
+            //         }).start();
+            //     }}
+            //     onShowFull={() => {
+            //         Animated.timing(this.anim, {
+            //             toValue: 0,
+            //             duration: 50,
+            //             useNativeDriver: true
+            //         }).start();
+            //     }}
+            //     closed={() => { this.closed() }}
+            //     checkIsFovorite={() => this.checkIsFovorite(this.props.bottomReducer.swiperShowRadiostation.id)
+            //     }
+            //     bottomReducer={this.props.bottomReducer}
+            //     backgroundColor={this.props.theme.backgroundColor}
+            //     toaddfavorite={() => { this.props.toaddfavorite(this.props.bottomReducer.swiperShowRadiostation.data) }}
+            //     onMoveUp={() => console.log('up')}
+            //     swipeHeight={this.props.theme.albomeMode ? 76 : 190}
+            //     disablePressToShow={false} // Press item mini to show full
+            //     style={{
+            //      //   backgroundColor:'red',
+            //         //height:deviceHeight-80,
+            //         backgroundColor: 'rgba(255,255,255,0)',
+            //         flex: 1,
+            //     }} // style for swipe
+            // />
 
-            <SwipeUpDown
-                hasRef={(ref: any) => {
-                   
-                    if (!this.state.headerHeight) {
-                        
-                        player.init(ref)
-                        this.setState({ headerHeight: true })
-                    }
-                }}
-                anim={this.anim}
-                animation={'linear'}
-                orientation={this.props.theme.albomeMode}
-                itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
-                itemFull={this.props.theme.albomeMode ? this.renderBottomSheetHorizontal() : this.renderBottomSheet()} // Pass props component when show full
-                onShowMini={() => {
 
-                    Animated.timing(this.anim, {
-                        toValue: 1,
-                        duration: 50,
-                        useNativeDriver: true
-                    }).start();
-                }}
-                onShowFull={() => {
-                    Animated.timing(this.anim, {
-                        toValue: 0,
-                        duration: 50,
-                        useNativeDriver: true
-                    }).start();
-                }}
-                closed={() => { this.closed() }}
-                checkIsFovorite={() => this.checkIsFovorite(this.props.bottomReducer.swiperShowRadiostation.id)
-                }
-                bottomReducer={this.props.bottomReducer}
-                backgroundColor={this.props.theme.backgroundColor}
-                toaddfavorite={() => { this.props.toaddfavorite(this.props.bottomReducer.swiperShowRadiostation.data) }}
-                onMoveUp={() => console.log('up')}
-                swipeHeight={this.props.theme.albomeMode ? 76 : 190}
-                disablePressToShow={false} // Press item mini to show full
-                style={{
-                 //   backgroundColor:'red',
-                    //height:deviceHeight-80,
-                    backgroundColor: 'rgba(255,255,255,0)',
-                    flex: 1,
-                }} // style for swipe
-            />
-
-
-            // </View>
-        );
+        )
     }
 };
 const mapStateToProps = ({ filterReducer, favorites, theme, settingsReducer, menuReducer, bottomReducer }: any) => {
@@ -891,6 +917,9 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeLookingList:(payload:any) => {
             dispatch(changeLookingList(payload))
         },
+        onchangeIsConnected:(payload:any) => {
+        dispatch(changeIsConnected(payload))
+    },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(BottomSwiper);

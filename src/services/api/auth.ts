@@ -58,7 +58,7 @@ class Static implements IDATA {
 
             return response.data
         } catch (ex) {
-            return Alert.alert("Error",ex)
+            return ex
         }
     }
 }

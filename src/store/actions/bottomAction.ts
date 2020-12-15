@@ -197,3 +197,17 @@ export const changeSelectedSatationbyBi = (payload: any) => {
 
 	};
 };
+export const changeIsConnected = (payload: any) => {
+	return {
+		type: BottomType.CHANGE_IS_CONNECTED,
+		payload
+
+	};
+};
+export const setIsConnected = (payload: any) => {
+	return {
+		type: BottomType.SET_IS_CONNECTED,
+		payload
+
+	};
+};

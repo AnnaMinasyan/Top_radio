@@ -103,6 +103,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
             }}
         >
             <RadioMenuElement
+                showFavoriteHeart={true}
              title={data.item.pa}
                 image={data.item.im}
                  backColor={this.props.theme.backgroundColor}

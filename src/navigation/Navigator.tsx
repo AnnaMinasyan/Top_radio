@@ -19,6 +19,7 @@ const Navigator: React.FunctionComponent = (props:any) => (
 
   <NavigationContainer
   >
+
       <Drawer.Navigator
           initialRouteName="Home"
           drawerContent={(props) => <MenuDrawerContent {...props} />}
@@ -60,6 +61,7 @@ const Navigator: React.FunctionComponent = (props:any) => (
           <Drawer.Screen name="LookingMenu" component={LookingMenu} />
 
       </Drawer.Navigator>
+
   </NavigationContainer>
 );
 

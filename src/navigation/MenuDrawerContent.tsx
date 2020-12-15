@@ -4,7 +4,7 @@ import {
     ScrollView,
     View,
     Text,
-    TouchableOpacity,
+    TouchableOpacity, SafeAreaView,
 } from 'react-native'
 import { connect } from 'react-redux';
 import Logo from "../assets/icons/logo.svg"
@@ -20,6 +20,7 @@ import { NavigationScreenProp } from 'react-navigation';
 import { changeisActive } from "../store/actions/filterAction"
 import player from "../services/player/PlayerServices"
 import {changeActiveArrow} from '../store/actions/bottomAction'
+import BottomSwiper from "../components/BottomSwiper";
 interface Props {
     navigation: NavigationScreenProp<any, any>;
     onchangeisActive(type:string): void;
@@ -27,7 +28,7 @@ interface Props {
     filterReducer: any
 }
 const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
-    return (<View style={{height:'100%'}}>
+    return (<View style={{height:'100%', zIndex:999}}>
         <ScrollView style={{ backgroundColor: '#0F1E45', height:deviceHeight}}>
             <View style={styles.container} >
 
@@ -103,7 +104,11 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                     <BackImage width={380} height={300} />
                 </View>
         </ScrollView>
-      
+
+                <BottomSwiper
+                    isSwiper={true}
+                    // navigation={this.props.navigation}
+                />
     </View>
     )
 };

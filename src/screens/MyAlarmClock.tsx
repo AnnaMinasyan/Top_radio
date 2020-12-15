@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  FlatList
+  FlatList, TouchableHighlight
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
@@ -26,6 +26,9 @@ import PowerOffSvg  from "../assets/icons/powerOff.svg"
 import SearchSvg from "../assets/icons/search.svg"
 import { changeSearchData } from '../store/actions/filterAction'
 import { createFilter } from 'react-native-search-filter';
+import RedHeart from "../assets/icons/redHeart.svg";
+import Heart from "../assets/icons/heart.svg";
+import player from "../services/player/PlayerServices";
 const KEYS_TO_FILTERS = ['pa'];
 
 interface IState {
@@ -41,7 +44,8 @@ interface IState {
   favoriteList: any,
   playItem: any,
   isOnAlarmclock: boolean,
-  onRepeat: boolean
+  onRepeat: boolean,
+  isFavorite:boolean
 }
 
 class MyAlarmClock extends React.Component<IMenuProps, IState> {
@@ -72,7 +76,8 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       favoriteList: [],
       playItem: [],
       isOnAlarmclock: false,
-      onRepeat: false
+      onRepeat: false,
+      isFavorite:false
     }
 
   }
@@ -86,7 +91,8 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           selectedHours:time.hours,
           selectedMinut:time.minute,
           onRepeat:time.repeat>0,
-          selectedTimeRepeat:time.repeat
+          selectedTimeRepeat:time.repeat,
+
 
         })
       }
@@ -108,21 +114,43 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
     });
   };
   renderMenuItems(data: any) {
+    if(this.checkIsFovorite(data.item.id) && this.state.isFavorite){
+      return <TouchableHighlight
+          onPress={() => {
+            this.setState({
+              visibleModal: null,
+              playItem: data.item,
+            })
+          }}
+      >
+        <RadioMenuElement
+            showFavoriteHeart={false}
+            title={data.item.pa}
+            image={data.item.im}
+            backColor={'#0F1E45'}
+            addInFavorite={() => this.props.toaddfavorite(data.item)}
+            isFavorite={this.checkIsFovorite(data.item.id)} />
+      </TouchableHighlight>
+    }
+    else if(this.state.isFavorite==false){
+      return <TouchableOpacity
+          onPress={() => {
+            this.setState({
+              visibleModal: null,
+              playItem: data.item,
+            })
+          }}
+          style={{width: '100%'}}
+      >
+        <RadioMenuElement
 
-    return <TouchableOpacity
-      onPress={() => {
-        this.setState({
-          visibleModal: null,
-          playItem: data.item,
-        })
-      }}
-      style={{ width: '100%' }}
-    >
-      <RadioMenuElement title={data.item.pa} image={data.item.im}
-        backColor={'#0F1E45'}
-        addInFavorite={() => this._changeInFavorite(data.item)}
-        isFavorite={this.checkIsFovorite(data.item.id)} />
-    </TouchableOpacity>
+            showFavoriteHeart={false}
+            title={data.item.pa} image={data.item.im}
+            backColor={'#0F1E45'}
+            addInFavorite={() => this._changeInFavorite(data.item)}
+            isFavorite={this.checkIsFovorite(data.item.id)}/>
+      </TouchableOpacity>
+    }else{return null}
   }
   checkIsFovorite(num: number) {
     return this.props.favorites.includes(num)
@@ -134,6 +162,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       })
     })
   }
+
   onRenderModalMenuRadio() {
     let list = this.props.menuReducer.menuData.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
     return <View style={[styles.modalMenuRadio,{backgroundColor:"#0F1E45"} ]}>
@@ -144,15 +173,26 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
         paddingBottom:calcHeight(5)
         }}>
        <View style={{borderBottomWidth:calcHeight(2),width:'10%',alignItems:'center',   justifyContent:'center',
-        borderColor:'#57678F',}}>
+        borderColor:'#57678F',paddingLeft:5}}>
                  <SearchSvg width={calcWidth(14.48)} height={calcHeight(15)} />
 
        </View>
-         <View style={{width:'90%'}}>
+         <View style={{width:'70%'}}>
          <Search renderSearchData={this.props.onchnageSearchData}  />
          </View>
+          <TouchableOpacity
+              onPress={()=>{
+            this.setState({isFavorite:!this.state.isFavorite})
+              }}
+              style={{ height:50,width:80,justifyContent:'center', alignItems:'center'}}
+          >
+            {this.state.isFavorite?
+
+                <RedHeart fill='#FF5050' height={19} width={21}/>: <Heart fill='#B3BACE'  height={18.54} width={20.83}/>}
+          </TouchableOpacity>
       </View>
-        <View style={{ height: calcHeight(400) }}>
+
+        <View style={{ height: calcHeight(400), width:'100%' }}>
           <FlatList
             style={{ marginBottom: 10, }}
             data={list}
@@ -456,8 +496,8 @@ const styles = StyleSheet.create({
     marginTop:calcHeight(50),
 paddingBottom:calcHeight(8),
     height: calcHeight(450),
-    marginHorizontal: calcWidth(45),
-  
+   // marginHorizontal: calcWidth(45),
+
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -79,7 +79,7 @@ class Settings extends React.Component<ISettings, IState> {
       ],
       timeSleep: 10,
       autoPlay: false,
-      ontimerSleep: false
+      ontimerSleep: true
 
     }
   }
@@ -178,8 +178,10 @@ class Settings extends React.Component<ISettings, IState> {
       <Text style={[global_styles.stationTexttitle, { color: "#1E2B4D", fontSize: calcFontSize(18), marginBottom: calcHeight(20) }]}>
         Размер буфера
             </Text>
-      {this.props.settingsReducer.bufferSize.map((res: any) => {
-        return <View style={{
+      {this.props.settingsReducer.bufferSize.map((res: any, index:number) => {
+        return <View
+            key={index}
+            style={{
           width: calcWidth(300),
           flexDirection: 'row',
           justifyContent: 'space-between',
@@ -260,7 +262,7 @@ class Settings extends React.Component<ISettings, IState> {
     });
     if (this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.state.timeSleep * 60000)
-
+      console.log('time',time)
       storeData("timerSleep", time)
     }
     initTimerSleep(this.timerSleep)

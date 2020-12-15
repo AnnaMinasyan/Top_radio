@@ -12,7 +12,8 @@ import {
     setSwiperShowStation,
     setSwiperPlayingSong,
     setSwiperActiveBi,
-    setActiveArrow
+    setActiveArrow,
+    setIsConnected
 } from "../actions/bottomAction";
 
 import { changePlayingMusic } from "../actions/filterAction"
@@ -63,7 +64,7 @@ function* addselectedRadioStation({ payload }: any) {
 
 
     } catch (ex) {
-        console.log(ex);
+        yield put(setIsConnected(false))
     }
 }
 function* changeSelectedRadioStationPlaying({ payload }: any) {
@@ -72,7 +73,7 @@ function* changeSelectedRadioStationPlaying({ payload }: any) {
 
         yield put(setSelectedRadioStationPlaying(payload))
     } catch (ex) {
-        console.log(ex);
+        yield put(setIsConnected(true))
     }
 }
 function* changeSwiperActiveBi({ payload }: any) {
@@ -95,7 +96,7 @@ function* onGetSongData({ payload }: any) {
 
         }
     } catch (ex) {
-        console.log(ex);
+        yield put(setIsConnected(payload))
     }
 }
 function* onChangePlayingData({ payload }: any) {
@@ -143,6 +144,12 @@ function* changeMiniScreenData({ payload }: any) {
     try {
 
         yield put(setMiniScreenData(payload))
+    } catch (ex) {
+        console.log(ex);
+    }
+}function* changeIsconnected({ payload }: any) {
+    try {
+        yield put(setIsConnected(payload))
     } catch (ex) {
         console.log(ex);
     }
@@ -200,6 +207,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_SELECTED_STATION_BY_BI as any,
         changeselectedSatationbyBi
+    )
+    yield takeEvery(
+        BottomType.CHANGE_IS_CONNECTED as any,
+        changeIsconnected
     )
 }
 

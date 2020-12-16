@@ -63,7 +63,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView, { marginTop: (6),  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
-            player.close()
+      
            this.props.navigation.navigate("MyAlarmClock")
           }}
         >
@@ -92,7 +92,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView,{  borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
-            player.close()
+           
             this.props.navigation.navigate('Settings')
           }}
         >

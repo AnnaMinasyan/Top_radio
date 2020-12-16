@@ -809,7 +809,6 @@ class BottomSwiper extends React.Component<Props, IState> {
             </View>
     }
     render() {
-        console.log(":::",this.props.bottomReducer.miniScreenData)
         if(this.props.bottomReducer.swiperShowRadiostation ){
             return (
                 <SwipeUpDown

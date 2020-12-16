@@ -19,6 +19,7 @@ import {initTimerSleep} from "./utils/timer_sleep"
 import {selectedRadioStationSelector,swiperShowRadiostationSelector,isConnectedSelector } from "./store/selector/bottomSelector"
 import Modal from 'react-native-modal';
 import player from "./services/player/PlayerServices"; // 2.4.0
+import SimpleExample from "./components/TimerScreen"
 interface Props {
     onchangeswipeablePanelActive(payload: boolean): void;
     filterReducer: any,
@@ -43,6 +44,8 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             setVisibleModal(!state.isConnected)
         });
         getData("timerSleep").then((time)=>{
+            console.log("ddskdjskldjslkdjsld",time);
+            
             settimerSleep(time)
         })
         dispatch(initFavorites())
@@ -68,7 +71,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
       //  console.log(width, height);
     }, [width, height])
 
-
+return <SimpleExample/>
     return (
         isConnected?
         <SafeAreaView style={{ flex: 1, }}>
@@ -83,7 +86,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             {/*    />: <View />}*/}
 
           
-             {initTimerSleep(timerSleep)}
+             {/* {initTimerSleep(timerSleep)} */}
         </SafeAreaView>
             :<View>
                 <Image style={{resizeMode:'center'}} source={require('./assets/images/launch_screen.png')}/>

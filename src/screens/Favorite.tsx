@@ -140,7 +140,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
     }
     render() {
         const list = this.state.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-        console.log("list")
         return (
             <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
                 
@@ -178,9 +177,6 @@ const mapStateToProps = ({filterReducer,menuReducer,favorites,theme,bottomReduce
 };
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onchangeswipeablePanelActive: (payload: boolean) => {
-            dispatch(changeswipeablePanelActive(payload))
-        },
         onchangeplayItem: (payload: boolean) => {
             dispatch(changeplayItem(payload))
         },

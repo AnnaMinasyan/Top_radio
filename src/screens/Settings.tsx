@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   TouchableHighlight,
-  BackHandler
+  BackHandler,
+  ScrollView
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceWidth } from "../assets/styles/dimensions"
@@ -48,9 +49,11 @@ interface IState {
   timeSleep: number,
   timeSleepList: number[],
   autoPlay: boolean,
-  ontimerSleep: boolean
+  ontimerSleep: boolean,
+  selectedItemIndex:number
 }
 class Settings extends React.Component<ISettings, IState> {
+  sview:any
   constructor(props: ISettings) {
 
     super(props)
@@ -74,13 +77,13 @@ class Settings extends React.Component<ISettings, IState> {
         }
       ],
       timeSleepList: [
-        0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+        0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
 
       ],
       timeSleep: 10,
       autoPlay: false,
-      ontimerSleep: true
-
+      ontimerSleep: true,
+      selectedItemIndex:0
     }
   }
 
@@ -194,6 +197,9 @@ class Settings extends React.Component<ISettings, IState> {
       })}
     </View>
   }
+  updateSelectedItem(index:number) {
+    this.setState({selectedItemIndex: index});
+  }
   onRenderModalSleepTimer() {
     return <View style={[styles.modalSleepTimer]}>
       <View style={styles.sleepTimerTop}>
@@ -219,7 +225,39 @@ class Settings extends React.Component<ISettings, IState> {
       </View>
       <View style={{ justifyContent: 'center', flexDirection: 'row', alignItems: 'center', }}>
         <View style={{ justifyContent: 'center', alignItems: 'center', }} >
-          <SmoothPicker
+        <ScrollView
+          ref={(sview:any) => {
+            this.sview = sview;
+            
+            
+          }}
+          style={{height:100}}
+       
+          showsVerticalScrollIndicator={false}
+          // onTouchStart={this.props.onTouchStart}
+          // onMomentumScrollBegin={this.onMomentumScrollBegin}
+           onMomentumScrollEnd={(event)=>{
+             console.log(";;;;");
+             
+           }}
+          //  onScroll={({index, item}) => {
+          //   this.updateSelectedItem(index);
+          // }}
+          // onScrollBeginDrag={this.onScrollBeginDrag}
+          // onScrollEndDrag={this.onScrollEndDrag}
+        >
+        {
+          this.state.timeSleepList.map((value, index)=>{
+            return<View key={index}>
+                    <Text>
+                      {value}
+                    </Text>
+            </View>
+          })
+        }
+        
+        </ScrollView>
+          {/* <SmoothPicker
             magnet
             scrollAnimation
             initialScrollToIndex={this.state.timeSleep}
@@ -229,13 +267,13 @@ class Settings extends React.Component<ISettings, IState> {
             onSelected={({ item, index }) => this.changeTimeSleep(item)}
             renderItem={({ item, index }) => (
               <Text style={{ fontSize: calcFontSize(37), color: this.state.timeSleep == item ? 'red' : '#B3BACE' }} >
-                {item}</Text>)} />
+                {item}</Text>)} /> */}
         </View>
         <Text
           style={[styles.timeText, {
             marginRight: calcWidth(41),
             color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white"
-          }]}>мин.</Text>
+          }]}>мин.{this.state.selectedItemIndex}</Text>
       </View>
       <TouchableOpacity
         style={{
@@ -270,6 +308,7 @@ class Settings extends React.Component<ISettings, IState> {
   createTimerSleep() {
     if (!this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.state.timeSleep * 60000)
+console.log(time);
 
       storeData("timerSleep", time)
     }
@@ -282,6 +321,7 @@ class Settings extends React.Component<ISettings, IState> {
     storeData("autoPlay", !this.props.settingsReducer.autoPlay)
   }
   render() {
+console.log("ppppp",this.sview);
 
     return (
       <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>

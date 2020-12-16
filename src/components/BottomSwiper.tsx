@@ -809,59 +809,66 @@ class BottomSwiper extends React.Component<Props, IState> {
             </View>
     }
     render() {
+        console.log(":::",this.props.bottomReducer.miniScreenData)
+        if(this.props.bottomReducer.swiperShowRadiostation ){
+            return (
+                <SwipeUpDown
+                hasRef={(ref: any) => {
+
+                    if (!this.state.headerHeight) {
+
+                        player.init(ref)
+                        this.setState({ headerHeight: true })
+                    }
+                }}
+                anim={this.anim}
+                animation={'linear'}
+                onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}
+                orientation={this.props.theme.albomeMode}
+                itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
+                itemFull={this.props.theme.albomeMode ? this.renderBottomSheetHorizontal() : this.renderBottomSheet()} // Pass props component when show full
+                onShowMini={() => {
+
+                    Animated.timing(this.anim, {
+                        toValue: 1,
+                        duration: 50,
+                        useNativeDriver: true
+                    }).start();
+                }}
+                onShowFull={() => {
+                    Animated.timing(this.anim, {
+                        toValue: 0,
+                        duration: 50,
+                        useNativeDriver: true
+                    }).start();
+                }}
+                closed={() => { this.closed() }}
+                checkIsFovorite={() => this.checkIsFovorite(this.props.bottomReducer.swiperShowRadiostation.id)
+                }
+                bottomReducer={this.props.bottomReducer}
+                backgroundColor={this.props.theme.backgroundColor}
+                toaddfavorite={() => { this.props.toaddfavorite(this.props.bottomReducer.swiperShowRadiostation.data) }}
+                onMoveUp={() => console.log('up')}
+                swipeHeight={this.props.theme.albomeMode ? 76 : 190}
+                disablePressToShow={false} // Press item mini to show full
+                style={{
+                 //   backgroundColor:'red',
+                    //height:deviceHeight-80,
+                    backgroundColor: 'rgba(255,255,255,0)',
+                    flex: 1,
+                }} // style for swipe
+            />
+
+                )
+        }else{
         return (
+
 <View style={{backgroundColor:'red', height:100, position:'absolute', bottom:0}}>
-    <Text>dafhwaf;</Text>
+
 </View>
-            // <SwipeUpDown
-            //     hasRef={(ref: any) => {
             //
-            //         if (!this.state.headerHeight) {
-            //
-            //             player.init(ref)
-            //             this.setState({ headerHeight: true })
-            //         }
-            //     }}
-            //     anim={this.anim}
-            //     animation={'linear'}
-            //     onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}
-            //     orientation={this.props.theme.albomeMode}
-            //     itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
-            //     itemFull={this.props.theme.albomeMode ? this.renderBottomSheetHorizontal() : this.renderBottomSheet()} // Pass props component when show full
-            //     onShowMini={() => {
-            //
-            //         Animated.timing(this.anim, {
-            //             toValue: 1,
-            //             duration: 50,
-            //             useNativeDriver: true
-            //         }).start();
-            //     }}
-            //     onShowFull={() => {
-            //         Animated.timing(this.anim, {
-            //             toValue: 0,
-            //             duration: 50,
-            //             useNativeDriver: true
-            //         }).start();
-            //     }}
-            //     closed={() => { this.closed() }}
-            //     checkIsFovorite={() => this.checkIsFovorite(this.props.bottomReducer.swiperShowRadiostation.id)
-            //     }
-            //     bottomReducer={this.props.bottomReducer}
-            //     backgroundColor={this.props.theme.backgroundColor}
-            //     toaddfavorite={() => { this.props.toaddfavorite(this.props.bottomReducer.swiperShowRadiostation.data) }}
-            //     onMoveUp={() => console.log('up')}
-            //     swipeHeight={this.props.theme.albomeMode ? 76 : 190}
-            //     disablePressToShow={false} // Press item mini to show full
-            //     style={{
-            //      //   backgroundColor:'red',
-            //         //height:deviceHeight-80,
-            //         backgroundColor: 'rgba(255,255,255,0)',
-            //         flex: 1,
-            //     }} // style for swipe
-            // />
 
-
-        )
+        )}
     }
 };
 const mapStateToProps = ({ filterReducer, favorites, theme, settingsReducer, menuReducer, bottomReducer }: any) => {

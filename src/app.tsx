@@ -76,11 +76,11 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
 
             <Navigator/>
             { init(changeActivePanel)}
-            {selectedRadioStation || swiperShowRadiostation?
-                <BottomSwiper
-                    isSwiper={true}
-                    // navigation={this.props.navigation}
-                />: <View />}
+            {/*{selectedRadioStation || swiperShowRadiostation?*/}
+            {/*    <BottomSwiper*/}
+            {/*        isSwiper={true}*/}
+            {/*        // navigation={this.props.navigation}*/}
+            {/*    />: <View />}*/}
 
           
              {initTimerSleep(timerSleep)}

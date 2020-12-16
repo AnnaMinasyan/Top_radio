@@ -124,6 +124,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                     activeBi:data.item.st[0],
                     id: data.item.id
                 }
+
                 player.open()
                 this.props.onchangeSwiperShowStation(radioStation)
 
@@ -137,7 +138,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                     id: data.item.id
                 }
                 this.props.onchangeSelectedRadioStation(radioStation)
-
+                    this.props.onchangeMiniScreenData(radioStation)
                 this.setState({swipeablePanelActive:true})
                 this.props.onchangeActiveIndex(data.index)
             }

@@ -15,15 +15,77 @@ import PlayList from "../screens/PlayList";
 import FilterMenu from "../screens/FilterMenu";
 const Drawer = createDrawerNavigator();
 import LookingMenu from "../screens/lookingMenu"
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import  BottomSwiper from "../components/BottomSwiper"
+const Tab = createBottomTabNavigator();
+import {createStackNavigator} from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
+const BottomTabStack = () => {
+    return (
+        <Tab.Navigator
+            initialRouteName="Menu"
+            tabBar={(props) => <BottomSwiper {...props} />}
+            >
+            <Tab.Screen
+                name="BottomSwiper"
+                component={BottomSwiper}
+                options={{
+                    tabBarLabel: 'Home Screen',
+                    /*tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons
+                        name="home"
+                        color={color}
+                        size={size}
+                      />
+                    ),*/
+                }}
+            />
+            <Tab.Screen
+                name="Menu"
+                component={Menu}
+
+            />
+        </Tab.Navigator>
+    );
+};
+const SettingScreenStack = ({navigation}) => {
+    return (
+        <Stack.Navigator
+            initialRouteName="Cities"
+            >
+            <Stack.Screen
+                name="Menu"
+                component={Menu}
+                options={{
+                    title: 'Menu', //Set Header Title
+                }}
+            />
+            <Stack.Screen
+                name="Cities"
+                component={Cities}
+                options={{
+                    title: 'Cities', //Set Header Title
+                }}
+            />
+        </Stack.Navigator>
+    );
+};
 const Navigator: React.FunctionComponent = (props:any) => (
 
   <NavigationContainer
   >
 
       <Drawer.Navigator
-          initialRouteName="Home"
+          initialRouteName="BottomTabStack"
           drawerContent={(props) => <MenuDrawerContent {...props} />}
       >
+          <Drawer.Screen
+              name="BottomTabStack"
+           //   options={{drawerLabel: 'Home Screen Option'}}
+              component={BottomTabStack}
+          />
+
           <Drawer.Screen
               name="Menu"
               component={Menu}

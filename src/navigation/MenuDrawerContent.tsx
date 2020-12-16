@@ -105,10 +105,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                 </View>
         </ScrollView>
 
-                <BottomSwiper
-                    isSwiper={true}
-                    // navigation={this.props.navigation}
-                />
+                
     </View>
     )
 };

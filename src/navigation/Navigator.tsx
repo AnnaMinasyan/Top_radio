@@ -25,20 +25,29 @@ const BottomTabStack = () => {
     return (
         <Tab.Navigator
             initialRouteName="Menu"
-            tabBar={(props) => <BottomSwiper {...props} />} >
+            tabBar={(props) => <BottomSwiper {...props} />}
+            >
             <Tab.Screen
                 name="BottomSwiper"
                 component={BottomSwiper}
                 options={{
                     tabBarLabel: 'Home Screen',
+                    /*tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons
+                        name="home"
+                        color={color}
+                        size={size}
+                      />
+                    ),*/
                 }}
             />
-            <Tab.Screen name="Menu" component={Menu} />
-            <Tab.Screen name="Cities" component={Cities} />
-            <Tab.Screen name="Genres" component={Genres} />
-            <Tab.Screen name="Favorite" component={Favorite} />
-            <Tab.Screen name="PlayList" component={PlayList} />
-            <Tab.Screen name="LookingMenu" component={LookingMenu} />
+            <Tab.Screen name="Menu" component={Menu}/>
+            <Tab.Screen name="Favorite"  component={Favorite}/>
+            <Tab.Screen name="Genres" component={Genres}/>
+            <Tab.Screen name="Cities" component={Cities}/>
+            <Tab.Screen name="FilterMenu" component={FilterMenu}/>
+            <Tab.Screen name="PlayList" component={PlayList}/>
+            <Tab.Screen name="LookingMenu" component={LookingMenu}/>
         </Tab.Navigator>
     );
 };
@@ -66,8 +75,6 @@ const SettingScreenStack = ({navigation}) => {
 };
 const Navigator: React.FunctionComponent = (props:any) => (
 
-  <NavigationContainer
-  >
 
       <Drawer.Navigator
           initialRouteName="BottomTabStack"
@@ -78,21 +85,22 @@ const Navigator: React.FunctionComponent = (props:any) => (
            //   options={{drawerLabel: 'Home Screen Option'}}
               component={BottomTabStack}
           />
-         <Drawer.Screen
+
+          <Drawer.Screen
+              name="Menu"
+              component={Menu}
+          />
+          <Drawer.Screen
               name="Settings"
-           //   options={{drawerLabel: 'Home Screen Option'}}
               component={Settings}
           />
-           <Drawer.Screen
+          <Drawer.Screen
               name="MyAlarmClock"
-           //   options={{drawerLabel: 'Home Screen Option'}}
               component={MyAlarmClock}
           />
-          
 
       </Drawer.Navigator>
 
-  </NavigationContainer>
 );
 
 export default Navigator;

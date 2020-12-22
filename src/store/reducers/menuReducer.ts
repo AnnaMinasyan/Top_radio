@@ -17,7 +17,8 @@ export interface IMenuState {
     playMusicData: any,
     headertext: string,
     activeInitialRouteName:string
-    lookingList:any
+    lookingList:any,
+    favoriteList:any
 }
 
 
@@ -31,7 +32,8 @@ export const initialState: IMenuState = {
     playMusicData: {},
     headertext: "",
     activeInitialRouteName:'Menu',
-    lookingList:[]
+    lookingList:[],
+    favoriteList:[]
 }
 const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
 
@@ -50,7 +52,9 @@ const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
             return { ...state, headertext: action.payload }
         case MenuTypes.SET_LOOKING_LIST:
             return { ...state, lookingList: action.payload }
-        default:
+        case MenuTypes.SET_FAVORITE_LIST:
+            return { ...state, favoriteList: action.payload}
+                default:
 
             return state;
     }

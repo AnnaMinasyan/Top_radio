@@ -12,19 +12,20 @@ import { init } from './utils/createAlarmClock'
 import { getData, storeData } from "./utils/local_storage"
 import { Dimensions, PixelRatio } from 'react-native';
 import {setHeightWidth} from './store/actions/themeAction'
-import BottomSwiper from './components/BottomSwiper'
+import {addFavorites} from './store/actions/favoritesActions'
 import NetInfo from "@react-native-community/netinfo";
 import {changeIsConnected} from "./store/actions/bottomAction"
 import {initTimerSleep} from "./utils/timer_sleep"
 import {selectedRadioStationSelector,swiperShowRadiostationSelector,isConnectedSelector } from "./store/selector/bottomSelector"
 import Modal from 'react-native-modal';
 import player from "./services/player/PlayerServices"; // 2.4.0
-import SimpleExample from "./components/TimerScreen"
 interface Props {
     onchangeswipeablePanelActive(payload: boolean): void;
     filterReducer: any,
     navigation: NavigationScreenProp<any, any>,
 }
+import {NavigationContainer} from '@react-navigation/native';
+
 const MyApp: React.FunctionComponent<Props> = (props) => {
     const dispatch = useDispatch()
     const [width, setWidth] = useState<number>(Dimensions.get('window').width)
@@ -37,16 +38,18 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     const [visibleModal1,setVisibleModal1]=useState<boolean>(true)
     useEffect(() => {
         NetInfo.fetch().then(state => {
-            console.log("Connection type", state.type);
+       //     console.log("Connection type", state.type);
             console.log("Is connected?", state.isConnected);
             dispatch(changeIsConnected(state.isConnected))
 
             setVisibleModal(!state.isConnected)
         });
         getData("timerSleep").then((time)=>{
-            console.log("ddskdjskldjslkdjsld",time);
-            
             settimerSleep(time)
+        })
+        getData("favorites").then((res)=>{
+
+        dispatch(addFavorites(res))
         })
         dispatch(initFavorites())
         dispatch(initMenuType())
@@ -71,22 +74,14 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
       //  console.log(width, height);
     }, [width, height])
 
-return <SimpleExample/>
+
     return (
         isConnected?
         <SafeAreaView style={{ flex: 1, }}>
             <StatusBar barStyle='light-content' backgroundColor="#0F1E45" />
-
+                <NavigationContainer>
             <Navigator/>
-            { init(changeActivePanel)}
-            {/*{selectedRadioStation || swiperShowRadiostation?*/}
-            {/*    <BottomSwiper*/}
-            {/*        isSwiper={true}*/}
-            {/*        // navigation={this.props.navigation}*/}
-            {/*    />: <View />}*/}
-
-          
-             {/* {initTimerSleep(timerSleep)} */}
+                </NavigationContainer>
         </SafeAreaView>
             :<View>
                 <Image style={{resizeMode:'center'}} source={require('./assets/images/launch_screen.png')}/>

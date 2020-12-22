@@ -45,10 +45,8 @@ function* changeselectedSatationbyBi({ payload }: any) {
     }
 }
 function* addselectedRadioStation({ payload }: any) {
-    console.log("====================================================================",payload);
 
     try {
-      console.log("+++++++++++++++++=",payload.data.pl);
         player.open()
         yield put(setSelectedRadioStation(payload))
       if(payload.data.pl) {
@@ -68,7 +66,6 @@ function* addselectedRadioStation({ payload }: any) {
     }
 }
 function* changeSelectedRadioStationPlaying({ payload }: any) {
-    console.log("payloadddddddd,",payload)
     try {
 
         yield put(setSelectedRadioStationPlaying(payload))

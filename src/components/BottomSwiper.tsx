@@ -9,14 +9,15 @@ import {
     Platform,
     PanResponderGestureState,
     ActivityIndicator,
-
-    ImageBackground
+    Alert,
+    ImageBackground,
+    BackHandler
 } from 'react-native';
 import AudioRecorderPlayer, {
     AVEncoderAudioQualityIOSType,
     AVEncodingOption,
     AudioEncoderAndroidType,
-    AudioSourceAndroidType,
+    AudioSourceAndroidType, AudioSet,
 } from 'react-native-audio-recorder-player';
 import Heart from "../assets/icons/heart.svg"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight, deviceWidth } from "../assets/styles/dimensions"
@@ -60,6 +61,8 @@ import SwipeUpDown from '../screens/Swiper';
 import {getData, storeData} from "../utils/local_storage";
 import Modal from "react-native-modal";
 import NetInfo from "@react-native-community/netinfo";
+import FileViewer from "react-native-file-viewer";
+import DocumentPicker from "react-native-document-picker";
 TrackPlayer.registerPlaybackService(() => require('../../service'));
 interface Props {
     onCloseStart(): void;
@@ -160,13 +163,14 @@ class BottomSwiper extends React.Component<Props, IState> {
             loadingStation:false,
             visibleModal:false
         }
+        this.audioRecorderPlayer = new AudioRecorderPlayer();
     }
     async componentDidMount() {
 
         TrackPlayer.addEventListener('remote-stop', async () => {
             console.log('stop')
             this.props.onchangeSelectedRadioStationPlaying(false)
-
+            BackHandler.exitApp()
             await TrackPlayer.stop()
         });
         TrackPlayer.addEventListener('remote-play', async () => {
@@ -402,7 +406,9 @@ class BottomSwiper extends React.Component<Props, IState> {
         }).start();
         // player.close()
     }
+
     private onStartRecord = async () => {
+        console.log("sdkfsmdklfds;lf")
         if (Platform.OS === 'android') {
             try {
                 const granted = await PermissionsAndroid.request(
@@ -424,6 +430,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                 return;
             }
         }
+
         if (Platform.OS === 'android') {
             try {
                 const granted = await PermissionsAndroid.request(
@@ -445,21 +452,20 @@ class BottomSwiper extends React.Component<Props, IState> {
                 return;
             }
         }
-
-        // create a path you want to write to
-        var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
-
-       // console.log(RNFileManager.MainBundlePath);
-
-        const audioSet = {
+        console.log(RNFS.DownloadDirectoryPath)
+        const path = `${RNFS.DownloadDirectoryPath}/TopRadio${Date.now()}.aac`
+        //   const path=`/storage/emulated/0/Download/kkkkk.aac`
+        const audioSet: AudioSet = {
             AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
             AudioSourceAndroid: AudioSourceAndroidType.MIC,
             AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
             AVNumberOfChannelsKeyIOS: 2,
             AVFormatIDKeyIOS: AVEncodingOption.aac,
         };
-   console.log('audioSet', audioSet);
-        const uri = await this.audioRecorderPlayer.startRecorder(path, true, audioSet);
+
+
+        const uri = await this.audioRecorderPlayer.startRecorder(path,true,audioSet);
+        console.log(";;;;;;;;;;;;;;",uri)
 
         this.audioRecorderPlayer.addRecordBackListener((e: any) => {
             this.setState({
@@ -469,47 +475,73 @@ class BottomSwiper extends React.Component<Props, IState> {
                 ),
             });
         });
-
-    }
+        console.log(`uri: ${uri}`);
+    };
 
     private onStopRecord = async () => {
-        console.log("stoppppppppp");
-
         const result = await this.audioRecorderPlayer.stopRecorder();
         this.audioRecorderPlayer.removeRecordBackListener();
         this.setState({
             recordSecs: 0,
         });
-        const dest = `${result}`;
-        // RNFS.copyFileAssets(result, dest)
-        // .then(() => {
-        //     console.log("opeeeeeeeeeeeeeeeeeeeen");
+        Alert.alert(
+            "Запись завершена",
+            `Запись успешно завершена, для посмотра перейдите в файловый менеджер по адресу: ${result}`,
+            [
+                {
+                    text: "Хорошо ",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel"
+                },
+                { text: "Открыть  ", onPress: () => this.selectFileTapped() }
+            ],
+            { cancelable: false }
+        );
 
-        //     FileViewer.open(dest)
-        // })
-        // .then(() => {
-        //    // success
-        // })
-        // .catch(error => {
-        //    /* */
-        //    console.log(error);
-
-        // });
-        // Alert.alert(
-        //     "Finish recording",
-        //     result,
-        //     [
-        //       {
-        //         text: "Cancel",
-        //         onPress: () => console.log("Cancel Pressed"),
-        //         style: "cancel"
-        //       },
-        //       { text: "OK", onPress: () => console.log("OK Pressed") }
-        //     ],
-        //     { cancelable: false }
-        //   );
-        // console.log(result);
+        console.log("result",result);
     };
+    dowloadFile(url: string) {
+        const localFile = `${RNFS.DocumentDirectoryPath}/t.mp4`;
+        console.log("diuhsksjfdklsfj",url)
+
+        const options = {
+            fromUrl: url,
+            toFile: localFile
+        };
+
+        RNFS.downloadFile(options).promise
+            .then(() => {
+                console.log("kdcvklscjsdpspov"),
+                    FileViewer.open(localFile)
+
+            })
+            .then(() => {
+
+            })
+            .catch(error => {
+                // error
+            });
+
+    }
+
+    async  selectFileTapped() {
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.allFiles],
+            });
+
+            console.log(
+                "fjkjfkdjdl",res
+            );
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                // User cancelled the picker, exit any dialogs or menus and move on
+            } else {
+                throw err;
+            }
+        }
+
+    }
     showActiveBi() {
         if (this.props.bottomReducer.swiperShowRadiostation.id == this.props.bottomReducer.selectedRadioStation.id) {
             return this.props.bottomReducer.selectedRadioStation.activeBi.bi
@@ -601,14 +633,17 @@ class BottomSwiper extends React.Component<Props, IState> {
             <View style={{
                 flexDirection: 'row', justifyContent: 'center'
             }}>
-                <View style={{ marginTop: 11 }}>
+                <View style={{ marginTop: 11}}>
                     <TouchableOpacity
+                        disabled={!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic}
                         onPress={() => {
+                            if (this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
                             if (this.state.isRecording) {
+                                console.log("onstart")
                                 this.onStopRecord()
                             } else {
                                 this.onStartRecord()
-                            }
+                            }}
                             this.setState({ isRecording: !this.state.isRecording })
                         }}
                         style={[styles.btnrecord,
@@ -808,6 +843,12 @@ class BottomSwiper extends React.Component<Props, IState> {
                 </View>
             </View>
     }
+    componentWillUnmount() {
+        console.log('componentWillUnmount')
+        player.init(null)
+
+    }
+
     render() {
         if(this.props.bottomReducer.swiperShowRadiostation ){
             return (
@@ -861,12 +902,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                 )
         }else{
         return (
-
-<View style={{backgroundColor:'red', height:100, position:'absolute', bottom:0}}>
-
-</View>
-            //
-
+                null
         )}
     }
 };

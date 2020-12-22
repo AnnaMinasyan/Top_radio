@@ -52,7 +52,6 @@ class Static implements IDATA {
     async getPlayItemType(payload: any) {
         try {
             const data = moment().format('YYYY-MM-DD')
-            console.log(payload,`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=1`)
             const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=1`,);
           
 

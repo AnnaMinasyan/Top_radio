@@ -30,6 +30,8 @@ import RedHeart from "../assets/icons/redHeart.svg";
 import Heart from "../assets/icons/heart.svg";
 import player from "../services/player/PlayerServices";
 const KEYS_TO_FILTERS = ['pa'];
+import DatePicker from 'react-native-date-picker'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 interface IState {
   date: any,
@@ -98,21 +100,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       }
     })
   }
-  handleChangeHours = (index: number) => {
-    this.setState({
-      selectedHours: index
-    });
-  };
-  handleChangeMinut = (index: number) => {
-    this.setState({
-      selectedMinut: index
-    });
-  };
-  handleChangeTimeSleepList = (index: number) => {
-    this.setState({
-      selectedTimeRepeat: index
-    });
-  };
+
   renderMenuItems(data: any) {
     if(this.checkIsFovorite(data.item.id) && this.state.isFavorite){
       return <TouchableHighlight
@@ -322,59 +310,72 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
         <View style={{ justifyContent: 'center', alignItems: "center", }}>
           <Text style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Время</Text>
         </View>
-        <View style={styles.timer}>
-          <View >
-            <SmoothPicker
-              magnet
-              scrollAnimation
-            //  selectOnPress
-              showsVerticalScrollIndicator={false}
-             // offsetSelection={-5}
-              initialScrollToIndex={this.state.hours[this.state.selectedHours]}
-              data={this.state.hours}
-              style={{ height: 240 }}
-              onSelected={({ item, index }) => this.handleChangeHours(item)}
-              renderItem={({ item, index }) => (<View>
-                {item < 10 ? <Text style={{
-                  fontSize: calcFontSize(37),
-                  color: this.state.selectedHours == item ? 'red' : '#B3BACE'
-                }}
-                >0{item}</Text> : <Text style={{
-                  fontSize: calcFontSize(37),
-                  color: this.state.selectedHours == item ? 'red' : '#B3BACE'
-                }}
-                >{item}</Text>}</View>
-              )}
-            />
-          </View>
-          <Text style={[styles.timeText, { marginRight: calcWidth(41), color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>ч.</Text>
-          <View >
-            <SmoothPicker
-              magnet
-              scrollAnimation
-           //   selectOnPress
-              showsVerticalScrollIndicator={false}
-            //  offsetSelection={-5}
-              data={this.state.minutes}
-              style={{ height: 240 }}
-              initialScrollToIndex={this.state.minutes[this.state.selectedMinut]}
-              onSelected={({ item, index }) => this.handleChangeMinut(item)}
-              renderItem={({ item, index }) => (
-                <View>
-                  {item < 10 ? <Text style={{
-                    fontSize: calcFontSize(37),
-                    color: this.state.selectedMinut == item ? 'red' : '#B3BACE'
-                  }}
-                  >0{item}</Text> : <Text style={{
-                    fontSize: calcFontSize(37),
-                    color: this.state.selectedMinut == item ? 'red' : '#B3BACE'
-                  }}
-                  >{item}</Text>}
-                </View>)}
-            />
-          </View>
-          <Text style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>мин.</Text>
+        {/*<View style={styles.timer}>*/}
+        {/*  <View >*/}
+        {/*    <SmoothPicker*/}
+        {/*      magnet*/}
+        {/*      scrollAnimation*/}
+        {/*    //  selectOnPress*/}
+        {/*      showsVerticalScrollIndicator={false}*/}
+        {/*     // offsetSelection={-5}*/}
+        {/*      initialScrollToIndex={this.state.hours[this.state.selectedHours]}*/}
+        {/*      data={this.state.hours}*/}
+        {/*      style={{ height: 240 }}*/}
+        {/*      onSelected={({ item, index }) => this.handleChangeHours(item)}*/}
+        {/*      renderItem={({ item, index }) => (<View>*/}
+        {/*        {item < 10 ? <Text style={{*/}
+        {/*          fontSize: calcFontSize(37),*/}
+        {/*          color: this.state.selectedHours == item ? 'red' : '#B3BACE'*/}
+        {/*        }}*/}
+        {/*        >0{item}</Text> : <Text style={{*/}
+        {/*          fontSize: calcFontSize(37),*/}
+        {/*          color: this.state.selectedHours == item ? 'red' : '#B3BACE'*/}
+        {/*        }}*/}
+        {/*        >{item}</Text>}</View>*/}
+        {/*      )}*/}
+        {/*    />*/}
+        {/*  </View>*/}
+        {/*  <Text style={[styles.timeText, { marginRight: calcWidth(41), color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>ч.</Text>*/}
+        {/*  <View >*/}
+        {/*    <SmoothPicker*/}
+        {/*      magnet*/}
+        {/*      scrollAnimation*/}
+        {/*   //   selectOnPress*/}
+        {/*      showsVerticalScrollIndicator={false}*/}
+        {/*    //  offsetSelection={-5}*/}
+        {/*      data={this.state.minutes}*/}
+        {/*      style={{ height: 240 }}*/}
+        {/*      initialScrollToIndex={this.state.minutes[this.state.selectedMinut]}*/}
+        {/*      onSelected={({ item, index }) => this.handleChangeMinut(item)}*/}
+        {/*      renderItem={({ item, index }) => (*/}
+        {/*        <View>*/}
+        {/*          {item < 10 ? <Text style={{*/}
+        {/*            fontSize: calcFontSize(37),*/}
+        {/*            color: this.state.selectedMinut == item ? 'red' : '#B3BACE'*/}
+        {/*          }}*/}
+        {/*          >0{item}</Text> : <Text style={{*/}
+        {/*            fontSize: calcFontSize(37),*/}
+        {/*            color: this.state.selectedMinut == item ? 'red' : '#B3BACE'*/}
+        {/*          }}*/}
+        {/*          >{item}</Text>}*/}
+        {/*        </View>)}*/}
+        {/*    />*/}
+        {/*  </View>*/}
+        {/*  <Text style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>мин.</Text>*/}
+        {/*</View>*/}
+
+        <View style={{width:'100%', justifyContent:'center', alignItems:'center'}}>
+          <DatePicker
+
+              mode="time"
+              textColor={'black'}
+              dividerHeight={0}
+              date={this.state.date}
+              onDateChange={(data)=>{
+                console.log(data)}}
+          />
         </View>
+
         <View style={[styles.radiostation, { backgroundColor: this.props.theme.backgroundColor,
            borderTopWidth: 1,
            borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D" }]}>

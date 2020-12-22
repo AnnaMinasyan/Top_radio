@@ -8,7 +8,7 @@ import store from './src/store';
 import { Provider } from "react-redux"
 import Bugsee from 'react-native-bugsee';
 import {Platform} from 'react-native';
-
+import Page from "./src/screens/recording"
 import Navigator from "./src/navigation/Navigator"
 interface Props{
 
@@ -58,7 +58,8 @@ class App extends React.Component<Props, any> {
     return (
       <Provider  store={store}>
        {/* <Navigator/> */}
-   <MyApp/> 
+       {/*<Page/>*/}
+   <MyApp/>
       </Provider>
     );
   }

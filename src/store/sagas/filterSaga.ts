@@ -23,17 +23,7 @@ function* initMenuTypebyStorage() {
     }
     
 }
-function* onGetPlayType({payload}:any) {
-    
-    try {
-        const data= yield auth.getPlayItemType(payload.pl)
-		yield put(setPlayItemType(data.playList[0]))
-	} catch (ex) {
-		console.log(ex);
-	
-	}
-    
-}
+
 export function* watchFilterSaga() {
     yield takeEvery(
         FilterTypes.INIT_MENU_TYPE as any,

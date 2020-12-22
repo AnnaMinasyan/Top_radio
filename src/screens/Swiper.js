@@ -208,8 +208,6 @@ export default class SwipeUpDown extends Component<Props> {
                         this.props.onchangeIsConnected(true)
                         setTimeout(()=>{
                             NetInfo.fetch().then(state => {
-                                    console.log("Connection type", state.type);
-                                    console.log("Is connected?", state.isConnected);
                                     this.props.onchangeIsConnected(state.isConnected)
                             },
                             50000);
@@ -225,7 +223,6 @@ export default class SwipeUpDown extends Component<Props> {
     }
     render() {
        // console.log("wdpa[d",this.props.bottomReducer.selectedRadioStation.isPlayingMusic)
-        console.log(this.props.backgroundColor.isConnected)
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (

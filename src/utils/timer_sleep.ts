@@ -8,20 +8,25 @@ export const initTimerSleep = (toDo: () => void) => {
     getData('timerSleep').then((data) => {
         if (data) {
              let f = new Date(data);
-         
 
-            const interval = setInterval(() => {
-                let now: number = Date.now();
-                console.log("0000000000000000", now ,f.getTime(),f);
-
-                if (now >f.getTime() ) {
-
-                    clearTimeout(interval);
-                    toDo()
-                    storeData("timerSleep",null)
-                    
-                }
-            }, 1000);
+            let hours = new Date().getHours()
+            let minute =  new Date().getMinutes()
+            console.log("alarm",f,"now",new Date().getMinutes())
+            // const interval = setInterval(() => {
+            //
+            //
+            //     if (f.getHours()==hours ) {
+            //         console.log("sss",f.getMinutes(),minute)
+            //         if (f.getMinutes()>minute){
+            //             //console.log("sss",f.getMinutes(),minute)
+            //         clearTimeout(interval);
+            //              toDo()
+            //             // storeData("timerSleep",null)
+            //         }
+            //
+            //
+            //     }
+            // }, 5000);
 
         }
     })

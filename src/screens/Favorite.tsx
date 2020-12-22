@@ -59,7 +59,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
            this.setState({favoriteList:favorite})
         })
     }
-   
     checkIsFovorite(num: number) {        
             return this.props.favorites.includes(num)
       
@@ -84,8 +83,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
         })
     }
     renderMenuItems(data: any) {
-        console.log("ddddddddddddd",data.item.id)
-        if(this.checkIsFovorite(data.item.id))  {
+     //   console.log("ddddddddddddd",data)
+        // if(this.checkIsFovorite(data.item.id))  {
             return <TouchableHighlight
             onPress={() => {
                 let radioStation = {
@@ -110,9 +109,9 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 addInFavorite={() => this.props.toaddfavorite(data.item)}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableHighlight>
-        }   else{
-            return null
-        }  
+        // }   else{
+        //     return null
+        // }
        
     }
     renderMenuItemsMenuStyle2(data: any) {
@@ -139,7 +138,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
         } 
     }
     render() {
-        const list = this.state.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+        const list = this.props.menuReducer.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
+     //   console.log("list", this.props.menuReducer.favoriteList)
         return (
             <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
                 

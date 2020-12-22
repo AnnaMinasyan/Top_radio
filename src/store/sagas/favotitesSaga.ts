@@ -18,7 +18,7 @@ import { favoritesSelector } from '../selector/favorites';
 import { setFavorites } from '../actions/favoritesActions';
 import { getData, storeData } from '../../utils/local_storage';
 
-
+import {setFavoriteList} from "../actions/menuActions"
 
 function* addToFavorite({payload}:any) {
     const favorites = yield getData('favorites');
@@ -32,6 +32,7 @@ function* addToFavorite({payload}:any) {
         favorites.splice(index,1);
     }
     yield storeData('favorites',favorites)
+    yield  put(setFavoriteList(favorites))
     yield put(setFavorites(tmp));
 
 }

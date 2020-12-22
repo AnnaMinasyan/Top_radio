@@ -41,8 +41,7 @@ export const storeData = async (key:any,value:any) => {
 		} else {
 			favorite.push(data)
 		}
-		console.log("favorite",favorite);
-		
+
 		storeData("favorites", favorite)
 	})
 }

@@ -96,3 +96,9 @@ export const changeLookingList = (payload: any) => {
 		payload
 	};
 };
+export const setFavoriteList = (payload: any) => {
+	return {
+		type: MenuTypes.SET_FAVORITE_LIST,
+		payload
+	};
+};

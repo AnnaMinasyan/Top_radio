@@ -17,9 +17,7 @@ interface IDATA {
 class PlayerServices implements IDATA {
     playerRef: any=null;
     isopenpanel:boolean=false;
-    init(value: any) {      
-       
-          
+    init(value: any) {
         this.playerRef = value
     }
     open() {

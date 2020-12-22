@@ -6,8 +6,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableHighlight,
-  BackHandler,
-  ScrollView
+  BackHandler
 } from 'react-native';
 import global_styles from "../assets/styles/global_styles"
 import { calcFontSize, calcHeight, calcWidth, deviceWidth } from "../assets/styles/dimensions"
@@ -31,29 +30,38 @@ import MoonSvg from "../assets/icons/sleep.svg"
 import SunSvg from "../assets/icons/sun.svg"
 import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
-import SmoothPicker from 'react-native-smooth-picker';
 import { ISettings } from "../Interface"
 import {
   changeAutoPlay,
   changeBufferSize,
   changeIsOnheadsets
 } from "../store/actions/settingsAcrion"
-import { initTimerSleep } from "../utils/timer_sleep"
 import player from "../services/player/PlayerServices"
+import DatePicker from "react-native-date-picker";
+import {initTimerSleep} from "../utils/timer_sleep"
 interface IState {
   data: any,
   isEnabled: boolean,
   visibleModal: number | null,
   theme: string
   bufferSize: IData[],
-  timeSleep: number,
+  timeSleep: any,
   timeSleepList: number[],
   autoPlay: boolean,
   ontimerSleep: boolean,
-  selectedItemIndex:number
+  activeIndex:number,
+  carouselItems:any
 }
+const wheelPickerData = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday"
+];
 class Settings extends React.Component<ISettings, IState> {
-  sview:any
+  carousel:any
   constructor(props: ISettings) {
 
     super(props)
@@ -77,16 +85,21 @@ class Settings extends React.Component<ISettings, IState> {
         }
       ],
       timeSleepList: [
-        0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+        0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
 
       ],
       timeSleep: 10,
       autoPlay: false,
       ontimerSleep: true,
-      selectedItemIndex:0
+      activeIndex:0,
+
+
     }
   }
 
+  onPress = () => {
+    this.setState({ activeIndex: 3 });
+  };
   onRenderModalTheme() {
     return <View style={[styles.modalTheme,]}>
       <TouchableHighlight
@@ -197,10 +210,20 @@ class Settings extends React.Component<ISettings, IState> {
       })}
     </View>
   }
-  updateSelectedItem(index:number) {
-    this.setState({selectedItemIndex: index});
+  _renderItem({item,index}){
+    return (
+        <View style={{
+          backgroundColor:'white',
+          borderRadius: 5,
+          height: 80, }}>
+          <Text style={{fontSize:37,color:'#B3BACE'}}>{item.text}</Text>
+        </View>
+
+    )
   }
+
   onRenderModalSleepTimer() {
+   // console.log("PPPPPPPPP",this.carousel)
     return <View style={[styles.modalSleepTimer]}>
       <View style={styles.sleepTimerTop}>
         <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
@@ -219,61 +242,26 @@ class Settings extends React.Component<ISettings, IState> {
             theme={this.props.theme}
             isEnabled={this.state.ontimerSleep}
             onValueChange={() => {
-              this.createTimerSleep()
+              // this.createTimerSleep()
             }} />
         </View>
       </View>
       <View style={{ justifyContent: 'center', flexDirection: 'row', alignItems: 'center', }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', }} >
-        <ScrollView
-          ref={(sview:any) => {
-            this.sview = sview;
-            
-            
-          }}
-          style={{height:100}}
-       
-          showsVerticalScrollIndicator={false}
-          // onTouchStart={this.props.onTouchStart}
-          // onMomentumScrollBegin={this.onMomentumScrollBegin}
-           onMomentumScrollEnd={(event)=>{
-             console.log(";;;;");
-             
-           }}
-          //  onScroll={({index, item}) => {
-          //   this.updateSelectedItem(index);
-          // }}
-          // onScrollBeginDrag={this.onScrollBeginDrag}
-          // onScrollEndDrag={this.onScrollEndDrag}
-        >
-        {
-          this.state.timeSleepList.map((value, index)=>{
-            return<View key={index}>
-                    <Text>
-                      {value}
-                    </Text>
-            </View>
-          })
-        }
-        
-        </ScrollView>
-          {/* <SmoothPicker
-            magnet
-            scrollAnimation
-            initialScrollToIndex={this.state.timeSleep}
-            showsVerticalScrollIndicator={false}
-            data={this.state.timeSleepList}
-            style={{ height: calcHeight(350), marginLeft: calcWidth(35) }}
-            onSelected={({ item, index }) => this.changeTimeSleep(item)}
-            renderItem={({ item, index }) => (
-              <Text style={{ fontSize: calcFontSize(37), color: this.state.timeSleep == item ? 'red' : '#B3BACE' }} >
-                {item}</Text>)} /> */}
+        <View style={{ justifyContent: 'center', alignItems: 'center', height:200}} >
+          <View style={{ justifyContent:'center', alignItems:'center'}}>
+            <DatePicker
+                mode="time"
+                textColor={'black'}
+                dividerHeight={0}
+                date={this.state.timeSleep}
+                onDateChange={(data)=>{
+                  let time=Date.now()
+                  initTimerSleep(this.timerSleep)
+                  storeData("timerSleep",data)
+                  console.log(data)}}
+            />
+          </View>
         </View>
-        <Text
-          style={[styles.timeText, {
-            marginRight: calcWidth(41),
-            color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white"
-          }]}>мин.{this.state.selectedItemIndex}</Text>
       </View>
       <TouchableOpacity
         style={{
@@ -291,8 +279,9 @@ class Settings extends React.Component<ISettings, IState> {
     </View>
   }
   timerSleep = () => {
-    player.stopPlayer()
-    BackHandler.exitApp()
+    console.log("sleeesssssssssssssssssssssssssssssssssp")
+   player.stopPlayer()
+    // BackHandler.exitApp()
   }
   changeTimeSleep = (index: number) => {
     this.setState({
@@ -300,7 +289,7 @@ class Settings extends React.Component<ISettings, IState> {
     });
     if (this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.state.timeSleep * 60000)
-      console.log('time',time)
+     // console.log('time',time)
       storeData("timerSleep", time)
     }
     initTimerSleep(this.timerSleep)
@@ -308,7 +297,6 @@ class Settings extends React.Component<ISettings, IState> {
   createTimerSleep() {
     if (!this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.state.timeSleep * 60000)
-console.log(time);
 
       storeData("timerSleep", time)
     }
@@ -321,7 +309,6 @@ console.log(time);
     storeData("autoPlay", !this.props.settingsReducer.autoPlay)
   }
   render() {
-console.log("ppppp",this.sview);
 
     return (
       <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor }]}>
@@ -392,7 +379,7 @@ console.log("ppppp",this.sview);
 
               isEnabled={true}
               onValueChange={() => {
-                console.log("dsahnofuh");
+
 
               }} />
           </View>
@@ -611,7 +598,7 @@ const styles = StyleSheet.create({
   },
   modalSleepTimer: {
     backgroundColor: 'white',
-    marginHorizontal: calcWidth(65),
+    marginHorizontal: calcWidth(25),
     padding: calcHeight(15),
     borderRadius: 5
     // width: calcWidth(100)

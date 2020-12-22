@@ -95,10 +95,8 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
             if (lookList.length > 0) {
                 for (let index = 0; index < lookList.length; index++) {
                     const element = lookList[index];
-                    console.log(element.id == data.id);
                     if (element.id == data.id) {
 
-                        console.log(lookList.splice(index, 1));
 
                     }
                 }
@@ -115,7 +113,6 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                console.log("ooooo",this.props.bottomReducer.selectedRadioStation && this.props.bottomReducer.selectedRadioStation.id==data.item.id)
 
                 if(this.props.bottomReducer.selectedRadioStation ){
                     let radioStation = {

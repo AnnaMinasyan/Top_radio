@@ -9,7 +9,7 @@ export const initialState:number[] = []
 const favoritesReducer = (state = initialState, action: IReduxAction<FavoriteType>) => {
     switch (action.type) {
         case FavoriteType.SET:
-        return  action.payload
+        return action.payload
         default:
             return state;
     }

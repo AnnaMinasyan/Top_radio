@@ -11,7 +11,6 @@ class NavigationService {
 		// Analytics.trackEvent('navigation', {screen: routeName});
 		if(this._navigator){
 			this._navigator.navigate(routeName)
-			console.log(this._navigator)
 			// this._navigator.dispatch(
 			// 	NavigationActions.navigate({
 			// 		routeName,

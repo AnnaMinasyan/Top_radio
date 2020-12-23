@@ -96,7 +96,7 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
                 for (let index = 0; index < lookList.length; index++) {
                     const element = lookList[index];
                     if (element.id == data.id) {
-
+                        lookList.splice(index, 1)
 
                     }
                 }
@@ -192,7 +192,7 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
     render() {
         const list = this.props.menuReducer.lookingList? this.props.menuReducer.lookingList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
         return (
-            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height }]}>
+            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height,paddingBottom:25 }]}>
                 <Header
                     navigation={this.props.navigation}
                     onchnageSearchData={this.props.onchnageSearchData}

@@ -70,8 +70,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 for (let index = 0; index < lookList.length; index++) {
                     const element = lookList[index];
                     if (element.id == data.id) {
-                        count = false
-                        break
+                        lookList.splice(index, 1)
                     }
                 }
                 if (count) {

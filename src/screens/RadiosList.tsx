@@ -99,7 +99,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                 for (let index = 0; index < lookList.length; index++) {
                     const element = lookList[index];
                     if (element.id == data.id) {
-
+                        lookList.splice(index, 1)
 
                     }
                 }

@@ -217,6 +217,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                 for (let index = 0; index < lookList.length; index++) {
                     const element = lookList[index];
                     if (element.id == data.id) {
+                        lookList.splice(index, 1)
 //  console.log(lookList.splice(index, 1));
 
                     }
@@ -862,7 +863,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                     }
                 }}
                 anim={this.anim}
-                animation={'linear'}
+                animation={'easeInEaseOut'}
                 onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}
                 orientation={this.props.theme.albomeMode}
                 itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed

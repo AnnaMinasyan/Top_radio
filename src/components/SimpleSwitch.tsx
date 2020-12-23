@@ -15,7 +15,7 @@ interface IState {
 interface Props{
   isEnabled: boolean
   onValueChange():void; 
-  theme:any
+  theme?:any
 }
 class SimpleSwitch extends React.Component<Props, IState> {
   constructor(props: Props) {

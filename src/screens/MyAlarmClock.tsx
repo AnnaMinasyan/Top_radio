@@ -392,7 +392,8 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             </View>
           </View>
           <View>
-            <SimpleSwitch isEnabled={this.state.onRepeat}
+            <SimpleSwitch
+                isEnabled={this.state.onRepeat}
               onValueChange={() => {
                 this._changeAlarmClock()
                 this.setState({ onRepeat: !this.state.onRepeat })

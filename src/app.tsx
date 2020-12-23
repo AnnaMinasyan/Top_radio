@@ -44,9 +44,9 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
 
             setVisibleModal(!state.isConnected)
         });
-        getData("timerSleep").then((time)=>{
-            settimerSleep(time)
-        })
+        // getData("timerSleep").then((time)=>{
+        //     settimerSleep(time)
+        // })
         getData("favorites").then((res)=>{
 
         dispatch(addFavorites(res))

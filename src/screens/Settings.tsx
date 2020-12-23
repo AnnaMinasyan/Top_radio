@@ -97,6 +97,10 @@ class Settings extends React.Component<ISettings, IState> {
     }
   }
 
+  componentDidMount() {
+
+  }
+
   onPress = () => {
     this.setState({ activeIndex: 3 });
   };
@@ -256,9 +260,15 @@ class Settings extends React.Component<ISettings, IState> {
                 date={this.state.timeSleep}
                 onDateChange={(data)=>{
                   let time=Date.now()
-                  initTimerSleep(this.timerSleep)
-                  storeData("timerSleep",data)
-                  console.log(data)}}
+                  const alarm={
+                   hours: data.getHours(),
+                    minute:data.getMinutes()
+                  }
+                  console.log(alarm)
+                  initTimerSleep(this.timerSleep,alarm)
+                  storeData("timerSleepTime",alarm)
+                  // console.log(data)
+                }}
             />
           </View>
         </View>
@@ -292,17 +302,17 @@ class Settings extends React.Component<ISettings, IState> {
      // console.log('time',time)
       storeData("timerSleep", time)
     }
-    initTimerSleep(this.timerSleep)
+//    initTimerSleep(this.timerSleep)
   };
   createTimerSleep() {
     if (!this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.state.timeSleep * 60000)
 
-      storeData("timerSleep", time)
+     // storeData("timerSleep", time)
     }
 
     this.setState({ ontimerSleep: !this.state.ontimerSleep })
-    initTimerSleep(this.timerSleep)
+//    initTimerSleep(this.timerSleep)
   }
   chnageAutoPlay() {
     this.props.onchangeAutoPlay(!this.props.settingsReducer.autoPlay)

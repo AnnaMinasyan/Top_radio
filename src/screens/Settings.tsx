@@ -31,6 +31,7 @@ import SunSvg from "../assets/icons/sun.svg"
 import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
 import { ISettings } from "../Interface"
+import {changeSelectedRadioStationPlaying} from "../store/actions/bottomAction"
 import {
   changeAutoPlay,
   changeBufferSize,
@@ -50,7 +51,9 @@ interface IState {
   autoPlay: boolean,
   ontimerSleep: boolean,
   activeIndex:number,
-  carouselItems:any
+  carouselItems:any,
+  onchangeSelectedRadioStationPlaying(payload: any): void;
+
 }
 const wheelPickerData = [
   "sunday",
@@ -88,7 +91,7 @@ class Settings extends React.Component<ISettings, IState> {
         0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
 
       ],
-      timeSleep: 10,
+      timeSleep: null,
       autoPlay: false,
       ontimerSleep: true,
       activeIndex:0,
@@ -260,14 +263,17 @@ class Settings extends React.Component<ISettings, IState> {
                 date={this.state.timeSleep}
                 onDateChange={(data)=>{
                   let time=Date.now()
+                  let hoursNow=new Date().getHours()
+
                   const alarm={
-                   hours: data.getHours(),
+                    hours: data.getHours(),
                     minute:data.getMinutes()
                   }
+                  this.setState({timeSleep:`${data.getHours()}:${data.getMinutes()}`})
                   console.log(alarm)
                   initTimerSleep(this.timerSleep,alarm)
                   storeData("timerSleepTime",alarm)
-                  // console.log(data)
+                  console.log(data)
                 }}
             />
           </View>
@@ -291,6 +297,8 @@ class Settings extends React.Component<ISettings, IState> {
   timerSleep = () => {
     console.log("sleeesssssssssssssssssssssssssssssssssp")
    player.stopPlayer()
+    this.props.onchangeSelectedRadioStationPlaying(false)
+
     // BackHandler.exitApp()
   }
   changeTimeSleep = (index: number) => {
@@ -411,7 +419,7 @@ class Settings extends React.Component<ISettings, IState> {
 
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Таймер сна
             </Text>
-              <Text style={global_styles.stationComment}>{this.state.timeSleep} мин</Text>
+              <Text style={global_styles.stationComment}>{this.state.timeSleep}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -550,7 +558,10 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     onchangeIsOnheadsets: (payload: boolean) => {
       dispatch(changeIsOnheadsets(payload))
-    }
+    },
+    onchangeSelectedRadioStationPlaying: (payload: boolean) => {
+      dispatch(changeSelectedRadioStationPlaying(payload))
+    },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

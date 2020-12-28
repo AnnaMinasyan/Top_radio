@@ -32,10 +32,14 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     const [height, setHeight] = useState<number>(Dimensions.get('window').height)
     const selectedRadioStation=useSelector(selectedRadioStationSelector)
     const swiperShowRadiostation=useSelector(swiperShowRadiostationSelector)
- const [timerSleep,settimerSleep] =useState<boolean>()
     const isConnected =useSelector(isConnectedSelector)
     const [visibleModal,setVisibleModal]=useState<boolean>(true)
     const [visibleModal1,setVisibleModal1]=useState<boolean>(true)
+  const  timerSleep = () => {
+        console.log("sleeesssssssssssssssssssssssssssssssssp")
+        player.stopPlayer()
+        // BackHandler.exitApp()
+    }
     useEffect(() => {
         NetInfo.fetch().then(state => {
        //     console.log("Connection type", state.type);
@@ -44,9 +48,12 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
 
             setVisibleModal(!state.isConnected)
         });
-        // getData("timerSleep").then((time)=>{
-        //     settimerSleep(time)
-        // })
+        getData("timerSleepTime").then((time)=>{
+            console.log("llllll",time)
+            if(time) {
+                initTimerSleep(timerSleep, time)
+            }
+        })
         getData("favorites").then((res)=>{
 
         dispatch(addFavorites(res))

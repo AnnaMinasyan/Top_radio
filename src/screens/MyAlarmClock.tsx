@@ -372,6 +372,11 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
               dividerHeight={0}
               date={this.state.date}
               onDateChange={(data)=>{
+                const alarm={
+                  hours: data.getHours(),
+                  minute:data.getMinutes()
+                }
+
                 console.log(data)}}
           />
         </View>

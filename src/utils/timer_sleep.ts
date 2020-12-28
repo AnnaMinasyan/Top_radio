@@ -7,7 +7,7 @@ export const initTimerSleep = (toDo: () => void, data:any) => {
             clearInterval(intervals.shift());
         }
         const interval = setInterval(() => {
-            console.log('timer',interval,data);
+            console.log('timer',new Date().getHours(),new Date().getMinutes(),data);
             
         let nowMinute= new Date().getMinutes()
         let nowHours= new Date().getHours()
@@ -15,47 +15,11 @@ export const initTimerSleep = (toDo: () => void, data:any) => {
                     if(nowMinute==data.minute){
                         console.log("minuu");
                         console.log('interval',interval);
-                        
+                        storeData('timerSleepTime',null)
                         clearInterval(interval);
                         toDo()
                     }
-                    // console.log('false')
                 }
-                // if (f.getHours()==hours ) {
-                //     console.log("sss",f.getMinutes(),minute)
-                //     if (f.getMinutes()>minute){
-                //         //console.log("sss",f.getMinutes(),minute)
-                //
-                //          toDo()
-                //         // storeData("timerSleep",null)
-                //     }
-                //
-                //
-                // }
+
             }, 5000);
-            intervals.push(interval)
-    // getData('timerSleepTime').then((data) => {
-    //     if (data) {
-    //         console.log(";;;;;;;;",data)
-    //
-    //         // const interval = setInterval(() => {
-    //         //
-    //         //
-    //         //     if (f.getHours()==hours ) {
-    //         //         console.log("sss",f.getMinutes(),minute)
-    //         //         if (f.getMinutes()>minute){
-    //         //             //console.log("sss",f.getMinutes(),minute)
-    //         //         clearTimeout(interval);
-    //         //              toDo()
-    //         //             // storeData("timerSleep",null)
-    //         //         }
-    //         //
-    //         //
-    //         //     }
-    //         // }, 5000);
-    //
-    //     }
-    // })
-
-
-}
+            intervals.push(interval)}

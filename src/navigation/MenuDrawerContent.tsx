@@ -20,7 +20,6 @@ import { NavigationScreenProp } from 'react-navigation';
 import { changeisActive } from "../store/actions/filterAction"
 import player from "../services/player/PlayerServices"
 import {changeActiveArrow} from '../store/actions/bottomAction'
-import BottomSwiper from "../components/BottomSwiper";
 interface Props {
     navigation: NavigationScreenProp<any, any>;
     onchangeisActive(type:string): void;
@@ -56,7 +55,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                             
                             props.navigation.navigate('Genres')
                              props.onchangeisActive('genres')
-                             props.onchangeActiveArrow(false)
+                             props.onchangeActiveArrow(true)
 
                              player.close()
                         }}
@@ -72,7 +71,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         onPress={() => {
                             props.navigation.navigate('Cities')
                             props.onchangeisActive('cities')
-                            props.onchangeActiveArrow(false)
+                            props.onchangeActiveArrow(true)
 
                         }}
                     >

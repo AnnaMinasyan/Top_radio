@@ -1,5 +1,5 @@
-import React, {useMemo} from 'react';
-import { View, SafeAreaView, StatusBar,Image ,Text,TouchableOpacity} from 'react-native';
+import React, { useMemo } from 'react';
+import { View, SafeAreaView, StatusBar, Image, Text, TouchableOpacity } from 'react-native';
 import Navigator from "./navigation/Navigator"
 import { NavigationScreenProp } from 'react-navigation';
 import { useEffect, useState, } from 'react';
@@ -11,12 +11,12 @@ import { changeplayItem } from './store/actions/bottomAction';
 import { init } from './utils/createAlarmClock'
 import { getData, storeData } from "./utils/local_storage"
 import { Dimensions, PixelRatio } from 'react-native';
-import {setHeightWidth} from './store/actions/themeAction'
-import {addFavorites} from './store/actions/favoritesActions'
+import { setHeightWidth } from './store/actions/themeAction'
+import { addFavorites } from './store/actions/favoritesActions'
 import NetInfo from "@react-native-community/netinfo";
-import {changeIsConnected} from "./store/actions/bottomAction"
-import {initTimerSleep} from "./utils/timer_sleep"
-import {selectedRadioStationSelector,swiperShowRadiostationSelector,isConnectedSelector } from "./store/selector/bottomSelector"
+import { changeIsConnected } from "./store/actions/bottomAction"
+import { initTimerSleep } from "./utils/timer_sleep"
+import { selectedRadioStationSelector, swiperShowRadiostationSelector, isConnectedSelector } from "./store/selector/bottomSelector"
 import Modal from 'react-native-modal';
 import player from "./services/player/PlayerServices"; // 2.4.0
 interface Props {
@@ -24,46 +24,48 @@ interface Props {
     filterReducer: any,
     navigation: NavigationScreenProp<any, any>,
 }
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 
 const MyApp: React.FunctionComponent<Props> = (props) => {
     const dispatch = useDispatch()
     const [width, setWidth] = useState<number>(Dimensions.get('window').width)
     const [height, setHeight] = useState<number>(Dimensions.get('window').height)
-    const selectedRadioStation=useSelector(selectedRadioStationSelector)
-    const swiperShowRadiostation=useSelector(swiperShowRadiostationSelector)
-    const isConnected =useSelector(isConnectedSelector)
-    const [visibleModal,setVisibleModal]=useState<boolean>(true)
-    const [visibleModal1,setVisibleModal1]=useState<boolean>(true)
-  const  timerSleep = () => {
+    const selectedRadioStation = useSelector(selectedRadioStationSelector)
+    const swiperShowRadiostation = useSelector(swiperShowRadiostationSelector)
+    const isConnected = useSelector(isConnectedSelector)
+    const [visibleModal, setVisibleModal] = useState<boolean>(true)
+    const [visibleModal1, setVisibleModal1] = useState<boolean>(true)
+    const timerSleep = () => {
         console.log("sleeesssssssssssssssssssssssssssssssssp")
         player.stopPlayer()
         // BackHandler.exitApp()
     }
     useEffect(() => {
         NetInfo.fetch().then(state => {
-       //     console.log("Connection type", state.type);
+            //     console.log("Connection type", state.type);
             console.log("Is connected?", state.isConnected);
-            dispatch(changeIsConnected(state.isConnected))
+           dispatch(changeIsConnected(state.isConnected))
 
-            setVisibleModal(!state.isConnected)
+          //  setVisibleModal(!state.isConnected)
         });
-        getData("timerSleepTime").then((time)=>{
-            console.log("llllll",time)
-            if(time) {
+        getData("timerSleepTime").then((time) => {
+            console.log("llllll", time)
+            if (time) {
                 initTimerSleep(timerSleep, time)
             }
         })
-        getData("favorites").then((res)=>{
+        getData("favorites").then((res) => {
+            if (res) {
+                dispatch(addFavorites(res))
+            }
 
-        dispatch(addFavorites(res))
         })
         dispatch(initFavorites())
         dispatch(initMenuType())
         dispatch(initAutoPlay())
-        dispatch(setHeightWidth({height:height,width:width}))
+        dispatch(setHeightWidth({ height: height, width: width }))
         return player.init(null)
-    }, [])
+    }, [isConnected])
     const changeActivePanel = () => {
         getData('alarmClock').then((time) => {
             dispatch(changeplayItem(time.playItem))
@@ -77,40 +79,40 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         setWidth(value.window.width)
     })
     useEffect(() => {
-        dispatch(setHeightWidth({height:height,width:width,albomeMode:width>height}))
-      //  console.log(width, height);
+        dispatch(setHeightWidth({ height: height, width: width, albomeMode: width > height }))
+        //  console.log(width, height);
     }, [width, height])
 
 
     return (
-        isConnected?
-        <SafeAreaView style={{ flex: 1, }}>
-            <StatusBar barStyle='light-content' backgroundColor="#0F1E45" />
+        isConnected ?
+            <SafeAreaView style={{ flex: 1, }}>
+                <StatusBar barStyle='light-content' backgroundColor="#0F1E45" />
                 <NavigationContainer>
-            <Navigator/>
+                    <Navigator />
                 </NavigationContainer>
-        </SafeAreaView>
-            :<View>
-                <Image style={{resizeMode:'center'}} source={require('./assets/images/launch_screen.png')}/>
+            </SafeAreaView>
+            : <View>
+                <Image style={{ resizeMode: 'center' }} source={require('./assets/images/launch_screen.png')} />
                 <Modal
                     isVisible={!isConnected}
                     animationIn={'slideInLeft'}
                     animationOut={'slideOutRight'}
                     backdropOpacity={0.2}
-                    onBackdropPress={() => {setVisibleModal(false)} } >
-                    {<View style={{backgroundColor:'white', height:150,padding:10}}>
-                        <Text style={{fontSize:22, fontWeight:'bold', marginBottom:8}}>Нет подключения к интернету </Text>
-                        <Text style={{fontSize:16,lineHeight:20}}>Подключите соединение или мобильный интернет для прослушивания радиостанций </Text>
+                    onBackdropPress={() => { setVisibleModal(false) }} >
+                    {<View style={{ backgroundColor: 'white', height: 150, padding: 10 }}>
+                        <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 8 }}>Нет подключения к интернету </Text>
+                        <Text style={{ fontSize: 16, lineHeight: 20 }}>Подключите соединение или мобильный интернет для прослушивания радиостанций </Text>
                         <TouchableOpacity
-                            onPress={()=>{
+                            onPress={() => {
                                 dispatch(changeIsConnected(true))
                                 dispatch(initFavorites())
                                 dispatch(initMenuType())
                                 dispatch(initAutoPlay())
                             }}
-                            style={{marginTop:25, width:'100%', alignItems:'flex-end'}}
+                            style={{ marginTop: 25, width: '100%', alignItems: 'flex-end' }}
                         >
-                            <Text style={{color:'green',fontSize:17}}>Перепадключится</Text>
+                            <Text style={{ color: 'green', fontSize: 17 }}>Переподключится</Text>
                         </TouchableOpacity>
                     </View>}
                 </Modal>

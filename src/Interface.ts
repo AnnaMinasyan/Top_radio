@@ -74,6 +74,7 @@ export interface ISettings {
     onchangeAutoPlay(type:boolean):void;
     onchangeIsOnheadsets(type:boolean):void;
    onchangeBackgroundColor(type:boolean):void;
+   onchangeSelectedRadioStationPlaying(payload: any): void;
     theme:any,
     navigation: NavigationScreenProp<any, any>,
     onChangeMenuType(type:number):void; 

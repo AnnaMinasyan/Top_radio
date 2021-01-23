@@ -31,7 +31,7 @@ import SunSvg from "../assets/icons/sun.svg"
 import ToDo from "../components/toDoList"
 import { IData } from "../Interface"
 import { ISettings } from "../Interface"
-import {changeSelectedRadioStationPlaying} from "../store/actions/bottomAction"
+import { changeSelectedRadioStationPlaying } from "../store/actions/bottomAction"
 import {
   changeAutoPlay,
   changeBufferSize,
@@ -39,7 +39,7 @@ import {
 } from "../store/actions/settingsAcrion"
 import player from "../services/player/PlayerServices"
 import DatePicker from "react-native-date-picker";
-import {initTimerSleep} from "../utils/timer_sleep"
+import { initTimerSleep } from "../utils/timer_sleep"
 interface IState {
   data: any,
   isEnabled: boolean,
@@ -50,10 +50,9 @@ interface IState {
   timeSleepList: number[],
   autoPlay: boolean,
   ontimerSleep: boolean,
-  activeIndex:number,
-  carouselItems:any,
-  onchangeSelectedRadioStationPlaying(payload: any): void;
-
+  activeIndex: number,
+  carouselItems: any,
+  timerSlipeTime:any
 }
 const wheelPickerData = [
   "sunday",
@@ -64,7 +63,14 @@ const wheelPickerData = [
   "friday"
 ];
 class Settings extends React.Component<ISettings, IState> {
-  carousel:any
+  carousel: any
+  timeSleep:any
+  timerSlipeTime:any={
+        
+    hours: "",
+    minute: ''
+ 
+}
   constructor(props: ISettings) {
 
     super(props)
@@ -72,7 +78,7 @@ class Settings extends React.Component<ISettings, IState> {
       data: new Date(1598051730000),
       isEnabled: true,
       visibleModal: null,
-      
+
       bufferSize: [
         {
           title: '500 ms',
@@ -91,10 +97,11 @@ class Settings extends React.Component<ISettings, IState> {
         0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
 
       ],
-      timeSleep: null,
+     // timeSleep: null,
       autoPlay: false,
       ontimerSleep: true,
-      activeIndex:0,
+      activeIndex: 0,
+      
 
 
     }
@@ -116,7 +123,7 @@ class Settings extends React.Component<ISettings, IState> {
           this.props.onchangeBackgroundColor(true)
           this.setState({
             visibleModal: null,
-          
+
           })
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -130,7 +137,7 @@ class Settings extends React.Component<ISettings, IState> {
           this.props.onchangeBackgroundColor(false)
           this.setState({
             visibleModal: null,
-        
+
           })
         }}
         style={[styles.modalThemeBtn, { backgroundColor: 'white' }]}
@@ -201,36 +208,37 @@ class Settings extends React.Component<ISettings, IState> {
       <Text style={[global_styles.stationTexttitle, { color: "#1E2B4D", fontSize: calcFontSize(18), marginBottom: calcHeight(20) }]}>
         Размер буфера
             </Text>
-      {this.props.settingsReducer.bufferSize.map((res: any, index:number) => {
+      {this.props.settingsReducer.bufferSize.map((res: any, index: number) => {
         return <View
-            key={index}
-            style={{
-          width: calcWidth(300),
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: calcHeight(50)
-        }}>
+          key={index}
+          style={{
+            width: calcWidth(300),
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            height: calcHeight(50)
+          }}>
           <Text style={styles.bufferSizeModalText}>{res.title}</Text>
           <ToDo data={res} valueChanged={(f: any) => this._changeBufferSize(f)} />
         </View>
       })}
     </View>
   }
-  _renderItem({item,index}){
+  _renderItem({ item, index }) {
     return (
-        <View style={{
-          backgroundColor:'white',
-          borderRadius: 5,
-          height: 80, }}>
-          <Text style={{fontSize:37,color:'#B3BACE'}}>{item.text}</Text>
-        </View>
+      <View style={{
+        backgroundColor: 'white',
+        borderRadius: 5,
+        height: 80,
+      }}>
+        <Text style={{ fontSize: 37, color: '#B3BACE' }}>{item.text}</Text>
+      </View>
 
     )
   }
 
   onRenderModalSleepTimer() {
-   // console.log("PPPPPPPPP",this.carousel)
+    // console.log("PPPPPPPPP",this.carousel)
     return <View style={[styles.modalSleepTimer]}>
       <View style={styles.sleepTimerTop}>
         <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
@@ -254,27 +262,22 @@ class Settings extends React.Component<ISettings, IState> {
         </View>
       </View>
       <View style={{ justifyContent: 'center', flexDirection: 'row', alignItems: 'center', }}>
-        <View style={{ justifyContent: 'center', alignItems: 'center', height:200}} >
-          <View style={{ justifyContent:'center', alignItems:'center'}}>
+        <View style={{ justifyContent: 'center', alignItems: 'center', height: 200 }} >
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             <DatePicker
-                mode="time"
-                textColor={'black'}
-                dividerHeight={0}
-                date={this.state.timeSleep}
-                onDateChange={(data)=>{
-                  let time=Date.now()
-                  let hoursNow=new Date().getHours()
-
-                  const alarm={
-                    hours: data.getHours(),
-                    minute:data.getMinutes()
-                  }
-                  this.setState({timeSleep:`${data.getHours()}:${data.getMinutes()}`})
-                  console.log(alarm)
-                  initTimerSleep(this.timerSleep,alarm)
-                  storeData("timerSleepTime",alarm)
-                  console.log(data)
-                }}
+              mode="time"
+              textColor={'black'}
+             // dividerHeight={0}
+             //date={this.timeSleep}
+              date={this.timeSleep?this.timeSleep:new Date(Date.now())}
+              onDateChange={(data) => {
+                const alarm = {
+                  hours: data.getHours(),
+                  minute: data.getMinutes()
+                }
+                this.timeSleep= `${data.getHours()}:${data.getMinutes()}`
+                this.timerSlipeTime=alarm                
+              }}
             />
           </View>
         </View>
@@ -289,38 +292,44 @@ class Settings extends React.Component<ISettings, IState> {
           justifyContent: 'center',
           alignItems: 'center'
         }}
+        onPress={()=>{
+          initTimerSleep(this.timerSleep, this.timerSlipeTime)
+          storeData("timerSleepTime", this.timerSlipeTime)
+          this.setState({ visibleModal: null })
+        }}
       >
-        <Text style={{ color: 'black' }}>Подтвердить число </Text>
+        <Text style={{ color: 'black' }}>Подтвердить</Text>
       </TouchableOpacity>
     </View>
   }
   timerSleep = () => {
     console.log("sleeesssssssssssssssssssssssssssssssssp")
-   player.stopPlayer()
-    this.props.onchangeSelectedRadioStationPlaying(false)
+    player.stopPlayer()
+     this.props.onchangeSelectedRadioStationPlaying(false)
 
     // BackHandler.exitApp()
   }
   changeTimeSleep = (index: number) => {
-    this.setState({
-      timeSleep: index
-    });
+    // this.setState({
+    //   timeSleep: index
+    // });
+    this.timeSleep=index
     if (this.state.ontimerSleep) {
-      let time = new Date(Date.now() + this.state.timeSleep * 60000)
-     // console.log('time',time)
+      let time = new Date(Date.now() + this.timeSleep * 60000)
+      // console.log('time',time)
       storeData("timerSleep", time)
     }
-//    initTimerSleep(this.timerSleep)
+    //    initTimerSleep(this.timerSleep)
   };
   createTimerSleep() {
     if (!this.state.ontimerSleep) {
-      let time = new Date(Date.now() + this.state.timeSleep * 60000)
+      let time = new Date(Date.now() + this.timeSleep * 60000)
 
-     // storeData("timerSleep", time)
+      // storeData("timerSleep", time)
     }
 
     this.setState({ ontimerSleep: !this.state.ontimerSleep })
-//    initTimerSleep(this.timerSleep)
+    //    initTimerSleep(this.timerSleep)
   }
   chnageAutoPlay() {
     this.props.onchangeAutoPlay(!this.props.settingsReducer.autoPlay)
@@ -404,6 +413,7 @@ class Settings extends React.Component<ISettings, IState> {
         </View>
         <TouchableOpacity
           onPress={() => {
+            this.timeSleep= 0
             this.setState({ visibleModal: 3, timeSleep: 0 })
           }}
           style={[styles.radiostation,
@@ -419,7 +429,7 @@ class Settings extends React.Component<ISettings, IState> {
 
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Таймер сна
             </Text>
-              <Text style={global_styles.stationComment}>{this.state.timeSleep}</Text>
+              <Text style={global_styles.stationComment}>{this.timeSleep}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -467,7 +477,7 @@ class Settings extends React.Component<ISettings, IState> {
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Выбрать тему
             </Text>
-              <Text style={[global_styles.stationComment]}>{this.props.theme.backgroundColor=='white'?'Светлая':'Тёмная'}</Text>
+              <Text style={[global_styles.stationComment]}>{this.props.theme.backgroundColor == 'white' ? 'Светлая' : 'Тёмная'}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -619,7 +629,7 @@ const styles = StyleSheet.create({
   },
   modalSleepTimer: {
     backgroundColor: 'white',
-    marginHorizontal: calcWidth(25),
+   // marginHorizontal: calcWidth(5),
     padding: calcHeight(15),
     borderRadius: 5
     // width: calcWidth(100)

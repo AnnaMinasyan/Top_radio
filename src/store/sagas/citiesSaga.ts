@@ -2,7 +2,7 @@ import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/
 import { CitiesTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setCities} from "../actions/citiesAction"
-
+import {setIsConnected  } from "../actions/bottomAction";
 
 
 function* getCitiesData() {
@@ -22,6 +22,7 @@ function* getCitiesData() {
 			}
 		yield put(setCities(data))
 	} catch (ex) {
+		yield put(setIsConnected(false))
 		console.log(ex);
 	
 	}

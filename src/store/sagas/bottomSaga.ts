@@ -19,11 +19,11 @@ import {
 import { changePlayingMusic } from "../actions/filterAction"
 import player from "../../services/player/PlayerServices"
 import { storeData, getData } from "../../utils/local_storage"
-
 function* onGetPlayType({ payload }: any) {
     try {
         yield put(setplayItem(payload))
     } catch (ex) {
+        yield put(setIsConnected(false))
         console.log(ex);
     }
 }
@@ -41,6 +41,18 @@ function* changeselectedSatationbyBi({ payload }: any) {
         yield put(setSelectedRadioStation(station))
 
     } catch (ex) {
+        yield put(setIsConnected(false))
+        console.log(ex);
+    }
+}
+function* clearReducerData() {
+    try {
+       
+        yield put(setSelectedRadioStation(null))
+
+
+    } catch (ex) {
+        yield put(setIsConnected(false))
         console.log(ex);
     }
 }
@@ -63,6 +75,7 @@ function* addselectedRadioStation({ payload }: any) {
 
     } catch (ex) {
         yield put(setIsConnected(false))
+       // yield put(setIsConnected(false))
     }
 }
 function* changeSelectedRadioStationPlaying({ payload }: any) {
@@ -70,7 +83,8 @@ function* changeSelectedRadioStationPlaying({ payload }: any) {
 
         yield put(setSelectedRadioStationPlaying(payload))
     } catch (ex) {
-        yield put(setIsConnected(true))
+        yield put(setIsConnected(false))
+       
     }
 }
 function* changeSwiperActiveBi({ payload }: any) {
@@ -84,7 +98,7 @@ function* changeSwiperActiveBi({ payload }: any) {
 function* onGetSongData({ payload }: any) {
     try {
         const res = yield auth.getPlayItemType(payload.data.pl)
-     
+        console.log("reeessss",res)
        yield put(setSwiperPlayingSong(res.playList[0]))
         const autoplay = yield getData("autoPlay")
 
@@ -93,8 +107,7 @@ function* onGetSongData({ payload }: any) {
 
         }
     } catch (ex) {
-        yield put(setIsConnected(payload))
-    }
+        yield put(setIsConnected(false))    }
 }
 function* onChangePlayingData({ payload }: any) {
     try {
@@ -110,6 +123,7 @@ function* onChangeplayItemArtistandSon({ payload }: any) {
 
         yield put(setplayItemArtistandSong(data.playList[0]))
     } catch (ex) {
+        yield put(setIsConnected(false))
         console.log(ex);
     }
 }
@@ -144,7 +158,8 @@ function* changeMiniScreenData({ payload }: any) {
     } catch (ex) {
         console.log(ex);
     }
-}function* changeIsconnected({ payload }: any) {
+}
+function* changeIsconnected({ payload }: any) {
     try {
         yield put(setIsConnected(payload))
     } catch (ex) {
@@ -208,6 +223,10 @@ export function* watchBottomType() {
     yield takeEvery(
         BottomType.CHANGE_IS_CONNECTED as any,
         changeIsconnected
+    )
+    yield takeEvery(
+        BottomType.CLEAR_REDUCER as any,
+        clearReducerData
     )
 }
 

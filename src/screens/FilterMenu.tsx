@@ -107,6 +107,8 @@ _addLookingList(data:any){
 
         return <TouchableHighlight
         onPress={() => {
+            console.log(data);
+            
            player.open()
             let radioStation = {
                 data: data.item,
@@ -114,7 +116,8 @@ _addLookingList(data:any){
                 activeBi:data.item.st[0],
                 id: data.item.id
             }
-
+            console.log(radioStation);
+            
             this._addLookingList(data.item)
             this.props.onchangeSwiperShowStation(radioStation)
             this.props.get_songData(radioStation)
@@ -180,11 +183,6 @@ _addLookingList(data:any){
                             />
 
                         }
-  {/* {this.props.bottomReducer.playItem?
-                    //<View style={styles.bottomView}>
-                        <BottomSwiper/>
-                   // </View>
-                :<View/>}  */}
 
                 </View>
              

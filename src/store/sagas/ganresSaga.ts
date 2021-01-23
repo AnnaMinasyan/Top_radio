@@ -2,6 +2,7 @@ import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/
 import { GanresTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setGanres} from "../actions/ganresAction"
+import {setIsConnected  } from "../actions/bottomAction";
 
 
 
@@ -22,6 +23,8 @@ function* getGanresData() {
 			}
 		yield put(setGanres(data))
 	} catch (ex) {
+		yield put(setIsConnected(false))
+
 		console.log(ex);
 	
 	}

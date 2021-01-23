@@ -2,6 +2,7 @@ import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/
 import { PlayListTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setPlayList,setTrackList,setHeaderText} from "../actions/playlistAction"
+import {setIsConnected  } from "../actions/bottomAction";
 
 
 
@@ -15,6 +16,8 @@ function* getPlayListData(payload:any) {
 		yield put(setPlayList(data.playList))
 		yield put(setTrackList(data.trackList))
 	} catch (ex) {
+		yield put(setIsConnected(false))
+
 		console.log(ex);
 	
 	}

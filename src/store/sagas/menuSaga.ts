@@ -5,6 +5,7 @@ import {setMenuData, setPlayingData,setFilterData,setHeaderText,
 	setInitialRouteName} from "../actions/menuActions"
 import {setSwiperData,setLookingList} from "../actions/menuActions"
 
+import {setIsConnected  } from "../actions/bottomAction";
 
 function* getMenuData() {
 	try {
@@ -15,6 +16,8 @@ function* getMenuData() {
 		yield put(setSwiperData(swiper))
 	
 	} catch (ex) {
+		yield put(setIsConnected(false))
+
 	}
 }
 function* changeInitialRouteName({payload}:any) {

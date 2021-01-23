@@ -44,6 +44,7 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
 
     switch (action.type) {
         case BottomType.SET_IS_CONNECTED:
+            console.log("djkdjdkdjdlkddk",action.payload)
             return { ...state, isConnected: action.payload }
         case BottomType.SET_SELECTED_RADIOSTATION:
             return { ...state, selectedRadioStation: action.payload, swiperShowRadiostation: action.payload }

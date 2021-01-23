@@ -1,58 +1,27 @@
 import { getData, storeData } from "./local_storage"
-import  player  from "../services/player/PlayerServices"
-export const init = (toAlert: () => void) => {
-    let minute = 0
-    let hours = 0
-    let playItem = ''
-    let repeat = 0
+import player from "../services/player/PlayerServices"
+const intervals:any[] = []
+export const initAlarmClock = (toDo: () => void, data:any) => {
+        console.log("initAlarmClock",data);
+        
+            while(intervals.length){
+            clearInterval(intervals.shift());
+        }
+        const interval = setInterval(() => {
+            console.log('timer',new Date().getHours(),new Date().getMinutes(),data);
+            
+        let nowMinute= new Date().getMinutes()
+        let nowHours= new Date().getHours()
+                if(nowHours==data.alarmClockTime.hours){
+                    if(nowMinute==data.alarmClockTime.minute){
+                        console.log("minuu");
+                        console.log('interval',interval);
+                        storeData('alarmClock',null)
+                        clearInterval(interval);
+                        toDo()
+                    }
+                }
 
-    getData('alarmClock').then((time) => {
-        // if (time) {
-        //     playItem = time.playItem.st[0].ur
-        //     minute = time.minute
-        //     hours = time.hours
-        //     repeat = time.repeat
-        //     let f = new Date();
-        //     f.setHours(hours);
-        //     f.setMinutes(minute);
-        //     f.setSeconds(0)
-        //     const alertTime = f.getTime()
-        //     let alertIsRun: boolean = false
-        //     let now: number = Date.now();
-        //
-        //     if (now > alertTime  ) {
-        //         f.setDate(f.getDate() + 1);
-        //         let tomorrowTime=time
-        //         tomorrowTime.hours= f.getHours();
-        //         tomorrowTime.minute=f.getMinutes();
-        //        // f.setSeconds(0)
-        //         storeData('alarmClock', tomorrowTime)
-        //
-        //     }else{
-        //     const interval = setInterval(() => {
-        //
-        //         if (now > alertTime ) {
-        //
-        //             clearTimeout(interval);
-        //             player._startPlayMusic(playItem, {song:"",artist:""})
-        //             alertIsRun=true
-        //             toAlert()
-        //             if (repeat && repeat > 0) {
-        //                 storeData('alarmClock',
-        //                     {
-        //                         hours: hours,
-        //                         minute: minute + repeat,
-        //                         playItem: time.playItem,
-        //                         repeat: repeat
-        //                     })
-        //             } else {
-        //               //  storeData('alarmClock', null)
-        //
-        //             }
-        //         }
-        //     }, 1000);}
-       // }
-    })
-
-
-}
+            }, 5000);
+            intervals.push(interval)
+        }

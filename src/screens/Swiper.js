@@ -39,8 +39,8 @@ type Props = {
     backgroundColor: String,
     bottomReducer: any,
     animation?: 'linear' | 'spring' | 'easeInEaseOut' | 'none',
-    orientation:String,
-    onchangeIsConnected:(v)=>void
+    orientation: String,
+    onchangeIsConnected: (v) => void
 };
 export default class SwipeUpDown extends Component<Props> {
     static defautProps = {
@@ -51,10 +51,10 @@ export default class SwipeUpDown extends Component<Props> {
         this.state = {
             collapsed: true,
             fadeAnim: new Animated.Value(0),
-            visible:false
+            visible: false
         };
         this.disablePressToShow = props.disablePressToShow;
-        this.SWIPE_HEIGHT = props.swipeHeight ;
+        this.SWIPE_HEIGHT = props.swipeHeight;
         this._panResponder = null;
         this.top = this.SWIPE_HEIGHT;
         this.height = this.SWIPE_HEIGHT;
@@ -69,11 +69,11 @@ export default class SwipeUpDown extends Component<Props> {
         this.showFull = this.showFull.bind(this);
     }
     fadeIn = () => {
-        this.setState({visible:true})
+        this.setState({ visible: true })
         // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(this.state.fadeAnim, {
             toValue: 1,
-            duration: 500,
+            duration: 100,
             useNativeDriver: true
         }).start(
 
@@ -84,13 +84,13 @@ export default class SwipeUpDown extends Component<Props> {
         // Will change fadeAnim value to 0 in 5 seconds
         Animated.timing(this.state.fadeAnim, {
             toValue: 0,
-            duration: 500,
+            duration: 100,
             useNativeDriver: true
         }).start(
 
 
         );
-     //this.setState({visible:false})
+        //this.setState({visible:false})
     };
     componentWillMount() {
         this._panResponder = PanResponder.create({
@@ -123,9 +123,9 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderMove(event, gestureState) {
-
+        console.log(gestureState.dy);
         this.fadeOut()
-        if (gestureState.dy > 50 && !this.checkCollapsed) {
+        if (gestureState.dy > 0 && !this.checkCollapsed) {
             // SWIPE DOWN
 
             this.customStyle.style.top = this.top + gestureState.dy;
@@ -135,6 +135,7 @@ export default class SwipeUpDown extends Component<Props> {
             this.updateNativeProps();
         } else if (this.checkCollapsed && gestureState.dy < -60) {
             // SWIPE UP
+
             this.top = 0;
             this.customStyle.style.top = DEVICE_HEIGHT + gestureState.dy;
             this.customStyle.style.height = -gestureState.dy + this.SWIPE_HEIGHT;
@@ -176,7 +177,7 @@ export default class SwipeUpDown extends Component<Props> {
         this.checkCollapsed = false;
         onShowFull && onShowFull();
 
-        this.setState({visible:false})
+        this.setState({ visible: false })
     }
 
     showMini() {
@@ -192,37 +193,39 @@ export default class SwipeUpDown extends Component<Props> {
         this.checkCollapsed = true;
         onShowMini && onShowMini();
     }
-    renderDisConectModal(){
+    renderDisConectModal() {
         return <Modal
             isVisible={!this.props.backgroundColor.isConnected}
             animationIn={'slideInLeft'}
             animationOut={'slideOutRight'}
             backdropOpacity={0.2}
-            onBackdropPress={() => {this.setState({visibleModal:false})} } >
-            {<View style={{backgroundColor:'white', height:150,padding:10}}>
-                <Text style={{fontSize:22, fontWeight:'bold', marginBottom:8}}>Нет подключения к интернету </Text>
-                <Text style={{fontSize:16,lineHeight:20}}>Подключите соединение или мобильный интернет для прослушивания радиостанций </Text>
+            onBackdropPress={() => { this.setState({ visibleModal: false }) }} >
+            {<View style={{ backgroundColor: 'white', height: 150, padding: 10 }}>
+                <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 8 }}>Нет подключения к интернету </Text>
+                <Text style={{ fontSize: 16, lineHeight: 20 }}>Подключите соединение или мобильный интернет для прослушивания радиостанций </Text>
                 <TouchableOpacity
-                    onPress={()=>{
+                    onPress={() => {
 
                         this.props.onchangeIsConnected(true)
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             NetInfo.fetch().then(state => {
-                                    this.props.onchangeIsConnected(state.isConnected)
+                                console.log("djdkjslakdjad9uao9du0fagbasf.")
+                                this.props.onchangeIsConnected(state.isConnected)
                             },
-                            50000);
+                                50000);
 
 
-                    })}}
-                    style={{marginTop:25, width:'100%', alignItems:'flex-end'}}
+                        })
+                    }}
+                    style={{ marginTop: 25, width: '100%', alignItems: 'flex-end' }}
                 >
-                    <Text style={{color:'green',fontSize:17}}>Перепадключится</Text>
+                    <Text style={{ color: 'green', fontSize: 17 }}>Перепадключится</Text>
                 </TouchableOpacity>
             </View>}
         </Modal>
     }
     render() {
-       // console.log("wdpa[d",this.props.bottomReducer.selectedRadioStation.isPlayingMusic)
+        // console.log("wdpa[d",this.props.bottomReducer.selectedRadioStation.isPlayingMusic)
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (
@@ -233,8 +236,8 @@ export default class SwipeUpDown extends Component<Props> {
                 style={[
                     styles.wrapSwipe,
                     {
-                        height:86,
-                        marginTop: MARGIN_TOP+56,
+                        height: 86,
+                        marginTop: MARGIN_TOP + 56,
                     },
                     !itemMini && collapsed && { marginBottom: -100 },
                     style
@@ -242,201 +245,201 @@ export default class SwipeUpDown extends Component<Props> {
             >
 
 
-                {this.state.visible?
-                    <View style={{ height:120,
-                        paddingTop:35,
-                      //  marginTop:-35,
-                       }}>
-                    <Animated.View
+                {this.state.visible ?
+                    <View style={{
+                        height: 120,
+                        paddingTop: 35,
+                        //  marginTop:-35,
+                    }}>
+                        <Animated.View
 
-                    style={[styles.bottomHeader, {
-                        backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+                            style={[styles.bottomHeader, {
+                                backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
 
-                    }, {
-                        opacity: this.state.fadeAnim // Bind opacity to animated value
-                    }]}>
-                    <View
-                        {...this._panResponder.panHandlers}
-                        onTouchStart={() => {
-                        }}
-                        style={{
-                            height:86, width: '70%',
-                            //backgroundColor:'red'
-                            backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
-                        }}>
-                        <View style={{
-                            flexDirection: 'row',
-                            paddingTop: (15),
-                            paddingLeft: (25),
-                            justifyContent: 'space-between',
-                            paddingRight: (12)
-                        }}>
+                            }, {
+                                opacity: this.state.fadeAnim // Bind opacity to animated value
+                            }]}>
+                            <View
+                                {...this._panResponder.panHandlers}
+                                onTouchStart={() => {
+                                }}
+                                style={{
+                                    height: 86, width: '70%',
+                                    //backgroundColor:'red'
+                                    backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+                                }}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    paddingTop: (15),
+                                    paddingLeft: (25),
+                                    justifyContent: 'space-between',
+                                    paddingRight: (12)
+                                }}>
 
-                            <View style={{flexDirection: 'row',}}>
-                                <SimpleImage size={57}
-                                             image={this.props.bottomReducer.miniScreenData.data.im}/>
-                                <View style={{marginLeft: (15)}}>
-                                    <Text
-                                        style={[styles.txtTitle, {color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white',}]}>
-                                        {this.props.bottomReducer.miniScreenData.data.pa
-                                        }</Text>
-                                    {this.props.bottomReducer.miniScreenData.playingSong && <Text
-                                        numberOfLines={1}
-                                        style={[styles.txtTitle,
-                                            {
-                                                fontSize: (12),
-                                                marginTop: (5),
-                                                width: 160,
-                                                color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white'
-                                            }]}>
+                                    <View style={{ flexDirection: 'row', }}>
+                                        <SimpleImage size={57}
+                                            image={this.props.bottomReducer.miniScreenData.data.im} />
+                                        <View style={{ marginLeft: (15) }}>
+                                            <Text
+                                                style={[styles.txtTitle, { color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white', }]}>
+                                                {this.props.bottomReducer.miniScreenData.data.pa
+                                                }</Text>
+                                            {this.props.bottomReducer.miniScreenData.playingSong && <Text
+                                                numberOfLines={1}
+                                                style={[styles.txtTitle,
+                                                {
+                                                    fontSize: (12),
+                                                    marginTop: (5),
+                                                    width: 160,
+                                                    color: this.props.backgroundColor == "white" ? "#1D2A4B" : 'white'
+                                                }]}>
 
-                                        {this.props.bottomReducer.miniScreenData.playingSong.artist}
-                                        {this.props.bottomReducer.miniScreenData.playingSong.song }</Text> }
+                                                {this.props.bottomReducer.miniScreenData.playingSong.artist}
+                                                {this.props.bottomReducer.miniScreenData.playingSong.song}</Text>}
 
+                                        </View>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
+                            {itemMini}
+                        </Animated.View>
                     </View>
-                    {itemMini}
-                </Animated.View>
-                    </View>
-                        :<View>
+                    : <View>
 
-                { this.props.orientation?
-                <View
-                    style={{height:'100%', backgroundColor: this.props.backgroundColor}}
-              >
-                <Image
-                    style={{backgroundColor: this.props.backgroundColor,
-                        alignItems:'center',
-                        height:222,
-                        resizeMode:'stretch'
-
-                    }}
-                    source={require('../assets/images/img.png')}/>
-                      <View  style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height:55, position:'absolute', top:30}}
-                       >
-                        <View
-                            onTouchEnd={() => {
-                                this.showMini() 
-                            
-                            }}
-                            style={[styles.bottomSheet, { height: 40,width:50 }]}>
-                            <TouchableOpacity
- 
-                                style={styles.bottomSheet}
+                        {this.props.orientation ?
+                            <View
+                                style={{ height: '100%', backgroundColor: this.props.backgroundColor, }}
                             >
-                                <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={10.59} width={19.8} />
-                            </TouchableOpacity>
+                                <Image
+                                    style={{
+                                        backgroundColor: this.props.backgroundColor,
+                                        alignItems: 'center',
+                                        height: 222,
+                                        resizeMode: 'stretch'
 
-                        </View>
-                        <View style={{ width: '60%', flexDirection:'row'}}  >
-                        <View  {...this._panResponder.panHandlers} style={{ alignItems: 'center' }}>
-                                    {this.props.bottomReducer.swiperShowRadiostation ? <Text 
-                                    numberOfLines={1} style={{
-                                        color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                        fontSize: 20,
-                                        fontWeight: '500',
-                                        width:200,
-                                    }}>{this.props.bottomReducer.swiperShowRadiostation?.data.pa}</Text> : null}
+                                    }}
+                                    source={require('../assets/images/img.png')} />
+                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', height: 55, position: 'absolute', top: 5 }}
+                                >
+                                    <View
+                                        onTouchEnd={() => {
+                                            this.showMini()
+
+                                        }}
+                                        style={[styles.bottomSheet, { height: 40, width: 50 }]}>
+                                        <TouchableOpacity
+
+                                            style={styles.bottomSheet}
+                                        >
+                                            <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={10.59} width={19.8} />
+                                        </TouchableOpacity>
+
+                                    </View>
+                                    <View style={{ width: '60%', flexDirection: 'row' , }}  >
+                                        <View  {...this._panResponder.panHandlers} style={{ alignItems: 'center' }}>
+                                            {this.props.bottomReducer.swiperShowRadiostation ? <Text
+                                                numberOfLines={1} style={{
+                                                    color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                                    fontSize: 20,
+                                                    fontWeight: '500',
+                                                    width: 200,
+                                                }}>{this.props.bottomReducer.swiperShowRadiostation?.data.pa}</Text> : null}
+                                        </View>
+                                        {this.props.bottomReducer.playingMusicArtistSong &&
+                                            <View style={{  alignItems: 'center', width: 300,   paddingTop: -5, }}>
+                                                <Text
+                                                    numberOfLines={1}
+                                                    style={{
+                                                        color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                                        fontSize: 17,
+                                                        paddingTop:1,
+                                                        alignItems: 'center',
+                                                        maxWidth: 300,
+                                                    }}>{this.props.bottomReducer.swiperShowRadiostation?.playingSong?.artist} {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.song}
+                                                </Text></View>}
+                                    </View>
+                                    <TouchableOpacity
+                                        style={{
+                                           // justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: 40,
+                                            width: '15%',
+                                            
+                                             paddingTop:5
+                                        }}
+                                        onPress={() => {
+                                            this.props.toaddfavorite()
+                                        }}>
+                                        {this.props.checkIsFovorite() ?
+                                            <RedHeart fill='#FF5050' height={19} width={21} /> :
+                                            <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={21.01} width={23.61} />}
+                                    </TouchableOpacity>
                                 </View>
-                                {this.props.bottomReducer.playingMusicArtistSong &&
-                                    <View style={{justifyContent:'center', alignItems:'center', width:300}}>
+                               
+                            </View>
+                            : <View><View
+
+                                style={{
+                                    backgroundColor: this.props.backgroundColor,
+                                    // marginTop:50
+
+
+                                }}>
+                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}
+                                >
+                                    <View
+                                        onTouchEnd={() => {
+                                            this.showMini()
+
+                                        }}
+                                        style={[styles.bottomSheet, { height: calcHeight(50), backgroundColor: this.props.backgroundColor }]}>
+                                        <TouchableOpacity
+
+                                            style={styles.bottomSheet}
+                                        >
+                                            <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
+                                        </TouchableOpacity>
+
+                                    </View>
+                                    <View  {...this._panResponder.panHandlers} onTouchEnd={() => {
+                                        this.showMini()
+
+                                    }} style={{ width: '55%', backgroundColor: this.props.backgroundColor }}  >
+                                    </View>
+                                    <TouchableOpacity
+                                        style={{
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: calcHeight(70),
+                                            width: '20%',
+                                            //    borderWidth:1
+                                        }}
+                                        onPress={() => {
+                                            this.props.toaddfavorite()
+                                        }}>
+                                        {this.props.checkIsFovorite() ?
+                                            <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
+                                            <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
+                                    </TouchableOpacity>
+                                </View>
+                                <View
+
+                                    style={{ justifyContent: 'center', alignItems: 'center', height: 50, backgroundColor: this.props.backgroundColor }}>
+                                    {this.props.bottomReducer.swiperShowRadiostation ?
                                         <Text
                                             numberOfLines={1}
                                             style={{
                                                 color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                                fontSize: 17,
+                                                fontSize: 24,
+                                                fontWeight: '500',
+                                                width: 200,
+                                                textAlign: 'center'
+                                            }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
+                                </View>
 
-                                                alignItems: 'center',
-                                              maxWidth:300,
-                                              //  justifyContent:'center',
-                                                paddingTop:5,
-
-                                            }}>{this.props.bottomReducer.swiperShowRadiostation?.playingSong?.artist}  {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.song}
-                                        </Text></View> }
-                        </View>
-                        <TouchableOpacity
-                            style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: 40,
-                                width: '15%',
-                               // borderWidth:1
-                            }}
-                            onPress={() => {
-                                this.props.toaddfavorite()
-                            }}>
-                            {this.props.checkIsFovorite() ?
-                                <RedHeart fill='#FF5050' height={19} width={21} /> :
-                                <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={21.01} width={23.61} />}
-                        </TouchableOpacity>
-                    </View>
-                    {itemFull}
-                </View>
-                :<View><View
-
-                    style={{
-                        backgroundColor: this.props.backgroundColor,
-                     // marginTop:50
-
-
-                    }}>
-                    <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between'}}
-                       >
-                        <View
-                            onTouchEnd={() => {
-                                this.showMini()
-                            
-                            }}
-                            style={[styles.bottomSheet, { height: calcHeight(50), backgroundColor: this.props.backgroundColor }]}>
-                            <TouchableOpacity
- 
-                                style={styles.bottomSheet}
-                            >
-                                <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
-                            </TouchableOpacity>
-
-                        </View>
-                        <View  {...this._panResponder.panHandlers}   onTouchEnd={() => {
-                            this.showMini()
-
-                        }} style={{ width: '55%', backgroundColor:this.props.backgroundColor }}  >
-                        </View>
-                        <TouchableOpacity
-                            style={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: calcHeight(70),
-                                width: '20%',
-                            //    borderWidth:1
-                            }}
-                            onPress={() => {
-                                this.props.toaddfavorite()
-                            }}>
-                            {this.props.checkIsFovorite() ?
-                                <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
-                                <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
-                        </TouchableOpacity>
-                    </View>
-                        <View
-
-                            style={{ justifyContent: 'center', alignItems: 'center',height:50, backgroundColor:this.props.backgroundColor}}>
-                            {this.props.bottomReducer.swiperShowRadiostation ?
-                                <Text
-                                    numberOfLines={1}
-                                    style={{
-                                        color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
-                                        fontSize: 24,
-                                        fontWeight: '500',
-                                        width:200,
-                                        textAlign:'center'
-                                    }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
-                        </View>
-
-                    </View>
-                {itemFull}
-                </View>}</View>}
+                            </View>
+                                {itemFull}
+                            </View>}</View>}
 
                 {itemFull}
 
@@ -449,17 +452,17 @@ const styles = StyleSheet.create({
     wrapSwipe: {
 
         backgroundColor: '#ccc',
-       position:'absolute',
-        bottom:0,
+        position: 'absolute',
+        bottom: 0,
         left: 0,
         right: 0
     },
     bottomSheet: {
-        height: calcHeight(50),
+        height: calcHeight(60),
         flexDirection: 'row',
-        alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'center',
-//paddingTop:10,
+        paddingTop: 5,
         width: '15%'
     },
     bottomHeader: {
@@ -474,9 +477,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.50,
         shadowRadius: 12.35,
         elevation: 25,
-   //     marginTop: -28,
-        zIndex:1,
-      //  paddingTop:calcHeight(10)
+        //     marginTop: -28,
+        zIndex: 1,
+        //  paddingTop:calcHeight(10)
     },
 
 });

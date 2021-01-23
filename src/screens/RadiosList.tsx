@@ -78,11 +78,13 @@ class Menu extends React.Component<IMenuProps, IState> {
         getData('menuView').then((menuView) => {
             this.setState({ styleView: menuView })
         })
+       
+        this.props.ongetMenuData()
         getData('isLooking').then((looking) => {
-            this.props.onchangeLookingList(looking)
+            if(looking)
+           { this.props.onchangeLookingList(looking)}
 
         })
-        this.props.ongetMenuData()
     }
     componentDidMount() {
         navigationService.setNavigator(this.props.navigation)
@@ -183,7 +185,8 @@ class Menu extends React.Component<IMenuProps, IState> {
             return this.props.menuReducer.menuData
         }
     }
-    render() {
+    
+    render() {        
         const list =this.props.menuReducer.menuData? this.props.menuReducer.menuData.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)) : []
         return (
             <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height }]}>

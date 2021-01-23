@@ -146,7 +146,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                     navigation={this.props.navigation} 
                      onchnageSearchData={this.props.onchnageSearchData}
                      />
-                        {this.props.filterReducer.menuType==1 ?
+                        { this.props.menuReducer.favoriteList && this.props.filterReducer.menuType==1 ?
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}

@@ -71,6 +71,15 @@ export const changeActiveBi = (payload: number) => {
 
 	};
 };
+export const clearReducer = () => {
+
+
+	return {
+		type: BottomType.CLEAR_REDUCER,
+	
+
+	};
+};
 export const getSongData = (payload: any) => {
 
 

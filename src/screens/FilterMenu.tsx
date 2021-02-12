@@ -11,11 +11,11 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import { IFilterMenuProps } from "../Interface"
 import player from "../services/player/PlayerServices"
-import {  getMenuData,changeSwiperData} from '../store/actions/menuActions'
+import { getMenuData, changeSwiperData } from '../store/actions/menuActions'
 import {
 
     getFavorites,
-   
+
     changePlayingMusic
 } from '../store/actions/filterAction'
 import {
@@ -23,7 +23,8 @@ import {
     changePlayingData,
     changeActiveIndex,
     getSongData,
-    changeMiniScreenData, changeSwiperShowStation
+    changeMiniScreenData, changeSwiperShowStation,
+    changeSelectedRadioStation
 } from "../store/actions/bottomAction";
 import RadioMenuElement from "../components/RadioMenuElement"
 import { storeData, getData } from "../utils/local_storage"
@@ -42,7 +43,7 @@ interface IState {
     playUrl: string,
     activBi: number,
     favoriteList: any,
-    lookingList:any
+    lookingList: any
 }
 
 class FilterMenu extends React.Component<IFilterMenuProps, IState> {
@@ -51,7 +52,7 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
         super(props)
         this.state = {
             radioList: [],
-          
+
             styleView: this.props.menuReducer.styleView,
             swipeablePanelActive: false,
             position: new Animated.Value(0),
@@ -62,7 +63,7 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
             playUrl: '',
             activBi: 0,
             favoriteList: [],
-            lookingList:[]
+            lookingList: []
 
 
         }
@@ -77,122 +78,167 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
             this.setState({ styleView: menuView })
         })
     }
-    checkIsFovorite(num: number) {        
+    checkIsFovorite(num: number) {
         return this.props.favorites.includes(num)
-  
-}
-_addLookingList(data:any){
-    getData("isLooking").then((lookList) => {
-        let count =true
-        if (lookList  ) {
-           
-         for (let index = 0; index < lookList.length; index++) {
-             const element = lookList[index];
-             if(element.id==data.id){
-                count=false
-                break
-             }
-         }
-        if (count) {
-            lookList.push(data)
-        }
-        }
-        
-        storeData("isLooking",lookList)
-        
-      })
-}
+
+    }
+    _addLookingList(data: any) {
+        getData("isLooking").then((lookList) => {
+            let count = true
+            if (lookList) {
+
+                for (let index = 0; index < lookList.length; index++) {
+                    const element = lookList[index];
+                    if (element.id == data.id) {
+                        count = false
+                        break
+                    }
+                }
+                if (count) {
+                    lookList.push(data)
+                }
+            }
+
+            storeData("isLooking", lookList)
+
+        })
+    }
     // }
     renderMenuItems(data: any) {
 
         return <TouchableHighlight
-        onPress={() => {
-            console.log(data);
-            
-           player.open()
-            let radioStation = {
-                data: data.item,
-                isPlayingMusic: false,
-                activeBi:data.item.st[0],
-                id: data.item.id
-            }
-            console.log(radioStation);
-            
-            this._addLookingList(data.item)
-            this.props.onchangeSwiperShowStation(radioStation)
-            this.props.get_songData(radioStation)
-            this.props.onchangeMiniScreenData(radioStation)
-            this.props.onchangeActiveIndex(data.index)
-          
-        }}
-    >
-        <RadioMenuElement
-         title={data.item.pa}
-            image={data.item.im}
-             backColor={this.props.theme.backgroundColor}
-            addInFavorite={() => this.props.toaddfavorite(data.item)}
-            isFavorite={this.checkIsFovorite(data.item.id)} />
-    </TouchableHighlight>
+            onPress={() => {
+                console.log(data, this.props.bottomReducer.selectedRadioStation);
+
+                this._addLookingList(data.item)
+                if (this.props.bottomReducer.selectedRadioStation) {
+                    let radioStation = {
+                        data: data.item,
+                        isPlayingMusic: false,
+                        activeBi: data.item.st[0],
+                        id: data.item.id
+                    }
+
+                    player.open()
+                    this.props.onchangeSwiperShowStation(radioStation)
+                    this.props.onchangeSelectedRadioStation(radioStation)
+
+                    this.props.onchangeMiniScreenData(radioStation)
+
+                    this.props.onchangeActiveIndex(data.index)
+                } else {
+                    let radioStation = {
+                        data: data.item,
+                        isPlayingMusic: false,
+                        activeBi: data.item.st[0],
+                        id: data.item.id
+                    }
+                    this.props.onchangeSelectedRadioStation(radioStation)
+                    this.props.onchangeMiniScreenData(radioStation)
+                    this.props.onchangeActiveIndex(data.index)
+                }
+                //     console.log(data);
+
+                //    player.open()
+                //     let radioStation = {
+                //         data: data.item,
+                //         isPlayingMusic: false,
+                //         activeBi:data.item.st[0],
+                //         id: data.item.id
+                //     }
+                //     console.log(radioStation);
+
+                //     this._addLookingList(data.item)
+                //     this.props.onchangeSwiperShowStation(radioStation)
+                //     this.props.get_songData(radioStation)
+                //     this.props.onchangeMiniScreenData(radioStation)
+                //     this.props.onchangeActiveIndex(data.index)
+
+            }}
+        >
+            <RadioMenuElement
+                title={data.item.pa}
+                image={data.item.im}
+                backColor={this.props.theme.backgroundColor}
+                addInFavorite={() => this.props.toaddfavorite(data.item)}
+                isFavorite={this.checkIsFovorite(data.item.id)} />
+        </TouchableHighlight>
     }
     renderMenuItemsMenuStyle2(data: any) {
-        return<TouchableHighlight
-        onPress={() => {
-            player.open()
-            let radioStation = {
-                data: data.item,
-                isPlayingMusic: false,
-                activeBi:data.item.st[0],
-                id: data.item.id
-            }
-            this._addLookingList(data.item)
-            this.props.onchangeSwiperShowStation(radioStation)
-            this.props.get_songData(radioStation)
-            this.props.onchangeMiniScreenData(radioStation)
-            this.props.onchangeActiveIndex(data.index)
-        }} style={{ padding: calcWidth(8), }}>
-        <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
-    </TouchableHighlight>
+        return <TouchableHighlight
+            onPress={() => {
+                this._addLookingList(data.item)
+                if (this.props.bottomReducer.selectedRadioStation) {
+                    let radioStation = {
+                        data: data.item,
+                        isPlayingMusic: false,
+                        activeBi: data.item.st[0],
+                        id: data.item.id
+                    }
+
+                    player.open()
+                    this.props.onchangeSwiperShowStation(radioStation)
+
+                    this.setState({ swipeablePanelActive: true })
+                    this.props.onchangeActiveIndex(data.index)
+                } else {
+                    let radioStation = {
+                        data: data.item,
+                        isPlayingMusic: false,
+                        activeBi: data.item.st[0],
+                        id: data.item.id
+                    }
+                    this.props.onchangeSelectedRadioStation(radioStation)
+                    this.props.onchangeMiniScreenData(radioStation)
+                    this.setState({ swipeablePanelActive: true })
+                    this.props.onchangeActiveIndex(data.index)
+                }
+            }}
+
+            style={{ padding: calcWidth(8), }}>
+            <SimpleImage size={calcWidth(98)} image={data.item.im} />
+        </TouchableHighlight>
     }
-    
+
     render() {
- const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
- 
+        const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
+        
         return (
-            
-    
-                <View style={[styles.container,{ backgroundColor: this.props.theme.backgroundColor,height:'100%' }]}>
-                    <Header navigation={this.props.navigation} type={true} />
 
-                        {this.props.filterReducer.menuType==1 ?
 
-                            <FlatList
-                            numColumns={1}
-                                data={list}
-                                renderItem={(d) => this.renderMenuItems(d)}
-                                keyExtractor={(item:any, index:number) => item.id.toString()}
-                                maxToRenderPerBatch={10}
-                            />
-                            :
-                            <FlatList
-                            numColumns={3}
-                                data={list}
-                                renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
-                                contentContainerStyle={{  paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                                keyExtractor={(item:any, index:number) => item.id.toString()}
-                                maxToRenderPerBatch={10}
-                            />
+            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: '100%' }]}>
+                <Header navigation={this.props.navigation} type={true} />
 
-                        }
+                {this.props.filterReducer.menuType == 1 ?
 
-                </View>
-             
+                    <FlatList
+                        numColumns={1}
+                        data={list}
+                        renderItem={(d) => this.renderMenuItems(d)}
+                        keyExtractor={(item: any, index: number) => item.id.toString()}
+                        maxToRenderPerBatch={10}
+                    />
+                    :
+                    <FlatList
+                        numColumns={3}
+                        data={list}
+                        renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
+                        contentContainerStyle={{ paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
+                        keyExtractor={(item: any, index: number) => item.id.toString()}
+                        maxToRenderPerBatch={10}
+                    />
 
-         
+                }
+
+            </View>
+
+
+
         );
     }
 };
-const mapStateToProps = ({filterReducer,menuReducer,favorites,theme,bottomReducer}:any) => {
-    return {filterReducer,menuReducer,favorites,theme,bottomReducer}
+const mapStateToProps = ({ filterReducer, menuReducer, favorites, theme, bottomReducer }: any) => {
+    return { filterReducer, menuReducer, favorites, theme, bottomReducer }
 };
 // const mapStateToProps = (state: any) => ({
 
@@ -226,15 +272,18 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeSwiperData: (payload: number) => {
             dispatch(changeSwiperData(payload))
         },
-        
+
         get_songData: (payload: any) => {
             dispatch(getSongData(payload))
         },
-        onchangeSwiperShowStation:(payload: any) => {
+        onchangeSwiperShowStation: (payload: any) => {
             dispatch(changeSwiperShowStation(payload))
         },
-        onchangeMiniScreenData:(payload: any) => {
+        onchangeMiniScreenData: (payload: any) => {
             dispatch(changeMiniScreenData(payload))
+        },
+        onchangeSelectedRadioStation: (payload: any) => {
+            dispatch(changeSelectedRadioStation(payload))
         },
     }
 }
@@ -341,7 +390,7 @@ const styles = StyleSheet.create({
         elevation: 8,
     },
     container: {
-        height:deviceHeight-calcHeight(30)
+        height: deviceHeight - calcHeight(30)
     },
     box: {
         width: 50,

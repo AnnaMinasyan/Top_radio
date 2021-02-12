@@ -27,6 +27,7 @@ import { NavigationScreenProp } from 'react-navigation';
     bottomReducer:any
      onchangeMiniScreenData(payload:any):void;
      onchangeSwiperShowStation(payload:any):void;
+      onsetFilterData(payload:any):void;
  }
 export interface IPlayListProps {
     playListReducer:any,
@@ -53,6 +54,7 @@ export interface IFilterMenuProps {
     onchangeSwiperShowStation(payload:any):void;
     get_songData(payload:any):void;
     onchangeMiniScreenData(payload:any):void;
+    onchangeSelectedRadioStation(payload:any):void;
 
 } 
 export interface IGanresProps {

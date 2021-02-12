@@ -17,7 +17,7 @@ interface IState {
 }
 class Search extends React.Component<Props, IState> {
   delayedCallback: any
-  onChangeTextDelayed =debounce(this.onChangeText, 2000);
+  onChangeTextDelayed =debounce(this.onChangeText, 5000);
   constructor(props: Props) {
     
     super(props)

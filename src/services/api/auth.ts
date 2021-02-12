@@ -16,7 +16,7 @@ class Static implements IDATA {
     async getMenuDatas() {
         try {
             const response = await authApi.get(`${keys.API_URL}radios.json`,);
-            console.log(';;;','response');
+           
             
             return response.data
         } catch (error) {
@@ -35,6 +35,9 @@ class Static implements IDATA {
     async getGanres() {
         try {
             const response = await authApi.get(`${keys.API_URL}genres.json`,);
+     
+            
+            
             return response.data
         } catch (ex) {
             return Alert.alert("Error",ex)
@@ -52,6 +55,7 @@ class Static implements IDATA {
     }
     async getPlayItemType(payload: any) {
         try {
+            
             const data = moment().format('YYYY-MM-DD')
             console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=1`);
             
@@ -61,7 +65,8 @@ class Static implements IDATA {
             return response.data
         } catch (ex) {
             console.log(ex)
-            return ex
+          return  Alert.alert("Сервер не работает ")
+            
         }
     }
 }

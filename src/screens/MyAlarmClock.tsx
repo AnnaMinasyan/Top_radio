@@ -32,9 +32,9 @@ import player from "../services/player/PlayerServices";
 const KEYS_TO_FILTERS = ['pa'];
 import DatePicker from 'react-native-date-picker'
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {initAlarmClock} from "../utils/createAlarmClock"
+import { initAlarmClock } from "../utils/createAlarmClock"
 import {
-  
+
   changeMiniScreenData,
 
   changeSelectedRadioStation,
@@ -42,20 +42,24 @@ import {
 } from "../store/actions/bottomAction";
 interface IState {
   date: any,
-  isEnabled: boolean, 
+  isEnabled: boolean,
   visibleModal: number | null,
   favoriteList: any,
   playItem: any,
   isFavorite: boolean,
-  timeSleepList:any,
+  timeSleepList: any,
+  alarmClock: any,
+  isOnAlarmclock: any
+  onRepeat:boolean,
+  selectedTimeRepeat:any
 }
 
 class MyAlarmClock extends React.Component<IMenuProps, IState> {
-  alarmClock:any
-  alarmClockTime:any=null
-  isOnAlarmclock:boolean=false
+
+  alarmClockTime: any = null
+
   constructor(props: IMenuProps) {
-    
+
     super(props)
 
     this.state = {
@@ -66,18 +70,28 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
         0, 2, 5, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60
       ],
       favoriteList: [],
-      playItem: [],
+      playItem: null,
       isFavorite: false,
-      
+      alarmClock: [],
+      isOnAlarmclock: false,
+      onRepeat:false,
+      selectedTimeRepeat:0
     }
   }
 
   componentDidMount() {
     getData('alarmClock').then((time) => {
+      console.log(time);
+
       if (time) {
         this.setState({
-          playItem: time.playItem,
+          playItem: time.radioStation,
+          alarmClock: time.datePickerData,
+          isOnAlarmclock: true,
+          selectedTimeRepeat:time.alarmClockTime.repeatTime,
+          onRepeat:time.alarmClockTime.repeatTime>0
         })
+
       }
     })
   }
@@ -89,10 +103,9 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           this.setState({
             visibleModal: null,
             playItem: data.item,
-            
           })
-          this.isOnAlarmclock=true
-          this._changeIsOnAlarmClock()
+
+          this._changeIsOnAlarmClock(this.state.alarmClock)
         }}
       >
         <RadioMenuElement
@@ -110,9 +123,9 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           this.setState({
             visibleModal: null,
             playItem: data.item,
-           
+
           })
-          this.isOnAlarmclock=true
+          this._changeIsOnAlarmClock(this.state.alarmClock)
         }}
         style={{ width: '100%' }}
       >
@@ -195,12 +208,12 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
             offsetSelection={-20}
             data={this.state.timeSleepList}
             style={{ height: calcHeight(370), marginTop: calcHeight(10) }}
-           // onSelected={({ item, index }) => this.handleChangeTimeSleepList(item)}
+            onSelected={({ item, index }) => {this.setState({selectedTimeRepeat:item})}}
             renderItem={({ item, index }) => (
               <View>
                 <Text style={{
                   fontSize: calcFontSize(37),
-                  // color: this.state.selectedTimeRepeat == item ? 'red' : '#B3BACE'
+                 color: this.state.selectedTimeRepeat == item ? 'red' : '#B3BACE'
                 }}
                 >{item}</Text>
               </View>
@@ -215,35 +228,58 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       <TouchableOpacity
         style={[styles.btn, { borderColor: this.props.theme.backgroundColor == "white" ? '#F3F4F5' : "#1E2B4D" }]}
         onPress={() => {
-          this.setState({ visibleModal: 0 })
+          if(this.alarmClockTime)
+           {this.alarmClockTime.repeatTime=this.state.selectedTimeRepeat}
+          this._changeIsOnAlarmClock(this.state.alarmClock)
+          this.setState({ visibleModal: 0,onRepeat:true })
         }}
       >
         <Text style={[styles.timeText,
-        { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white", marginTop: 0 }]}>Подтвердить число </Text>
+        { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white", marginTop: 0 }]}>Подтвердить</Text>
       </TouchableOpacity>
     </View>
   }
-  _changeIsOnAlarmClock(){
-    let data:any={}
-    if(this.state.playItem && this.alarmClockTime){
-      data.radioStation=this.state.playItem
-      data.alarmClockTime=this.alarmClockTime
+  _changeIsOnAlarmClock(datePickerData: any) {
+    let data: any = {}
+    if (this.state.playItem && this.alarmClockTime) {
+      this.setState({
+        isOnAlarmclock: true
+      })
+      if(!this.state.onRepeat){
+        this.alarmClockTime.repeatTime=0
+      }
+      data.radioStation = this.state.playItem
+      data.alarmClockTime = this.alarmClockTime
+      data.datePickerData = datePickerData
+      console.log(data);
+      
       storeData("alarmClock", data)
-      initAlarmClock(this.alarmClockTodo,data)
+      initAlarmClock(this.alarmClockTodo, data)
     }
 
   }
-  alarmClockTodo=()=>{
-    console.log(";;;;;;;;;;;;;;;;;",this.state.playItem);
-let  playingData=  {data:this.state.playItem ,
-    isPlayingMusic: true,
-    activeBi:this.state.playItem.st[0],
-    id:this.state.playItem.id ,
-  }
+  alarmClockTodo = (data: any) => {
+    console.log(";;;;;;;;;;;;;;;;;", this.state.playItem);
+    let playingData = {
+      data: this.state.playItem,
+      isPlayingMusic: true,
+      activeBi: this.state.playItem.st[0],
+      id: this.state.playItem.id,
+    }
     this.props.onchangeSelectedRadioStation(playingData)
     this.props.onchangeMiniScreenData(playingData)
+    player.open()
+    player._startPlayMusic(playingData.data, playingData.activeBi)
+  }
+  changeIsOnAlarmclock() {
 
-    player._startPlayMusic(playingData.data,playingData.activeBi)
+    this.setState({ isOnAlarmclock: !this.state.isOnAlarmclock })
+    if(this.state.isOnAlarmclock){
+      initAlarmClock(this.alarmClockTodo, null)
+     
+    }else if (this.state.playItem && this.alarmClockTime) {
+      this._changeIsOnAlarmClock(this.state.alarmClock)
+    }
   }
   render() {
 
@@ -271,7 +307,7 @@ let  playingData=  {data:this.state.playItem ,
             </View>
           </View>
           <View >
-            <SimpleSwitch isEnabled={this.isOnAlarmclock} onValueChange={() => this._changeIsOnAlarmClock()} />
+            <SimpleSwitch isEnabled={this.state.isOnAlarmclock} onValueChange={() => this.changeIsOnAlarmclock()} />
           </View>
         </View>
         <TouchableOpacity
@@ -299,27 +335,26 @@ let  playingData=  {data:this.state.playItem ,
         <View style={{ justifyContent: 'center', alignItems: "center", }}>
           <Text style={[styles.timeText, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>Время</Text>
         </View>
-       
+
         <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        <DatePicker
-              mode="time"
-              textColor={'black'}
-             // dividerHeight={0}
-             //date={this.timeSleep}
-              date={this.alarmClock?this.alarmClock:new Date(Date.now())}
-              onDateChange={(data) => {
-                const alarm = {
-                  hours: data.getHours(),
-                  minute: data.getMinutes()
-                }
-                console.log('alarm',alarm);
-                
-                this.alarmClock= `${data.getHours()}:${data.getMinutes()}`
-                this.alarmClockTime=alarm    
-                this.isOnAlarmclock=true   
-               this._changeIsOnAlarmClock()       
-              }}
-            />
+          <DatePicker
+            mode="time"
+            textColor={'black'}
+            // dividerHeight={0}
+            //date={this.timeSleep}
+            date={this.state.alarmClock ? this.state.alarmClock : new Date(Date.now())}
+            onDateChange={(data) => {
+              const alarm = {
+                hours: data.getHours(),
+                minute: data.getMinutes(),
+                repeatTime:this.state.selectedTimeRepeat
+              }
+              this.setState({ alarmClock: data })
+              this.alarmClockTime = alarm
+
+              this._changeIsOnAlarmClock(data)
+            }}
+          />
         </View>
 
         <View style={[styles.radiostation, {
@@ -343,8 +378,12 @@ let  playingData=  {data:this.state.playItem ,
             <SimpleSwitch
               isEnabled={this.state.onRepeat}
               onValueChange={() => {
-                this._changeAlarmClock()
-                this.setState({ onRepeat: !this.state.onRepeat })
+                if(this.state.onRepeat){
+                  this.setState({onRepeat:!this.state.onRepeat,selectedTimeRepeat:0})
+                }else{
+                  this.setState({onRepeat:!this.state.onRepeat})
+                }
+               
               }} />
           </View>
         </View>
@@ -362,7 +401,7 @@ let  playingData=  {data:this.state.playItem ,
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Частота повторений
             </Text>
-              <Text style={global_styles.stationComment}>{this.state.selectedTimeRepeat} мин</Text>
+          { this.state.selectedTimeRepeat>0&&   <Text style={global_styles.stationComment}>{this.state.selectedTimeRepeat} мин</Text>}
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />
@@ -409,10 +448,10 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     onchangeSelectedRadioStation: (payload: any) => {
       dispatch(changeSelectedRadioStation(payload))
-  },
-  onchangeMiniScreenData: (payload: any) => {
-    dispatch(changeMiniScreenData(payload))
-},
+    },
+    onchangeMiniScreenData: (payload: any) => {
+      dispatch(changeMiniScreenData(payload))
+    },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MyAlarmClock);

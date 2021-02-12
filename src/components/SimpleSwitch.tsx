@@ -25,11 +25,6 @@ class SimpleSwitch extends React.Component<Props, IState> {
     }
 
   }
-  onChange() {
-    return<View>
-
-    </View>
-   }
 
   render() {
 
@@ -53,7 +48,7 @@ class SimpleSwitch extends React.Component<Props, IState> {
               circleActiveColor={'white'}
               circleInActiveColor={'white'}
               changeValueImmediately={true}
-              renderInsideCircle={() =>this.onChange} // custom component to render inside the Switch circle (Text, Image, etc.)
+            //  renderInsideCircle={() =>this.onChange} // custom component to render inside the Switch circle (Text, Image, etc.)
               innerCircleStyle={{  height:calcHeight(26) ,width:calcHeight(26) }} // style for inner animated circle for what you (may) be rendering inside the circle
               outerCircleStyle={{height:100}} // style for outer animated circle
               renderActiveText={true}

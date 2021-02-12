@@ -118,6 +118,8 @@ class Menu extends React.Component<IMenuProps, IState> {
     renderMenuItems(data: any) {
         return <TouchableHighlight
             onPress={() => {
+                console.log(data);
+                
                 this._addLookingList(data.item)
                 if(this.props.bottomReducer.selectedRadioStation ){
                 let radioStation = {
@@ -128,9 +130,9 @@ class Menu extends React.Component<IMenuProps, IState> {
                 }
 
                 player.open()
-                this.props.onchangeSwiperShowStation(radioStation)
-
-                this.setState({swipeablePanelActive:true})
+               // this.props.onchangeSwiperShowStation(radioStation)
+                this.props.onchangeSelectedRadioStation(radioStation)
+                this.props.onchangeMiniScreenData(radioStation)
                 this.props.onchangeActiveIndex(data.index)
             }else{
                 let radioStation = {
@@ -141,7 +143,6 @@ class Menu extends React.Component<IMenuProps, IState> {
                 }
                 this.props.onchangeSelectedRadioStation(radioStation)
                     this.props.onchangeMiniScreenData(radioStation)
-                this.setState({swipeablePanelActive:true})
                 this.props.onchangeActiveIndex(data.index)
             }
 
@@ -160,21 +161,34 @@ class Menu extends React.Component<IMenuProps, IState> {
     }
     renderMenuItemsMenuStyle2(data: any) {
         return <TouchableHighlight
-            onPress={() => {
-                let radioStation = {
-                    data: data.item,
-                    isPlayingMusic: false,
-                    activeBi:data.item.st[0],
-                    id: data.item.id
-                }
-                this._addLookingList(data.item)
-                this.props.onchangeSelectedRadioStation(radioStation)
-                if(this.props.bottomReducer.selectedRadioStation && !this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
-                    this.props.onchangeMiniScreenData(radioStation)
-                }
-                player.open()
-                this.props.onchangeActiveIndex(data.index)
-            }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
+        onPress={() => {
+            this._addLookingList(data.item)
+            if(this.props.bottomReducer.selectedRadioStation ){
+            let radioStation = {
+                data: data.item,
+                isPlayingMusic: false,
+                activeBi:data.item.st[0],
+                id: data.item.id
+            }
+
+            player.open()
+            this.props.onchangeSwiperShowStation(radioStation)
+            this.props.onchangeSelectedRadioStation(radioStation)
+            this.props.onchangeActiveIndex(data.index)
+        }else{
+            let radioStation = {
+                data: data.item,
+                isPlayingMusic: false,
+                activeBi:data.item.st[0],
+                id: data.item.id
+            }
+            this.props.onchangeSelectedRadioStation(radioStation)
+                this.props.onchangeMiniScreenData(radioStation)
+            this.props.onchangeActiveIndex(data.index)
+        }
+
+        }}
+          style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
             <SimpleImage size={98} image={data.item.im} />
         </TouchableHighlight>
     }
@@ -200,12 +214,17 @@ class Menu extends React.Component<IMenuProps, IState> {
                         </View> :
                         this.props.filterReducer.menuType == 1 ?
                             <FlatList
+                            onEndReachedThreshold={0.01}
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
                                 keyExtractor={(item: any, index: number) => item.id.toString()}
                                 maxToRenderPerBatch={10}
+                                onEndReached={info => {
+                                    console.log(info);
+                                  }}
                             />:
                             <FlatList
+                            onEndReachedThreshold={0.01}
                                 data={list}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{

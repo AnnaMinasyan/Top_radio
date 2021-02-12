@@ -51,6 +51,7 @@ export default class SwipeUpDown extends Component<Props> {
         this.state = {
             collapsed: true,
             fadeAnim: new Animated.Value(0),
+           animHeader: new Animated.Value(1),
             visible: false
         };
         this.disablePressToShow = props.disablePressToShow;
@@ -70,9 +71,15 @@ export default class SwipeUpDown extends Component<Props> {
     }
     fadeIn = () => {
         this.setState({ visible: true })
-        // Will change fadeAnim value to 1 in 5 seconds
         Animated.timing(this.state.fadeAnim, {
             toValue: 1,
+            duration: 100,
+            useNativeDriver: true
+        }).start(
+
+        );
+        Animated.timing(this.state.animHeader, {
+            toValue: 0,
             duration: 100,
             useNativeDriver: true
         }).start(
@@ -81,15 +88,21 @@ export default class SwipeUpDown extends Component<Props> {
     };
 
     fadeOut = () => {
-        // Will change fadeAnim value to 0 in 5 seconds
         Animated.timing(this.state.fadeAnim, {
             toValue: 0,
-            duration: 100,
+            duration: 200,
             useNativeDriver: true
         }).start(
-
+            Animated.timing(this.state.animHeader, {
+                toValue: 1,
+                duration: 200,
+                useNativeDriver: true
+            }).start(
+    
+            )
 
         );
+       
         //this.setState({visible:false})
     };
     componentWillMount() {
@@ -123,31 +136,23 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderMove(event, gestureState) {
-        console.log(gestureState.dy);
-        this.fadeOut()
+console.log('====',this.checkCollapsed && gestureState.dy < 0);
+        //    this.fadeOut()
         if (gestureState.dy > 0 && !this.checkCollapsed) {
             // SWIPE DOWN
 
             this.customStyle.style.top = this.top + gestureState.dy;
             this.customStyle.style.height = DEVICE_HEIGHT - gestureState.dy;
-            this.swipeIconRef && this.swipeIconRef.setState({ icon: images.minus });
             !this.state.collapsed && this.setState({ collapsed: true });
             this.updateNativeProps();
-        } else if (this.checkCollapsed && gestureState.dy < -60) {
+        }
+        else if (this.checkCollapsed && gestureState.dy < 0) {
+            console.log( this.customStyle.style.height);
             // SWIPE UP
-
-            this.top = 0;
-            this.customStyle.style.top = DEVICE_HEIGHT + gestureState.dy;
-            this.customStyle.style.height = -gestureState.dy + this.SWIPE_HEIGHT;
-            this.swipeIconRef &&
-                this.swipeIconRef.setState({ icon: images.minus, showIcon: true });
-            if (this.customStyle.style.top <= DEVICE_HEIGHT / 2) {
-                this.swipeIconRef &&
-                    this.swipeIconRef.setState({
-                        icon: images.arrow_down,
-                        showIcon: true
-                    });
-            }
+            this.top =0;
+            this.customStyle.style.top = DEVICE_HEIGHT+gestureState.dy-150;
+            this.customStyle.style.height = DEVICE_HEIGHT - gestureState.dy;
+            this.fadeOut()
             this.updateNativeProps();
             this.state.collapsed && this.setState({ collapsed: false });
         }
@@ -166,12 +171,11 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     showFull() {
-        this.fadeOut()
+        // this.fadeOut()
         const { onShowFull } = this.props;
         this.customStyle.style.top = 0;
         this.customStyle.style.height = DEVICE_HEIGHT;
-        this.swipeIconRef &&
-            this.swipeIconRef.setState({ icon: images.arrow_down, showIcon: true });
+    
         this.updateNativeProps();
         this.state.collapsed && this.setState({ collapsed: false });
         this.checkCollapsed = false;
@@ -187,7 +191,6 @@ export default class SwipeUpDown extends Component<Props> {
             ? DEVICE_HEIGHT - this.SWIPE_HEIGHT
             : DEVICE_HEIGHT;
         this.customStyle.style.height = itemMini ? this.SWIPE_HEIGHT : 0;
-        this.swipeIconRef && this.swipeIconRef.setState({ showIcon: false });
         this.updateNativeProps();
         !this.state.collapsed && this.setState({ collapsed: true });
         this.checkCollapsed = true;
@@ -238,6 +241,7 @@ export default class SwipeUpDown extends Component<Props> {
                     {
                         height: 86,
                         marginTop: MARGIN_TOP + 56,
+                       
                     },
                     !itemMini && collapsed && { marginBottom: -100 },
                     style
@@ -265,8 +269,8 @@ export default class SwipeUpDown extends Component<Props> {
                                 }}
                                 style={{
                                     height: 86, width: '70%',
-                                    //backgroundColor:'red'
-                                    backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
+                                    
+                                   // backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
                                 }}>
                                 <View style={{
                                     flexDirection: 'row',
@@ -335,7 +339,7 @@ export default class SwipeUpDown extends Component<Props> {
                                         </TouchableOpacity>
 
                                     </View>
-                                    <View style={{ width: '60%', flexDirection: 'row' , }}  >
+                                    <View style={{ width: '60%', flexDirection: 'row', }}  >
                                         <View  {...this._panResponder.panHandlers} style={{ alignItems: 'center' }}>
                                             {this.props.bottomReducer.swiperShowRadiostation ? <Text
                                                 numberOfLines={1} style={{
@@ -346,13 +350,13 @@ export default class SwipeUpDown extends Component<Props> {
                                                 }}>{this.props.bottomReducer.swiperShowRadiostation?.data.pa}</Text> : null}
                                         </View>
                                         {this.props.bottomReducer.playingMusicArtistSong &&
-                                            <View style={{  alignItems: 'center', width: 300,   paddingTop: -5, }}>
+                                            <View style={{ alignItems: 'center', width: 300, paddingTop: -5, }}>
                                                 <Text
                                                     numberOfLines={1}
                                                     style={{
                                                         color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
                                                         fontSize: 17,
-                                                        paddingTop:1,
+                                                        paddingTop: 1,
                                                         alignItems: 'center',
                                                         maxWidth: 300,
                                                     }}>{this.props.bottomReducer.swiperShowRadiostation?.playingSong?.artist} {this.props.bottomReducer.swiperShowRadiostation?.playingSong?.song}
@@ -360,12 +364,12 @@ export default class SwipeUpDown extends Component<Props> {
                                     </View>
                                     <TouchableOpacity
                                         style={{
-                                           // justifyContent: 'center',
+                                            // justifyContent: 'center',
                                             alignItems: 'center',
                                             height: 40,
                                             width: '15%',
-                                            
-                                             paddingTop:5
+
+                                            paddingTop: 5
                                         }}
                                         onPress={() => {
                                             this.props.toaddfavorite()
@@ -375,16 +379,15 @@ export default class SwipeUpDown extends Component<Props> {
                                             <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={21.01} width={23.61} />}
                                     </TouchableOpacity>
                                 </View>
-                               
+
                             </View>
-                            : <View><View
-
-                                style={{
+                            : <View>
+                                <Animated.View
+                                style={[{
                                     backgroundColor: this.props.backgroundColor,
-                                    // marginTop:50
-
-
-                                }}>
+                                }, {
+                                   // opacity: this.state.animHeader // Bind opacity to animated value
+                                }]}>
                                 <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}
                                 >
                                     <View
@@ -437,7 +440,7 @@ export default class SwipeUpDown extends Component<Props> {
                                             }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
                                 </View>
 
-                            </View>
+                            </Animated.View>
                                 {itemFull}
                             </View>}</View>}
 
@@ -453,7 +456,7 @@ const styles = StyleSheet.create({
 
         backgroundColor: '#ccc',
         position: 'absolute',
-        bottom: 0,
+        bottom: 50,
         left: 0,
         right: 0
     },

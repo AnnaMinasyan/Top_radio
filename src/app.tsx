@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from "react-redux"
 import { initFavorites } from './store/actions/favoritesActions';
 import { initAutoPlay } from "./store/actions/settingsAcrion"
 import { changePlayingMusic, initMenuType } from './store/actions/filterAction';
-import { changeplayItem } from './store/actions/bottomAction';
-import { init } from './utils/createAlarmClock'
+import { changeplayItem, changeSelectedRadioStation, changeMiniScreenData } from './store/actions/bottomAction';
+import { initAlarmClock } from './utils/createAlarmClock'
 import { getData, storeData } from "./utils/local_storage"
 import { Dimensions, PixelRatio } from 'react-native';
 import { setHeightWidth } from './store/actions/themeAction'
@@ -16,7 +16,7 @@ import { addFavorites } from './store/actions/favoritesActions'
 import NetInfo from "@react-native-community/netinfo";
 import { changeIsConnected } from "./store/actions/bottomAction"
 import { initTimerSleep } from "./utils/timer_sleep"
-import { selectedRadioStationSelector, swiperShowRadiostationSelector, isConnectedSelector } from "./store/selector/bottomSelector"
+import { selectedRadioStationSelector, alarmClockRadioStationSelector, isConnectedSelector } from "./store/selector/bottomSelector"
 import Modal from 'react-native-modal';
 import player from "./services/player/PlayerServices"; // 2.4.0
 interface Props {
@@ -30,28 +30,44 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     const dispatch = useDispatch()
     const [width, setWidth] = useState<number>(Dimensions.get('window').width)
     const [height, setHeight] = useState<number>(Dimensions.get('window').height)
-    const selectedRadioStation = useSelector(selectedRadioStationSelector)
-    const swiperShowRadiostation = useSelector(swiperShowRadiostationSelector)
+    const [activeRadiostation,setRadiostation]=useState<any>()
     const isConnected = useSelector(isConnectedSelector)
-    const [visibleModal, setVisibleModal] = useState<boolean>(true)
-    const [visibleModal1, setVisibleModal1] = useState<boolean>(true)
+    const alarmClockRadioStation=useSelector(alarmClockRadioStationSelector)
     const timerSleep = () => {
         console.log("sleeesssssssssssssssssssssssssssssssssp")
         player.stopPlayer()
-        // BackHandler.exitApp()
+       
+    }
+    
+   const  createAlarmClock  =(radioStation:any)=> {
+            player.open()
+            if (radioStation) {
+                let playingData = {
+                    data: radioStation,
+                    isPlayingMusic: true,
+                    activeBi: radioStation.st[0],
+                    id:radioStation.id,
+                }
+                dispatch(changeSelectedRadioStation(playingData))
+                dispatch(changeMiniScreenData(playingData))
+
+                player._startPlayMusic(playingData.data, playingData.activeBi)
+            }
     }
     useEffect(() => {
         NetInfo.fetch().then(state => {
-            //     console.log("Connection type", state.type);
-            console.log("Is connected?", state.isConnected);
-           dispatch(changeIsConnected(state.isConnected))
+            dispatch(changeIsConnected(state.isConnected))
 
-          //  setVisibleModal(!state.isConnected)
         });
         getData("timerSleepTime").then((time) => {
-            console.log("llllll", time)
             if (time) {
                 initTimerSleep(timerSleep, time)
+            }
+        })
+        getData("alarmClock").then((time) => {
+            console.log("alarmclock", time)
+            if (time) {
+                initAlarmClock(createAlarmClock, time)
             }
         })
         getData("favorites").then((res) => {

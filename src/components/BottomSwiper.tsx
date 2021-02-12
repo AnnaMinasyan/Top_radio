@@ -234,14 +234,15 @@ class BottomSwiper extends React.Component<Props, IState> {
         })
     }
     isPlaying() {
-        if (this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+        if (this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {            
             player._pouseMusic()
             this.props.onchangeSelectedRadioStationPlaying(false)
         } else if (this.props.bottomReducer.selectedRadioStation.isPlayingMusic && this.state.isRecording) {
+            this.onStopRecord()
             player._pouseMusic()
             this.props.onchangeSelectedRadioStationPlaying(false)
             this.setState({ isRecording: false })
-        } else {
+        } else {            
             this._addLookingList(this.props.bottomReducer.selectedRadioStation.data)
             player._startPlayMusic(this.props.bottomReducer.selectedRadioStation.data, this.props.bottomReducer.selectedRadioStation.activeBi)
             this.props.onchangeSelectedRadioStationPlaying(true)
@@ -513,6 +514,7 @@ class BottomSwiper extends React.Component<Props, IState> {
         this.audioRecorderPlayer.removeRecordBackListener();
         this.setState({
             recordSecs: 0,
+            isRecording:false
         });
         Alert.alert(
             "Запись завершена",
@@ -699,6 +701,10 @@ class BottomSwiper extends React.Component<Props, IState> {
                     <TouchableOpacity
                         onPress={() => {
                             if (this.props.bottomReducer.isConnected) {
+                                if(this.state.isRecording){
+                                    console.log("dhkabsakhshakj");
+                                    this.onStopRecord()
+                                }
                                 if (this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation?.id) {
                                     this.isPlaying()
                                 } else {
@@ -709,6 +715,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                                     console.log("ddd", d)
                                     this.props.onchangeSelectedRadioStation(d)
                                     this.props.onchangeMiniScreenData(d)
+                                  
                                     setTimeout(() => {
                                         this._addLookingList(this.props.bottomReducer.swiperShowRadiostation.data)
                                         player._startPlayMusic(this.props.bottomReducer.swiperShowRadiostation?.data, this.props.bottomReducer.swiperShowRadiostation?.data.st[0])
@@ -823,10 +830,12 @@ class BottomSwiper extends React.Component<Props, IState> {
                             <TouchableOpacity
                                 onPress={() => {
                                     if (this.props.bottomReducer.isConnected) {
+                                    
                                         if (this.props.bottomReducer.selectedRadioStation.id == this.props.bottomReducer.swiperShowRadiostation?.id) {
                                             this.isPlaying()
                                         } else {
                                             player._pouseMusic()
+                                           
                                             this.setState({ loading: true })
                                             let d = this.props.bottomReducer.swiperShowRadiostation
                                             d.isPlayingMusic = true
@@ -933,8 +942,10 @@ class BottomSwiper extends React.Component<Props, IState> {
                     style={{
                         //   backgroundColor:'red',
                         //height:deviceHeight-80,
-                        backgroundColor: 'rgba(255,255,255,0)',
+                        
+                      backgroundColor: 'rgba(255,255,255,0)',
                         flex: 1,
+                      //  backgroundColor:'red'
                     }} // style for swipe
                 />
 

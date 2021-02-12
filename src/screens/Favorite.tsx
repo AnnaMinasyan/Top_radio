@@ -29,7 +29,7 @@ import { createFilter } from 'react-native-search-filter';
 import { addFavorites } from '../store/actions/favoritesActions';
 import player from "../services/player/PlayerServices"
 import Bottom from "../components/Bottom"
-
+import {setFilterData} from "../store/actions/menuActions"
 const KEYS_TO_FILTERS = ['pa'];
 interface IState {
     favoriteList:[],
@@ -57,6 +57,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
     setData() {
         getData('favorites').then((favorite) => {
            this.setState({favoriteList:favorite})
+           this.props.onsetFilterData(favorite)
         })
     }
     checkIsFovorite(num: number) {        
@@ -150,7 +151,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                             <FlatList
                                 data={list}
                                 renderItem={(d) => this.renderMenuItems(d)}
-                                keyExtractor={(item:any, index:number) => item.id.toString()}
+                                keyExtractor={(item:any, index:number) => item.id?.toString()}
                                 maxToRenderPerBatch={10}
                             />
                             :
@@ -158,7 +159,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
                                 data={list}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
-                                keyExtractor={(item:any, index:number) => item.id.toString()}
+                                keyExtractor={(item:any, index:number) => item.id?.toString()}
                                 maxToRenderPerBatch={10}
                             />
                         }
@@ -202,8 +203,12 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangeSelectedRadioStation: (payload: any) => {
             dispatch(changeSelectedRadioStation(payload))
-        }, onchangeMiniScreenData: (payload: any) => {
+        },
+         onchangeMiniScreenData: (payload: any) => {
             dispatch(changeMiniScreenData(payload))
+        },
+        onsetFilterData: (payload: any) => {
+            dispatch(setFilterData(payload))
         },
     }
 }

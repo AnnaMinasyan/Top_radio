@@ -5,7 +5,8 @@ import {
     TouchableHighlight,
     FlatList,
     ActivityIndicator,
-    Dimensions
+    Dimensions,
+    KeyboardAvoidingView
 } from 'react-native';
 import player from "../services/player/PlayerServices"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
@@ -119,9 +120,8 @@ class Menu extends React.Component<IMenuProps, IState> {
         return <TouchableHighlight
             onPress={() => {
                 console.log(data);
-                
                 this._addLookingList(data.item)
-                if(this.props.bottomReducer.selectedRadioStation ){
+                if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ){
                 let radioStation = {
                     data: data.item,
                     isPlayingMusic: false,
@@ -135,14 +135,16 @@ class Menu extends React.Component<IMenuProps, IState> {
                 this.props.onchangeMiniScreenData(radioStation)
                 this.props.onchangeActiveIndex(data.index)
             }else{
+                console.log("ooooooooooooooooooooo");
+                player.open()
+
                 let radioStation = {
                     data: data.item,
                     isPlayingMusic: false,
                     activeBi:data.item.st[0],
                     id: data.item.id
                 }
-                this.props.onchangeSelectedRadioStation(radioStation)
-                    this.props.onchangeMiniScreenData(radioStation)
+                this.props.onchangeSwiperShowStation(radioStation)
                 this.props.onchangeActiveIndex(data.index)
             }
 
@@ -203,11 +205,13 @@ class Menu extends React.Component<IMenuProps, IState> {
     render() {        
         const list =this.props.menuReducer.menuData? this.props.menuReducer.menuData.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)) : []
         return (
+            <KeyboardAvoidingView>
             <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height }]}>
                 <Header
 
                     navigation={this.props.navigation}
                     onchnageSearchData={this.props.onchnageSearchData}/>
+                    
                 {!this.props.menuReducer.menuData ?
                         <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: calcHeight(150) }}>
                             <ActivityIndicator size="large" color="#0F1E45" />
@@ -240,6 +244,7 @@ class Menu extends React.Component<IMenuProps, IState> {
                             /> }
 
             </View>
+            </KeyboardAvoidingView>
         );
     }
 };

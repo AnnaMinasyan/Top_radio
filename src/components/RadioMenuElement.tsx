@@ -10,6 +10,7 @@ import SimpleImage from "./SimpleImage"
 import RedHeart from "../assets/icons/redHeart.svg"
 import global_styles from "../assets/styles/global_styles"
 import {IRadioMenuElementProps} from "../Interface"
+import { TouchableHighlight } from 'react-native-gesture-handler';
 interface IState {
     isFavorite:boolean
  }
@@ -31,7 +32,10 @@ add(){
       { backgroundColor:this.props.backColor,
         borderBottomColor:this.props.backColor=="white"?'#F3F4F5':'#1E2B4D',
       }]}>
-      <View style={styles.row}>
+    <TouchableHighlight 
+    
+    style={{height:'100%',justifyContent:'center',paddingLeft:25, }}> 
+    <View style={styles.row}>
       
       <SimpleImage size={54} image={this.props.image}/>
     
@@ -40,12 +44,13 @@ add(){
      style={[global_styles.txtTitle,{color:this.props.backColor=="white"?"#1E2B4D":"white", marginRight:20,}]}>
       {this.props.title}</Text>
       </View>
+    </TouchableHighlight>
           {this.props.showFavoriteHeart &&
            <TouchableOpacity
            onPress={()=>{
               this.add()
            }}
-           style={{ height:50,width:70,justifyContent:'center', alignItems:'center',}}
+           style={{ height:50,width:70,justifyContent:'center', alignItems:'center'}}
            >
            {this.props.isFavorite?
     
@@ -67,8 +72,7 @@ const styles = StyleSheet.create({
    flexDirection:'row',
    alignItems:'center',
     justifyContent:'space-between',
-    paddingLeft:25
-    //paddingLeft:calcWidth(29),
+    //paddingLeft:25
    
   },
   

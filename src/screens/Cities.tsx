@@ -74,7 +74,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
                      onchnageSearchData={this.props.onchnageSearchData} />
               {
                  ! this.props.citiesReducer.cities?
-                 <View style={{ justifyContent:'center', alignItems:'center', marginTop:150}}>
+                 <View style={{ justifyContent:'center', alignItems:'center', marginTop:150, height:'100%', backgroundColor:this.props.theme.backgroundColor}}>
                  <ActivityIndicator size="large" color="#0F1E45" />
                 </View>:
                      <FlatList

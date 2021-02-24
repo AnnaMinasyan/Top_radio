@@ -7,6 +7,7 @@ import {
 import { calcHeight, calcWidth } from "../assets/styles/dimensions"
 import { createFilter } from 'react-native-search-filter';
 import { debounce } from "lodash";
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
   renderSearchData(type: any): void;
@@ -40,7 +41,7 @@ class Search extends React.Component<Props, IState> {
   render() {
     return (
 
-      <View style={styles.search}>
+      <ScrollView contentContainerStyle={styles.search}    keyboardShouldPersistTaps="handled">
         <View
           style={{
             borderBottomWidth: calcHeight(2),
@@ -62,7 +63,7 @@ class Search extends React.Component<Props, IState> {
             autoFocus={true}
           />
         </View>
-      </View>
+      </ScrollView>
 
     );
   }

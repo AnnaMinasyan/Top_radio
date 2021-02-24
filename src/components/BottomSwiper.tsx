@@ -268,6 +268,8 @@ class BottomSwiper extends React.Component<Props, IState> {
             this.timerHandle = setTimeout(() => {
                 this.props.onchangeSwiperShowStation(radiostation)
                 if (!this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+                    console.log("---------------------------");
+                    
                     this.props.onchangeMiniScreenData(radiostation)
                 }
                 this.props.get_songData(radiostation)
@@ -286,7 +288,7 @@ class BottomSwiper extends React.Component<Props, IState> {
         //console.log("::::",!this.props.bottomReducer.selectedRadioStation.isPlayingMusic);
         this.setState({ loadingStation: true })
         this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex + 1)
-
+        if (this.count <this.props.menuReducer.filterData.length-1) {
         let radiostation = {
             data: this.props.menuReducer.filterData[this.props.bottomReducer.activeIndex + 1],
             isPlayingMusic: false,
@@ -299,9 +301,9 @@ class BottomSwiper extends React.Component<Props, IState> {
         this.props.onchangeSwiperShowStation(radiostation)
         this.timerHandle = setTimeout(() => {
             this.props.onchangeSwiperShowStation(radiostation)
-            // if(!this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
-            //     this.props.onchangeMiniScreenData(radiostation)
-            // }
+            if(!this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+                this.props.onchangeMiniScreenData(radiostation)
+            }
             this.props.get_songData(radiostation)
             this.setState({ loadingStation: false })
         }, 500)
@@ -311,6 +313,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                 swiperIndex: this.count + 1,
             })
         }
+    }
     }
     chooseList() {
         if (this.props.bottomReducer.selectedRadioStation && this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
@@ -582,6 +585,8 @@ class BottomSwiper extends React.Component<Props, IState> {
         }
     }
     renderBottomSheet() {
+        console.log(this.props.bottomReducer.selectedRadioStation?.id , this.props.bottomReducer.swiperShowRadiostation?.id ,this.props.bottomReducer.selectedRadioStation?.isPlayingMusic);
+        
         return <View style={{
             height: deviceHeight - 50,
 
@@ -619,9 +624,9 @@ class BottomSwiper extends React.Component<Props, IState> {
                         </View> :
                             <SimpleImage size={180} image={this.props.bottomReducer.swiperShowRadiostation.data.im} />}
                     </View>
-                    { this.props.bottomReducer.activeIndex < this.props.menuReducer.menuData.length - 1 ?
+                    { this.props.bottomReducer.activeIndex <  this.props.menuReducer.filterData.length - 1 ?
                         <TouchableOpacity style={styles.arrow}
-                            disabled={this.count == this.props.menuReducer.menuData.length - 1}
+                            disabled={this.count == this.props.menuReducer.filterData.length - 1}
                             onPress={() => {
                                 console.log("right");
                                 this.count += 1

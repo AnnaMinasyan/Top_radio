@@ -21,6 +21,8 @@ class PlayerServices implements IDATA {
         this.playerRef = value
     }
     open() {
+        console.log("oppppeeeeeen");
+        
         if(this.playerRef)
             this.playerRef.showFull()
             else 

@@ -102,7 +102,7 @@ export interface IRadioMenuElementProps {
     addInFavorite():void,
     isFavorite:boolean,
     backColor:string,
-    theme:any,
+    theme?:any,
     showFavoriteHeart?:boolean
 }
 export interface ICitiesMenuElementProps {

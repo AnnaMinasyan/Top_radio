@@ -156,11 +156,15 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
 
             }}
         >
-            <RadioMenuElement
+          <RadioMenuElement
+                showFavoriteHeart={true}
                 title={data.item.pa}
                 image={data.item.im}
+                theme={this.props.theme}
                 backColor={this.props.theme.backgroundColor}
-                addInFavorite={() => this.props.toaddfavorite(data.item)}
+                addInFavorite={() => {
+                    this.props.toaddfavorite(data.item)
+                }}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableHighlight>
     }

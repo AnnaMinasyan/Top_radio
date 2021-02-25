@@ -337,11 +337,15 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
         </View>
 
         <View style={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+  
           <DatePicker
             mode="time"
-            textColor={'black'}
+           // showTime = {{ user12hours: true }} 
+            textColor={ this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white"}
             // dividerHeight={0}
             //date={this.timeSleep}
+            fadeToColor ={this.props.theme.backgroundColor}
+            style={{width:100, height:200}}
             date={this.state.alarmClock ? this.state.alarmClock : new Date(Date.now())}
             onDateChange={(data) => {
               const alarm = {

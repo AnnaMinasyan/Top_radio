@@ -99,7 +99,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                 </View>
                
             </View>
-            <View style={{position:'absolute', bottom:0,left:-50}} >
+            <View style={{position:'absolute', bottom:-10,left:-50}} >
                     <BackImage width={380} height={300} />
                 </View>
         </ScrollView>

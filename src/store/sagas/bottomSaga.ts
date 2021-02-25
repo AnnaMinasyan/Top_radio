@@ -51,7 +51,7 @@ function* changeselectedSatationbyBi({ payload }: any) {
     }
   } catch (ex) {
     yield put(setIsConnected(false));
-    console.log(ex);
+    Alert.alert("Сервер не работает ");
   }
 }
 function* clearReducerData() {
@@ -77,6 +77,7 @@ function* addselectedRadioStation({ payload }: any) {
     // console.log( data)
   } catch (ex) {
     yield put(setIsConnected(false));
+    Alert.alert("Сервер не работает ");
     // yield put(setIsConnected(false))
   }
 }

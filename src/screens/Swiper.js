@@ -57,13 +57,14 @@ export default class SwipeUpDown extends Component<Props> {
         this.disablePressToShow = props.disablePressToShow;
         this.SWIPE_HEIGHT = props.swipeHeight;
         this._panResponder = null;
-        this.top = this.SWIPE_HEIGHT;
+        this.top =0
+       // this.top = DEVICE_HEIGHT-190;
         this.height = this.SWIPE_HEIGHT;
         this.customStyle = {
             style: {
                 bottom: 0,
-                top: this.top,
-                height: this.height
+               // top: DEVICE_HEIGHT-86,
+               // height: this.height
             }
         };
         this.checkCollapsed = true;
@@ -90,12 +91,12 @@ export default class SwipeUpDown extends Component<Props> {
     fadeOut = () => {
         Animated.timing(this.state.fadeAnim, {
             toValue: 0,
-            duration: 200,
+            duration: 100,
             useNativeDriver: true
         }).start(
             Animated.timing(this.state.animHeader, {
                 toValue: 1,
-                duration: 200,
+                duration: 100,
                 useNativeDriver: true
             }).start(
     
@@ -136,31 +137,36 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderMove(event, gestureState) {
-console.log('====',this.checkCollapsed && gestureState.dy < 0);
+     console.log(gestureState.dy);
+//console.log('====',this.checkCollapsed && gestureState.dy < 0);
         //    this.fadeOut()
-        if (gestureState.dy > 0 && !this.checkCollapsed) {
+        if (gestureState.dy > 0 && !this.checkCollapsed && gestureState.dy<DEVICE_HEIGHT) {
+            console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
             // SWIPE DOWN
+            
 
             this.customStyle.style.top = this.top + gestureState.dy;
-            this.customStyle.style.height = DEVICE_HEIGHT - gestureState.dy;
+            this.height = DEVICE_HEIGHT ;
             !this.state.collapsed && this.setState({ collapsed: true });
             this.updateNativeProps();
         }
-        else if (this.checkCollapsed && gestureState.dy < 0) {
-            console.log( this.customStyle.style.height);
+        else if (this.checkCollapsed && gestureState.dy < 0 && gestureState.dy>-(DEVICE_HEIGHT-150)) {
+            console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
+          // console.log( this.customStyle.style.top,"this.customStyle.style.top");
             // SWIPE UP
             this.top =0;
-            this.customStyle.style.top = DEVICE_HEIGHT+gestureState.dy-150;
-            this.customStyle.style.height = DEVICE_HEIGHT - gestureState.dy;
+            this.customStyle.style.top = (DEVICE_HEIGHT-190)+gestureState.dy;
+            this.customStyle.style.height = this.SWIPE_HEIGHT - gestureState.dy;
             this.fadeOut()
+                        this.state.collapsed && this.setState({ collapsed: false });
+
             this.updateNativeProps();
-            this.state.collapsed && this.setState({ collapsed: false });
         }
     }
 
     _onPanResponderRelease(event, gestureState) {
 
-        this.fadeIn()
+       this.fadeIn()
         if (gestureState.dy < -100 || gestureState.dy < 100) {
             this.showFull();
 
@@ -188,7 +194,7 @@ console.log('====',this.checkCollapsed && gestureState.dy < 0);
         this.fadeIn()
         const { onShowMini, itemMini } = this.props;
         this.customStyle.style.top = itemMini
-            ? DEVICE_HEIGHT - this.SWIPE_HEIGHT
+            ? DEVICE_HEIGHT-this.SWIPE_HEIGHT
             : DEVICE_HEIGHT;
         this.customStyle.style.height = itemMini ? this.SWIPE_HEIGHT : 0;
         this.updateNativeProps();
@@ -250,12 +256,15 @@ console.log('====',this.checkCollapsed && gestureState.dy < 0);
 
 
                 {this.state.visible ?
-                    <View style={{
+                    <View 
+                    style={{
                         height: 120,
                         paddingTop: 35,
+                        
                         //  marginTop:-35,
                     }}>
                         <Animated.View
+                    {...this._panResponder.panHandlers}
 
                             style={[styles.bottomHeader, {
                                 backgroundColor: this.props.backgroundColor == "white" ? '#EBEEF7' : '#0F1E45',
@@ -264,7 +273,7 @@ console.log('====',this.checkCollapsed && gestureState.dy < 0);
                                 opacity: this.state.fadeAnim // Bind opacity to animated value
                             }]}>
                             <View
-                                {...this._panResponder.panHandlers}
+                               
                                 onTouchStart={() => {
                                 }}
                                 style={{
@@ -382,13 +391,8 @@ console.log('====',this.checkCollapsed && gestureState.dy < 0);
 
                             </View>
                             : <View>
-                                <Animated.View
-                                style={[{
-                                    backgroundColor: this.props.backgroundColor,
-                                }, {
-                                   // opacity: this.state.animHeader // Bind opacity to animated value
-                                }]}>
-                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}
+                               
+                                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between',backgroundColor:'white' }}
                                 >
                                     <View
                                         onTouchEnd={() => {
@@ -440,10 +444,59 @@ console.log('====',this.checkCollapsed && gestureState.dy < 0);
                                             }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
                                 </View>
 
-                            </Animated.View>
                                 {itemFull}
                             </View>}</View>}
+                            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between',backgroundColor:'white',marginTop:-86 }}
+                                >
+                                    <View
+                                        onTouchEnd={() => {
+                                            this.showMini()
 
+                                        }}
+                                        style={[styles.bottomSheet, { height: calcHeight(50), backgroundColor: this.props.backgroundColor }]}>
+                                        <TouchableOpacity
+
+                                            style={styles.bottomSheet}
+                                        >
+                                            <Arrow fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : "white"} height={calcHeight(10.59)} width={calcWidth(19.8)} />
+                                        </TouchableOpacity>
+
+                                    </View>
+                                    <View  {...this._panResponder.panHandlers} onTouchEnd={() => {
+                                        this.showMini()
+
+                                    }} style={{ width: '55%', backgroundColor: this.props.backgroundColor }}  >
+                                    </View>
+                                    <TouchableOpacity
+                                        style={{
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            height: calcHeight(70),
+                                            width: '20%',
+                                            //    borderWidth:1
+                                        }}
+                                        onPress={() => {
+                                            this.props.toaddfavorite()
+                                        }}>
+                                        {this.props.checkIsFovorite() ?
+                                            <RedHeart fill='#FF5050' height={calcHeight(19)} width={calcWidth(21)} /> :
+                                            <Heart fill={this.props.backgroundColor == 'white' ? '#1E2B4D' : 'white'} height={calcHeight(21.01)} width={calcWidth(23.61)} />}
+                                    </TouchableOpacity>
+                                </View>
+                                <View
+
+                                    style={{ justifyContent: 'center', alignItems: 'center', height: 50, backgroundColor: this.props.backgroundColor }}>
+                                    {this.props.bottomReducer.swiperShowRadiostation ?
+                                        <Text
+                                            numberOfLines={1}
+                                            style={{
+                                                color: this.props.backgroundColor == "white" ? '#1E2B4D' : 'white',
+                                                fontSize: 24,
+                                                fontWeight: '500',
+                                                width: 200,
+                                                textAlign: 'center'
+                                            }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
+                                </View>
                 {itemFull}
 
             </Animated.View>

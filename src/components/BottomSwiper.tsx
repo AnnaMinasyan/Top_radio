@@ -942,7 +942,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                     backgroundColor={this.props.theme.backgroundColor}
                     toaddfavorite={() => { this.props.toaddfavorite(this.props.bottomReducer.swiperShowRadiostation.data) }}
                     onMoveUp={() => console.log('up')}
-                    swipeHeight={this.props.theme.albomeMode ? 76 : 190}
+                    swipeHeight={this.props.theme.albomeMode ? 76 : 175}
                     disablePressToShow={false} // Press item mini to show full
                     style={{
                         //   backgroundColor:'red',

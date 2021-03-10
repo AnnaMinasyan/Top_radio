@@ -1,7 +1,7 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { CitiesTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setCities} from "../actions/citiesAction"
+import {setCities,setFilterCities} from "../actions/citiesAction"
 import {setIsConnected  } from "../actions/bottomAction";
 
 
@@ -21,17 +21,29 @@ function* getCitiesData() {
 			  }
 			}
 		yield put(setCities(data))
+		
 	} catch (ex) {
 		yield put(setIsConnected(false))
 		console.log(ex);
 	
 	}
 }
-
+function* changeFilterCities({payload}:any) {
+	try {
+		yield put(setFilterCities(payload))
+	} catch (ex) {
+		yield put(setIsConnected(false))
+		console.log(ex);
+	
+	}
+}
 export function* watchCities() {
 	yield takeEvery(
 		CitiesTypes.GET_CITIES_DATA as any,
 		getCitiesData
 	)
-	
+	yield takeEvery(
+		CitiesTypes.CHANGE_FILTER_CITIES_DATA as any,
+		changeFilterCities
+	)
 }

@@ -20,11 +20,20 @@ import { NavigationScreenProp } from 'react-navigation';
 import { changeisActive } from "../store/actions/filterAction"
 import player from "../services/player/PlayerServices"
 import {changeActiveArrow} from '../store/actions/bottomAction'
+import { changeSearchData } from '../store/actions/menuActions';
+import { changeFilterGanres } from '../store/actions/ganresAction';
+import { changeFilterCities } from '../store/actions/citiesAction';
 interface Props {
     navigation: NavigationScreenProp<any, any>;
     onchangeisActive(type:string): void;
     onchangeActiveArrow(type:boolean): void;
-    filterReducer: any
+    onchangeSearchData(payload:any):void; 
+    filterReducer: any,
+    menuReducer:any,
+    ganresReducer:any,
+    citiesReducer:any,
+    onchangeFilterGanres(payload:any):void; 
+    onchangeFilterCities(payload:any):void; 
 }
 const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
     return (<View style={{height:'100%', zIndex:999}}>
@@ -41,7 +50,9 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                         onPress={() => {
                             props.onchangeisActive('all')
                             props.onchangeActiveArrow(true)
-                            props.navigation.navigate('Menu')
+                            props.navigation.navigate('Menu')  
+                                                      
+                            props.onchangeSearchData(props.menuReducer.menuData)
                         }}
                     >
                         <View style={styles.item}>
@@ -56,7 +67,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                             props.navigation.navigate('Genres')
                              props.onchangeisActive('genres')
                              props.onchangeActiveArrow(true)
-
+                            props.onchangeFilterGanres(props.ganresReducer.ganres)
                              player.close()
                         }}
                     >
@@ -72,7 +83,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                             props.navigation.navigate('Cities')
                             props.onchangeisActive('cities')
                             props.onchangeActiveArrow(true)
-
+                            props.onchangeFilterCities(props.citiesReducer.cities)
                         }}
                     >
                         <View style={styles.item}>
@@ -178,6 +189,15 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeActiveArrow: (payload: string) => {
             dispatch(changeActiveArrow(payload))
         },
+        onchangeSearchData: (payload: any) => {
+            dispatch(changeSearchData(payload));
+          },
+          onchangeFilterGanres: (payload: string) => {
+            dispatch(changeFilterGanres(payload))
+        },
+        onchangeFilterCities: (payload: string) => {
+            dispatch(changeFilterCities(payload));
+          },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawerContentComponent);

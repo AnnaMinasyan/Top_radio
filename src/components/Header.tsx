@@ -35,6 +35,9 @@ interface Props {
   title?: string,
   onchangeActiveArrow(type: boolean): void;
   onclearReducer(): void;
+    changeSearchData(text:string): void;
+    searchvalue:string,
+    clearSearchData():void
 }
 interface IState {
   hideMenuModal: boolean,
@@ -140,7 +143,6 @@ class Header extends React.Component<Props, IState> {
     </View>
   }
   render() {
-
     return (
 
       <View style={styles.header}>
@@ -176,8 +178,9 @@ class Header extends React.Component<Props, IState> {
               marginLeft: (20),
             }}>
               <Search
-                value={this.props.filterReducer.searchData}
-                renderSearchData={this.props.onchnageSearchData}
+                value={this.props.searchvalue}
+                renderSearchData={(text:string)=>{this.props.changeSearchData(text)}}
+                changeSearchData={(text:string)=>{this.props.changeSearchData(text)}}
               />
             </View>}
         </View>
@@ -186,15 +189,20 @@ class Header extends React.Component<Props, IState> {
             style={global_styles.searchbtn}
             onPress={() => {
               player.close(),
+              console.log("///////////////");
+              
+              this.props.clearSearchData()
                 this.setState({ showSearchView: !this.state.showSearchView })
             }}
           >
             {!this.state.showSearchView ? <SearchSvg width={(14.48)} height={(15)} /> :
               <TouchableOpacity
                 onPress={() => {
-              
-                  this.props.onchnageSearchData('')
-                  // this.setState({showSearchView:false})
+                  console.log("))))))))))))))))))))))))))))))))");
+                  
+                  this.props.clearSearchData()
+              //    this.props.onchnageSearchData('')
+                   this.setState({showSearchView:false})
                 }}
               >
                 <CloseSvg width={(15.48)} height={(15)} fill='#B3BACE' />

@@ -23,6 +23,7 @@ import {setFavoriteList} from "../actions/menuActions"
 function* addToFavorite({payload}:any) {
     const favorites = yield getData('favorites');
     const tmp:number[] = favorites?favorites.map((i:{id:number})=>i.id):[];
+    
     const index = tmp.indexOf(payload.id);
     if(index==-1){
         tmp.push(payload.id);
@@ -33,6 +34,7 @@ function* addToFavorite({payload}:any) {
     }
     yield storeData('favorites',favorites)
     yield  put(setFavoriteList(favorites))
+    
     yield put(setFavorites(tmp));
 
 }

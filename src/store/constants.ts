@@ -19,6 +19,8 @@ export enum MenuTypes {
     SET_ACTIVE_INITIALROUTE_NAME= '@menutypes/SET_ACTIVE_INITIALROUTE_NAME',
    CHANGE_ACTIVE_INITIALROUTE_NAME= '@menutypes/CHANGE_ACTIVE_INITIALROUTE_NAME',
     SET_FAVORITE_LIST= '@menutypes/CHANGE_ACTIVE_INITIALROUTE_NAME',
+    SET_SEARCH_DATA= '@menutypes/SET_SEARCH_DATA',
+    CHANGE_SEARCH_DATA= '@menutypes/CHANGE_SEARCH_DATA',
 }
 export enum PlayListTypes {
     SET_PLAY_LIST = '@playListtypes/SET_PLAY_LIST',
@@ -29,10 +31,14 @@ export enum PlayListTypes {
 export enum CitiesTypes {
     GET_CITIES_DATA = '@citiestypes/GET_CITIES_DATA',
     SET_CITIES_DATA = '@citiestypes/SET_CITIES_DATA',
+    SET_FILTER_CITIES_DATA = '@citiestypes/SET_FILTER_CITIES_DATA', 
+    CHANGE_FILTER_CITIES_DATA = '@citiestypes/CHANGE_FILTER_CITIES_DATA', 
 }
 export enum GanresTypes {
     GET_GANRES_DATA = '@ganresTypes/GET_GANRES_DATA',
     SET_GANRES_DATA = '@ganresTypes/SET_GANRES_DATA',
+    SET_FILTER_GANRE = '@ganresTypes/SET_FILTER_GANRE', 
+    CHANGE_FILTER_GANRE = '@ganresTypes/CHANGE_FILTER_GANRE',  
 }
 export enum FilterTypes {
     CHANGE_IS_FAVORITE = '@filterTypes/CHANGE_IS_FAVORITE',

@@ -2,14 +2,15 @@ import React from 'react';
 import {
     View,
     StyleSheet,
-    Text
+    Text,
+    TouchableHighlight
 } from 'react-native';
 import SimpleImage from "./SimpleImage"
 import ConnectSvg from "../assets/icons/connect.svg"
 import { ICitiesMenuElementProps, ICitiesConnect } from "../Interface"
 interface IState {
     isFavorite: boolean,
-    colors:string[]
+    colors:string[],
 }
 class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState> {
     constructor(props: ICitiesMenuElementProps) {
@@ -21,11 +22,17 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
     }
     render() {
         return (
-            <View style={[styles.body,
+            <TouchableHighlight
+            onPressIn={()=>{                
+                this.props.onSelect()
+            }}
+             style={[
             {backgroundColor:this.props.backColor,
+                borderBottomWidth: 1,
                 borderBottomColor:this.props.backColor=="white"?'#F3F4F5':'#1E2B4D',
             }]}>
-                <View style={styles.row}>
+               <View style={styles.body}>
+               <View style={styles.row}>
                     <SimpleImage size={54} title={this.props.info.pa} 
                  color={this.state.colors[this.props.info.id %5]}
                     />
@@ -37,7 +44,8 @@ class CitiesMenuElement extends React.Component<ICitiesMenuElementProps, IState>
                     {this.props.info.co}
                     </Text>
                 </View>
-            </View>
+               </View>
+            </TouchableHighlight>
         );
     }
 };
@@ -47,7 +55,7 @@ const styles = StyleSheet.create({
     body: {
         backgroundColor: 'white',
         height: 74,
-        borderBottomWidth: 1,
+    
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

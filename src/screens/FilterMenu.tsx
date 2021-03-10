@@ -11,7 +11,7 @@ import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/sty
 import Header from "../components/Header"
 import { IFilterMenuProps } from "../Interface"
 import player from "../services/player/PlayerServices"
-import { getMenuData, changeSwiperData } from '../store/actions/menuActions'
+import { getMenuData, changeSwiperData, changeSearchData } from '../store/actions/menuActions'
 import {
 
     getFavorites,
@@ -31,6 +31,9 @@ import { storeData, getData } from "../utils/local_storage"
 import SimpleImage from "../components/SimpleImage"
 import { connect } from "react-redux"
 import { addFavorites } from '../store/actions/favoritesActions';
+import { createFilter } from 'react-native-search-filter';
+const KEYS_TO_FILTERS = ['pa'];
+
 interface IState {
     radioList: [],
     styleView: boolean,
@@ -43,7 +46,8 @@ interface IState {
     playUrl: string,
     activBi: number,
     favoriteList: any,
-    lookingList: any
+    lookingList: any,
+    searchvalue:string
 }
 
 class FilterMenu extends React.Component<IFilterMenuProps, IState> {
@@ -63,7 +67,8 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
             playUrl: '',
             activBi: 0,
             favoriteList: [],
-            lookingList: []
+            lookingList: [],
+            searchvalue:''
 
 
         }
@@ -108,7 +113,6 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
 
         return <TouchableHighlight
             onPress={() => {
-                console.log(data, this.props.bottomReducer.selectedRadioStation);
 
                 this._addLookingList(data.item)
                 if (this.props.bottomReducer.selectedRadioStation) {
@@ -203,15 +207,30 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
             <SimpleImage size={calcWidth(98)} image={data.item.im} />
         </TouchableHighlight>
     }
+    _changeSearchData(text: string) {
 
+        this.setState({ searchvalue: text });
+        let data=this.props.menuReducer.filterData
+        data.filter((i:any)=>i.pa.toLowerCase().includes(text.toLowerCase()))
+        this.props.onchangeSearchData(data.filter((i:any)=>i.pa.toLowerCase().includes(text.toLowerCase())))
+    
+      }
+      componentWillUnmount(){
+        this.setState({ searchvalue: '' });
+      }
     render() {
-        const list = this.props.filterReducer.isFavorite ? this.state.favoriteList : this.props.menuReducer.filterData
+        const list = this.props.filterReducer.isFavorite ? this.state.favoriteList: 
+        this.props.menuReducer.searchData
         
         return (
 
 
             <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: '100%' }]}>
-                <Header navigation={this.props.navigation} type={true} />
+                <Header navigation={this.props.navigation} type={true}   changeSearchData={(text) => {
+              this._changeSearchData(text);
+            }}
+            clearSearchData={()=>{ this.setState({ searchvalue: '' });}}
+            />
 
                 {this.props.filterReducer.menuType == 1 ?
 
@@ -289,6 +308,9 @@ const mapDispatchToProps = (dispatch: any) => {
         onchangeSelectedRadioStation: (payload: any) => {
             dispatch(changeSelectedRadioStation(payload))
         },
+        onchangeSearchData: (payload: any) => {
+            dispatch(changeSearchData(payload));
+          },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FilterMenu);

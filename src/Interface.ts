@@ -28,6 +28,7 @@ import { NavigationScreenProp } from 'react-navigation';
      onchangeMiniScreenData(payload:any):void;
      onchangeSwiperShowStation(payload:any):void;
       onsetFilterData(payload:any):void;
+      onchangeSearchData(payload:any):void; 
  }
 export interface IPlayListProps {
     playListReducer:any,
@@ -55,7 +56,7 @@ export interface IFilterMenuProps {
     get_songData(payload:any):void;
     onchangeMiniScreenData(payload:any):void;
     onchangeSelectedRadioStation(payload:any):void;
-
+    onchangeSearchData(payload:any):void;
 } 
 export interface IGanresProps {
     styleView:boolean;
@@ -68,7 +69,8 @@ export interface IGanresProps {
     navigation: NavigationScreenProp<any, any>;
     theme:any,
     onchangeHeaderText(type:string):void;
-    bottomReducer:any
+    bottomReducer:any,
+    onchangeFilterGanres(type:any):void;
 
 } 
 export interface ISettings {
@@ -94,7 +96,8 @@ export interface ICitiesProps {
     navigation: NavigationScreenProp<any, any>;
     filterReducer: any,
     onchnageSearchData(type:any):void;
-    theme:any
+    onchangeFilterCities(type:any):void;
+    theme:any,
 }
 export interface IRadioMenuElementProps {
     title:string,
@@ -108,7 +111,8 @@ export interface IRadioMenuElementProps {
 export interface ICitiesMenuElementProps {
     info:ICitiesConnect,
     backColor:string
-    
+        onSelect():void
+
 }
 export interface ICitiesConnect{
     pa:string,

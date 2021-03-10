@@ -18,7 +18,8 @@ export interface IMenuState {
     headertext: string,
     activeInitialRouteName:string
     lookingList:any,
-    favoriteList:any
+    favoriteList:any,
+    searchData:any
 }
 
 
@@ -33,11 +34,14 @@ export const initialState: IMenuState = {
     headertext: "",
     activeInitialRouteName:'Menu',
     lookingList:[],
-    favoriteList:[]
+    favoriteList:[],
+    searchData:[]
 }
 const menuReducer = (state = initialState, action: IReduxAction<MenuTypes>) => {
 
     switch (action.type) {
+        case MenuTypes.SET_SEARCH_DATA:
+            return { ...state, searchData: action.payload }
         case MenuTypes.SET_ACTIVE_INITIALROUTE_NAME:
             return { ...state, activeInitialRouteName: action.payload }
         case MenuTypes.SET_MENU_DATA:

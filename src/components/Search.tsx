@@ -11,7 +11,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props {
   renderSearchData(type: any): void;
-  value: string
+  value: string;
+  changeSearchData(type: string): void;
 }
 interface IState {
   searchTerm: any
@@ -30,8 +31,8 @@ class Search extends React.Component<Props, IState> {
   }
 
   onChangeText(text:string) {
-    this.props.renderSearchData(text)
-    console.log("debouncing",text);
+    //this.props.renderSearchData(text)
+   this.props.changeSearchData(text)
   }
   searchUpdated(term: any) {
     this.setState({ searchTerm: term })
@@ -39,6 +40,7 @@ class Search extends React.Component<Props, IState> {
  
  
   render() {
+    
     return (
 
       <ScrollView contentContainerStyle={styles.search}    keyboardShouldPersistTaps="handled">

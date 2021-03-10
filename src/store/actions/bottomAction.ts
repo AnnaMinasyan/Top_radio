@@ -91,7 +91,6 @@ export const getSongData = (payload: any) => {
 	};
 };
 export const setSelectedRadioStation = (payload: any) => {
-	console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
 		return {
 			type: BottomType.SET_SELECTED_RADIOSTATION,
 			payload

@@ -35,7 +35,8 @@ interface IState {
     favoriteList:[],
     playItem:[],
     activBi:number,
-    playUrl:string
+    playUrl:string,
+    searchvalue:string
 }
 
 class Favorite extends React.Component<IMenuProps, IState> {
@@ -46,7 +47,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
             favoriteList:[],
             playItem:[],
             activBi:0,
-            playUrl:''
+            playUrl:'',
+            searchvalue:''
         }
         const unsubscribe = props.navigation.addListener('focus', () => {
             
@@ -56,9 +58,11 @@ class Favorite extends React.Component<IMenuProps, IState> {
     }
     setData() {
         getData('favorites').then((favorite) => {
+            
            this.setState({favoriteList:favorite})
            this.props.onsetFilterData(favorite)
         })
+        this.setState({ searchvalue: '' });
     }
     checkIsFovorite(num: number) {        
             return this.props.favorites.includes(num)
@@ -83,8 +87,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
         })
     }
     renderMenuItems(data: any) {
-     //   console.log("ddddddddddddd",data)
-        // if(this.checkIsFovorite(data.item.id))  {
+        if(data.item.id && this.checkIsFovorite(data.item.id))  {
             return <TouchableHighlight
             onPress={() => {
                 let radioStation = {
@@ -109,13 +112,13 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 addInFavorite={() => this.props.toaddfavorite(data.item)}
                 isFavorite={this.checkIsFovorite(data.item.id)} />
         </TouchableHighlight>
-        // }   else{
-        //     return null
-        // }
+        }   else{
+            return null
+        }
        
     }
     renderMenuItemsMenuStyle2(data: any) {
-        if(this.checkIsFovorite(data.item.id))  {
+        if( data.item.id &&this.checkIsFovorite(data.item.id))  {
         return <TouchableHighlight
             onPress={() => {
                 let radioStation = {
@@ -137,26 +140,38 @@ class Favorite extends React.Component<IMenuProps, IState> {
             return null
         } 
     }
+    _changeSearchData(text: string) {       
+        this.setState({ searchvalue: text });
+        let data = this.props.menuReducer.favoriteList;
+        data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()));
+        this.setState(
+         {favoriteList: data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()))}
+        );
+      
+    }
     render() {
-        const list = this.props.menuReducer.favoriteList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS))
-     //   console.log("list", this.props.menuReducer.favoriteList)
         return (
             <View style={[styles.container, {backgroundColor: this.props.theme.backgroundColor}]}>
                 
                     <Header 
                     navigation={this.props.navigation} 
                      onchnageSearchData={this.props.onchnageSearchData}
+                     changeSearchData={(text) => {
+                        this._changeSearchData(text);
+                      }}
+                      searchvalue={this.state.searchvalue}
+
                      />
-                        { this.props.menuReducer.favoriteList && this.props.filterReducer.menuType==1 ?
+                        { this.state.favoriteList && this.props.filterReducer.menuType==1 ?
                             <FlatList
-                                data={list}
+                                data={this.state.favoriteList}
                                 renderItem={(d) => this.renderMenuItems(d)}
                                 keyExtractor={(item:any, index:number) => item.id?.toString()}
                                 maxToRenderPerBatch={10}
                             />
                             :
                             <FlatList
-                                data={list}
+                                data={this.state.favoriteList}
                                 renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                                 contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap', paddingLeft: calcWidth(12), paddingRight: calcWidth(16), justifyContent: 'center' }}
                                 keyExtractor={(item:any, index:number) => item.id?.toString()}

@@ -108,14 +108,14 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
                     <Navigator />
                 </NavigationContainer>
             </SafeAreaView>
-            : <View>
+            : (<View>
                 <Image style={{ resizeMode: 'center' }} source={require('./assets/images/launch_screen.png')} />
                 <Modal
                     isVisible={!isConnected}
                     animationIn={'slideInLeft'}
                     animationOut={'slideOutRight'}
                     backdropOpacity={0.2}
-                    onBackdropPress={() => { setVisibleModal(false) }} >
+                    onBackdropPress={() => {  }} >
                     {<View style={{ backgroundColor: 'white', height: 150, padding: 10 }}>
                         <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 8 }}>Нет подключения к интернету </Text>
                         <Text style={{ fontSize: 16, lineHeight: 20 }}>Подключите соединение или мобильный интернет для прослушивания радиостанций </Text>
@@ -129,10 +129,10 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
                             style={{ marginTop: 25, width: '100%', alignItems: 'flex-end' }}
                         >
                             <Text style={{ color: 'green', fontSize: 17 }}>Переподключится</Text>
-                        </TouchableOpacity>
+                       </TouchableOpacity>
                     </View>}
                 </Modal>
-            </View>
+            </View>)
     );
 };
 export default MyApp;

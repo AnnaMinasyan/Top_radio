@@ -64,7 +64,7 @@ function* clearReducerData() {
 }
 function* addselectedRadioStation({ payload }: any) {
   try {
-    player.open();
+    
     yield put(setSelectedRadioStation(payload));
     if (payload.data.pl) {
       const data = yield auth.getPlayItemType(payload.data.pl);
@@ -100,7 +100,6 @@ function* onGetSongData({ payload }: any) {
   try {
     if (payload) {
       const res = yield auth.getPlayItemType(payload.data.pl);
-      console.log("reeessss", res);
       if (res) {
         yield put(setSwiperPlayingSong(res.playList[0]));
       }

@@ -57,6 +57,7 @@
     "react-native-roll-picker-line-control": "^1.0.8",
     "react-native-safe-area-context": "^3.0.2",
     "react-native-screens": "^2.8.0",
+    "react-native-search-box": "^0.0.20",
     "react-native-search-filter": "^0.1.5",
     "react-native-simple-bottom-sheet": "^1.0.1",
     "react-native-smooth-picker": "^1.1.2",

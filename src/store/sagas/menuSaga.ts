@@ -2,7 +2,8 @@ import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
 import {setMenuData, setPlayingData,setFilterData,setHeaderText,
-	setInitialRouteName} from "../actions/menuActions"
+	setInitialRouteName,
+	setSearchData} from "../actions/menuActions"
 import {setSwiperData,setLookingList} from "../actions/menuActions"
 
 import {setIsConnected  } from "../actions/bottomAction";
@@ -14,7 +15,8 @@ function* getMenuData() {
 		yield put(setMenuData(data))
 		yield put(setFilterData(data))
 		yield put(setSwiperData(swiper))
-	
+		yield put(setSearchData(data))
+
 	} catch (ex) {
 		yield put(setIsConnected(false))
 
@@ -29,9 +31,9 @@ function* changeInitialRouteName({payload}:any) {
 	}
 }
 function* changeLookingList({payload}:any) {
-
 	try {
 		yield put(setLookingList(payload.reverse()))
+
 	} catch (ex) {
 		console.log(ex);
 	}
@@ -52,8 +54,10 @@ function* onChangeSwiperData({payload}:any) {
 	} 
 }
 function* onChangeFilterData({payload}:any) {
-    try {
+    try {		
 		yield put(setFilterData(payload))
+		yield put(setSearchData(payload))
+
 	} catch (ex) {
 		console.log(ex);
 	} 
@@ -61,6 +65,15 @@ function* onChangeFilterData({payload}:any) {
 function* onChangeHeaderText({payload}:any) {
     try {
 		yield put(setHeaderText(payload))
+	} catch (ex) {
+		console.log(ex);
+	} 
+}
+function* changeSearchData({payload}:any) {
+    try {
+		console.log("jjjjjjjjjjjjjjjjjjjj");
+		
+		yield put(setSearchData(payload))
 	} catch (ex) {
 		console.log(ex);
 	} 
@@ -93,6 +106,10 @@ export function* watchMenuType() {
 	yield takeEvery(
 		MenuTypes.CHANGE_LOOKING_LIST as any,
 		changeLookingList
+	)
+	yield takeEvery(
+		MenuTypes.CHANGE_SEARCH_DATA as any,
+		changeSearchData
 	)
 }
 

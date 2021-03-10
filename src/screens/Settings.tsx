@@ -303,7 +303,6 @@ class Settings extends React.Component<ISettings, IState> {
     </View>
   }
   timerSleep = () => {
-    console.log("sleeesssssssssssssssssssssssssssssssssp")
     player.stopPlayer()
      this.props.onchangeSelectedRadioStationPlaying(false)
 

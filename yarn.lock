@@ -8275,6 +8275,13 @@
   "resolved" "https://registry.npmjs.org/react-native-screens/-/react-native-screens-2.8.0.tgz"
   "version" "2.8.0"
 
+"react-native-search-box@^0.0.20":
+  "integrity" "sha512-ynyqX2wXynzgzt9wshBm6aE+/1EDOzCv49QcyGzoIsed3pgirzW4ealHLjFEkFos3Eb7RP5PriUGnjhyH1plLQ=="
+  "resolved" "https://registry.npmjs.org/react-native-search-box/-/react-native-search-box-0.0.20.tgz"
+  "version" "0.0.20"
+  dependencies:
+    "prop-types" "^15.5.10"
+
 "react-native-search-filter@^0.1.5":
   "integrity" "sha512-uzA7/8XL93ez/uRKVjX2SxO0TrHi9awMWZxNMFWwisYvUDm2RaxuTc7TgAEOrogp+qhCYr3guet/A90AHqMSCg=="
   "resolved" "https://registry.npmjs.org/react-native-search-filter/-/react-native-search-filter-0.1.5.tgz"

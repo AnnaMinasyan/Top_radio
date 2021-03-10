@@ -137,11 +137,11 @@ export default class SwipeUpDown extends Component<Props> {
     }
 
     _onPanResponderMove(event, gestureState) {
-     console.log(gestureState.dy);
+    // console.log(gestureState.dy);
 //console.log('====',this.checkCollapsed && gestureState.dy < 0);
         //    this.fadeOut()
         if (gestureState.dy > 0 && !this.checkCollapsed && gestureState.dy<DEVICE_HEIGHT) {
-            console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+           // console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
             // SWIPE DOWN
             
 
@@ -151,7 +151,7 @@ export default class SwipeUpDown extends Component<Props> {
             this.updateNativeProps();
         }
         else if (this.checkCollapsed && gestureState.dy < 0 && gestureState.dy>-(DEVICE_HEIGHT-150)) {
-            console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
+         //   console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
           // console.log( this.customStyle.style.top,"this.customStyle.style.top");
             // SWIPE UP
             this.top =0;
@@ -238,20 +238,7 @@ export default class SwipeUpDown extends Component<Props> {
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
         return (
-            <Animated.View
-
-                ref={ref => (this.viewRef = ref)}
-
-                style={[
-                    styles.wrapSwipe,
-                    {
-                        height: 86,
-                        marginTop: MARGIN_TOP + 56,
-                       
-                    },
-                    !itemMini && collapsed && { marginBottom: -100 },
-                    style
-                ]}
+            <View
             >
 
 
@@ -327,7 +314,7 @@ export default class SwipeUpDown extends Component<Props> {
                                     style={{
                                         backgroundColor: this.props.backgroundColor,
                                         alignItems: 'center',
-                                        height: 222,
+                                        height: 300,
                                         resizeMode: 'stretch'
 
                                     }}
@@ -446,7 +433,7 @@ export default class SwipeUpDown extends Component<Props> {
 
                                 {itemFull}
                             </View>}</View>}
-                            <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between',backgroundColor:'white',marginTop:-86 }}
+                            {/* <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between',backgroundColor:'white',marginTop:-86 }}
                                 >
                                     <View
                                         onTouchEnd={() => {
@@ -496,10 +483,10 @@ export default class SwipeUpDown extends Component<Props> {
                                                 width: 200,
                                                 textAlign: 'center'
                                             }}>{this.props.bottomReducer.swiperShowRadiostation.data.pa}</Text> : null}
-                                </View>
+                                </View> */}
                 {itemFull}
 
-            </Animated.View>
+            </View>
         );
     }
 };

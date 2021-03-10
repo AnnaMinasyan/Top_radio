@@ -49,7 +49,8 @@ interface IState {
     playUrl: string,
     activBi: number,
     favoriteList: any,
-    searchData: any | null
+    searchvalue:string,
+    lookingData:any
 }
 
 class LookingMenu extends React.Component<IMenuProps, IState> {
@@ -65,7 +66,8 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
             playUrl: '',
             activBi: 0,
             favoriteList: [],
-            searchData: null
+            searchvalue: '',
+            lookingData:[]
         }
         const unsubscribe = props.navigation.addListener('focus', () => {
             this.setData()
@@ -77,8 +79,10 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
         })
         getData('isLooking').then((looking) => {
             this.props.onchangeLookingList(looking)
+            this.setState({lookingData:looking})
         })
         this.props.ongetMenuData()
+        
     }
     componentDidMount() {
         navigationService.setNavigator(this.props.navigation)
@@ -143,7 +147,6 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
                     }
                     this.props.onchangeSelectedRadioStation(radioStation)
                     //
-                    console.log("!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic",!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic)
                     // if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
                     //     console.log(";;;;;;;;;;;;;;;;;")
                     //     this.props.onchangeMiniScreenData(radioStation)
@@ -188,14 +191,29 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
             <SimpleImage size={98} image={data.item.im} />
         </TouchableHighlight>
     }
-
+    _changeSearchData(text: string) {
+       
+          this.setState({ searchvalue: text });
+          let data = this.props.menuReducer.lookingList;
+          data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()));
+          this.setState(
+           {lookingData: data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()))}
+          );
+        
+      }
     render() {
-        const list = this.props.menuReducer.lookingList? this.props.menuReducer.lookingList.filter(createFilter(this.props.filterReducer.searchData, KEYS_TO_FILTERS)):[]
+        
         return (
             <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height,paddingBottom:25 }]}>
                 <Header
+                   clearSearchData={()=>{ this.setState({ searchvalue: '' });}}
+
                     navigation={this.props.navigation}
-                    onchnageSearchData={this.props.onchnageSearchData}
+                    changeSearchData={(text) => {
+                        this._changeSearchData(text);
+                      }}
+                      searchvalue={this.state.searchvalue}
+
                     title={'Просмотренные'}/>
 
                     {!this.props.menuReducer.menuData ?
@@ -204,13 +222,13 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
                     </View> :
                     this.props.filterReducer.menuType == 1 ?
                         <FlatList
-                            data={list}
+                            data={this.state.lookingData}
                             renderItem={(d) => this.renderMenuItems(d)}
                             keyExtractor={(item: any, index: number) => item.id.toString()}
                             maxToRenderPerBatch={10}
                         />:
                         <FlatList
-                            data={list}
+                            data={this.state.lookingData}
                             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
                             contentContainerStyle={{
                                 width: '100%',

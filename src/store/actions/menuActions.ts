@@ -97,8 +97,23 @@ export const changeLookingList = (payload: any) => {
 	};
 };
 export const setFavoriteList = (payload: any) => {
+	
 	return {
 		type: MenuTypes.SET_FAVORITE_LIST,
+		payload
+	};
+};
+export const changeSearchData = (payload: any) => {
+	
+	return {
+		type: MenuTypes.CHANGE_SEARCH_DATA,
+		payload
+	};
+};
+export const setSearchData = (payload: any) => {
+	
+	return {
+		type: MenuTypes.SET_SEARCH_DATA,
 		payload
 	};
 };

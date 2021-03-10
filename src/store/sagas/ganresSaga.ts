@@ -1,7 +1,7 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { GanresTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setGanres} from "../actions/ganresAction"
+import {setFilterGanres, setGanres} from "../actions/ganresAction"
 import {setIsConnected  } from "../actions/bottomAction";
 
 
@@ -29,11 +29,24 @@ function* getGanresData() {
 	
 	}
 }
-
+function* changeFilerGenre({payload}:any) {
+	try {
+		console.log('payload',payload);
+		
+	yield put(setFilterGanres(payload))
+	} catch (ex) {
+		yield put(setIsConnected(false))
+		console.log(ex);
+	}
+}
 export function* watchGanres() {
 	yield takeEvery(
 		GanresTypes.GET_GANRES_DATA as any,
 		getGanresData
 	)
 	
+	yield takeEvery(
+		GanresTypes.CHANGE_FILTER_GANRE as any,
+		changeFilerGenre
+	)
 }

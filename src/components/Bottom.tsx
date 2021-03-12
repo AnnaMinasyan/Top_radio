@@ -825,7 +825,6 @@ closed() {
             this.isPortrait();
         })
 
-console.log("--------------------------------------",this.isPlayingMusic());
 
         return (
 

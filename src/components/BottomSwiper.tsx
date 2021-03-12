@@ -68,7 +68,7 @@ import player from "../services/player/PlayerServices";
 import RNFS from "react-native-fs";
 import navigationService from "../navigation/NavigationService";
 var RNFileManager = require("react-native-file-manager");
-import SwipeUpDown from "../screens/Swiper2";
+import SwipeUpDown from "../screens/Swiper";
 import { getData, storeData } from "../utils/local_storage";
 import Modal from "react-native-modal";
 import NetInfo from "@react-native-community/netinfo";
@@ -179,7 +179,7 @@ class BottomSwiper extends React.Component<Props, IState> {
   async componentDidMount() {
     TrackPlayer.addEventListener("remote-stop", async () => {
       console.log("stop");
-      player.init(null);
+
       this.props.onchangeSelectedRadioStationPlaying(false);
       BackHandler.exitApp();
       await TrackPlayer.stop();
@@ -215,9 +215,7 @@ class BottomSwiper extends React.Component<Props, IState> {
     await TrackPlayer.reset();
     await TrackPlayer.play();
 
-    this.props.onchangeMiniScreenData(
-      this.props.bottomReducer.selectedRadioStation
-    );
+  
   }
   checkIsFovorite(num: number) {
     return this.props.favorites.includes(num);
@@ -244,11 +242,11 @@ class BottomSwiper extends React.Component<Props, IState> {
     });
   }
   isPlaying() {
-    if (this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+    if (this.props.bottomReducer.selectedRadioStation?.isPlayingMusic) {
       player._pouseMusic();
       this.props.onchangeSelectedRadioStationPlaying(false);
     } else if (
-      this.props.bottomReducer.selectedRadioStation.isPlayingMusic &&
+      this.props.bottomReducer.selectedRadioStation?.isPlayingMusic &&
       this.state.isRecording
     ) {
       this.onStopRecord();
@@ -256,10 +254,10 @@ class BottomSwiper extends React.Component<Props, IState> {
       this.props.onchangeSelectedRadioStationPlaying(false);
       this.setState({ isRecording: false });
     } else {
-      this._addLookingList(this.props.bottomReducer.selectedRadioStation.data);
+      this._addLookingList(this.props.bottomReducer.selectedRadioStation?.data);
       player._startPlayMusic(
-        this.props.bottomReducer.selectedRadioStation.data,
-        this.props.bottomReducer.selectedRadioStation.activeBi
+        this.props.bottomReducer.selectedRadioStation?.data,
+        this.props.bottomReducer.selectedRadioStation?.activeBi
       );
       this.props.onchangeSelectedRadioStationPlaying(true);
     }
@@ -285,7 +283,7 @@ class BottomSwiper extends React.Component<Props, IState> {
       this.props.onchangeSwiperShowStation(radiostation);
       this.timerHandle = setTimeout(() => {
         this.props.onchangeSwiperShowStation(radiostation);
-        if (!this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+        if (!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic) {
           console.log("---------------------------");
 
           this.props.onchangeMiniScreenData(radiostation);
@@ -305,7 +303,7 @@ class BottomSwiper extends React.Component<Props, IState> {
   swipeRight() {
     //console.log("::::",!this.props.bottomReducer.selectedRadioStation.isPlayingMusic);
     this.setState({ loadingStation: true });
-    this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex + 1);
+    // this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex + 1);
     if (this.count < this.props.menuReducer.filterData.length - 1) {
       let radiostation = {
         data: this.props.menuReducer.filterData[
@@ -317,13 +315,20 @@ class BottomSwiper extends React.Component<Props, IState> {
           this.props.bottomReducer.activeIndex + 1
         ].id,
       };
+      console.log("araj",this.timerHandle);
       if (this.timerHandle) {
         clearTimeout(this.timerHandle);
       }
-      this.props.onchangeSwiperShowStation(radiostation);
+      console.log(this.timerHandle);
+      
+      this.props.onchangeSwiperShowStation({
+        radioStation: radiostation,
+        index: this.props.bottomReducer.activeIndex + 1,
+        isPlayingMusic: false,
+      });
       this.timerHandle = setTimeout(() => {
-        this.props.onchangeSwiperShowStation(radiostation);
-        if (!this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+        
+        if (!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic) {
           this.props.onchangeMiniScreenData(radiostation);
         }
         this.props.get_songData(radiostation);
@@ -382,7 +387,7 @@ class BottomSwiper extends React.Component<Props, IState> {
           onPress={() => {
             if (this.props.bottomReducer.isConnected) {
               if (
-                this.props.bottomReducer.selectedRadioStation?.id ==
+                this.props.bottomReducer.selectedRadioStation.id ==
                 this.props.bottomReducer.miniScreenData.id
               ) {
                 this.isPlaying();
@@ -450,15 +455,15 @@ class BottomSwiper extends React.Component<Props, IState> {
     this.setState({ loading: true });
 
     if (
-      this.props.bottomReducer.swiperShowRadiostation.id ==
-      this.props.bottomReducer.selectedRadioStation.id
+      this.props.bottomReducer.swiperShowRadiostation?.id ==
+      this.props.bottomReducer.selectedRadioStation?.id
     ) {
       this.props.onchangeActiveBi(item);
       player._pouseMusic();
       setTimeout(() => {
         player._startPlayMusic(
-          this.props.bottomReducer.swiperShowRadiostation.data,
-          this.props.bottomReducer.swiperShowRadiostation.activeBi
+          this.props.bottomReducer.swiperShowRadiostation?.data,
+          this.props.bottomReducer.swiperShowRadiostation?.activeBi
         );
         this.props.onchangeSelectedRadioStationPlaying(true);
         this.setState({ loading: false });
@@ -474,11 +479,11 @@ class BottomSwiper extends React.Component<Props, IState> {
 
       setTimeout(() => {
         this._addLookingList(
-          this.props.bottomReducer.swiperShowRadiostation.data
+          this.props.bottomReducer.swiperShowRadiostation?.data
         );
         player._startPlayMusic(
-          this.props.bottomReducer.swiperShowRadiostation.data,
-          this.props.bottomReducer.swiperShowRadiostation.activeBi
+          this.props.bottomReducer.swiperShowRadiostation?.data,
+          this.props.bottomReducer.swiperShowRadiostation?.activeBi
         );
         this.props.onchangeSelectedRadioStationPlaying(true);
         this.setState({ loading: false });
@@ -663,22 +668,15 @@ class BottomSwiper extends React.Component<Props, IState> {
   }
   showActiveBi() {
     if (
-      this.props.bottomReducer.swiperShowRadiostation.id ==
-      this.props.bottomReducer.selectedRadioStation.id
+      this.props.bottomReducer.swiperShowRadiostation?.id ==
+      this.props.bottomReducer.selectedRadioStation?.id
     ) {
-      return this.props.bottomReducer.selectedRadioStation.activeBi.bi;
+      return this.props.bottomReducer.selectedRadioStation?.activeBi.bi;
     } else {
-      return this.props.bottomReducer.swiperShowRadiostation.data.st[0].bi;
+      return this.props.bottomReducer.swiperShowRadiostation?.data.st[0].bi;
     }
   }
   renderBottomSheet() {
-    console.log(
-      this.props.bottomReducer.swiperShowRadiostation.data.id,this.props.bottomReducer.selectedRadioStation?.id ==
-      this.props.bottomReducer.swiperShowRadiostation?.id &&
-    this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
-    this.props.bottomReducer.selectedRadioStation?.id,  this.props.bottomReducer.swiperShowRadiostation?.id,  this.props.bottomReducer.selectedRadioStation.isPlayingMusic
-    );
-
     return (
       <View
         style={{
@@ -731,17 +729,17 @@ class BottomSwiper extends React.Component<Props, IState> {
             )}
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
-              {this.state.loadingStation ? (
-                <View style={styles.swiperImage}>
-                  <ActivityIndicator size={100} color="#EBEEF7" />
-                </View>
-              ) : (
+              {this.props.bottomReducer.swiperShowRadiostation ? (
                 <SimpleImage
                   size={180}
                   image={
                     this.props.bottomReducer.swiperShowRadiostation.data.im
                   }
                 />
+              ) : (
+                <View style={styles.swiperImage}>
+                  <ActivityIndicator size={100} color="#EBEEF7" />
+                </View>
               )}
             </View>
             {this.props.bottomReducer.activeIndex <
@@ -811,25 +809,26 @@ class BottomSwiper extends React.Component<Props, IState> {
               marginTop: 23,
             }}
           >
-            {this.props.bottomReducer.swiperShowRadiostation.data.st.map(
-              (item: any, index: number) => {
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      this.changeRadioStancia(item);
-                    }}
-                    style={
-                      item.bi == this.showActiveBi()
-                        ? [styles.numbers, { marginRight: 15 }]
-                        : styles.activeNumbers
-                    }
-                  >
-                    <Text style={styles.activenumber}>{item.bi}</Text>
-                  </TouchableOpacity>
-                );
-              }
-            )}
+            {this.props.bottomReducer.swiperShowRadiostation &&
+              this.props.bottomReducer.swiperShowRadiostation.data.st.map(
+                (item: any, index: number) => {
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      onPress={() => {
+                        this.changeRadioStancia(item);
+                      }}
+                      style={
+                        item.bi == this.showActiveBi()
+                          ? [styles.numbers, { marginRight: 15 }]
+                          : styles.activeNumbers
+                      }
+                    >
+                      <Text style={styles.activenumber}>{item.bi}</Text>
+                    </TouchableOpacity>
+                  );
+                }
+              )}
           </View>
         </View>
         <View
@@ -911,7 +910,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                     this.onStopRecord();
                   }
                   if (
-                    this.props.bottomReducer.selectedRadioStation.id ==
+                    this.props.bottomReducer.selectedRadioStation?.id ==
                     this.props.bottomReducer.swiperShowRadiostation?.id
                   ) {
                     this.isPlaying();
@@ -926,7 +925,7 @@ class BottomSwiper extends React.Component<Props, IState> {
 
                     setTimeout(() => {
                       this._addLookingList(
-                        this.props.bottomReducer.swiperShowRadiostation.data
+                        this.props.bottomReducer.swiperShowRadiostation?.data
                       );
                       player._startPlayMusic(
                         this.props.bottomReducer.swiperShowRadiostation?.data,
@@ -974,7 +973,7 @@ class BottomSwiper extends React.Component<Props, IState> {
           )}
 
           <TouchableOpacity
-            disabled={!this.props.bottomReducer.swiperShowRadiostation.data.pl}
+            disabled={!this.props.bottomReducer.swiperShowRadiostation?.data.pl}
             style={[
               styles.btnrecord,
               {
@@ -1154,7 +1153,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                   onPress={() => {
                     if (this.props.bottomReducer.isConnected) {
                       if (
-                        this.props.bottomReducer.selectedRadioStation.id ==
+                        this.props.bottomReducer.selectedRadioStation?.id ==
                         this.props.bottomReducer.swiperShowRadiostation?.id
                       ) {
                         this.isPlaying();
@@ -1168,7 +1167,8 @@ class BottomSwiper extends React.Component<Props, IState> {
                         this.props.onchangeMiniScreenData(d);
                         setTimeout(() => {
                           this._addLookingList(
-                            this.props.bottomReducer.swiperShowRadiostation.data
+                            this.props.bottomReducer.swiperShowRadiostation
+                              ?.data
                           );
 
                           player._startPlayMusic(
@@ -1208,7 +1208,7 @@ class BottomSwiper extends React.Component<Props, IState> {
                 </TouchableOpacity>
                 <TouchableOpacity
                   disabled={
-                    !this.props.bottomReducer.swiperShowRadiostation.data.pl
+                    !this.props.bottomReducer.swiperShowRadiostation?.data.pl
                   }
                   style={[
                     styles.btnrecord,
@@ -1268,80 +1268,91 @@ class BottomSwiper extends React.Component<Props, IState> {
       </View>
     );
   }
-  componentWillUnmount() {
-    player.init(null);
-  }
 
   render() {
-    if (this.props.bottomReducer.swiperShowRadiostation) {
-      return (
-        <SwipeUpDown
-          hasRef={(ref: any) => {
-            if (!this.state.headerHeight) {
-              player.init(ref);
-              this.setState({ headerHeight: true });
-            }
-          }}
-          anim={this.anim}
-          animation={"easeInEaseOut"}
-          // onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}
-          orientation={this.props.theme.albomeMode}
-          itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
-          itemFull={
-            this.props.theme.albomeMode
-              ? this.renderBottomSheetHorizontal()
-              : this.renderBottomSheet()
-          } // Pass props component when show full
-          onShowMini={() => {
-            if (this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
-              this.props.onchangeSwiperShowStation(
-                this.props.bottomReducer.selectedRadioStation
-              );
-            }
-            Animated.timing(this.anim, {
-              toValue: 1,
-              duration: 50,
-              useNativeDriver: true,
-            }).start();
-          }}
-          onShowFull={() => {
-            Animated.timing(this.anim, {
-              toValue: 0,
-              duration: 50,
-              useNativeDriver: true,
-            }).start();
-          }}
-          closed={() => {
-            this.closed();
-          }}
-          checkIsFovorite={() =>
-            this.checkIsFovorite(
-              this.props.bottomReducer.swiperShowRadiostation.id
-            )
+    //  if (this.props.bottomReducer.swiperShowRadiostation) {
+    return (
+      <SwipeUpDown
+        hasRef={(ref: any) => {
+          if (!this.state.headerHeight) {
+            player.init(ref);
+            this.setState({ headerHeight: true });
           }
-          bottomReducer={this.props.bottomReducer}
-          backgroundColor={this.props.theme.backgroundColor}
-          toaddfavorite={() => {
-            this.props.toaddfavorite(
-              this.props.bottomReducer.swiperShowRadiostation.data
+        }}
+        isPlaying={()=>this.isPlaying()}
+        onStopRecord={()=>this.onStopRecord()}
+        onStartRecord={()=>{this.onStartRecord()}}
+        _addLookingList={(v)=>{this._addLookingList(v)}}
+        _navigatePlayList={()=>{this._navigatePlayList()}}
+        changeRadioStancia={(v)=>{this.changeRadioStancia(v)}}
+        anim={this.anim}
+        animation={"easeInEaseOut"}
+        onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}
+        orientation={this.props.theme.albomeMode}
+        itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
+        itemFull={
+          this.props.theme.albomeMode
+            ? this.renderBottomSheetHorizontal()
+            : this.renderBottomSheet()
+        } // Pass props component when show full
+        onShowMini={() => {
+          console.log(";;;;;;;;;djddddddddddddddddddddddddddddd",this.props.bottomReducer.selectedRadioStation);
+          
+          if (this.props.bottomReducer.selectedRadioStation&& this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+            console.log(";;;;;;;;;djfffffffffffffffffffffffdddddddddd",this.props.bottomReducer.miniScreenData);
+            let info={
+              radioStation:this.props.bottomReducer.selectedRadioStation,
+              index:this.props.bottomReducer.selectedRadioStation.index,
+              isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+            }
+            this.props.onchangeSwiperShowStation(
+              info
             );
-          }}
-          onMoveUp={() => console.log("up")}
-          swipeHeight={this.props.theme.albomeMode ? 76 : 175}
-          disablePressToShow={false} // Press item mini to show full
-          style={{
-            //   backgroundColor:'red',
-            //height:deviceHeight-80,
+          }
+          Animated.timing(this.anim, {
+            toValue: 1,
+            duration: 50,
+            useNativeDriver: true,
+          }).start();
+        }}
+        onShowFull={() => {
+          Animated.timing(this.anim, {
+            toValue: 0,
+            duration: 50,
+            useNativeDriver: true,
+          }).start();
+        }}
+        closed={() => {
+          this.closed();
+        }}
+        checkIsFovorite={() =>
+          this.checkIsFovorite(
+            this.props.bottomReducer.swiperShowRadiostation?.id
+          )
+        }
+        bottomReducer={this.props.bottomReducer}
+        backgroundColor={this.props.theme.backgroundColor}
+        toaddfavorite={() => {
+          this.props.toaddfavorite(
+            this.props.bottomReducer.swiperShowRadiostation.data
+          );
+        }}
+        onMoveUp={() => console.log("up")}
+        swipeHeight={this.props.theme.albomeMode ? 76 : 175}
+        disablePressToShow={false} // Press item mini to show full
+        style={{
+          //   backgroundColor:'red',
+          //height:deviceHeight-80,
 
-            backgroundColor: "rgba(255,255,255,0)",
-            flex: 1,
-            //  backgroundColor:'red'
-          }} // style for swipe
-        />
-      );
-    } else {
-      return null;
-    }
+          backgroundColor: "rgba(255,255,255,0)",
+          flex: 1,
+          //  backgroundColor:'red'
+        }} // style for swipe
+      />
+    );
+    // } else {
+    //   return null;
+    // }
   }
 }
 const mapStateToProps = ({

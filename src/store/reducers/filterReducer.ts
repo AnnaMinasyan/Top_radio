@@ -16,7 +16,8 @@ export interface IFilterState {
     searchData: any ,
     isPlayingMusic:boolean
     menuType:number,
-    playListType:any
+    playListType:any,
+    activeIndex:number|undefined
 }
 
 
@@ -30,7 +31,8 @@ export const initialState: IFilterState = {
     searchData: '',
     isPlayingMusic:false,
     menuType:0,
-    playListType:{}
+    playListType:{},
+    activeIndex:undefined
 }
 const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) => {
     
@@ -44,7 +46,8 @@ const filterReducer = (state = initialState, action: IReduxAction<FilterTypes>) 
             return { ...state, isActive:  action.payload  }
         case FilterTypes.CHANGE_SHEARCH_DATA:
             return { ...state, searchData: action.payload }
-
+            case FilterTypes.SET_ACTIVE_INDEX:
+                return { ...state, activeIndex: action.payload }
 
 
         default:

@@ -189,7 +189,6 @@ class Header extends React.Component<Props, IState> {
             style={global_styles.searchbtn}
             onPress={() => {
               player.close(),
-              console.log("///////////////");
               
               this.props.clearSearchData()
                 this.setState({ showSearchView: !this.state.showSearchView })
@@ -198,8 +197,6 @@ class Header extends React.Component<Props, IState> {
             {!this.state.showSearchView ? <SearchSvg width={(14.48)} height={(15)} /> :
               <TouchableOpacity
                 onPress={() => {
-                  console.log("))))))))))))))))))))))))))))))))");
-                  
                   this.props.clearSearchData()
               //    this.props.onchnageSearchData('')
                    this.setState({showSearchView:false})

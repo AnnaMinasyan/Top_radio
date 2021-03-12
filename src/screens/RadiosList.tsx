@@ -125,32 +125,23 @@ class Menu extends React.Component<IMenuProps, IState> {
     return (
       <TouchableHighlight
         onPress={() => {
+          // console.log("::::::::::::::::::::::");
+      
           this._addLookingList(data.item);
-          if (!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic) {
-            let radioStation = {
-              data: data.item,
-              isPlayingMusic: false,
-              activeBi: data.item.st[0],
-              id: data.item.id,
-            };
-
-           player.open();
-            // this.props.onchangeSwiperShowStation(radioStation)
-            this.props.onchangeSelectedRadioStation(radioStation);
-            this.props.onchangeMiniScreenData(radioStation);
-            this.props.onchangeActiveIndex(data.index);
-          } else {
-       player.open();
-
-            let radioStation = {
-              data: data.item,
-              isPlayingMusic: false,
-              activeBi: data.item.st[0],
-              id: data.item.id,
-            };
-            this.props.onchangeSwiperShowStation(radioStation);
-            this.props.onchangeActiveIndex(data.index);
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: false,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index:data.index,
+          };
+          let info={
+            radioStation:radioStation,
+            index:data.index,
+            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
           }
+          player.open(info);
+          
         }}
       >
         <RadioMenuElement
@@ -224,7 +215,6 @@ class Menu extends React.Component<IMenuProps, IState> {
 
   }
   render() {    
-    console.log(this.state.searchvalue,this.props.menuReducer.searchData.length);
     
     return (
       <KeyboardAvoidingView>
@@ -245,7 +235,7 @@ class Menu extends React.Component<IMenuProps, IState> {
             }}
             navigation={this.props.navigation}
             onchnageSearchData={this.props.onchnageSearchData}
-            clearSearchData={()=>{ console.log("++++++++++++++++++++++++");
+            clearSearchData={()=>{ 
              this._changeSearchData ("")}}
           />
 

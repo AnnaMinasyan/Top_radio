@@ -17,7 +17,6 @@ export interface IBottomState {
     playItem: any,
     playingMusicArtistSong: any,
     playMusicData: any,
-    activeIndex: number,
     activeBi: number,
     selectedRadioStation: ISelectedRadioStation | null,
     swiperShowRadiostation: ISelectedRadioStation | null,
@@ -31,7 +30,6 @@ export const initialState: IBottomState = {
     playItem: null,
     playingMusicArtistSong: {},
     playMusicData: {},
-    activeIndex: 0,
     activeBi: 0,
     selectedRadioStation: null,
     swiperShowRadiostation: null,
@@ -41,6 +39,7 @@ export const initialState: IBottomState = {
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
+
 
     switch (action.type) {
         case BottomType.SET_IS_CONNECTED:
@@ -80,8 +79,7 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
         case BottomType.SET_PLAYING_DATA:
             return { ...state, playMusicData: action.payload }
 
-        case BottomType.SET_ACTIVE_INDEX:
-            return { ...state, activeIndex: action.payload }
+       
         case BottomType.SET_ACTIVE_BI:
             return { ...state, activeBi: action.payload }
 

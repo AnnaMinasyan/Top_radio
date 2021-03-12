@@ -51,7 +51,9 @@ export enum FilterTypes {
     SET_MENU_TYPE = '@filterTypes/CHANGE_MENU_TYPE',
     INIT_MENU_TYPE = '@filterTypes/INIT_MENU_TYPE',
     GET_MENU_TYPE = '@filterTypes/GET_MENU_TYPE',
-    SET_PLAYLIST_TYPE = '@filterTypes/SET_PLAYLIST_TYPE'
+    SET_PLAYLIST_TYPE = '@filterTypes/SET_PLAYLIST_TYPE',
+    CHANGE_ACTIVE_INDEX = '@filterTypes/CHANGE_ACTIVE_INDEX',
+    SET_ACTIVE_INDEX = '@filterTypes/SET_ACTIVE_INDEX',
 }
 export enum ThemeTypes {
     CHANGE_BACKGROUNDCOLOR = '@themeTypes/CHANGE_BACKGROUNDCOLOR',
@@ -81,8 +83,7 @@ export enum BottomType {
     CHANGE_PLAYING_DATA = '@bottomtypes/CHANGE_PLAYING_DATA',
     SET_PLAYING_DATA = '@bottomtypes/SET_PLAYING_DATA',
     CHANGE_PLAY_ITEM_ARTIST_SONG = '@bottomtypes/CHANGE_PLAY_ITEM_ARTIST_SONG',
-    CHANGE_ACTIVE_INDEX = '@bottomtypes/CHANGE_ACTIVE_INDEX',
-    SET_ACTIVE_INDEX = '@bottomtypes/SET_ACTIVE_INDEX',
+  
     SET_ACTIVE_BI = '@bottomtypes/SET_ACTIVE_BI',
     CHANGE_ACTIVE_BI = '@bottomtypes/CHANGE_ACTIVE_BI',
     GET_SONG_DATA = '@bottomtypes/GET_SONG_DATA',

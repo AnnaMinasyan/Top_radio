@@ -64,3 +64,19 @@ export const setMenuType = (payload:number) => {
 		payload
 	};
 };
+export const changeActiveIndex = (payload: number) => {
+
+	return {
+		type: FilterTypes.CHANGE_ACTIVE_INDEX,
+		payload
+
+	};
+}; export const setActiveIndex = (payload: number) => {
+
+
+	return {
+		type: FilterTypes.SET_ACTIVE_INDEX,
+		payload
+
+	};
+};

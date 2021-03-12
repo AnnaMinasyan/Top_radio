@@ -26,7 +26,8 @@ import {
 import SimpleImage from "../components/SimpleImage";
 import Modal from "react-native-modal";
 import NetInfo from "@react-native-community/netinfo";
-
+import { connect } from "react-redux";
+import { changeSwiperShowStation } from "../store/actions/bottomAction";
 const MARGIN_TOP = Platform.OS === "ios" ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get("window").height - MARGIN_TOP;
 type Props = {
@@ -46,8 +47,9 @@ type Props = {
   animation?: "linear" | "spring" | "easeInEaseOut" | "none",
   orientation: String,
   onchangeIsConnected: (v) => void,
+  onchangeSwiperShowStation: (v) => void,
 };
-export default class SwipeUpDown extends Component<Props> {
+class SwipeUpDown extends Component<Props> {
   static defautProps = {
     disablePressToShow: false,
   };
@@ -143,7 +145,6 @@ export default class SwipeUpDown extends Component<Props> {
       !this.checkCollapsed &&
       gestureState.dy < DEVICE_HEIGHT
     ) {
-      console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
       // SWIPE DOWN
 
       this.customStyle.style.top = this.top + gestureState.dy;
@@ -155,42 +156,46 @@ export default class SwipeUpDown extends Component<Props> {
       gestureState.dy < 0 &&
       gestureState.dy > -(DEVICE_HEIGHT - 150)
     ) {
-    
       // console.log( this.customStyle.style.top,"this.customStyle.style.top");
       // SWIPE UP
       this.top = 0;
       this.customStyle.style.top = DEVICE_HEIGHT - 189.1 + gestureState.dy;
       this.customStyle.style.height = this.SWIPE_HEIGHT - gestureState.dy;
-      this.fadeOut();
+      // this.fadeOut();
       this.state.collapsed && this.setState({ collapsed: false });
-      console.log(
-        "uppppppppppppppppppppppppppppppppppppppp",
-        this.customStyle.style.height = this.SWIPE_HEIGHT - gestureState.dy
-      );
+
       this.updateNativeProps();
     }
   }
 
   _onPanResponderRelease(event, gestureState) {
-    this.fadeIn();
+
     if (gestureState.dy < -100 || gestureState.dy < 100) {
       this.showFull();
     } else {
+      this.fadeIn();
       this.showMini();
     }
+    
   }
 
-  showFull() {
-    // this.fadeOut()
+  showFull(value) {
+   console.log(":::::::::::::::::::::::");
     const { onShowFull } = this.props;
     this.customStyle.style.top = 0;
     this.customStyle.style.height = DEVICE_HEIGHT;
 
     this.updateNativeProps();
-    this.state.collapsed && this.setState({ collapsed: false });
+    // this.state.collapsed && this.setState({ collapsed: false });
     this.checkCollapsed = false;
     onShowFull && onShowFull();
-
+    if (value) {
+      setTimeout(() => {
+        if (!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic) {
+          this.props.onchangeSwiperShowStation(value);
+        }
+      }, 100);
+    }
     this.setState({ visible: false });
   }
 
@@ -287,9 +292,9 @@ export default class SwipeUpDown extends Component<Props> {
                   opacity: this.state.fadeAnim, // Bind opacity to animated value
                 },
               ]}
+              onTouchEnd={() => {this.showFull()}}
             >
               <View
-                onTouchStart={() => {}}
                 style={{
                   height: 86,
                   width: "70%",
@@ -697,7 +702,31 @@ export default class SwipeUpDown extends Component<Props> {
     );
   }
 }
-
+const mapStateToProps = ({
+  filterReducer,
+  menuReducer,
+  favorites,
+  theme,
+  settingsReducer,
+  bottomReducer,
+}) => {
+  return {
+    filterReducer,
+    menuReducer,
+    favorites,
+    theme,
+    settingsReducer,
+    bottomReducer,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onchangeSwiperShowStation: (payload) => {
+      dispatch(changeSwiperShowStation(payload));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(SwipeUpDown);
 const styles = StyleSheet.create({
   wrapSwipe: {
     backgroundColor: "#ccc",

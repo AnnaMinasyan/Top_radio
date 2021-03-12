@@ -7,13 +7,12 @@ import {
   take,
   takeEvery,
 } from "redux-saga/effects";
-import { BottomType } from "../constants";
+import { BottomType, FilterTypes } from "../constants";
 import auth from "../../services/api/auth";
 import {
   setplayItem,
   setplayItemArtistandSong,
   setPlayingData,
-  setActiveIndex,
   setMiniScreenData,
   setSelectedRadioStation,
   setSelectedRadioStationPlaying,
@@ -23,7 +22,7 @@ import {
   setActiveArrow,
   setIsConnected,
 } from "../actions/bottomAction";
-
+import { setActiveIndex } from "../actions/filterAction";
 import { changePlayingMusic } from "../actions/filterAction";
 import player from "../../services/player/PlayerServices";
 import { storeData, getData } from "../../utils/local_storage";
@@ -64,7 +63,6 @@ function* clearReducerData() {
 }
 function* addselectedRadioStation({ payload }: any) {
   try {
-    
     yield put(setSelectedRadioStation(payload));
     if (payload.data.pl) {
       const data = yield auth.getPlayItemType(payload.data.pl);
@@ -98,6 +96,8 @@ function* changeSwiperActiveBi({ payload }: any) {
 }
 function* onGetSongData({ payload }: any) {
   try {
+    console.log(";payloadpayload", payload);
+
     if (payload) {
       const res = yield auth.getPlayItemType(payload.data.pl);
       if (res) {
@@ -142,7 +142,29 @@ function* onchangeActiveIndex({ payload }: any) {
 }
 function* changeSwiperShowStation({ payload }: any) {
   try {
-    yield put(setSwiperShowStation(payload));
+    yield put(setSwiperShowStation(undefined));
+
+
+    yield put(setSwiperShowStation(payload.radioStation));
+    yield put(setActiveIndex(payload.index));
+    if (!payload.isPlayingMusic) {
+    
+
+      yield put(setMiniScreenData(payload.radioStation));
+       yield put(setSelectedRadioStation(payload.radioStation));
+    }
+    if (payload.radioStation) {
+
+      // const res = yield auth.getPlayItemType(payload.radioStation.data.pl);
+      // if (res) {
+      //   yield put(setSwiperPlayingSong(res.playList[0]));
+      // }
+      const autoplay = yield getData("autoPlay");
+
+      if (autoplay) {
+        yield put(changePlayingMusic(true));
+      }
+    }
   } catch (ex) {
     console.log(ex);
   }
@@ -175,7 +197,7 @@ export function* watchBottomType() {
     BottomType.CHANGE_PLAY_ITEM_ARTIST_SONG as any,
     onChangeplayItemArtistandSon
   );
-  yield takeEvery(BottomType.CHANGE_ACTIVE_INDEX as any, onchangeActiveIndex);
+  yield takeEvery(FilterTypes.CHANGE_ACTIVE_INDEX as any, onchangeActiveIndex);
 
   yield takeEvery(BottomType.GET_SONG_DATA as any, onGetSongData);
   yield takeEvery(

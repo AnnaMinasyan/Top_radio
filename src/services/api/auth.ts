@@ -55,6 +55,7 @@ class Static implements IDATA {
     }
     async getPlayItemType(payload: any) {
         try {
+            console.log('geeeeeeeeeeeeeeeeeeeeet')
             
             const data = moment().format('YYYY-MM-DD')
             if(payload)

@@ -38,7 +38,11 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         player.stopPlayer()
        
     }
-    
+    useEffect(()=>{
+        console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+return console.log("closeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+
+    },[])
    const  createAlarmClock  =(radioStation:any)=> {
             player.open()
             if (radioStation) {
@@ -80,14 +84,9 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         dispatch(initMenuType())
         dispatch(initAutoPlay())
         dispatch(setHeightWidth({ height: height, width: width }))
-        return player.init(null)
+     
     }, [isConnected])
-    const changeActivePanel = () => {
-        getData('alarmClock').then((time) => {
-            dispatch(changeplayItem(time.playItem))
-            dispatch(changePlayingMusic(true))
-        })
-    }
+
 
     Dimensions.addEventListener('change', (value: any) => {
 

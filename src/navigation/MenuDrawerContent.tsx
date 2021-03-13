@@ -34,6 +34,7 @@ interface Props {
     citiesReducer:any,
     onchangeFilterGanres(payload:any):void; 
     onchangeFilterCities(payload:any):void; 
+    bottomReducer:any
 }
 const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
     return (<View style={{height:'100%', zIndex:999}}>
@@ -68,7 +69,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                              props.onchangeisActive('genres')
                              props.onchangeActiveArrow(true)
                             props.onchangeFilterGanres(props.ganresReducer.ganres)
-                             player.close()
+                        props.bottomReducer.swiperShowRadiostation && player.close()
                         }}
                     >
                         <View style={styles.item}>
@@ -84,6 +85,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                             props.onchangeisActive('cities')
                             props.onchangeActiveArrow(true)
                             props.onchangeFilterCities(props.citiesReducer.cities)
+                            props.bottomReducer.swiperShowRadiostation && player.close()
                         }}
                     >
                         <View style={styles.item}>

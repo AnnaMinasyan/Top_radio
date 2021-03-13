@@ -118,45 +118,21 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
         return <TouchableHighlight
             onPress={() => {
 
-                if(this.props.bottomReducer.selectedRadioStation ){
-                    let radioStation = {
-                        data: data.item,
-                        isPlayingMusic: false,
-                        activeBi:data.item.st[0],
-                        id: data.item.id
-                    }
-                    player.open()
-                    this.props.onchangeSwiperShowStation(radioStation)
-                    //
-                    // console.log("!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic",!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic)
-                    // if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
-                    //     console.log(";;;;;;;;;;;;;;;;;")
-                    //     this.props.onchangeMiniScreenData(radioStation)
-                    //     this.props.onchangeSwiperShowStation(radioStation)
-                    // }else{
-                    //
-                    // }
-                    this.setState({swipeablePanelActive:true})
-                    this.props.onchangeActiveIndex(data.index)
-                }else{
-                    let radioStation = {
-                        data: data.item,
-                        isPlayingMusic: false,
-                        activeBi:data.item.st[0],
-                        id: data.item.id
-                    }
-                    this.props.onchangeSelectedRadioStation(radioStation)
-                    //
-                    // if(!this.props.bottomReducer.selectedRadioStation?.isPlayingMusic){
-                    //     console.log(";;;;;;;;;;;;;;;;;")
-                    //     this.props.onchangeMiniScreenData(radioStation)
-                    //     this.props.onchangeSwiperShowStation(radioStation)
-                    // }else{
-                    //
-                    // }
-                    this.setState({swipeablePanelActive:true})
-                    this.props.onchangeActiveIndex(data.index)
-                }
+              
+          this._addLookingList(data.item);
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: false,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index:data.index,
+          };
+          let info={
+            radioStation:radioStation,
+            index:data.index,
+            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+          }
+          player.open(info);
 
             }}>
             <RadioMenuElement
@@ -174,19 +150,21 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
     renderMenuItemsMenuStyle2(data: any) {
         return <TouchableHighlight
             onPress={() => {
-                let radioStation = {
-                    data: data.item,
-                    isPlayingMusic: false,
-                    activeBi:data.item.st[0],
-                    id: data.item.id
-                }
-                this._addLookingList(data.item)
-                this.props.onchangeSelectedRadioStation(radioStation)
-                if(this.props.bottomReducer.selectedRadioStation && !this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
-                    this.props.onchangeMiniScreenData(radioStation)
-                }
-                player.open()
-                this.props.onchangeActiveIndex(data.index)
+                
+          this._addLookingList(data.item);
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: false,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index:data.index,
+          };
+          let info={
+            radioStation:radioStation,
+            index:data.index,
+            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+          }
+          player.open(info);
             }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
             <SimpleImage size={98} image={data.item.im} />
         </TouchableHighlight>

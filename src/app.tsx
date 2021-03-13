@@ -38,11 +38,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         player.stopPlayer()
        
     }
-    useEffect(()=>{
-        console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-return console.log("closeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-
-    },[])
+ 
    const  createAlarmClock  =(radioStation:any)=> {
             player.open()
             if (radioStation) {

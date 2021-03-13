@@ -90,18 +90,21 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if(data.item.id && this.checkIsFovorite(data.item.id))  {
             return <TouchableHighlight
             onPress={() => {
-                let radioStation = {
-                    data: data.item,
-                    isPlayingMusic: false,
-                    activeBi: data.item.st[0],
-                    id: data.item.id
-                }
-                this._addLookingList(data.item)
-                this.props.onchangeSelectedRadioStation(radioStation)
-                this.props.get_songData(radioStation)
-                this.props.onchangeMiniScreenData(radioStation)
-                player.open()
-                this.props.onchangeActiveIndex(data.index)
+               
+          this._addLookingList(data.item);
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: false,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index:data.index,
+          };
+          let info={
+            radioStation:radioStation,
+            index:data.index,
+            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+          }
+          player.open(info);
             }}
         >
             <RadioMenuElement
@@ -121,18 +124,21 @@ class Favorite extends React.Component<IMenuProps, IState> {
         if( data.item.id &&this.checkIsFovorite(data.item.id))  {
         return <TouchableHighlight
             onPress={() => {
-                let radioStation = {
-                    data: data.item,
-                    isPlayingMusic: false,
-                    activeBi:data.item.st[0],
-                    id: data.item.id
-                }
-                this._addLookingList(data.item)
-                this.props.onchangeSelectedRadioStation(radioStation)
-                this.props.get_songData(radioStation)
-                this.props.onchangeMiniScreenData(radioStation)
-                player.open()
-                this.props.onchangeActiveIndex(data.index)
+              
+          this._addLookingList(data.item);
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: false,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index:data.index,
+          };
+          let info={
+            radioStation:radioStation,
+            index:data.index,
+            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+          }
+          player.open(info);
             }} style={{ padding: calcWidth(8), }}>
             <SimpleImage size={calcWidth(98)}  image={data.item.im}/>
         </TouchableHighlight>

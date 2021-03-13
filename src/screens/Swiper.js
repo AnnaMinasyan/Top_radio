@@ -205,8 +205,6 @@ class SwipeUpDown extends Component<Props> {
   }
 
   showFull(value) {
-    console.log("::::", value);
-
      this.fadeOut()
     const { onShowFull } = this.props;
     this.customStyle.style.top = 0;
@@ -295,7 +293,6 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   swipeLeft() {
-    this.setState({ loadingStation: true });
     if (this.count > 0) {
       let radiostation = {
         data: this.props.menuReducer.filterData[
@@ -318,16 +315,11 @@ class SwipeUpDown extends Component<Props> {
         index: this.props.filterReducer.activeIndex - 1,
         isPlayingMusic: this.props.bottomReducer.selectedRadioStation.isPlayingMusic,
       });
-      this.timerHandle = setTimeout(() => {
-        this.props.onchangeSwiperShowStation({
-          radioStation: radiostation,
-          index: this.props.filterReducer.activeIndex ,
-          isPlayingMusic: this.props.bottomReducer.selectedRadioStation.isPlayingMusic,
-        });
+     this.timerHandle = setTimeout(() => {
+   
       
         this.props.get_songData(radiostation);
-        this.setState({ loadingStation: false });
-      }, 500);
+      }, 800);
 
       if (this.props.settingsReducer.autoPlay) {
         this.setState({
@@ -337,9 +329,6 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   swipeRight() {
-    //console.log("::::",!this.props.bottomReducer.selectedRadioStation.isPlayingMusic);
-    this.setState({ loadingStation: true });
-    // this.props.onchangeActiveIndex(this.props.bottomReducer.activeIndex + 1);
     if (this.count < this.props.menuReducer.filterData.length - 1) {
       let radiostation = {
         data: this.props.menuReducer.filterData[
@@ -362,16 +351,14 @@ class SwipeUpDown extends Component<Props> {
         index: this.props.filterReducer.activeIndex + 1,
         isPlayingMusic: this.props.bottomReducer.selectedRadioStation.isPlayingMusic,
       });
+      
       this.timerHandle = setTimeout(() => {
-        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++");
-        this.props.onchangeSwiperShowStation({
-          radioStation: radiostation,
-          index: this.props.filterReducer.activeIndex ,
-          isPlayingMusic: this.props.bottomReducer.selectedRadioStation.isPlayingMusic,
-        });
+        // this.setState({loading:true})
+       
         this.props.get_songData(radiostation);
-        this.setState({ loadingStation: false });
-      }, 500);
+      
+        
+      }, 800);
 
       if (this.props.settingsReducer.autoPlay) {
         this.setState({
@@ -718,13 +705,14 @@ class SwipeUpDown extends Component<Props> {
     
     const { itemMini, itemFull, style } = this.props;
     const { collapsed } = this.state;
+    
     return (
       <Animated.View
         ref={(ref) => (this.viewRef = ref)}
         style={[
           styles.wrapSwipe,
           {
-            height: 60,
+            height: 0,
             marginTop: MARGIN_TOP + 56,
           },
           !itemMini && collapsed && { marginBottom: -100 },
@@ -733,7 +721,7 @@ class SwipeUpDown extends Component<Props> {
       >
    
           <Animated.View
-            {...this._panResponder.panHandlers}
+         {...this._panResponder.panHandlers}
             style={[
               styles.bottomHeader,
               {
@@ -819,8 +807,11 @@ class SwipeUpDown extends Component<Props> {
         
         
           
-              <View   {...this._panResponder.panHandlers} style={{ height: deviceHeight ,width:'100%', position:'absolute' }}>
+              <View   
+          
+              style={{ height: deviceHeight ,width:'100%', position:'absolute' }}>
                 <View
+                   {...this._panResponder.panHandlers} 
                   style={{
                     flexDirection: "row",
                    
@@ -829,7 +820,9 @@ class SwipeUpDown extends Component<Props> {
                   }}
                 >
                  
-                    <TouchableOpacity style={{height:calcHeight(70), width:'80%',  justifyContent:'center', paddingLeft:20}}>
+                    <View   
+ 
+                     style={{height:calcHeight(70), width:'80%',  justifyContent:'center', paddingLeft:20}}>
                       <Arrow
                         fill={
                           this.props.backgroundColor == "white"
@@ -839,7 +832,7 @@ class SwipeUpDown extends Component<Props> {
                         height={calcHeight(10.59)}
                         width={calcWidth(19.8)}
                       />
-                    </TouchableOpacity>
+                    </View>
                  
                   <TouchableOpacity
                     style={{
@@ -848,7 +841,8 @@ class SwipeUpDown extends Component<Props> {
                       height: calcHeight(70),
                       width: "20%",
                          backgroundColor:this.props.backgroundColor,
-                   
+                      position:'absolute',
+                      right:0
                     }}
                     onPress={() => {
                       console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
@@ -875,6 +869,7 @@ class SwipeUpDown extends Component<Props> {
                   </TouchableOpacity>
                 </View>
                 <View
+                {...this._panResponder.panHandlers} 
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
@@ -973,7 +968,7 @@ const styles = StyleSheet.create({
   wrapSwipe: {
     backgroundColor: "#ccc",
     position: "absolute",
-    bottom: 50,
+    bottom: 0,
     left: 0,
     right: 0,
   },
@@ -1233,12 +1228,13 @@ const styles = StyleSheet.create({
   },
   arrow: {
     //  paddingLeft: calcWidth(22),
-    height: calcHeight(70),
+    height: calcHeight(170),
     marginTop: -20,
     justifyContent: "center",
     width: calcWidth(80),
     zIndex: 1,
     alignItems: "center",
+   // backgroundColor:'red'
   },
   recordingTime: {
     marginTop: calcHeight(10),

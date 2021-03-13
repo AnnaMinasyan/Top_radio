@@ -90,8 +90,6 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const setSelectedRadioStationPlaying = (payload: any) => {
-
-		
 		return {
 			type: BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC,
 			payload
@@ -99,8 +97,6 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const changeSelectedRadioStationPlaying = (payload: any) => {
-
-		
 		return {
 			type: BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC,
 			payload
@@ -108,8 +104,6 @@ export const setSelectedRadioStation = (payload: any) => {
 		};
 	};
 	export const setSwiperShowStation = (payload: any) => {
-console.log("payloadpayloadpayload",payload);
-
 		return {
 			type: BottomType.SET_SWIPERSHOW_RADIOSTATION,
 			payload
@@ -124,7 +118,6 @@ console.log("payloadpayloadpayload",payload);
 		};
 	};
 	export const setSwiperPlayingSong= (payload: any) => {
-
 		return {
 			type: BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG,
 			payload
@@ -139,8 +132,6 @@ console.log("payloadpayloadpayload",payload);
 		};
 	};
 	export const setSwiperActiveBi= (payload: any) => {
-
-		
 		return {
 			type: BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI,
 			payload
@@ -154,9 +145,7 @@ console.log("payloadpayloadpayload",payload);
 	
 		};
 	};
-	export const changeActiveArrow= (payload: any) => {
-
-		
+	export const changeActiveArrow= (payload: any) => {	
 		return {
 			type: BottomType.CHANGE_ACTIVEARROW,
 			payload

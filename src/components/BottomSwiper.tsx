@@ -1274,10 +1274,10 @@ class BottomSwiper extends React.Component<Props, IState> {
     return (
       <SwipeUpDown
         hasRef={(ref: any) => {
-          if (!this.state.headerHeight) {
+         // if (!this.state.headerHeight) {
             player.init(ref);
-            this.setState({ headerHeight: true });
-          }
+          //  this.setState({ headerHeight: true });
+         // }
         }}
         isPlaying={()=>this.isPlaying()}
         onStopRecord={()=>this.onStopRecord()}
@@ -1296,10 +1296,8 @@ class BottomSwiper extends React.Component<Props, IState> {
             : this.renderBottomSheet()
         } // Pass props component when show full
         onShowMini={() => {
-          console.log(";;;;;;;;;djddddddddddddddddddddddddddddd",this.props.bottomReducer.selectedRadioStation);
           
           if (this.props.bottomReducer.selectedRadioStation&& this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
-            console.log(";;;;;;;;;djfffffffffffffffffffffffdddddddddd",this.props.bottomReducer.miniScreenData);
             let info={
               radioStation:this.props.bottomReducer.selectedRadioStation,
               index:this.props.bottomReducer.selectedRadioStation.index,

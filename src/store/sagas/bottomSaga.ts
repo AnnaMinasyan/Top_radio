@@ -96,8 +96,6 @@ function* changeSwiperActiveBi({ payload }: any) {
 }
 function* onGetSongData({ payload }: any) {
   try {
-    console.log(";payloadpayload", payload);
-
     if (payload) {
       const res = yield auth.getPlayItemType(payload.data.pl);
       if (res) {
@@ -142,23 +140,15 @@ function* onchangeActiveIndex({ payload }: any) {
 }
 function* changeSwiperShowStation({ payload }: any) {
   try {
-    yield put(setSwiperShowStation(undefined));
 
 
     yield put(setSwiperShowStation(payload.radioStation));
     yield put(setActiveIndex(payload.index));
     if (!payload.isPlayingMusic) {
-    
-
       yield put(setMiniScreenData(payload.radioStation));
        yield put(setSelectedRadioStation(payload.radioStation));
     }
     if (payload.radioStation) {
-
-      // const res = yield auth.getPlayItemType(payload.radioStation.data.pl);
-      // if (res) {
-      //   yield put(setSwiperPlayingSong(res.playList[0]));
-      // }
       const autoplay = yield getData("autoPlay");
 
       if (autoplay) {

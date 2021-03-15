@@ -46,7 +46,7 @@ import Stop from "../assets/icons/stop.svg";
 import player from "../services/player/PlayerServices";
 
 const MARGIN_TOP = Platform.OS === "ios" ? 20 : 0;
-const DEVICE_HEIGHT = Dimensions.get("window").height - MARGIN_TOP;
+const DEVICE_HEIGHT = Dimensions.get("window").height+calcHeight(50)
 type Props = {
   hasRef?: () => void,
   swipeHeight?: number,
@@ -721,13 +721,13 @@ class SwipeUpDown extends Component<Props> {
       >
    
           <Animated.View
-         {...this._panResponder.panHandlers}
+        
             style={[
               styles.bottomHeader,
               {
                 backgroundColor:
                   this.props.backgroundColor == "white" ? "#EBEEF7" : "#0F1E45",
-                  marginTop:calcHeight(10)
+                
               },
               {
                 opacity: this.state.fadeAnim, // Bind opacity to animated value
@@ -736,6 +736,7 @@ class SwipeUpDown extends Component<Props> {
             visible={this.state.visible}
           >
             <View
+             {...this._panResponder.panHandlers}
               onTouchStart={() => {}}
               style={{
                 height: 86,
@@ -971,6 +972,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    flex:1
   },
   bottomSheet: {
  
@@ -990,9 +992,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 12.35,
     elevation: 25,
-    //     marginTop: -28,
     zIndex: 1,
-    //  paddingTop:calcHeight(10)
   },
   swiperImage: {
     backgroundColor: "white",

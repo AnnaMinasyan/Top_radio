@@ -68,7 +68,7 @@ import player from "../services/player/PlayerServices";
 import RNFS from "react-native-fs";
 import navigationService from "../navigation/NavigationService";
 var RNFileManager = require("react-native-file-manager");
-import SwipeUpDown from "../screens/Swiper2";
+import SwipeUpDown from "../screens/Swiper";
 import { getData, storeData } from "../utils/local_storage";
 import Modal from "react-native-modal";
 import NetInfo from "@react-native-community/netinfo";
@@ -1341,8 +1341,10 @@ class BottomSwiper extends React.Component<Props, IState> {
         swipeHeight={this.props.theme.albomeMode ? 60 : 175}
         disablePressToShow={false} // Press item mini to show full
         style={{
-          backgroundColor:this.props.theme.backgroundColor,
+          backgroundColor:'yellow',
           flex: 1,
+          position: "absolute",
+          bottom: 0,
         }}
       />
     );

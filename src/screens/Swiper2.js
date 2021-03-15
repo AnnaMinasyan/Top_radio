@@ -527,7 +527,7 @@ class SwipeUpDown extends Component<Props> {
             style={[styles.arrow, { marginLeft: 10, marginTop: 30 }]}
             />
           )}
-         <View style={{ marginLeft:50, marginRight:50}}>
+         <View style={{ marginLeft:20, marginRight:50}}>
          {!this.state.loading &&
           this.props.bottomReducer.swiperShowRadiostation ? (
             <SimpleImage

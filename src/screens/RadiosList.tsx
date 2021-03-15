@@ -224,7 +224,7 @@ class Menu extends React.Component<IMenuProps, IState> {
             {
               backgroundColor: this.props.theme.backgroundColor,
               height: Dimensions.get("window").height,
-              paddingBottom:30
+             
             },
           ]}
         >
@@ -462,7 +462,7 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
   container: {
-    height: deviceHeight - calcHeight(24),
+    height:'100%',
   },
   box: {
     width: 50,

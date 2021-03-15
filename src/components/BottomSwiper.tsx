@@ -68,7 +68,7 @@ import player from "../services/player/PlayerServices";
 import RNFS from "react-native-fs";
 import navigationService from "../navigation/NavigationService";
 var RNFileManager = require("react-native-file-manager");
-import SwipeUpDown from "../screens/Swiper";
+import SwipeUpDown from "../screens/Swiper2";
 import { getData, storeData } from "../utils/local_storage";
 import Modal from "react-native-modal";
 import NetInfo from "@react-native-community/netinfo";
@@ -1065,7 +1065,7 @@ class BottomSwiper extends React.Component<Props, IState> {
         ) : (
           <SimpleImage
             size={180}
-            image={this.props.bottomReducer.swiperShowRadiostation.data.im}
+            image={this.props.bottomReducer.swiperShowRadiostation?.data.im}
           />
         )}
         <View style={{ flexDirection: "row", marginLeft: 30, marginTop: 10 }}>
@@ -1270,9 +1270,11 @@ class BottomSwiper extends React.Component<Props, IState> {
   }
 
   render() {
-    //  if (this.props.bottomReducer.swiperShowRadiostation) {
+    console.log('this.props.theme.albomeMode',this.props.theme.albomeMode);
+    
     return (
-      <SwipeUpDown
+
+        <SwipeUpDown
         hasRef={(ref: any) => {
          // if (!this.state.headerHeight) {
             player.init(ref);
@@ -1290,11 +1292,11 @@ class BottomSwiper extends React.Component<Props, IState> {
         onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}
         orientation={this.props.theme.albomeMode}
         itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
-        itemFull={
-          this.props.theme.albomeMode
-            ? this.renderBottomSheetHorizontal()
-            : this.renderBottomSheet()
-        } // Pass props component when show full
+        // itemFull={
+        //   this.props.theme.albomeMode
+        //     ? this.renderBottomSheetHorizontal()
+        //     : this.renderBottomSheet()
+        // } // Pass props component when show full
         onShowMini={() => {
           
           if (this.props.bottomReducer.selectedRadioStation&& this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
@@ -1336,21 +1338,14 @@ class BottomSwiper extends React.Component<Props, IState> {
           );
         }}
         onMoveUp={() => console.log("up")}
-        swipeHeight={this.props.theme.albomeMode ? 76 : 175}
+        swipeHeight={this.props.theme.albomeMode ? 60 : 175}
         disablePressToShow={false} // Press item mini to show full
         style={{
-          //   backgroundColor:'red',
-          //height:deviceHeight-80,
-
-          backgroundColor: "rgba(255,255,255,0)",
+          backgroundColor:this.props.theme.backgroundColor,
           flex: 1,
-          //  backgroundColor:'red'
-        }} // style for swipe
+        }}
       />
     );
-    // } else {
-    //   return null;
-    // }
   }
 }
 const mapStateToProps = ({

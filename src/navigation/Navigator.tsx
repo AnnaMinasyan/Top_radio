@@ -51,28 +51,6 @@ const BottomTabStack = () => {
         </Tab.Navigator>
     );
 };
-const SettingScreenStack = ({navigation}) => {
-    return (
-        <Stack.Navigator
-            initialRouteName="Cities"
-            >
-            <Stack.Screen
-                name="Menu"
-                component={Menu}
-                options={{
-                    title: 'Menu', //Set Header Title
-                }}
-            />
-            <Stack.Screen
-                name="Cities"
-                component={Cities}
-                options={{
-                    title: 'Cities', //Set Header Title
-                }}
-            />
-        </Stack.Navigator>
-    );
-};
 const Navigator: React.FunctionComponent = (props:any) => (
 
 

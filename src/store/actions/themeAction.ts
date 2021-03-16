@@ -7,7 +7,7 @@ export const changeBackgroundColor = (payload:boolean) => {
 		payload
 	};
 };
-export const setHeightWidth = (payload:any) => {
+export const setHeightWidth = (payload:any) => {	
 	return {
 		type: ThemeTypes.SET_HEIGHT_WIDTH,
 		payload

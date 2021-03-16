@@ -92,7 +92,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     useEffect(() => {
         dispatch(setHeightWidth({ height: height, width: width, albomeMode: width > height }))
         //  console.log(width, height);
-    }, [width, height])
+    }, [width])
 
 
     return (

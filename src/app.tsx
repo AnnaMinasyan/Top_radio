@@ -85,7 +85,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
 
 
     Dimensions.addEventListener('change', (value: any) => {
-
+        
         setHeight(value.window.height)
         setWidth(value.window.width)
     })

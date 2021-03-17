@@ -12,6 +12,9 @@ import {
   Alert,
   ImageBackground,
   BackHandler,
+  Dimensions,
+  SafeAreaView,
+  StatusBar,
 } from "react-native";
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -68,7 +71,7 @@ import player from "../services/player/PlayerServices";
 import RNFS from "react-native-fs";
 import navigationService from "../navigation/NavigationService";
 var RNFileManager = require("react-native-file-manager");
-import SwipeUpDown from "../screens/Swiper2";
+import SwipeUpDown from "../screens/Swiper";
 import { getData, storeData } from "../utils/local_storage";
 import Modal from "react-native-modal";
 import NetInfo from "@react-native-community/netinfo";
@@ -1270,10 +1273,11 @@ class BottomSwiper extends React.Component<Props, IState> {
   }
 
   render() {
-    // console.log('this.props.theme.albomeMode',this.props.theme.albomeMode, this.props.theme.height, this.props.theme.width);
+    // console.log('this.props.theme.albomeMode',this.state.recordTime, this.state.recordSecs);
     
     return (
 
+               
         <SwipeUpDown
         hasRef={(ref: any) => {
          // if (!this.state.headerHeight) {
@@ -1281,6 +1285,8 @@ class BottomSwiper extends React.Component<Props, IState> {
           //  this.setState({ headerHeight: true });
          // }
         }}
+        recordTime={this.state.recordTime}
+        recordSecs={this.state.recordSecs}
         isPlaying={()=>this.isPlaying()}
         onStopRecord={()=>this.onStopRecord()}
         onStartRecord={()=>{this.onStartRecord()}}
@@ -1344,6 +1350,7 @@ class BottomSwiper extends React.Component<Props, IState> {
         
         }}
       />
+      //  </SafeAreaView>
     );
   }
 }

@@ -44,7 +44,6 @@ import { connect } from "react-redux";
 import PlaySvG from "../assets/icons/play.svg";
 import Stop from "../assets/icons/stop.svg";
 import player from "../services/player/PlayerServices";
-import global_styles from "../assets/styles/global_styles";
 
 const MARGIN_TOP = Platform.OS === "ios" ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get("window").height + calcHeight(55);
@@ -73,21 +72,22 @@ type Props = {
   onchangeSelectedRadioStationPlaying(payload: any): void,
   _addLookingList(payload: any): void,
   _navigatePlayList(): void,
-  recordTime:string
 };
 class SwipeUpDown extends Component<Props> {
   static defautProps = {
     disablePressToShow: false,
   };
+  buttomValue
   constructor(props) {
     super(props);
     this.state = {
+      startDrag: false,
       collapsed: true,
       fadeAnim: new Animated.Value(0),
       animHeader: new Animated.Value(1),
+      swipeAnimation: new Animated.Value(deviceHeight),
       visible: false,
       loading: true,
-      
     };
     this.disablePressToShow = props.disablePressToShow;
     this.SWIPE_HEIGHT = props.swipeHeight;
@@ -102,10 +102,36 @@ class SwipeUpDown extends Component<Props> {
         // height: this.height
       },
     };
+    this.buttomValue =  Dimensions.get("window").height - (86+56)
     this.checkCollapsed = true;
     this.showFull = this.showFull.bind(this);
     this.count = 0;
+    Dimensions.addEventListener('change', this._changeHAndler.bind(this))
   }
+  _changeHAndler(value) {
+      const albome = value.window.width > value.window.height;
+      if(this.state.visible){
+        this.buttomValue = value.window.height - (86+56)
+        if((this.state.swipeAnimation)._value != 0){
+            this.move(this.buttomValue)
+        }
+      }
+      // if (albome && this.state.visible) {
+      //     this.customStyle.style.top = value.window.height - 50 - 86;
+      //     this.height = DEVICE_HEIGHT;
+      //     this.updateNativeProps();
+      // } else {
+      //     this.customStyle.style.top = value.window.height - 50 - 86;
+      //     this.height = DEVICE_HEIGHT;
+      //     this.updateNativeProps();
+      // }
+      // setHeight(value.window.height)
+      // setWidth(value.window.width)
+  }
+  componentWillUnmount() {
+      Dimensions.removeEventListener('change', _changeHAndler)
+  }
+
   fadeIn = () => {
     this.setState({ visible: true });
     Animated.timing(this.state.fadeAnim, {
@@ -121,7 +147,6 @@ class SwipeUpDown extends Component<Props> {
   };
 
   fadeOut = () => {
-    this.setState({ visible: false });
     Animated.timing(this.state.fadeAnim, {
       toValue: 0,
       duration: 100,
@@ -139,15 +164,28 @@ class SwipeUpDown extends Component<Props> {
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-				return !( (Math.abs(gestureState.dx) + Math.abs(gestureState.dy) < 15)  )
-            }, 
+        return !((Math.abs(gestureState.dx) + Math.abs(gestureState.dy) < 15))
+    },
+      // on: this._onPanResponderStart(this),
       onPanResponderMove: this._onPanResponderMove.bind(this),
       onPanResponderRelease: this._onPanResponderRelease.bind(this),
     });
   }
+  _onPanResponderStart() {
+    console.log("this----->", this.state.startDrag);
+    // this.setState({startDrag:true})
+  }
 
   componentDidMount() {
     this.props.hasRef && this.props.hasRef(this);
+    // setTimeout(() => {
+    //   console.log("-animat");
+    //   Animated.timing(this.state.swipeAnimation, {
+    //     toValue: 500,
+    //     duration: 500,
+    //     useNativeDriver: true,
+    //   }).start();
+    // }, 5000);
   }
 
   updateNativeProps() {
@@ -165,7 +203,7 @@ class SwipeUpDown extends Component<Props> {
       default:
         break;
     }
-    this.viewRef.setNativeProps(this.customStyle);
+    // this.viewRef.setNativeProps(this.customStyle);
   }
   renderBottomSheetHorizontal() {
     return (
@@ -177,9 +215,9 @@ class SwipeUpDown extends Component<Props> {
           height: this.props.theme.height * 0.8,
         }}
       >
-        <View >
+        <View>
           <View
-            {...this._panResponder.panHandlers}
+            // {...this._panResponder.panHandlers}
             style={{
               flexDirection: "row",
             }}
@@ -201,7 +239,7 @@ class SwipeUpDown extends Component<Props> {
               />
             </View>
             <View
-              {...this._panResponder.panHandlers}
+              // {...this._panResponder.panHandlers}
               style={{
                 height: 60,
                 width: 200,
@@ -229,7 +267,7 @@ class SwipeUpDown extends Component<Props> {
             </View>
             {!this.state.loading ? (
               <View
-                {...this._panResponder.panHandlers}
+                /// {...this._panResponder.panHandlers}
                 style={{
                   justifyContent: "center",
                   alignItems: "center",
@@ -466,7 +504,7 @@ class SwipeUpDown extends Component<Props> {
                         },
                       ]}
                     >
-                      {this.props.recordSecs > 0 ? this.props.recordTime : ""}
+                      {this.state.recordSecs > 0 ? this.state.recordTime : ""}
                     </Text>
 
                     {this.state.loading ? (
@@ -490,7 +528,7 @@ class SwipeUpDown extends Component<Props> {
                           if (this.props.bottomReducer.isConnected) {
                             if (this.state.isRecording) {
                               console.log("dhkabsakhshakj");
-                              this.props.onStopRecord();
+                              this.onStopRecord();
                             }
                             if (
                               this.props.bottomReducer.selectedRadioStation
@@ -624,6 +662,33 @@ class SwipeUpDown extends Component<Props> {
     );
   }
   _onPanResponderMove(event, gestureState) {
+    const dy = gestureState.dy;
+    //console.log(gestureState);
+
+    if (
+      gestureState.dy > 0 &&
+      gestureState.dy < deviceHeight 
+    ) {
+      if (!this.state.startDrag) {
+        this.setState({ startDrag: true });
+      }
+      Animated.timing(this.state.swipeAnimation, {
+        toValue: dy,
+        duration: 0,
+        useNativeDriver: true,
+      }).start(
+        this.setState({visible:true}),
+        this.fadeIn()
+      );
+    } else {
+      Animated.timing(this.state.swipeAnimation, {
+        toValue: dy+500,
+        duration: 0,
+        useNativeDriver: true,
+      }).start();
+    }
+
+    return;
     // console.log(gestureState.dy,deviceHeight-deviceHeight/5);
     if (this.props.theme.albomeMode) {
       if (
@@ -654,6 +719,7 @@ class SwipeUpDown extends Component<Props> {
         this.updateNativeProps();
       }
     } else {
+      console.log(",mtaaaaaaaaaaaaaaaaav");
       if (
         gestureState.dy > 0 &&
         !this.checkCollapsed &&
@@ -685,9 +751,29 @@ class SwipeUpDown extends Component<Props> {
     // }
   }
 
+  move(moveTo) {
+    Animated.timing(this.state.swipeAnimation, {
+      toValue: moveTo,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  }
   _onPanResponderRelease(event, gestureState) {
+    //console.log('gestureState',gestureState);
+    const delta = this.buttomValue;
+    this.setState({ startDrag: false });
+    console.log('_onPanResponderRelease',gestureState.dy);
+    if (gestureState.dy > 0) {
+      this.move(delta);
+    } else {
+      this.move(0);
+    }
+
+    return;
+    console.log("/////////////////////////", gestureState.dy);
     this.fadeIn();
     if (this.props.theme.albomeMode) {
+      console.log(gestureState.dy);
       if (gestureState.dy < 20 || gestureState.dy < 200) {
         this.showFull();
       } else {
@@ -704,14 +790,19 @@ class SwipeUpDown extends Component<Props> {
 
   showFull(value) {
     this.fadeOut();
-    const { onShowFull } = this.props;
-    this.customStyle.style.top = 0;
-    this.customStyle.style.height = DEVICE_HEIGHT;
+    Animated.timing(this.state.swipeAnimation, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+    // const { onShowFull } = this.props;
+    // this.customStyle.style.top = 0;
+    // this.customStyle.style.height = DEVICE_HEIGHT;
 
-    this.updateNativeProps();
-    this.state.collapsed && this.setState({ collapsed: false, visible: false });
-    this.checkCollapsed = false;
-    onShowFull && onShowFull();
+    // this.updateNativeProps();
+    // this.state.collapsed && this.setState({ collapsed: false, visible: false });
+    // this.checkCollapsed = false;
+    // onShowFull && onShowFull();
 
     if (value) {
       this.setState({ visible: false, loading: true });
@@ -723,24 +814,32 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   // componentWillReceiveProps() {
-  //   const albome=this.props.theme.width>this.props.theme.height
-  //    if(this.state.visible){
-  //     if(albome){
-  //       console.log("1111111111",this.props.theme.height);
-  //       this.customStyle.style.top = this.props.theme.height-50-86;
-  //       this.height = DEVICE_HEIGHT;
-  //     //  !this.state.collapsed && this.setState({ collapsed: true });
-  //       this.updateNativeProps();
-  //     }else{
-  //       console.log("22222222222");
-  //       this.customStyle.style.top = this.props.theme.height-50-86;
-  //       this.height = DEVICE_HEIGHT;
-  //       //!this.state.collapsed && this.setState({ collapsed: true });
-  //       this.updateNativeProps();
+  //   if (this.props.theme.albomeMode) {
+  //     console.log("1111111111111");
+  //     if (this.customStyle.style.top && this.state.visible) {
+  //       console.log(
+  //         "kffffffffffffffffffffffffffffffffffffffffffffffff",
+  //         this.props.theme.height - this.props.theme.height / 3
+  //       );
+  //       this.customStyle.style.top =
+  //         this.props.theme.height - this.props.theme.height / 3;
+  //       this.viewRef.setNativeProps(this.customStyle);
   //     }
-  //    }
+  //   } else {
+  //     console.log("22222222222222222");
+  //     if (this.customStyle.style.top && this.state.visible) {
+  //       console.log(
+  //         "0000000000000000000000000000000",
+  //         this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(50)
+  //       );
+  //       this.customStyle.style.top =
+  //         this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(50);
+  //       this.viewRef.setNativeProps(this.customStyle);
+  //     }
+  //   }
   // }
   showMini() {
+    console.log("-----------------------------------");
     this.fadeIn();
     if (this.props.theme.albomeMode) {
       const { onShowMini, itemMini } = this.props;
@@ -754,12 +853,10 @@ class SwipeUpDown extends Component<Props> {
       this.checkCollapsed = true;
       onShowMini && onShowMini();
     } else {
-      console.log("lllpdssp[");
       const { onShowMini, itemMini } = this.props;
-      this.customStyle.style.top = 700
-      // itemMini
-      //   ? this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(86)
-      //   : this.props.theme.height;
+      this.customStyle.style.top = itemMini
+        ? this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(50)
+        : this.props.theme.height;
       this.customStyle.style.height = itemMini ? this.SWIPE_HEIGHT : 0;
       this.updateNativeProps();
       !this.state.collapsed &&
@@ -793,6 +890,7 @@ class SwipeUpDown extends Component<Props> {
                 this.props.onchangeIsConnected(true);
                 setTimeout(() => {
                   NetInfo.fetch().then((state) => {
+                    console.log("djdkjslakdjad9uao9du0fagbasf.");
                     this.props.onchangeIsConnected(state.isConnected);
                   }, 50000);
                 });
@@ -893,10 +991,9 @@ class SwipeUpDown extends Component<Props> {
   }
   renderBottomSheet() {
     return (
-      <View>
+      <View style={{ height: "100%" }}>
         <View
-          {...this._panResponder.panHandlers}
-        
+          //  {...this._panResponder.panHandlers}
           style={{
             flexDirection: "row",
 
@@ -904,16 +1001,12 @@ class SwipeUpDown extends Component<Props> {
             backgroundColor: this.props.backgroundColor,
           }}
         >
-          <TouchableOpacity
+          <View
             style={{
               height: 70,
               width: "80%",
               justifyContent: "center",
               paddingLeft: 20,
-            }}
-            onPress={()=>{
-              console.log("00000000000000000000000000000000");
-              this.showMini()
             }}
           >
             <Arrow
@@ -921,7 +1014,7 @@ class SwipeUpDown extends Component<Props> {
               height={10.59}
               width={19.8}
             />
-          </TouchableOpacity>
+          </View>
 
           <TouchableOpacity
             style={{
@@ -934,6 +1027,7 @@ class SwipeUpDown extends Component<Props> {
               right: 0,
             }}
             onPress={() => {
+              console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
               this.props.toaddfavorite();
             }}
           >
@@ -951,7 +1045,7 @@ class SwipeUpDown extends Component<Props> {
           </TouchableOpacity>
         </View>
         <View
-          {...this._panResponder.panHandlers}
+          /// {...this._panResponder.panHandlers}
           style={{
             justifyContent: "center",
             alignItems: "center",
@@ -1205,7 +1299,7 @@ class SwipeUpDown extends Component<Props> {
                   },
                 ]}
               >
-                {this.props.recordSecs > 0 ? this.props.recordTime : ""}
+                {this.state.recordSecs > 0 ? this.state.recordTime : ""}
               </Text>
             </View>
             {this.state.loading ? (
@@ -1320,248 +1414,147 @@ class SwipeUpDown extends Component<Props> {
       </View>
     );
   }
-  renderBottomSheetheader() {
-    return (
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TouchableOpacity
-          style={global_styles.searchbtn}
-          onPress={() => {
-            this.props.bottomReducer.miniScreenData.data &&
-              this.props.toaddfavorite(
-                this.props.bottomReducer.miniScreenData.data
-              );
-          }}
-        >
-          {this.props.bottomReducer.miniScreenData &&
-          this.props.checkIsFovorite(this.props.bottomReducer.miniScreenData.id) ? (
-            <RedHeart fill="#FF5050" height={19} width={21} />
-          ) : (
-            <Heart fill="#B3BACE" height={18.54} width={20.83} />
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.player,
-            {
-              backgroundColor:
-                this.props.theme.backgroundColor == "white"
-                  ? "white"
-                  : "#0D1834",
-            },
-          ]}
-          onPress={() => {
-            if (this.props.bottomReducer.isConnected) {
-              if (
-                this.props.bottomReducer.selectedRadioStation.id ==
-                this.props.bottomReducer.miniScreenData.id
-              ) {
-                this.isPlaying();
-              } else {
-                player._pouseMusic();
-                this.setState({ loading: true });
-                let d = this.props.bottomReducer.miniScreenData;
-                d.isPlayingMusic = true;
-                this.props.onchangeSelectedRadioStation(d);
-                this._addLookingList(
-                  this.props.bottomReducer.miniScreenData.data
-                );
-                setTimeout(() => {
-                  this.props.bottomReducer.miniScreenData &&
-                    player._startPlayMusic(
-                      this.props.bottomReducer.miniScreenData.data,
-                      this.props.bottomReducer.miniScreenData.data.st[0]
-                    );
-                  this.setState({ swiperIndex: this.count, loading: false });
-                }, 500);
-              }
-            } else {
-              this.setState({ visibleModal: true });
-            }
-          }}
-        >
-          {this.props.bottomReducer.miniScreenData &&
-          this.props.bottomReducer.miniScreenData.isPlayingMusic ? (
-            <Stop
-              width={16}
-              height={22}
-              fill={
-                this.props.theme.backgroundColor == "white"
-                  ? "#101C3B"
-                  : "white"
-              }
-            />
-          ) : (
-            <PlaySvG
-              width={calcWidth(16)}
-              height={22}
-              fill={
-                this.props.theme.backgroundColor == "white"
-                  ? "#101C3B"
-                  : "white"
-              }
-            />
-          )}
-        </TouchableOpacity>
-      </View>
-    );
-  }
-returnMargintop(){
-  if( this.props.theme.albomeMode){
-return 56
-  }else if( ! this.props.theme.albomeMode){
-return this.state.visible ?78:56
-  }
-}
+
   render() {
     const { itemMini, itemFull, style } = this.props;
     const { collapsed } = this.state;
-
-    if (this.state.visible ) {
-      if (this.props.theme.albomeMode) {
-        console.log("1111111111", this.props.theme.height);
-        this.customStyle.style.top = this.props.theme.height - 50 - 86;
-        this.height = DEVICE_HEIGHT;
-
-        this.updateNativeProps();
-      } else {
-        console.log("22222222222");
-        this.customStyle.style.top = this.props.theme.height - 50 - 86;
-        this.height = DEVICE_HEIGHT;
-
-        this.updateNativeProps();
-      }
-    }
-
-    //   Dimensions.addEventListener('change', (value) => {
-    //     console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
-    //     const albome=value.window.width>value.window.height
-    //     if(albome && this.state.visible){
-    //       console.log("1111111111",value.window.height);
-    //       this.customStyle.style.top = value.window.height-50-86;
-    //       this.height = DEVICE_HEIGHT;
-
-    //       this.updateNativeProps();
-    //     }else{
-    //       console.log("22222222222");
-    //       this.customStyle.style.top = value.window.height-50-86;
-    //       this.height = DEVICE_HEIGHT;
-
-    //       this.updateNativeProps();
-    //     }
-    //     // setHeight(value.window.height)
-    //     // setWidth(value.window.width)
-    // })
+    console.log("this.state.startDrag", this.state.swipeAnimation);
     return (
-      <Animated.View
-      {...this._panResponder.panHandlers}
-        ref={(ref) => (this.viewRef = ref)}
-        style={[
-          styles.wrapSwipe,
-          {
-            flex: 1,
-            height: 0,
-            marginTop: this.returnMargintop(),
-         backgroundColor:this.props.theme.backgroundColor,
-            
-          },
-          !itemMini && collapsed && { marginBottom: -100 },
-          style,
-        ]}
+      <View
+      // onLayout={(event)=>{
+      //   console.log('event',event);
+      // }}
+        style={{ position: "absolute", flex: 1, height: "100%", width: "100%" }}
       >
-        <Animated.View
-        {...this._panResponder.panHandlers}
-          style={[
-            styles.bottomHeader,
-            {
-              backgroundColor:
-                this.props.backgroundColor == "white" ? "#EBEEF7" : "#0F1E45",
-                
-            },
-            {
-              opacity: this.state.fadeAnim, // Bind opacity to animated value
-            },
-          ]}
-          visible={this.state.visible}
-        >
+        {this.state.startDrag ? (
           <View
-            
-            onTouchStart={() => {}}
-            style={{
-              height: 86,
-              width: "70%",
+            style={{ backgroundColor: "#0005", height: "100%", width: "100%" }}
+          ></View>
+        ) : null}
+        <Animated.View
+          {...this._panResponder.panHandlers}
+          ref={(ref) => (this.viewRef = ref)}
+          style={[
+            styles.wrapSwipe,
 
-              backgroundColor:
-                this.props.backgroundColor == "white" ? "#EBEEF7" : "#0F1E45",
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                paddingTop: 15,
-                paddingLeft: 25,
-                justifyContent: "space-between",
-                paddingRight: 12,
-              }}
+            {
+              flex: 1,
+              //height: deviceHeight-50,
+              marginTop: MARGIN_TOP + 56,
+              top: 0,
+              transform: [{ translateY: this.state.swipeAnimation }],
+            },
+
+            !itemMini && collapsed && { marginBottom: -100 },
+            style,
+          ]}
+        >
+          <View>
+            <Animated.View
+              style={[
+                styles.bottomHeader,
+                {
+                  backgroundColor:
+                    this.props.backgroundColor == "white"
+                      ? "#EBEEF7"
+                      : "#0F1E45",
+                },
+                {
+                  opacity: this.state.fadeAnim, // Bind opacity to animated value
+                },
+              ]}
+              visible={this.state.visible}
             >
-              <View style={{ flexDirection: "row" }}>
-                {this.props.bottomReducer.miniScreenData && (
-                  <SimpleImage
-                    size={57}
-                    image={this.props.bottomReducer.miniScreenData.data.im}
-                  />
-                )}
-                <View style={{ marginLeft: 15 }}>
-                  <Text
-                    style={[
-                      styles.txtTitle,
-                      {
-                        color:
-                          this.props.backgroundColor == "white"
-                            ? "#1D2A4B"
-                            : "white",
-                      },
-                    ]}
-                  >
-                    {this.props.bottomReducer.miniScreenData?.data.pa}
-                  </Text>
-                  {this.props.bottomReducer.miniScreenData?.playingSong && (
-                    <Text
-                      numberOfLines={1}
-                      style={[
-                        styles.txtTitle,
-                        {
-                          fontSize: 12,
-                          marginTop: 5,
-                          width: 160,
-                          color:
-                            this.props.backgroundColor == "white"
-                              ? "#1D2A4B"
-                              : "white",
-                        },
-                      ]}
-                    >
-                      {
-                        this.props.bottomReducer.miniScreenData.playingSong
-                          .artist
-                      }
-                      {this.props.bottomReducer.miniScreenData.playingSong.song}
-                    </Text>
-                  )}
+              <View
+                // {...this._panResponder.panHandlers}
+                onTouchStart={() => {}}
+                style={{
+                  height: 86,
+                  width: "70%",
+
+                  backgroundColor:
+                    this.props.backgroundColor == "white"
+                      ? "#EBEEF7"
+                      : "#0F1E45",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    paddingTop: 15,
+                    paddingLeft: 25,
+                    justifyContent: "space-between",
+                    paddingRight: 12,
+                  }}
+                >
+                  <View style={{ flexDirection: "row" }}>
+                    {this.props.bottomReducer.miniScreenData && (
+                      <SimpleImage
+                        size={57}
+                        image={this.props.bottomReducer.miniScreenData.data.im}
+                      />
+                    )}
+                    <View style={{ marginLeft: 15 }}>
+                      <Text
+                        style={[
+                          styles.txtTitle,
+                          {
+                            color:
+                              this.props.backgroundColor == "white"
+                                ? "#1D2A4B"
+                                : "white",
+                          },
+                        ]}
+                      >
+                        {this.props.bottomReducer.miniScreenData?.data.pa}
+                      </Text>
+                      {this.props.bottomReducer.miniScreenData?.playingSong && (
+                        <Text
+                          numberOfLines={1}
+                          style={[
+                            styles.txtTitle,
+                            {
+                              fontSize: 12,
+                              marginTop: 5,
+                              width: 160,
+                              color:
+                                this.props.backgroundColor == "white"
+                                  ? "#1D2A4B"
+                                  : "white",
+                            },
+                          ]}
+                        >
+                          {
+                            this.props.bottomReducer.miniScreenData.playingSong
+                              .artist
+                          }
+                          {
+                            this.props.bottomReducer.miniScreenData.playingSong
+                              .song
+                          }
+                        </Text>
+                      )}
+                    </View>
+                  </View>
                 </View>
               </View>
+              {itemMini}
+            </Animated.View>
+
+            <View
+              style={{
+                height: deviceHeight,
+                width: "100%",
+                position: "absolute",
+              }}
+            >
+              {this.props.theme.albomeMode
+                ? this.renderBottomSheetHorizontal()
+                : this.renderBottomSheet()}
             </View>
           </View>
-          {this.renderBottomSheetheader()}
         </Animated.View>
-
-        <View
-          style={{ height: deviceHeight, width: "100%", position: "absolute" }}
-        >
-          {this.props.theme.albomeMode
-            ? this.renderBottomSheetHorizontal()
-            : this.renderBottomSheet()}
-        </View>
-      </Animated.View>
+      </View>
     );
   }
 }
@@ -1724,7 +1717,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12.35,
     // height: calcHeight(86),
     elevation: 25,
-    marginTop: calcHeight(-28),
+   // marginTop: calcHeight(-28),
   },
 
   row: {

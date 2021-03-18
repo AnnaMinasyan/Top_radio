@@ -113,7 +113,6 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
 
         return <TouchableHighlight
             onPress={() => {
-
                 this._addLookingList(data.item);
                 let radioStation = {
                   data: data.item,
@@ -128,7 +127,6 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
                   isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
                 }
                 player.open(info);
-
             }}
         >
           <RadioMenuElement

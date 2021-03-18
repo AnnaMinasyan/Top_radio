@@ -45,6 +45,7 @@ import PlaySvG from "../assets/icons/play.svg";
 import Stop from "../assets/icons/stop.svg";
 import player from "../services/player/PlayerServices";
 
+
 const MARGIN_TOP = Platform.OS === "ios" ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get("window").height + calcHeight(55);
 type Props = {
@@ -88,11 +89,13 @@ class SwipeUpDown extends Component<Props> {
       swipeAnimation: new Animated.Value(deviceHeight),
       visible: false,
       loading: true,
+      close:false
     };
     this.disablePressToShow = props.disablePressToShow;
     this.SWIPE_HEIGHT = props.swipeHeight;
     this._panResponder = null;
     this.top = 0;
+
     // this.top = DEVICE_HEIGHT-190;
     this.height = this.SWIPE_HEIGHT;
     this.customStyle = {
@@ -102,16 +105,18 @@ class SwipeUpDown extends Component<Props> {
         // height: this.height
       },
     };
-    this.buttomValue =  Dimensions.get("window").height - (86+56)
-    this.checkCollapsed = true;
+    this.buttomValue =  this.props.theme.albomeMode?Dimensions.get("window").height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?78:85)):
+    Dimensions.get("window").height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?56:68))
     this.showFull = this.showFull.bind(this);
     this.count = 0;
     Dimensions.addEventListener('change', this._changeHAndler.bind(this))
   }
   _changeHAndler(value) {
       const albome = value.window.width > value.window.height;
+      this.buttomValue =albome?value.window.height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?78:85)):
+       value.window.height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?56:68))
       if(this.state.visible){
-        this.buttomValue = value.window.height - (86+56)
+        
         if((this.state.swipeAnimation)._value != 0){
             this.move(this.buttomValue)
         }
@@ -133,7 +138,8 @@ class SwipeUpDown extends Component<Props> {
   }
 
   fadeIn = () => {
-    this.setState({ visible: true });
+    this.setState({ visible: true});
+
     Animated.timing(this.state.fadeAnim, {
       toValue: 1,
       duration: 100,
@@ -158,7 +164,7 @@ class SwipeUpDown extends Component<Props> {
         useNativeDriver: true,
       }).start()
     );
-
+    this.setState({visible:false,close:false})
     //this.setState({visible:false})
   };
   componentWillMount() {
@@ -166,16 +172,18 @@ class SwipeUpDown extends Component<Props> {
       onMoveShouldSetPanResponder: (evt, gestureState) => {
         return !((Math.abs(gestureState.dx) + Math.abs(gestureState.dy) < 15))
     },
-      // on: this._onPanResponderStart(this),
+    // onPanResponderStart:() =>{this._onPanResponderStart(this)},
+    onPanResponderEnd:() =>{this._onPanResponderEnd(this)},
       onPanResponderMove: this._onPanResponderMove.bind(this),
       onPanResponderRelease: this._onPanResponderRelease.bind(this),
     });
   }
-  _onPanResponderStart() {
-    console.log("this----->", this.state.startDrag);
-    // this.setState({startDrag:true})
+  _onPanResponderEnd() {
+    if(this.state.visible){
+    this.setState({close:true})
+    }
   }
-
+  
   componentDidMount() {
     this.props.hasRef && this.props.hasRef(this);
     // setTimeout(() => {
@@ -504,7 +512,7 @@ class SwipeUpDown extends Component<Props> {
                         },
                       ]}
                     >
-                      {this.state.recordSecs > 0 ? this.state.recordTime : ""}
+                      {this.props.recordSecs > 0 ? this.props.recordTime : ""}
                     </Text>
 
                     {this.state.loading ? (
@@ -565,7 +573,6 @@ class SwipeUpDown extends Component<Props> {
                               }, 500);
                             }
                           } else {
-                            console.log(";;;;;;;;;;;;;;;;;;;;");
                             this.props.onchangeIsConnected(false);
                           }
                         }}
@@ -662,13 +669,13 @@ class SwipeUpDown extends Component<Props> {
     );
   }
   _onPanResponderMove(event, gestureState) {
-    const dy = gestureState.dy;
-    //console.log(gestureState);
-
+    const dy = gestureState.dy + ((!this.state.close)?0:this.buttomValue);
+    console.log(gestureState.dy,dy);
     if (
-      gestureState.dy > 0 &&
-      gestureState.dy < deviceHeight 
+      dy > 0 &&
+      dy < deviceHeight 
     ) {
+     
       if (!this.state.startDrag) {
         this.setState({ startDrag: true });
       }
@@ -677,78 +684,13 @@ class SwipeUpDown extends Component<Props> {
         duration: 0,
         useNativeDriver: true,
       }).start(
-        this.setState({visible:true}),
+        
         this.fadeIn()
       );
-    } else {
-      Animated.timing(this.state.swipeAnimation, {
-        toValue: dy+500,
-        duration: 0,
-        useNativeDriver: true,
-      }).start();
     }
 
     return;
-    // console.log(gestureState.dy,deviceHeight-deviceHeight/5);
-    if (this.props.theme.albomeMode) {
-      if (
-        gestureState.dy > 0 &&
-        !this.checkCollapsed &&
-        gestureState.dy < deviceHeight - deviceHeight / 5
-      ) {
-        // console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
-        // SWIPE DOWN
-        this.customStyle.style.top = this.top + gestureState.dy;
-        this.height = DEVICE_HEIGHT;
-        !this.state.collapsed && this.setState({ collapsed: true });
-        this.updateNativeProps();
-      } else if (
-        this.checkCollapsed &&
-        gestureState.dy < 0 &&
-        gestureState.dy > -(DEVICE_HEIGHT - 180)
-      ) {
-        //   console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
-        // console.log( this.customStyle.style.top,"this.customStyle.style.top");
-        // SWIPE UP
-        this.top = 0;
-        this.customStyle.style.top = DEVICE_HEIGHT - 180 + gestureState.dy;
-        this.customStyle.style.height = this.SWIPE_HEIGHT - gestureState.dy;
-        this.fadeOut();
-        this.state.collapsed && this.setState({ collapsed: false });
-
-        this.updateNativeProps();
-      }
-    } else {
-      console.log(",mtaaaaaaaaaaaaaaaaav");
-      if (
-        gestureState.dy > 0 &&
-        !this.checkCollapsed &&
-        gestureState.dy < DEVICE_HEIGHT
-      ) {
-        // console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
-        // SWIPE DOWN
-        this.customStyle.style.top = this.top + gestureState.dy;
-        this.height = DEVICE_HEIGHT;
-        !this.state.collapsed && this.setState({ collapsed: true });
-        this.updateNativeProps();
-      } else if (
-        this.checkCollapsed &&
-        gestureState.dy < 0 &&
-        gestureState.dy > -(DEVICE_HEIGHT - 180)
-      ) {
-        //   console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
-        // console.log( this.customStyle.style.top,"this.customStyle.style.top");
-        // SWIPE UP
-        this.top = 0;
-        this.customStyle.style.top = DEVICE_HEIGHT - 180 + gestureState.dy;
-        this.customStyle.style.height = this.SWIPE_HEIGHT - gestureState.dy;
-        this.fadeOut();
-        this.state.collapsed && this.setState({ collapsed: false });
-
-        this.updateNativeProps();
-      }
-    }
-    // }
+   
   }
 
   move(moveTo) {
@@ -762,47 +704,27 @@ class SwipeUpDown extends Component<Props> {
     //console.log('gestureState',gestureState);
     const delta = this.buttomValue;
     this.setState({ startDrag: false });
-    console.log('_onPanResponderRelease',gestureState.dy);
     if (gestureState.dy > 0) {
       this.move(delta);
+
     } else {
-      this.move(0);
+      this.showFull();
+
     }
 
+
     return;
-    console.log("/////////////////////////", gestureState.dy);
-    this.fadeIn();
-    if (this.props.theme.albomeMode) {
-      console.log(gestureState.dy);
-      if (gestureState.dy < 20 || gestureState.dy < 200) {
-        this.showFull();
-      } else {
-        this.showMini();
-      }
-    } else {
-      if (gestureState.dy < -100 || gestureState.dy < 100) {
-        this.showFull();
-      } else {
-        this.showMini();
-      }
-    }
+   
   }
 
   showFull(value) {
     this.fadeOut();
+    console.log("lfkdfk");
     Animated.timing(this.state.swipeAnimation, {
       toValue: 0,
       duration: 500,
       useNativeDriver: true,
     }).start();
-    // const { onShowFull } = this.props;
-    // this.customStyle.style.top = 0;
-    // this.customStyle.style.height = DEVICE_HEIGHT;
-
-    // this.updateNativeProps();
-    // this.state.collapsed && this.setState({ collapsed: false, visible: false });
-    // this.checkCollapsed = false;
-    // onShowFull && onShowFull();
 
     if (value) {
       this.setState({ visible: false, loading: true });
@@ -813,57 +735,9 @@ class SwipeUpDown extends Component<Props> {
       }, 50);
     }
   }
-  // componentWillReceiveProps() {
-  //   if (this.props.theme.albomeMode) {
-  //     console.log("1111111111111");
-  //     if (this.customStyle.style.top && this.state.visible) {
-  //       console.log(
-  //         "kffffffffffffffffffffffffffffffffffffffffffffffff",
-  //         this.props.theme.height - this.props.theme.height / 3
-  //       );
-  //       this.customStyle.style.top =
-  //         this.props.theme.height - this.props.theme.height / 3;
-  //       this.viewRef.setNativeProps(this.customStyle);
-  //     }
-  //   } else {
-  //     console.log("22222222222222222");
-  //     if (this.customStyle.style.top && this.state.visible) {
-  //       console.log(
-  //         "0000000000000000000000000000000",
-  //         this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(50)
-  //       );
-  //       this.customStyle.style.top =
-  //         this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(50);
-  //       this.viewRef.setNativeProps(this.customStyle);
-  //     }
-  //   }
-  // }
   showMini() {
-    console.log("-----------------------------------");
+    this.setState({close:true})
     this.fadeIn();
-    if (this.props.theme.albomeMode) {
-      const { onShowMini, itemMini } = this.props;
-      this.customStyle.style.top = itemMini
-        ? this.props.theme.height - this.props.theme.height / 3
-        : 30;
-      this.customStyle.style.height = itemMini ? this.SWIPE_HEIGHT : 0;
-      this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(50);
-      !this.state.collapsed &&
-        this.setState({ collapsed: true, visible: true });
-      this.checkCollapsed = true;
-      onShowMini && onShowMini();
-    } else {
-      const { onShowMini, itemMini } = this.props;
-      this.customStyle.style.top = itemMini
-        ? this.props.theme.height - this.SWIPE_HEIGHT + calcHeight(50)
-        : this.props.theme.height;
-      this.customStyle.style.height = itemMini ? this.SWIPE_HEIGHT : 0;
-      this.updateNativeProps();
-      !this.state.collapsed &&
-        this.setState({ collapsed: true, visible: true });
-      this.checkCollapsed = true;
-      onShowMini && onShowMini();
-    }
   }
   renderDisConectModal() {
     return (
@@ -917,7 +791,7 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   swipeLeft() {
-    if (this.count > 0) {
+    if (this.props.filterReducer.activeIndex > 0) {
       let radiostation = {
         data: this.props.menuReducer.filterData[
           this.props.filterReducer.activeIndex - 1
@@ -990,8 +864,10 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   renderBottomSheet() {
-    return (
-      <View style={{ height: "100%" }}>
+return (
+     <View 
+  
+      style={{ height: "100%" }}>
         <View
           //  {...this._panResponder.panHandlers}
           style={{
@@ -1001,12 +877,16 @@ class SwipeUpDown extends Component<Props> {
             backgroundColor: this.props.backgroundColor,
           }}
         >
-          <View
+          <TouchableOpacity
             style={{
               height: 70,
               width: "80%",
               justifyContent: "center",
               paddingLeft: 20,
+            }}
+            onPress={()=>{
+              this.showMini()
+              this.move(this.buttomValue)
             }}
           >
             <Arrow
@@ -1014,7 +894,7 @@ class SwipeUpDown extends Component<Props> {
               height={10.59}
               width={19.8}
             />
-          </View>
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={{
@@ -1023,7 +903,6 @@ class SwipeUpDown extends Component<Props> {
               height: 70,
               width: "20%",
               backgroundColor: this.props.backgroundColor,
-              position: "absolute",
               right: 0,
             }}
             onPress={() => {
@@ -1299,7 +1178,7 @@ class SwipeUpDown extends Component<Props> {
                   },
                 ]}
               >
-                {this.state.recordSecs > 0 ? this.state.recordTime : ""}
+                {this.props.recordSecs > 0 ? this.props.recordTime : ""}
               </Text>
             </View>
             {this.state.loading ? (
@@ -1355,7 +1234,6 @@ class SwipeUpDown extends Component<Props> {
                       }, 500);
                     }
                   } else {
-                    console.log(";;;;;;;;;;;;;;;;;;;;");
                     this.props.onchangeIsConnected(false);
                   }
                 }}
@@ -1418,12 +1296,9 @@ class SwipeUpDown extends Component<Props> {
   render() {
     const { itemMini, itemFull, style } = this.props;
     const { collapsed } = this.state;
-    console.log("this.state.startDrag", this.state.swipeAnimation);
+    console.log(Dimensions.get("screen").height-Dimensions.get("window").height);
     return (
       <View
-      // onLayout={(event)=>{
-      //   console.log('event',event);
-      // }}
         style={{ position: "absolute", flex: 1, height: "100%", width: "100%" }}
       >
         {this.state.startDrag ? (
@@ -1443,13 +1318,14 @@ class SwipeUpDown extends Component<Props> {
               marginTop: MARGIN_TOP + 56,
               top: 0,
               transform: [{ translateY: this.state.swipeAnimation }],
+              backgroundColor: this.props.theme.backgroundColor,
             },
 
             !itemMini && collapsed && { marginBottom: -100 },
             style,
           ]}
         >
-          <View>
+        
             <Animated.View
               style={[
                 styles.bottomHeader,
@@ -1467,7 +1343,9 @@ class SwipeUpDown extends Component<Props> {
             >
               <View
                 // {...this._panResponder.panHandlers}
-                onTouchStart={() => {}}
+                onTouchStart={() => {
+                  console.log(';;;;;;;');
+                  this.setState({close:false})}}
                 style={{
                   height: 86,
                   width: "70%",
@@ -1541,18 +1419,19 @@ class SwipeUpDown extends Component<Props> {
               {itemMini}
             </Animated.View>
 
+           {!this.state.close &&
             <View
-              style={{
-                height: deviceHeight,
-                width: "100%",
-                position: "absolute",
-              }}
-            >
-              {this.props.theme.albomeMode
-                ? this.renderBottomSheetHorizontal()
-                : this.renderBottomSheet()}
-            </View>
-          </View>
+            style={{
+              height: deviceHeight,
+              width: "100%",
+              position: "absolute",
+            }}
+          >
+            {this.props.theme.albomeMode
+              ? this.renderBottomSheetHorizontal()
+              : this.renderBottomSheet()}
+          </View>}
+    
         </Animated.View>
       </View>
     );
@@ -1809,7 +1688,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   txtTitle: {
-    fontSize: calcFontSize(15),
+    fontSize: 15,
     fontWeight: "500",
     fontFamily: "Roboto",
     color: "#1D2A4B",

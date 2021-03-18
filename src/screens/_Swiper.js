@@ -1724,7 +1724,6 @@ const styles = StyleSheet.create({
         shadowRadius: 12.35,
         // height: calcHeight(86),
         elevation: 25,
-        marginTop: calcHeight(-28),
     },
 
     row: {

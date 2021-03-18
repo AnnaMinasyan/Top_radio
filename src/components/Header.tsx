@@ -59,7 +59,7 @@ class Header extends React.Component<Props, IState> {
 
   hideMenuModal() {
     return <Modal
-      style={{ position: 'absolute', top: (30), right: (8), }}
+      style={{ position: 'absolute', top: (30), right: (8) }}
       onBackdropPress={() => { this.setState({ hideMenuModal: false }) }}
       onRequestClose={() => this.setState({ hideMenuModal: false })}
 
@@ -261,7 +261,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     paddingLeft: 20,
-    paddingRight: 13.83
+    paddingRight: 13.83,
+    width:'100%'
   },
   headerContainer: {
     flexDirection: 'row',

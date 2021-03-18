@@ -164,31 +164,24 @@ class Menu extends React.Component<IMenuProps, IState> {
     return (
       <TouchableHighlight
         onPress={() => {
-          this._addLookingList(data.item);
-          if (this.props.bottomReducer.selectedRadioStation) {
+     
+            this._addLookingList(data.item);
             let radioStation = {
               data: data.item,
               isPlayingMusic: false,
               activeBi: data.item.st[0],
               id: data.item.id,
+              index:data.index,
             };
-
-          //  player.open();
-            this.props.onchangeSwiperShowStation(radioStation);
-            this.props.onchangeSelectedRadioStation(radioStation);
-            this.props.onchangeActiveIndex(data.index);
-          } else {
-            let radioStation = {
-              data: data.item,
-              isPlayingMusic: false,
-              activeBi: data.item.st[0],
-              id: data.item.id,
-            };
-            this.props.onchangeSelectedRadioStation(radioStation);
-            this.props.onchangeMiniScreenData(radioStation);
-            this.props.onchangeActiveIndex(data.index);
-          }
-        }}
+            let info={
+              radioStation:radioStation,
+              index:data.index,
+              isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+            }
+            player.open(info);
+          }   
+        
+        }
         style={{
           marginRight: calcWidth(16),
           marginBottom: calcHeight(16),

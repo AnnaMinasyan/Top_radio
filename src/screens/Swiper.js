@@ -79,6 +79,7 @@ class SwipeUpDown extends Component<Props> {
     disablePressToShow: false,
   };
   buttomValue
+  close
   constructor(props) {
     super(props);
     this.state = {
@@ -91,6 +92,7 @@ class SwipeUpDown extends Component<Props> {
       loading: true,
       close:false
     };
+    this.close = false
     this.disablePressToShow = props.disablePressToShow;
     this.SWIPE_HEIGHT = props.swipeHeight;
     this._panResponder = null;
@@ -164,6 +166,7 @@ class SwipeUpDown extends Component<Props> {
         useNativeDriver: true,
       }).start()
     );
+    //this.close = false
     this.setState({visible:false,close:false})
     //this.setState({visible:false})
   };
@@ -180,6 +183,7 @@ class SwipeUpDown extends Component<Props> {
   }
   _onPanResponderEnd() {
     if(this.state.visible){
+      //this.close = true
     this.setState({close:true})
     }
   }
@@ -187,7 +191,7 @@ class SwipeUpDown extends Component<Props> {
   componentDidMount() {
     this.props.hasRef && this.props.hasRef(this);
     // setTimeout(() => {
-    //   console.log("-animat");
+    //   //console.log("-animat");
     //   Animated.timing(this.state.swipeAnimation, {
     //     toValue: 500,
     //     duration: 500,
@@ -327,7 +331,7 @@ class SwipeUpDown extends Component<Props> {
                 top: 5,
               }}
               onPress={() => {
-                console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
+                //console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
                 this.props.toaddfavorite();
               }}
             >
@@ -358,7 +362,7 @@ class SwipeUpDown extends Component<Props> {
               <TouchableOpacity
                 disabled={this.count == 0}
                 onPress={() => {
-                  console.log("left");
+                  //console.log("left");
                   this.count -= 1;
                   this.swipeLeft();
                 }}
@@ -477,7 +481,7 @@ class SwipeUpDown extends Component<Props> {
                             ?.isPlayingMusic
                         ) {
                           if (this.state.isRecording) {
-                            console.log("onstart");
+                            //console.log("onstart");
                             this.props.onStopRecord();
                           } else {
                             this.props.onStartRecord();
@@ -535,7 +539,7 @@ class SwipeUpDown extends Component<Props> {
                         onPress={() => {
                           if (this.props.bottomReducer.isConnected) {
                             if (this.state.isRecording) {
-                              console.log("dhkabsakhshakj");
+                              //console.log("dhkabsakhshakj");
                               this.onStopRecord();
                             }
                             if (
@@ -551,7 +555,7 @@ class SwipeUpDown extends Component<Props> {
                               let d = this.props.bottomReducer
                                 .swiperShowRadiostation;
                               d.isPlayingMusic = true;
-                              console.log("ddd", d);
+                              //console.log("ddd", d);
                               this.props.onchangeSelectedRadioStation(d);
                               this.props.onchangeMiniScreenData(d);
 
@@ -643,7 +647,7 @@ class SwipeUpDown extends Component<Props> {
                       this.props.menuReducer.menuData.length - 1
                     }
                     onPress={() => {
-                      console.log("right");
+                      //console.log("right");
                       this.count += 1;
                       this.swipeRight();
                     }}
@@ -669,13 +673,8 @@ class SwipeUpDown extends Component<Props> {
     );
   }
   _onPanResponderMove(event, gestureState) {
-    const dy = gestureState.dy + ((!this.state.close)?0:this.buttomValue);
-    console.log(gestureState.dy,dy);
-    if (
-      dy > 0 &&
-      dy < deviceHeight 
-    ) {
-     
+    const dy = gestureState.dy + ((!this.close)?0:this.buttomValue);
+    if(dy<0)return
       if (!this.state.startDrag) {
         this.setState({ startDrag: true });
       }
@@ -687,7 +686,7 @@ class SwipeUpDown extends Component<Props> {
         
         this.fadeIn()
       );
-    }
+    
 
     return;
    
@@ -701,15 +700,15 @@ class SwipeUpDown extends Component<Props> {
     }).start();
   }
   _onPanResponderRelease(event, gestureState) {
-    //console.log('gestureState',gestureState);
+    ////console.log('gestureState',gestureState);
     const delta = this.buttomValue;
     this.setState({ startDrag: false });
     if (gestureState.dy > 0) {
       this.move(delta);
-
+      this.close = true
     } else {
       this.showFull();
-
+      this.close = false
     }
 
 
@@ -719,7 +718,7 @@ class SwipeUpDown extends Component<Props> {
 
   showFull(value) {
     this.fadeOut();
-    console.log("lfkdfk");
+    //console.log("lfkdfk");
     Animated.timing(this.state.swipeAnimation, {
       toValue: 0,
       duration: 500,
@@ -737,6 +736,7 @@ class SwipeUpDown extends Component<Props> {
   }
   showMini() {
     this.setState({close:true})
+    //this.close = true
     this.fadeIn();
   }
   renderDisConectModal() {
@@ -764,7 +764,7 @@ class SwipeUpDown extends Component<Props> {
                 this.props.onchangeIsConnected(true);
                 setTimeout(() => {
                   NetInfo.fetch().then((state) => {
-                    console.log("djdkjslakdjad9uao9du0fagbasf.");
+                    //console.log("djdkjslakdjad9uao9du0fagbasf.");
                     this.props.onchangeIsConnected(state.isConnected);
                   }, 50000);
                 });
@@ -906,7 +906,7 @@ return (
               right: 0,
             }}
             onPress={() => {
-              console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
+              //console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
               this.props.toaddfavorite();
             }}
           >
@@ -977,7 +977,7 @@ return (
                 <TouchableOpacity
                   disabled={this.state.loading}
                   onPress={() => {
-                    console.log("left");
+                    //console.log("left");
 
                     this.swipeLeft();
                   }}
@@ -1029,7 +1029,7 @@ return (
                   style={styles.arrow}
                   disabled={this.state.loading}
                   onPress={() => {
-                    console.log("right");
+                    //console.log("right");
                     this.count += 1;
                     this.swipeRight();
                   }}
@@ -1142,7 +1142,7 @@ return (
                       ?.isPlayingMusic
                   ) {
                     if (this.state.isRecording) {
-                      console.log("onstart");
+                      //console.log("onstart");
                       this.props.onStopRecord();
                     } else {
                       this.props.onStartRecord();
@@ -1201,7 +1201,7 @@ return (
                 onPress={() => {
                   if (this.props.bottomReducer.isConnected) {
                     if (this.state.isRecording) {
-                      console.log("dhkabsakhshakj");
+                      //console.log("dhkabsakhshakj");
                       this.onStopRecord();
                     }
                     if (
@@ -1214,7 +1214,7 @@ return (
                       this.setState({ loading: true });
                       let d = this.props.bottomReducer.swiperShowRadiostation;
                       d.isPlayingMusic = true;
-                      console.log("ddd", d);
+                      //console.log("ddd", d);
                       this.props.onchangeSelectedRadioStation(d);
                       this.props.onchangeMiniScreenData(d);
 
@@ -1296,7 +1296,7 @@ return (
   render() {
     const { itemMini, itemFull, style } = this.props;
     const { collapsed } = this.state;
-    console.log(Dimensions.get("screen").height-Dimensions.get("window").height);
+    //console.log(Dimensions.get("screen").height-Dimensions.get("window").height);
     return (
       <View
         style={{ position: "absolute", flex: 1, height: "100%", width: "100%" }}
@@ -1344,8 +1344,11 @@ return (
               <View
                 // {...this._panResponder.panHandlers}
                 onTouchStart={() => {
-                  console.log(';;;;;;;');
-                  this.setState({close:false})}}
+                  //console.log(';;;;;;;');
+                  this.setState({close:false})
+                  //this.close = false
+                }}
+                  
                 style={{
                   height: 86,
                   width: "70%",

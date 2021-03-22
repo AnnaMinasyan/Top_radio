@@ -30,16 +30,7 @@ const BottomTabStack = () => {
             <Tab.Screen
                 name="BottomSwiper"
                 component={BottomSwiper}
-                options={{
-                    tabBarLabel: 'Home Screen',
-                    /*tabBarIcon: ({ color, size }) => (
-                      <MaterialCommunityIcons
-                        name="home"
-                        color={color}
-                        size={size}
-                      />
-                    ),*/
-                }}
+              
             />
             <Tab.Screen name="Menu" component={Menu}/>
             <Tab.Screen name="Favorite"  component={Favorite}/>
@@ -65,10 +56,6 @@ const Navigator: React.FunctionComponent = (props:any) => (
           />
 
           <Drawer.Screen
-              name="Menu"
-              component={Menu}
-          />
-          <Drawer.Screen
               name="Settings"
               component={Settings}
           />
@@ -76,7 +63,6 @@ const Navigator: React.FunctionComponent = (props:any) => (
               name="MyAlarmClock"
               component={MyAlarmClock}
           />
-
       </Drawer.Navigator>
 
 );

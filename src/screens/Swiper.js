@@ -136,7 +136,7 @@ class SwipeUpDown extends Component<Props> {
       // setWidth(value.window.width)
   }
   componentWillUnmount() {
-      Dimensions.removeEventListener('change', _changeHAndler)
+      Dimensions.removeEventListener('change', this._changeHAndler)
   }
 
   fadeIn = () => {
@@ -738,6 +738,8 @@ class SwipeUpDown extends Component<Props> {
     this.setState({close:true})
     //this.close = true
     this.fadeIn();
+    this.move(this.buttomValue) 
+    
   }
   renderDisConectModal() {
     return (
@@ -1181,7 +1183,7 @@ return (
                 {this.props.recordSecs > 0 ? this.props.recordTime : ""}
               </Text>
             </View>
-            {this.state.loading ? (
+            {this.state.loading ||this.props.loadingBi ? (
               <View
                 style={[
                   styles.btnPlay,
@@ -1274,6 +1276,7 @@ return (
                 },
               ]}
               onPress={() => {
+                 this.move(this.buttomValue);
                 this.props._navigatePlayList();
               }}
             >
@@ -1342,11 +1345,11 @@ return (
               visible={this.state.visible}
             >
               <View
-                // {...this._panResponder.panHandlers}
+              {...this._panResponder.panHandlers}
                 onTouchStart={() => {
                   //console.log(';;;;;;;');
-                  this.setState({close:false})
-                  //this.close = false
+                  //this.setState({close:false})
+                  this.showFull()
                 }}
                   
                 style={{

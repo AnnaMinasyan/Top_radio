@@ -52,7 +52,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                             props.onchangeisActive('all')
                             props.onchangeActiveArrow(true)
                             props.navigation.navigate('Menu')  
-                                                      
+                           props.bottomReducer.swiperShowRadiostation && player.close()              
                             props.onchangeSearchData(props.menuReducer.menuData)
                         }}
                     >
@@ -101,7 +101,7 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
                             props.onchangeisActive('looking')
                             props.navigation.navigate('LookingMenu')
                             props.onchangeActiveArrow(false)
-
+                            props.bottomReducer.swiperShowRadiostation && player.close()
                         }}
                     >
                         <View style={styles.item}>

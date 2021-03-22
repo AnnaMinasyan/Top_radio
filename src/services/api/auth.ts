@@ -16,12 +16,12 @@ class Static implements IDATA {
     async getMenuDatas() {
         try {
             const response = await authApi.get(`${keys.API_URL}radios.json`,);
-           
-            
+
+
             return response.data
         } catch (error) {
-         return Alert.alert("Error",error)
-          
+            return Alert.alert("Error", error)
+
         }
     }
     async getCities() {
@@ -29,44 +29,44 @@ class Static implements IDATA {
             const response = await authApi.get(`${keys.API_URL}cities.json`,);
             return response.data
         } catch (ex) {
-            return Alert.alert("Error",ex)
+            return Alert.alert("Error", ex)
         }
     }
     async getGanres() {
         try {
             const response = await authApi.get(`${keys.API_URL}genres.json`,);
-     
-            
-            
+
+
+
             return response.data
         } catch (ex) {
-            return Alert.alert("Error",ex)
+            return Alert.alert("Error", ex)
         }
     }
     async getPlayLists(payload: number) {
-        
+
         try {
             const data = moment().format('YYYY-MM-DD')
             const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=100`,);
             return response.data
         } catch (ex) {
-            return Alert.alert("Error",ex)
+            return Alert.alert("Error", ex)
         }
     }
     async getPlayItemType(payload: any) {
         try {
-            console.log('geeeeeeeeeeeeeeeeeeeeet')
-            
-            const data = moment().format('YYYY-MM-DD')
-            if(payload)
-               {const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=1`,);
-          
 
-            return response.data}
+            const data = moment().format('YYYY-MM-DD')
+            if (payload) {
+                const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=1`,);
+
+
+                return response.data
+            }
         } catch (ex) {
             console.log(ex)
-          throw ex 
-            
+            throw ex
+
         }
     }
 }

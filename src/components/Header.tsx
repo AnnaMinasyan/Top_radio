@@ -153,6 +153,7 @@ class Header extends React.Component<Props, IState> {
               style={[global_styles.searchbtn, { paddingHorizontal: (0), paddingRight: (11) }]}
               onPress={() => {
                 this.props.navigation.goBack()
+                player.close()
               }}
             >
               <Arrow height={(23.49)} width={(23.49)} />

@@ -17,7 +17,6 @@ export const setGanres= (payload:any) => {
 	};
 };
 export const changeFilterGanres= (payload:any) => {
-	console.log(":",payload);
 	
 	return {
 		type: GanresTypes.CHANGE_FILTER_GANRE,
@@ -25,9 +24,7 @@ export const changeFilterGanres= (payload:any) => {
 	
 	};
 };
-export const setFilterGanres= (payload:any) => {
-	console.log("000000",payload);
-	
+export const setFilterGanres= (payload:any) => {	
 	return {
 		type: GanresTypes.SET_FILTER_GANRE,
 		payload

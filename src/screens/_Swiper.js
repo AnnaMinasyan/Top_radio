@@ -930,7 +930,6 @@ class SwipeUpDown extends Component<Props> {
                             paddingLeft: 20,
                         }}
                         onPress={() => {
-                            console.log("00000000000000000000000000000000");
                             this.showMini()
                         }}
                     >

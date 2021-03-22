@@ -253,16 +253,20 @@ class BottomSwiper extends React.Component<Props, IState> {
       this.state.isRecording
     ) {
       this.onStopRecord();
-      player._pouseMusic();
-      this.props.onchangeSelectedRadioStationPlaying(false);
+      player._pouseMusic().then(()=>{
+        this.props.onchangeSelectedRadioStationPlaying(false);
+      })
+      
       this.setState({ isRecording: false });
     } else {
       this._addLookingList(this.props.bottomReducer.selectedRadioStation?.data);
       player._startPlayMusic(
         this.props.bottomReducer.selectedRadioStation?.data,
         this.props.bottomReducer.selectedRadioStation?.activeBi
-      );
-      this.props.onchangeSelectedRadioStationPlaying(true);
+      ).then(()=>{
+        this.props.onchangeSelectedRadioStationPlaying(true);
+      })
+    
     }
   }
   lastClickData = Date.now();
@@ -463,14 +467,16 @@ class BottomSwiper extends React.Component<Props, IState> {
     ) {
       this.props.onchangeActiveBi(item);
       player._pouseMusic();
-      setTimeout(() => {
+      //setTimeout(() => {
         player._startPlayMusic(
           this.props.bottomReducer.swiperShowRadiostation?.data,
           this.props.bottomReducer.swiperShowRadiostation?.activeBi
-        );
-        this.props.onchangeSelectedRadioStationPlaying(true);
+        ).then(()=>{
+          this.props.onchangeSelectedRadioStationPlaying(true);
         this.setState({ loading: false });
-      }, 500);
+        })
+        
+     // }, 500);
     } else {
       let data = this.props.bottomReducer.swiperShowRadiostation;
       data.isPlayingMusic = true;
@@ -480,17 +486,19 @@ class BottomSwiper extends React.Component<Props, IState> {
       this.props.onchangeSelectedSatationbyBi(data);
       // this.props.onchangeSelectedRadioStation(data)
 
-      setTimeout(() => {
+      //setTimeout(() => {
         this._addLookingList(
           this.props.bottomReducer.swiperShowRadiostation?.data
         );
         player._startPlayMusic(
           this.props.bottomReducer.swiperShowRadiostation?.data,
           this.props.bottomReducer.swiperShowRadiostation?.activeBi
-        );
-        this.props.onchangeSelectedRadioStationPlaying(true);
-        this.setState({ loading: false });
-      }, 500);
+        ).then(()=>{
+          this.props.onchangeSelectedRadioStationPlaying(true);
+          this.setState({ loading: false });
+        })
+       
+     // }, 500);
     }
   }
   closed() {
@@ -1272,9 +1280,7 @@ class BottomSwiper extends React.Component<Props, IState> {
     );
   }
 
-  render() {
-    // console.log('this.props.theme.albomeMode',this.state.recordTime, this.state.recordSecs);
-    
+  render() {    
     return (
 
                
@@ -1285,6 +1291,7 @@ class BottomSwiper extends React.Component<Props, IState> {
           //  this.setState({ headerHeight: true });
          // }
         }}
+        loadingBi={this.state.loading}
         recordTime={this.state.recordTime}
         recordSecs={this.state.recordSecs}
         isPlaying={()=>this.isPlaying()}

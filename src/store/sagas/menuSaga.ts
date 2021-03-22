@@ -70,9 +70,7 @@ function* onChangeHeaderText({payload}:any) {
 	} 
 }
 function* changeSearchData({payload}:any) {
-    try {
-		console.log("jjjjjjjjjjjjjjjjjjjj");
-		
+    try {		
 		yield put(setSearchData(payload))
 	} catch (ex) {
 		console.log(ex);

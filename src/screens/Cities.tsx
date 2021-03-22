@@ -42,6 +42,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
   }
   setData() {
     this.setState({ searchvalue: "" });
+    this.setState({ loading: false });
   }
   filterData(res: any) {
     const array: any = [];
@@ -73,6 +74,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
           this.filterData(data.item);
           this.props.navigation.navigate("FilterMenu");
           this.props.onchangeHeaderText(data.item.pa);
+       
         }}
       />
     );

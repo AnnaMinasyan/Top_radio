@@ -62,7 +62,9 @@ class PlayerServices implements IDATA {
     async stopPlayer(){
         await TrackPlayer.stop()
     }
-    
+
+   
+
    
 }
 const player = new PlayerServices();

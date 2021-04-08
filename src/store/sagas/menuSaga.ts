@@ -10,11 +10,14 @@ import {setIsConnected  } from "../actions/bottomAction";
 
 function* getMenuData() {
 	try {
-		const data= yield auth.getMenuDatas()
-		let swiper =data.slice(0, 15)
+		let data= yield auth.getMenuDatas()
+		
+		for (let index = 0; index < data.length; index++) {
+			const element = data[index];
+			element.index=index
+		}
 		yield put(setMenuData(data))
 		yield put(setFilterData(data))
-		yield put(setSwiperData(swiper))
 		yield put(setSearchData(data))
 
 	} catch (ex) {

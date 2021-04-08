@@ -7,8 +7,13 @@ import { getData, storeData } from '../../utils/local_storage';
 import auth from "../../services/api/auth"
 
 function* onGetMenuType({payload}:any) {
-    yield storeData('menuType',payload);
+    try {
+        yield storeData('menuType',payload);
     yield put(setMenuType(payload));
+      } catch (ex) {
+        console.log('errror',ex);
+      }
+   
    
 }
 function* initMenuTypebyStorage() {

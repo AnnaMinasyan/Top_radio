@@ -29,7 +29,7 @@ import { createFilter } from "react-native-search-filter";
 import { addFavorites } from "../store/actions/favoritesActions";
 import player from "../services/player/PlayerServices";
 import Bottom from "../components/Bottom";
-import { setFilterData } from "../store/actions/menuActions";
+import { changeFilterData, setFilterData } from "../store/actions/menuActions";
 const KEYS_TO_FILTERS = ["pa"];
 interface IState {
   favoriteList: [];
@@ -56,6 +56,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
   setData() {
     getData("favorites").then((favorite) => {
       this.setState({ favoriteList: favorite });
+      console.log(favorite);
+
       this.props.onsetFilterData(favorite);
     });
     this.setState({ searchvalue: "" });
@@ -136,7 +138,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 ?.isPlayingMusic,
             };
             player.open(info);
-            player.open(info);
           }}
           style={{ padding: calcWidth(8) }}
         >
@@ -149,7 +150,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
   }
   _changeSearchData(text: string) {
     this.setState({ searchvalue: text });
-    let data = this.props.menuReducer.favoriteList;    
+    let data = this.props.menuReducer.favoriteList;
     this.setState({
       favoriteList: data.filter((i: any) =>
         i.pa.toLowerCase().includes(text.toLowerCase())
@@ -170,12 +171,15 @@ class Favorite extends React.Component<IMenuProps, IState> {
           changeSearchData={(text) => {
             this._changeSearchData(text);
           }}
-          clearSearchData={()=>{ 
-            this._changeSearchData ("")}}
+          clearSearchData={() => {
+            this._changeSearchData("");
+          }}
           searchvalue={this.state.searchvalue}
         />
         {this.state.favoriteList && this.props.filterReducer.menuType == 1 ? (
           <FlatList
+          key={'_'}
+
             data={this.state.favoriteList}
             renderItem={(d) => this.renderMenuItems(d)}
             keyExtractor={(item: any, index: number) => item.id?.toString()}
@@ -183,20 +187,21 @@ class Favorite extends React.Component<IMenuProps, IState> {
           />
         ) : (
           <FlatList
+          key={'#'}
+
             data={this.state.favoriteList}
             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
             contentContainerStyle={{
-              flexDirection: "row",
-              flexWrap: "wrap",
               paddingLeft: calcWidth(12),
               paddingRight: calcWidth(16),
               justifyContent: "center",
             }}
             keyExtractor={(item: any, index: number) => item.id?.toString()}
             maxToRenderPerBatch={10}
+            numColumns={3}
+
           />
         )}
-       
       </View>
     );
   }
@@ -243,7 +248,7 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(changeMiniScreenData(payload));
     },
     onsetFilterData: (payload: any) => {
-      dispatch(setFilterData(payload));
+      dispatch(changeFilterData(payload));
     },
   };
 };

@@ -45,7 +45,6 @@ import PlaySvG from "../assets/icons/play.svg";
 import Stop from "../assets/icons/stop.svg";
 import player from "../services/player/PlayerServices";
 
-
 const MARGIN_TOP = Platform.OS === "ios" ? 20 : 0;
 const DEVICE_HEIGHT = Dimensions.get("window").height + calcHeight(55);
 type Props = {
@@ -78,8 +77,8 @@ class SwipeUpDown extends Component<Props> {
   static defautProps = {
     disablePressToShow: false,
   };
-  buttomValue
-  close
+  buttomValue;
+  close;
   constructor(props) {
     super(props);
     this.state = {
@@ -90,9 +89,9 @@ class SwipeUpDown extends Component<Props> {
       swipeAnimation: new Animated.Value(deviceHeight),
       visible: false,
       loading: true,
-      close:false
+      close: false,
     };
-    this.close = false
+    this.close = false;
     this.disablePressToShow = props.disablePressToShow;
     this.SWIPE_HEIGHT = props.swipeHeight;
     this._panResponder = null;
@@ -107,40 +106,61 @@ class SwipeUpDown extends Component<Props> {
         // height: this.height
       },
     };
-    this.buttomValue =  this.props.theme.albomeMode?Dimensions.get("window").height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?78:85)):
-    Dimensions.get("window").height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?56:68))
+    this.buttomValue = this.props.theme.albomeMode
+      ? Dimensions.get("window").height -
+        (86 +
+          (Dimensions.get("screen").height - Dimensions.get("window").height >
+          48
+            ? 78
+            : 85))
+      : Dimensions.get("window").height -
+        (86 +
+          (Dimensions.get("screen").height - Dimensions.get("window").height >
+          48
+            ? 56
+            : 68));
     this.showFull = this.showFull.bind(this);
     this.count = 0;
-    Dimensions.addEventListener('change', this._changeHAndler.bind(this))
+    Dimensions.addEventListener("change", this._changeHAndler.bind(this));
   }
   _changeHAndler(value) {
-      const albome = value.window.width > value.window.height;
-      this.buttomValue =albome?value.window.height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?78:85)):
-       value.window.height - (86+(Dimensions.get("screen").height-Dimensions.get("window").height>48?56:68))
-      if(this.state.visible){
-        
-        if((this.state.swipeAnimation)._value != 0){
-            this.move(this.buttomValue)
-        }
+    const albome = value.window.width > value.window.height;
+    this.buttomValue = albome
+      ? value.window.height -
+        (86 +
+          (Dimensions.get("screen").height - Dimensions.get("window").height >
+          48
+            ? 78
+            : 85))
+      : value.window.height -
+        (86 +
+          (Dimensions.get("screen").height - Dimensions.get("window").height >
+          48
+            ? 56
+            : 68));
+    if (this.state.visible) {
+      if (this.state.swipeAnimation._value != 0) {
+        this.move(this.buttomValue);
       }
-      // if (albome && this.state.visible) {
-      //     this.customStyle.style.top = value.window.height - 50 - 86;
-      //     this.height = DEVICE_HEIGHT;
-      //     this.updateNativeProps();
-      // } else {
-      //     this.customStyle.style.top = value.window.height - 50 - 86;
-      //     this.height = DEVICE_HEIGHT;
-      //     this.updateNativeProps();
-      // }
-      // setHeight(value.window.height)
-      // setWidth(value.window.width)
+    }
+    // if (albome && this.state.visible) {
+    //     this.customStyle.style.top = value.window.height - 50 - 86;
+    //     this.height = DEVICE_HEIGHT;
+    //     this.updateNativeProps();
+    // } else {
+    //     this.customStyle.style.top = value.window.height - 50 - 86;
+    //     this.height = DEVICE_HEIGHT;
+    //     this.updateNativeProps();
+    // }
+    // setHeight(value.window.height)
+    // setWidth(value.window.width)
   }
   componentWillUnmount() {
-      Dimensions.removeEventListener('change', this._changeHAndler)
+    Dimensions.removeEventListener("change", this._changeHAndler);
   }
 
   fadeIn = () => {
-    this.setState({ visible: true});
+    this.setState({ visible: true });
 
     Animated.timing(this.state.fadeAnim, {
       toValue: 1,
@@ -167,27 +187,29 @@ class SwipeUpDown extends Component<Props> {
       }).start()
     );
     //this.close = false
-    this.setState({visible:false,close:false})
+    this.setState({ visible: false, close: false });
     //this.setState({visible:false})
   };
   componentWillMount() {
     this._panResponder = PanResponder.create({
       onMoveShouldSetPanResponder: (evt, gestureState) => {
-        return !((Math.abs(gestureState.dx) + Math.abs(gestureState.dy) < 15))
-    },
-    // onPanResponderStart:() =>{this._onPanResponderStart(this)},
-    onPanResponderEnd:() =>{this._onPanResponderEnd(this)},
+        return !(Math.abs(gestureState.dx) + Math.abs(gestureState.dy) < 15);
+      },
+      // onPanResponderStart:() =>{this._onPanResponderStart(this)},
+      onPanResponderEnd: () => {
+        this._onPanResponderEnd(this);
+      },
       onPanResponderMove: this._onPanResponderMove.bind(this),
       onPanResponderRelease: this._onPanResponderRelease.bind(this),
     });
   }
   _onPanResponderEnd() {
-    if(this.state.visible){
+    if (this.state.visible) {
       //this.close = true
-    this.setState({close:true})
+      this.setState({ close: true });
     }
   }
-  
+
   componentDidMount() {
     this.props.hasRef && this.props.hasRef(this);
     // setTimeout(() => {
@@ -600,10 +622,9 @@ class SwipeUpDown extends Component<Props> {
                         )}
                       </TouchableOpacity>
                     )}
-                    <TouchableOpacity
+                    {this.props.bottomReducer.swiperShowRadiostation?.data.pl ? <TouchableOpacity
                       disabled={
-                        !this.props.bottomReducer.swiperShowRadiostation?.data
-                          .pl
+                        !this.props.bottomReducer.swiperShowRadiostation?.data.pl
                       }
                       style={[
                         styles.btnrecord,
@@ -627,7 +648,15 @@ class SwipeUpDown extends Component<Props> {
                             : "white"
                         }
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity>:<View style={[
+                        styles.btnrecord,
+                        {
+                          backgroundColor:
+                            this.props.theme.backgroundColor == "white"
+                              ? "white"
+                              : "#0F1E45",
+                        },
+                      ]}/>}
                   </View>
                 </View>
               </View>
@@ -673,24 +702,19 @@ class SwipeUpDown extends Component<Props> {
     );
   }
   _onPanResponderMove(event, gestureState) {
-    const dy = gestureState.dy + ((!this.close)?0:this.buttomValue);
+    const dy = gestureState.dy + (!this.close ? 0 : this.buttomValue);
 
-    if(dy<0)return
-      if (!this.state.startDrag) {
-        this.setState({ startDrag: true });
-      }
-      Animated.timing(this.state.swipeAnimation, {
-        toValue: dy,
-        duration: 0,
-        useNativeDriver: true,
-      }).start(
-        
-        this.fadeIn()
-      );
-    
+    if (dy < 0) return;
+    if (!this.state.startDrag) {
+      this.setState({ startDrag: true });
+    }
+    Animated.timing(this.state.swipeAnimation, {
+      toValue: dy,
+      duration: 0,
+      useNativeDriver: true,
+    }).start(this.fadeIn());
 
     return;
-   
   }
 
   move(moveTo) {
@@ -704,21 +728,20 @@ class SwipeUpDown extends Component<Props> {
     ////console.log('gestureState',gestureState);
     const delta = this.buttomValue;
     this.setState({ startDrag: false });
-    
+
     if (gestureState.dy > 0) {
       this.move(delta);
-      this.close = true
+      this.close = true;
     } else {
       this.showFull();
-      this.close = false
+      this.close = false;
     }
 
-
     return;
-   
   }
 
   showFull(value) {
+    console.log(value);
     this.fadeOut();
     //console.log("lfkdfk");
     Animated.timing(this.state.swipeAnimation, {
@@ -737,11 +760,10 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   showMini() {
-    this.setState({close:true})
+    this.setState({ close: true });
     //this.close = true
     this.fadeIn();
-    this.move(this.buttomValue) 
-    
+    this.move(this.buttomValue);
   }
   renderDisConectModal() {
     return (
@@ -768,10 +790,13 @@ class SwipeUpDown extends Component<Props> {
                 this.props.onchangeIsConnected(true);
                 setTimeout(() => {
                   NetInfo.fetch().then((state) => {
-                  console.log("djdkjslakdjad9uao9du0fagbasf.");
-                  if(this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
-                    this.props.isPlaying();
-                  }
+                    console.log("djdkjslakdjad9uao9du0fagbasf.");
+                    if (
+                      this.props.bottomReducer.selectedRadioStation
+                        .isPlayingMusic
+                    ) {
+                      this.props.isPlaying();
+                    }
                     this.props.onchangeIsConnected(state.isConnected);
                   }, 50000);
                 });
@@ -833,18 +858,13 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   swipeRight() {
-    if (this.count < this.props.menuReducer.filterData.length - 1) {
+    console.log("----",this.props.filterReducer.activeIndex);
+    if (this.count < this.props.menuReducer.filterData.length ) {
       let radiostation = {
-        data: this.props.menuReducer.filterData[
-          this.props.filterReducer.activeIndex + 1
-        ],
+        data: this.props.menuReducer.filterData[this.props.filterReducer.activeIndex + 1],
         isPlayingMusic: false,
-        activeBi: this.props.menuReducer.filterData[
-          this.props.filterReducer.activeIndex + 1
-        ].st[0],
-        id: this.props.menuReducer.filterData[
-          this.props.filterReducer.activeIndex + 1
-        ].id,
+        activeBi: this.props.menuReducer.filterData[this.props.filterReducer.activeIndex + 1].st[0],
+        id: this.props.menuReducer.filterData[this.props.filterReducer.activeIndex + 1].id,
         index: this.props.filterReducer.activeIndex - 1,
       };
       if (this.timerHandle) {
@@ -871,10 +891,8 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   renderBottomSheet() {
-return (
-     <View 
-  
-      style={{ height: "100%" }}>
+    return (
+      <View style={{ height: "100%" }}>
         <View
           //  {...this._panResponder.panHandlers}
           style={{
@@ -891,9 +909,9 @@ return (
               justifyContent: "center",
               paddingLeft: 20,
             }}
-            onPress={()=>{
-              this.showMini()
-              this.move(this.buttomValue)
+            onPress={() => {
+              this.showMini();
+              this.move(this.buttomValue);
             }}
           >
             <Arrow
@@ -1188,7 +1206,7 @@ return (
                 {this.props.recordSecs > 0 ? this.props.recordTime : ""}
               </Text>
             </View>
-            {this.state.loading ||this.props.loadingBi ? (
+            {this.state.loading || this.props.loadingBi ? (
               <View
                 style={[
                   styles.btnPlay,
@@ -1265,36 +1283,46 @@ return (
                 )}
               </TouchableOpacity>
             )}
-
-            <TouchableOpacity
-              disabled={
-                !this.props.bottomReducer.swiperShowRadiostation?.data.pl
-              }
-              style={[
-                styles.btnrecord,
-                {
-                  backgroundColor:
-                    this.props.theme.backgroundColor == "white"
-                      ? "white"
-                      : "#0F1E45",
-                  marginTop: calcHeight(10),
-                },
-              ]}
-              onPress={() => {
-                 this.move(this.buttomValue);
-                this.props._navigatePlayList();
-              }}
-            >
-              <InfoSvg
-                width={29.91}
-                height={24.22}
-                fill={
-                  this.props.theme.backgroundColor == "white"
-                    ? "#1E2B4D"
-                    : "white"
+            {this.props.bottomReducer.swiperShowRadiostation?.data.pl ? (
+              <TouchableOpacity
+                disabled={
+                  !this.props.bottomReducer.swiperShowRadiostation?.data.pl
                 }
-              />
-            </TouchableOpacity>
+                style={[
+                  styles.btnrecord,
+                  {
+                    backgroundColor:
+                      this.props.theme.backgroundColor == "white"
+                        ? "white"
+                        : "#0F1E45",
+                    marginTop: calcHeight(10),
+                  },
+                ]}
+                onPress={() => {
+                  this.move(this.buttomValue);
+                  this.props._navigatePlayList();
+                }}
+              >
+                <InfoSvg
+                  width={29.91}
+                  height={24.22}
+                  fill={
+                    this.props.theme.backgroundColor == "white"
+                      ? "#1E2B4D"
+                      : "white"
+                  }
+                />
+              </TouchableOpacity>
+            ):<View style={[
+              styles.btnrecord,
+              {
+                backgroundColor:
+                  this.props.theme.backgroundColor == "white"
+                    ? "white"
+                    : "#0F1E45",
+                marginTop: calcHeight(10),
+              },
+            ]}/>}
           </View>
         </View>
       </View>
@@ -1304,7 +1332,6 @@ return (
   render() {
     const { itemMini, itemFull, style } = this.props;
     const { collapsed } = this.state;
-console.log(  this.props.bottomReducer.selectedRadioStation?.isPlayingMusic);
     return (
       <View
         style={{ position: "absolute", flex: 1, height: "100%", width: "100%" }}
@@ -1333,61 +1360,74 @@ console.log(  this.props.bottomReducer.selectedRadioStation?.isPlayingMusic);
             style,
           ]}
         >
-        
-            <Animated.View
-              style={[
-                styles.bottomHeader,
-                {
-                  backgroundColor:
-                    this.props.backgroundColor == "white"
-                      ? "#EBEEF7"
-                      : "#0F1E45",
-                },
-                {
-                  opacity: this.state.fadeAnim, // Bind opacity to animated value
-                },
-              ]}
-              visible={this.state.visible}
+          <Animated.View
+            style={[
+              styles.bottomHeader,
+              {
+                backgroundColor:
+                  this.props.backgroundColor == "white" ? "#EBEEF7" : "#0F1E45",
+              },
+              {
+                opacity: this.state.fadeAnim, // Bind opacity to animated value
+              },
+            ]}
+            visible={this.state.visible}
+          >
+            <View
+               {...this._panResponder.panHandlers}
+              onTouchStart={() => {
+                this.move(0);
+             this.fadeOut();
+              this.close = false;
+              }}
+           
+              style={{
+                height: 86,
+                width: "70%",
+
+                backgroundColor:
+                  this.props.backgroundColor == "white" ? "#EBEEF7" : "#0F1E45",
+              }}
             >
               <View
-              {...this._panResponder.panHandlers}
-                onTouchStart={() => {
-                  this.move(0)
-                  this.fadeOut();
-                  this.close=false
-                }}
-                  
                 style={{
-                  height: 86,
-                  width: "70%",
-
-                  backgroundColor:
-                    this.props.backgroundColor == "white"
-                      ? "#EBEEF7"
-                      : "#0F1E45",
+                  flexDirection: "row",
+                  paddingTop: 15,
+                  paddingLeft: 25,
+                  justifyContent: "space-between",
+                  paddingRight: 12,
                 }}
               >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    paddingTop: 15,
-                    paddingLeft: 25,
-                    justifyContent: "space-between",
-                    paddingRight: 12,
-                  }}
-                >
-                  <View style={{ flexDirection: "row" }}>
-                    {this.props.bottomReducer.miniScreenData && (
-                      <SimpleImage
-                        size={57}
-                        image={this.props.bottomReducer.miniScreenData.data.im}
-                      />
-                    )}
-                    <View style={{ marginLeft: 15 }}>
+                <View style={{ flexDirection: "row" }}>
+                  {this.props.bottomReducer.miniScreenData && (
+                    <SimpleImage
+                      size={57}
+                      image={this.props.bottomReducer.miniScreenData.data.im}
+                    />
+                  )}
+                  <View style={{ marginLeft: 15 }}>
+                    <Text
+                      style={[
+                        styles.txtTitle,
+                        {
+                          color:
+                            this.props.backgroundColor == "white"
+                              ? "#1D2A4B"
+                              : "white",
+                        },
+                      ]}
+                    >
+                      {this.props.bottomReducer.miniScreenData?.data.pa}
+                    </Text>
+                    {this.props.bottomReducer.miniScreenData?.playingSong && (
                       <Text
+                        numberOfLines={1}
                         style={[
                           styles.txtTitle,
                           {
+                            fontSize: 12,
+                            marginTop: 5,
+                            width: 160,
                             color:
                               this.props.backgroundColor == "white"
                                 ? "#1D2A4B"
@@ -1395,54 +1435,36 @@ console.log(  this.props.bottomReducer.selectedRadioStation?.isPlayingMusic);
                           },
                         ]}
                       >
-                        {this.props.bottomReducer.miniScreenData?.data.pa}
+                        {
+                          this.props.bottomReducer.miniScreenData.playingSong
+                            .artist
+                        }
+                        {
+                          this.props.bottomReducer.miniScreenData.playingSong
+                            .song
+                        }
                       </Text>
-                      {this.props.bottomReducer.miniScreenData?.playingSong && (
-                        <Text
-                          numberOfLines={1}
-                          style={[
-                            styles.txtTitle,
-                            {
-                              fontSize: 12,
-                              marginTop: 5,
-                              width: 160,
-                              color:
-                                this.props.backgroundColor == "white"
-                                  ? "#1D2A4B"
-                                  : "white",
-                            },
-                          ]}
-                        >
-                          {
-                            this.props.bottomReducer.miniScreenData.playingSong
-                              .artist
-                          }
-                          {
-                            this.props.bottomReducer.miniScreenData.playingSong
-                              .song
-                          }
-                        </Text>
-                      )}
-                    </View>
+                    )}
                   </View>
                 </View>
               </View>
-              {itemMini}
-            </Animated.View>
+            </View>
+            {itemMini}
+          </Animated.View>
 
-           {!this.state.close &&
+          {!this.state.close && (
             <View
-            style={{
-              height: deviceHeight,
-              width: "100%",
-              position: "absolute",
-            }}
-          >
-            {this.props.theme.albomeMode
-              ? this.renderBottomSheetHorizontal()
-              : this.renderBottomSheet()}
-          </View>}
-    
+              style={{
+                height: deviceHeight,
+                width: "100%",
+                position: "absolute",
+              }}
+            >
+              {this.props.theme.albomeMode
+                ? this.renderBottomSheetHorizontal()
+                : this.renderBottomSheet()}
+            </View>
+          )}
         </Animated.View>
       </View>
     );
@@ -1607,7 +1629,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12.35,
     // height: calcHeight(86),
     elevation: 25,
-   // marginTop: calcHeight(-28),
+    // marginTop: calcHeight(-28),
   },
 
   row: {

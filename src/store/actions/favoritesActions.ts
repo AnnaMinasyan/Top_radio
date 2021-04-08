@@ -19,3 +19,9 @@ export const initFavorites = () => {
 		type: FavoriteType.INIT
 	};
 };
+export const appCreateFavorites = (payload:any) => {
+	return {
+		type: FavoriteType.APP_CREATE,
+		payload
+	};
+};

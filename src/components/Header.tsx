@@ -128,9 +128,11 @@ class Header extends React.Component<Props, IState> {
 
       this.props.navigation.navigate("Menu")
     } else {
-      player.close()
       this.props.onchangeActiveArrow(false)
       this.props.navigation.navigate("Favorite")
+    }
+    if(this.props.bottomReducer.selectedRadioStation){
+      player.close()
     }
     this.props.onchangeFavoriteType()
 
@@ -153,8 +155,9 @@ class Header extends React.Component<Props, IState> {
               style={[global_styles.searchbtn, { paddingHorizontal: (0), paddingRight: (11) }]}
               onPress={() => {
                 this.props.navigation.goBack()
-                player.close()
-              }}
+                if(this.props.bottomReducer.selectedRadioStation){
+                  player.close()
+                }              }}
             >
               <Arrow height={(23.49)} width={(23.49)} />
             </TouchableOpacity>
@@ -190,7 +193,9 @@ class Header extends React.Component<Props, IState> {
           <TouchableOpacity
             style={global_styles.searchbtn}
             onPress={() => {
-              player.close(),
+              if(this.props.bottomReducer.selectedRadioStation){
+                player.close()
+              }
               
               this.props.clearSearchData()
                 this.setState({ showSearchView: !this.state.showSearchView })

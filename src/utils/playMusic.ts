@@ -20,3 +20,7 @@ export const   _pouseMusic=async(isPlayingMusic:boolean)=> {
         await TrackPlayer.pause();
     }
 }
+export const   _stop=async()=> {
+        await TrackPlayer.stop();
+   
+}

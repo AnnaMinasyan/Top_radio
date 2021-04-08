@@ -23,24 +23,11 @@ class App extends React.Component<Props, any> {
     }
 
 }
-  componentDidMount() {
-    SplashScreen.hide()
-   
-    // getData("favorites").then((favorites) => {
-    //   if (favorites == null) {
-    //     storeData("favorites", [])
-    //   }
-    // })
-    getData("isLooking").then((favorites) => {
-      if (favorites == null) {
-        storeData("isLooking", [])
-      }
-    })
-    getData('alarmClock').then((time)=>{
-      if(time){
-      }
-      })
+componentDidUpdate(prevProps:any, prevState:any) {
+  if (prevState.cardComponents !== this.state.cardComponents) {
+    SplashScreen.hide();
   }
+}
   async launchBugsee() {
     let appToken;
 

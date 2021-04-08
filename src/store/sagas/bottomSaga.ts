@@ -57,7 +57,8 @@ function* changeselectedSatationbyBi({ payload }: any) {
 }
 function* clearReducerData() {
   try {
-    yield put(setSelectedRadioStation(null));
+    yield put(setSelectedRadioStation(undefined));
+    player.stopPlayer()
   } catch (ex) {
     yield put(setIsConnected(false));
     console.log(ex);
@@ -142,10 +143,12 @@ function* onchangeActiveIndex({ payload }: any) {
 }
 function* changeSwiperShowStation({ payload }: any) {
   try {
-
-
-    yield put(setSwiperShowStation(payload.radioStation));
-    yield put(setActiveIndex(payload.index));
+    yield put(setSwiperShowStation(payload.radioStation));    
+    if(payload.search){
+      yield put(setActiveIndex(payload.radioStation.data.index));
+    }else{
+      yield put(setActiveIndex(payload.index));
+    }
     if (!payload.isPlayingMusic) {
       yield put(setMiniScreenData(payload.radioStation));
        yield put(setSelectedRadioStation(payload.radioStation));
@@ -179,7 +182,6 @@ function* changeIsconnected({ payload }: any) {
   try {
     if(payload){
       console.log("PPPPPPP",payload);
-      yield put(initFavorites())
       yield put(initMenuType())
       yield put(initAutoPlay())
     }

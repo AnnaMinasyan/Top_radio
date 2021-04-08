@@ -62,8 +62,8 @@ export enum ThemeTypes {
 export enum FavoriteType {
     ADD = "@FavoriteType/ADD",
     SET = "@FavoriteType/SET",
-    INIT = "@FavoriteType/INIT"
-
+    INIT = "@FavoriteType/INIT",
+    APP_CREATE = "@FavoriteType/APP_CREATE"
 
 }
 export enum SettingsType {

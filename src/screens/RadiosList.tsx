@@ -138,7 +138,8 @@ class Menu extends React.Component<IMenuProps, IState> {
           let info={
             radioStation:radioStation,
             index:data.index,
-            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
+            search:this.state.searchvalue
           }
           player.open(info);
           
@@ -171,13 +172,15 @@ class Menu extends React.Component<IMenuProps, IState> {
               isPlayingMusic: false,
               activeBi: data.item.st[0],
               id: data.item.id,
-              index:data.index,
+              index:data.item.index,
             };
             let info={
               radioStation:radioStation,
-              index:data.index,
-              isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
+              index:data.item.index,
+              isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
+              search:this.state.searchvalue
             }
+            
             player.open(info);
           }   
         
@@ -244,6 +247,7 @@ class Menu extends React.Component<IMenuProps, IState> {
             </View>
           ) : this.props.filterReducer.menuType == 1 ? (
             <FlatList
+            key={'_'}
               onEndReachedThreshold={0.01}
               data={this.props.menuReducer.searchData}
               renderItem={(d) => this.renderMenuItems(d)}
@@ -252,20 +256,23 @@ class Menu extends React.Component<IMenuProps, IState> {
               onEndReached={(info) => {
                 console.log(info);
               }}
+
             />
           ) : (
             <FlatList
+            key={'#'}
               onEndReachedThreshold={0.01}
               data={this.props.menuReducer.searchData}
               renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
               contentContainerStyle={{
                 width: "100%",
-                flexWrap: "wrap",
-                flexDirection: "row",
-                paddingLeft: calcWidth(15),
+                
+                paddingLeft: calcWidth(30),
                 paddingTop: calcHeight(8),
                 justifyContent: "center",
               }}
+              numColumns={3}
+
               keyExtractor={(item: any, index: number) => item.id.toString()}
               maxToRenderPerBatch={10}
             />

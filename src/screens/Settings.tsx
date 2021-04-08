@@ -121,6 +121,7 @@ class Settings extends React.Component<ISettings, IState> {
         style={[styles.modalThemeBtn, { backgroundColor: '#1E2B4D' }]}
         onPress={() => {
           this.props.onchangeBackgroundColor(true)
+          storeData('theme', true)
           this.setState({
             visibleModal: null,
 
@@ -135,6 +136,8 @@ class Settings extends React.Component<ISettings, IState> {
         underlayColor={'rgba(235, 235, 237,5)'}
         onPress={() => {
           this.props.onchangeBackgroundColor(false)
+          storeData('theme', false)
+
           this.setState({
             visibleModal: null,
 
@@ -459,6 +462,7 @@ class Settings extends React.Component<ISettings, IState> {
         <TouchableOpacity
           onPress={() => {
             this.setState({ visibleModal: 1 })
+
             //  this.props.onchangeBackgroundColor(this.props.theme.backgroundColor=="white")
           }}
           style={[styles.radiostation,

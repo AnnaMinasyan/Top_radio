@@ -4,14 +4,14 @@ import Navigator from "./navigation/Navigator"
 import { NavigationScreenProp } from 'react-navigation';
 import { useEffect, useState, } from 'react';
 import { useSelector, useDispatch } from "react-redux"
-import { initFavorites } from './store/actions/favoritesActions';
+import { appCreateFavorites, initFavorites } from './store/actions/favoritesActions';
 import { initAutoPlay } from "./store/actions/settingsAcrion"
 import { changePlayingMusic, initMenuType } from './store/actions/filterAction';
 import { changeplayItem, changeSelectedRadioStation, changeMiniScreenData } from './store/actions/bottomAction';
 import { initAlarmClock } from './utils/createAlarmClock'
 import { getData, storeData } from "./utils/local_storage"
 import { Dimensions, PixelRatio } from 'react-native';
-import { setHeightWidth } from './store/actions/themeAction'
+import { changeBackgroundColor, setHeightWidth } from './store/actions/themeAction'
 import { addFavorites } from './store/actions/favoritesActions'
 import NetInfo from "@react-native-community/netinfo";
 import { changeIsConnected } from "./store/actions/bottomAction"
@@ -26,6 +26,7 @@ interface Props {
 }
 import { NavigationContainer } from '@react-navigation/native';
 import { calcHeight } from './assets/styles/dimensions';
+import SplashScreen from 'react-native-splash-screen';
 
 const MyApp: React.FunctionComponent<Props> = (props) => {
     const dispatch = useDispatch()
@@ -60,6 +61,14 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             dispatch(changeIsConnected(state.isConnected))
 
         });
+        getData("theme").then((res) => {
+            if (res) {
+                dispatch(changeBackgroundColor(res))
+            }else{
+                dispatch(changeBackgroundColor(false))
+            }
+
+        })
         getData("timerSleepTime").then((time) => {
             if (time) {
                 initTimerSleep(timerSleep, time)
@@ -72,12 +81,15 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             }
         })
         getData("favorites").then((res) => {
+            
             if (res) {
-                dispatch(addFavorites(res))
+                dispatch(appCreateFavorites(res))
+            }else{
+                dispatch(initFavorites())
             }
 
         })
-        dispatch(initFavorites())
+     
         dispatch(initMenuType())
         dispatch(initAutoPlay())
         dispatch(setHeightWidth({ height: height, width: width }))

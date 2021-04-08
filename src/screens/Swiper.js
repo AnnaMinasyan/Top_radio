@@ -674,6 +674,7 @@ class SwipeUpDown extends Component<Props> {
   }
   _onPanResponderMove(event, gestureState) {
     const dy = gestureState.dy + ((!this.close)?0:this.buttomValue);
+
     if(dy<0)return
       if (!this.state.startDrag) {
         this.setState({ startDrag: true });
@@ -703,6 +704,7 @@ class SwipeUpDown extends Component<Props> {
     ////console.log('gestureState',gestureState);
     const delta = this.buttomValue;
     this.setState({ startDrag: false });
+    
     if (gestureState.dy > 0) {
       this.move(delta);
       this.close = true
@@ -721,7 +723,7 @@ class SwipeUpDown extends Component<Props> {
     //console.log("lfkdfk");
     Animated.timing(this.state.swipeAnimation, {
       toValue: 0,
-      duration: 500,
+      duration: 100,
       useNativeDriver: true,
     }).start();
 
@@ -753,7 +755,7 @@ class SwipeUpDown extends Component<Props> {
         }}
       >
         {
-          <View style={{ backgroundColor: "white", height: 150, padding: 10 }}>
+          <View style={{ backgroundColor: "white", height: 200, padding: 10 }}>
             <Text style={{ fontSize: 22, fontWeight: "bold", marginBottom: 8 }}>
               Нет подключения к интернету{" "}
             </Text>
@@ -766,7 +768,10 @@ class SwipeUpDown extends Component<Props> {
                 this.props.onchangeIsConnected(true);
                 setTimeout(() => {
                   NetInfo.fetch().then((state) => {
-                    //console.log("djdkjslakdjad9uao9du0fagbasf.");
+                  console.log("djdkjslakdjad9uao9du0fagbasf.");
+                  if(this.props.bottomReducer.selectedRadioStation.isPlayingMusic){
+                    this.props.isPlaying();
+                  }
                     this.props.onchangeIsConnected(state.isConnected);
                   }, 50000);
                 });
@@ -1103,7 +1108,7 @@ return (
               {!this.state.loading &&
               this.props.bottomReducer.swiperShowRadiostation ? (
                 this.props.bottomReducer.swiperShowRadiostation.data.st.map(
-                  (item: any, index: number) => {
+                  (item, index) => {
                     return (
                       <TouchableOpacity
                         key={index}
@@ -1299,7 +1304,7 @@ return (
   render() {
     const { itemMini, itemFull, style } = this.props;
     const { collapsed } = this.state;
-    //console.log(Dimensions.get("screen").height-Dimensions.get("window").height);
+console.log(  this.props.bottomReducer.selectedRadioStation?.isPlayingMusic);
     return (
       <View
         style={{ position: "absolute", flex: 1, height: "100%", width: "100%" }}
@@ -1347,9 +1352,9 @@ return (
               <View
               {...this._panResponder.panHandlers}
                 onTouchStart={() => {
-                  //console.log(';;;;;;;');
-                  //this.setState({close:false})
-                  this.showFull()
+                  this.move(0)
+                  this.fadeOut();
+                  this.close=false
                 }}
                   
                 style={{

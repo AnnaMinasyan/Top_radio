@@ -263,7 +263,10 @@ class BottomSwiper extends React.Component<Props, IState> {
       player._startPlayMusic(
         this.props.bottomReducer.selectedRadioStation?.data,
         this.props.bottomReducer.selectedRadioStation?.activeBi
-      ).then(()=>{
+      )
+      .then(()=>{
+        console.log("ooooooooooooooo");
+        
         this.props.onchangeSelectedRadioStationPlaying(true);
       })
     

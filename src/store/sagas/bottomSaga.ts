@@ -22,11 +22,13 @@ import {
   setActiveArrow,
   setIsConnected,
 } from "../actions/bottomAction";
-import { setActiveIndex } from "../actions/filterAction";
+import { initMenuType, setActiveIndex } from "../actions/filterAction";
 import { changePlayingMusic } from "../actions/filterAction";
 import player from "../../services/player/PlayerServices";
 import { storeData, getData } from "../../utils/local_storage";
 import { Alert } from "react-native";
+import { initFavorites } from "../actions/favoritesActions";
+import { initAutoPlay } from "../actions/settingsAcrion";
 function* onGetPlayType({ payload }: any) {
   try {
     yield put(setplayItem(payload));
@@ -175,7 +177,14 @@ function* changeMiniScreenData({ payload }: any) {
 }
 function* changeIsconnected({ payload }: any) {
   try {
+    if(payload){
+      console.log("PPPPPPP",payload);
+      yield put(initFavorites())
+      yield put(initMenuType())
+      yield put(initAutoPlay())
+    }
     yield put(setIsConnected(payload));
+
   } catch (ex) {
     console.log(ex);
   }
@@ -198,10 +207,7 @@ export function* watchBottomType() {
     BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC as any,
     changeSelectedRadioStationPlaying
   );
-  yield takeEvery(
-    BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC as any,
-    changeSelectedRadioStationPlaying
-  );
+ 
   yield takeEvery(
     BottomType.CHANGE_SWIPERSHOW_RADIOSTATION as any,
     changeSwiperShowStation

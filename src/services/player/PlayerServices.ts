@@ -31,9 +31,7 @@ class PlayerServices implements IDATA {
             
             // setTimeout(this.open, 500);
     }
-    close() {
-        console.log("ppppppppppppppp");
-        
+    close() {        
         this.playerRef&&    this.playerRef.showMini()
     
     }

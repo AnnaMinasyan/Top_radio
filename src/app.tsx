@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, SafeAreaView, StatusBar, Image, Text, TouchableOpacity } from 'react-native';
+import { View, SafeAreaView, StatusBar, Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Navigator from "./navigation/Navigator"
 import { NavigationScreenProp } from 'react-navigation';
 import { useEffect, useState, } from 'react';
@@ -25,34 +25,35 @@ interface Props {
     navigation: NavigationScreenProp<any, any>,
 }
 import { NavigationContainer } from '@react-navigation/native';
+import { calcHeight } from './assets/styles/dimensions';
 
 const MyApp: React.FunctionComponent<Props> = (props) => {
     const dispatch = useDispatch()
     const [width, setWidth] = useState<number>(Dimensions.get('window').width)
     const [height, setHeight] = useState<number>(Dimensions.get('window').height)
-    const [activeRadiostation,setRadiostation]=useState<any>()
+    const [activeRadiostation, setRadiostation] = useState<any>()
     const isConnected = useSelector(isConnectedSelector)
-    const alarmClockRadioStation=useSelector(alarmClockRadioStationSelector)
+    const alarmClockRadioStation = useSelector(alarmClockRadioStationSelector)
     const timerSleep = () => {
         console.log("sleeesssssssssssssssssssssssssssssssssp")
         player.stopPlayer()
-       
-    }
- 
-   const  createAlarmClock  =(radioStation:any)=> {
-            player.open()
-            if (radioStation) {
-                let playingData = {
-                    data: radioStation,
-                    isPlayingMusic: true,
-                    activeBi: radioStation.st[0],
-                    id:radioStation.id,
-                }
-                dispatch(changeSelectedRadioStation(playingData))
-                dispatch(changeMiniScreenData(playingData))
 
-                player._startPlayMusic(playingData.data, playingData.activeBi)
+    }
+    const [loading, setloading] = useState<boolean>(false)
+    const createAlarmClock = (radioStation: any) => {
+        player.open()
+        if (radioStation) {
+            let playingData = {
+                data: radioStation,
+                isPlayingMusic: true,
+                activeBi: radioStation.st[0],
+                id: radioStation.id,
             }
+            dispatch(changeSelectedRadioStation(playingData))
+            dispatch(changeMiniScreenData(playingData))
+
+            player._startPlayMusic(playingData.data, playingData.activeBi)
+        }
     }
     useEffect(() => {
         NetInfo.fetch().then(state => {
@@ -80,12 +81,12 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         dispatch(initMenuType())
         dispatch(initAutoPlay())
         dispatch(setHeightWidth({ height: height, width: width }))
-     
+
     }, [isConnected])
 
 
     Dimensions.addEventListener('change', (value: any) => {
-        
+
         setHeight(value.window.height)
         setWidth(value.window.width)
     })
@@ -105,26 +106,39 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             </SafeAreaView>
             : (<View>
                 <Image style={{ resizeMode: 'center' }} source={require('./assets/images/launch_screen.png')} />
+                
                 <Modal
                     isVisible={!isConnected}
                     animationIn={'slideInLeft'}
                     animationOut={'slideOutRight'}
                     backdropOpacity={0.2}
-                    onBackdropPress={() => {  }} >
-                    {<View style={{ backgroundColor: 'white', height: 150, padding: 10 }}>
+                    onBackdropPress={() => { }} >
+                    {<View style={{ backgroundColor: 'white', height: 180, padding: 10 }}>
                         <Text style={{ fontSize: 22, fontWeight: 'bold', marginBottom: 8 }}>Нет подключения к интернету </Text>
                         <Text style={{ fontSize: 16, lineHeight: 20 }}>Подключите соединение или мобильный интернет для прослушивания радиостанций </Text>
                         <TouchableOpacity
                             onPress={() => {
-                                dispatch(changeIsConnected(true))
-                                dispatch(initFavorites())
-                                dispatch(initMenuType())
-                                dispatch(initAutoPlay())
+                                setloading(true)
+                                NetInfo.fetch().then(state => {
+                                    dispatch(changeIsConnected(state.isConnected))
+                                    setloading(!state.isConnected)
+                                });
+                                setTimeout(()=>{
+                                   setloading(false) 
+                                },5000)
                             }}
                             style={{ marginTop: 25, width: '100%', alignItems: 'flex-end' }}
                         >
-                            <Text style={{ color: 'green', fontSize: 17 }}>Переподключится</Text>
-                       </TouchableOpacity>
+                           {loading ? <View
+                            style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                               
+                            }}
+                        >
+                            <ActivityIndicator size="large" color="#0F1E45" />
+                        </View> :<Text style={{ color: 'green', fontSize: 17 }}>Переподключится</Text>}
+                        </TouchableOpacity>
                     </View>}
                 </Modal>
             </View>)

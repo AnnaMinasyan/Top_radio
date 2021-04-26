@@ -8,9 +8,9 @@ import {setSwiperData,setLookingList} from "../actions/menuActions"
 
 import {setIsConnected  } from "../actions/bottomAction";
 
-function* getMenuData() {
+function* getMenuData():Generator {
 	try {
-		let data= yield auth.getMenuDatas()
+		let data:any= yield auth.getMenuDatas()
 		
 		for (let index = 0; index < data.length; index++) {
 			const element = data[index];

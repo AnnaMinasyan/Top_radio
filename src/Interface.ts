@@ -29,6 +29,9 @@ import { NavigationScreenProp } from 'react-navigation';
      onchangeSwiperShowStation(payload:any):void;
       onsetFilterData(payload:any):void;
       onchangeSearchData(payload:any):void; 
+      ondeleteIsFavorite(payload:any):void; 
+      onchangeSwiperListType(payload:any):void; 
+
  }
 export interface IPlayListProps {
     playListReducer:any,
@@ -57,6 +60,7 @@ export interface IFilterMenuProps {
     onchangeMiniScreenData(payload:any):void;
     onchangeSelectedRadioStation(payload:any):void;
     onchangeSearchData(payload:any):void;
+    onchangeSwiperListType(payload:any):void;
 } 
 export interface IGanresProps {
     styleView:boolean;
@@ -83,6 +87,7 @@ export interface ISettings {
     navigation: NavigationScreenProp<any, any>,
     onChangeMenuType(type:number):void; 
     onchangeBufferSize(type:string):void;
+    onchangeReconnenct(type:boolean):void;
     filterReducer: any,
     settingsReducer:any
 } 
@@ -103,10 +108,11 @@ export interface IRadioMenuElementProps {
     title:string,
     image:string,
     addInFavorite():void,
-    isFavorite:boolean,
+    id:number,
     backColor:string,
     theme?:any,
-    showFavoriteHeart?:boolean
+    showFavoriteHeart?:boolean,
+    favorites:any
 }
 export interface ICitiesMenuElementProps {
     info:ICitiesConnect,

@@ -44,6 +44,7 @@ import { connect } from "react-redux";
 import { createFilter } from "react-native-search-filter";
 import { addFavorites } from "../store/actions/favoritesActions";
 import navigationService from "../navigation/NavigationService";
+import { changeSwiperListType } from "../store/actions/playlistAction";
 const KEYS_TO_FILTERS = ["pa"];
 
 interface IState {
@@ -84,6 +85,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     });
   }
   setData() {
+   
     getData("menuView").then((menuView) => {
       this.setState({ styleView: menuView });
     });
@@ -99,13 +101,11 @@ class Menu extends React.Component<IMenuProps, IState> {
     navigationService.setNavigator(this.props.navigation);
   }
 
-  checkIsFovorite(num: number) {
-    return this.props.favorites.includes(num);
-  }
+ 
   _addLookingList(data: any) {
     getData("isLooking").then((lookList) => {
       let count = true;
-      if (lookList.length > 0) {
+      if (lookList && lookList.length > 0) {
         for (let index = 0; index < lookList.length; index++) {
           const element = lookList[index];
           if (element.id == data.id) {
@@ -125,8 +125,8 @@ class Menu extends React.Component<IMenuProps, IState> {
     return (
       <TouchableHighlight
         onPress={() => {
-          // console.log("::::::::::::::::::::::");
-      
+          console.log('press');
+          this.props.onchangeSwiperListType('main')
           this._addLookingList(data.item);
           let radioStation = {
             data: data.item,
@@ -156,7 +156,7 @@ class Menu extends React.Component<IMenuProps, IState> {
             this.props.toaddfavorite(data.item);
 
           }}
-          isFavorite={this.checkIsFovorite(data.item.id)}
+          id={data.item.id}
         />
       </TouchableHighlight>
     );
@@ -165,6 +165,7 @@ class Menu extends React.Component<IMenuProps, IState> {
     return (
       <TouchableHighlight
         onPress={() => {
+     console.log('press');
      
             this._addLookingList(data.item);
             let radioStation = {
@@ -180,7 +181,7 @@ class Menu extends React.Component<IMenuProps, IState> {
               isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
               search:this.state.searchvalue
             }
-            
+            this.props.onchangeSwiperListType('main')
             player.open(info);
           }   
         
@@ -248,15 +249,14 @@ class Menu extends React.Component<IMenuProps, IState> {
           ) : this.props.filterReducer.menuType == 1 ? (
             <FlatList
             key={'_'}
-              onEndReachedThreshold={0.01}
               data={this.props.menuReducer.searchData}
               renderItem={(d) => this.renderMenuItems(d)}
               keyExtractor={(item: any, index: number) => item.id.toString()}
-              maxToRenderPerBatch={10}
+              windowSize={5}
               onEndReached={(info) => {
                 console.log(info);
               }}
-
+           
             />
           ) : (
             <FlatList
@@ -272,7 +272,10 @@ class Menu extends React.Component<IMenuProps, IState> {
                 justifyContent: "center",
               }}
               numColumns={3}
+              initialNumToRender={7}
+              snapToAlignment="start"
 
+              decelerationRate="fast"
               keyExtractor={(item: any, index: number) => item.id.toString()}
               maxToRenderPerBatch={10}
             />
@@ -349,6 +352,9 @@ const mapDispatchToProps = (dispatch: any) => {
     onchangeSearchData: (payload: any) => {
         dispatch(changeSearchData(payload));
       },
+      onchangeSwiperListType: (payload: any) => {
+        dispatch(changeSwiperListType(payload));
+      }
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

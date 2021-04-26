@@ -18,8 +18,36 @@ import { favoritesSelector } from '../selector/favorites';
 import { setFavorites } from '../actions/favoritesActions';
 import { getData, storeData } from '../../utils/local_storage';
 
-import {setFavoriteList} from "../actions/menuActions"
+import {setFavoriteList, setFilterData, setSearchData} from "../actions/menuActions"
+function* deleteIsFavorites({payload}:any) {
+    console.log("::::::payload:::::",payload);
+    
+    const favorites = yield getData('favorites');
+    const tmp:number[] = favorites?.length>0?favorites.map((i:{id:number})=>i.id):[];
+    console.log("favorites",favorites);
+    
+    const index = tmp.indexOf(payload.id);
+    if(index==-1){
+        
+        tmp.push(payload.id);
+        favorites.push(payload)
+        console.log("111111",favorites);
 
+    }else{
+        tmp.splice(index,1);
+        favorites.splice(index,1);
+        console.log("22222222",favorites);
+
+    }
+    yield storeData('favorites',favorites)
+    console.log("sagaaaa",favorites);
+    yield put(setFilterData(favorites))
+		yield put(setSearchData(favorites))
+    yield  put(setFavoriteList(favorites))
+    
+    yield put(setFavorites(tmp));
+
+}
 function* addToFavorite({payload}:any) {
     console.log("::::::payload:::::",payload);
     
@@ -89,6 +117,10 @@ export function* watchFavoritesSaga() {
 	  yield takeEvery(
 		FavoriteType.APP_CREATE as any,
 		createApp
+	)
+    yield takeEvery(
+		FavoriteType.DELET_IS_FAVORITE as any,
+		deleteIsFavorites
 	)
 }
 

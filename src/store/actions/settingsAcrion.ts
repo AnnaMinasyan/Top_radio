@@ -41,10 +41,20 @@ export const changeIsOnheadsets= (payload:boolean) => {
 	};
 };
 export const setIsOnheadsets= (payload:boolean) => {
-
-
 	return {
 		type: SettingsType.SET_IS_ON_HEADSES,
+		payload
+	};
+};
+export const changeReconnenct= (payload:boolean) => {
+	return {
+		type: SettingsType.CHANGE_RECONNECT,
+		payload
+	};
+};
+export const setReconnenct= (payload:boolean) => {
+	return {
+		type: SettingsType.SET_RECONNECT,
 		payload
 	};
 };

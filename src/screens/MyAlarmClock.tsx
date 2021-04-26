@@ -114,7 +114,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           image={data.item.im}
           backColor={'#0F1E45'}
           addInFavorite={() => this.props.toaddfavorite(data.item)}
-          isFavorite={this.checkIsFovorite(data.item.id)} />
+          id={data.item.id} />
       </TouchableHighlight>
     }
     else if (this.state.isFavorite == false) {
@@ -135,7 +135,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
           title={data.item.pa} image={data.item.im}
           backColor={'#0F1E45'}
           addInFavorite={() => this._changeInFavorite(data.item)}
-          isFavorite={this.checkIsFovorite(data.item.id)} />
+          id={data.item.id} />
       </TouchableOpacity>
     } else { return null }
   }
@@ -265,9 +265,17 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       isPlayingMusic: true,
       activeBi: this.state.playItem.st[0],
       id: this.state.playItem.id,
+      index:data.index,
     }
-    this.props.onchangeSelectedRadioStation(playingData)
-    this.props.onchangeMiniScreenData(playingData)
+    let info={
+      radioStation:playingData,
+      index:data.index,
+      isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
+      search:null
+    }
+  
+    this.props.onchangeSelectedRadioStation(info)
+    this.props.onchangeMiniScreenData(info)
     player.open()
     player._startPlayMusic(playingData.data, playingData.activeBi)
   }

@@ -9,8 +9,7 @@ export enum MenuTypes {
     CHANGE_HEADERTEXT = '@menutypes/CHANGE_HEADERTEXT',
     SET_HEADERTEXT = '@menutypes/SET_HEADERTEXT',
     CHANGE_LOOKING_LIST = '@menutypes/CHANGE_LOOKING_LIST',
-    CHANGE_FAVORITE = '@menutypes/CHANGE_FAVORITE',
-    SET_LOOKING_LIST='@menutypes/CHANGE_FAVORITE',
+    SET_LOOKING_LIST='@menutypes/SET_LOOKING_LIST',
     SET_PLAYINGDATA = '@menutypes/SET_PLAYINGDATA',
     CHANGE_PLAYINGDATA = '@menutypes/CHANGE_PLAYINGDATA',
     CHANGE_SWIPER_DATA = '@menutypes/CHANGE_SWIPER_DATA',
@@ -27,6 +26,8 @@ export enum PlayListTypes {
     SET_TRACK_LIST = '@playListtypes/GET_TRACK_LIST',
     SET_HEADER_TEXT = '@playListtypes/SET_HEADER_TEXT',
     GET_PLAY_LIST = '@playListtypes/GET_PLAY_LIST',
+    SET_SWIPER_LIST_TYPE = '@playListtypes/SET_SWIPER_LIST_TYPE',
+     CHANGE_SWIPER_LIST_TYPE = '@playListtypes/CHANGE_SWIPER_LIST_TYPE',
 }
 export enum CitiesTypes {
     GET_CITIES_DATA = '@citiestypes/GET_CITIES_DATA',
@@ -63,8 +64,8 @@ export enum FavoriteType {
     ADD = "@FavoriteType/ADD",
     SET = "@FavoriteType/SET",
     INIT = "@FavoriteType/INIT",
-    APP_CREATE = "@FavoriteType/APP_CREATE"
-
+    APP_CREATE = "@FavoriteType/APP_CREATE",
+    DELET_IS_FAVORITE= "@FavoriteType/DELET_IS_FAVORITE"
 }
 export enum SettingsType {
     CHANGE_AUTO_PLAY = "@SettingsType/CHANGE_AUTO_PLAY",
@@ -74,7 +75,8 @@ export enum SettingsType {
     CHANGE_BUFFER_SIZE = "@SettingsType/CHANGE_BUFFER_SIZE",
     SET_IS_ON_HEADSES = "@SettingsType/SET_IS_ON_HEADSES",
     CHANGE_IS_ON_HEADSES = "@SettingsType/CHANGE_IS_ON_HEADSES",
-
+    SET_RECONNECT= "@SettingsType/SET_RECONNECT",
+    CHANGE_RECONNECT= "@SettingsType/CHANGE_RECONNECT", 
 }
 export enum BottomType {
     CHANGE_PLAY_ITEM = '@bottomtypes/CHANGE_PLAY_ITEM',

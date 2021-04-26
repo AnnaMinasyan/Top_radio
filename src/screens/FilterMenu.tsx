@@ -28,7 +28,6 @@ import {
 import {
   changeplayItem,
   changePlayingData,
-  changeActiveIndex,
   getSongData,
   changeMiniScreenData,
   changeSwiperShowStation,
@@ -40,6 +39,7 @@ import SimpleImage from "../components/SimpleImage";
 import { connect } from "react-redux";
 import { addFavorites } from "../store/actions/favoritesActions";
 import { createFilter } from "react-native-search-filter";
+import { changeSwiperListType } from "../store/actions/playlistAction";
 const KEYS_TO_FILTERS = ["pa"];
 
 interface IState {
@@ -93,7 +93,7 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
   _addLookingList(data: any) {
     getData("isLooking").then((lookList) => {
       let count = true;
-      if (lookList) {
+      if (lookList && lookList.length>0) {
         for (let index = 0; index < lookList.length; index++) {
           const element = lookList[index];
           if (element.id == data.id) {
@@ -130,6 +130,8 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
               search:this.state.searchvalue
 
           };
+          this.props.onchangeSwiperListType('filter')
+
           player.open(info);
         }}
       >
@@ -142,7 +144,7 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
           addInFavorite={() => {
             this.props.toaddfavorite(data.item);
           }}
-          isFavorite={this.checkIsFovorite(data.item.id)}
+          id={data.item.id}
         />
       </TouchableHighlight>
     );
@@ -151,6 +153,8 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
     return (
       <TouchableHighlight
         onPress={() => {
+          this.props.onchangeSwiperListType('filter')
+
           this._addLookingList(data.item);
           let radioStation = {
             data: data.item,
@@ -294,6 +298,9 @@ const mapDispatchToProps = (dispatch: any) => {
     onchangeSearchData: (payload: any) => {
       dispatch(changeSearchData(payload));
     },
+    onchangeSwiperListType: (payload: any) => {
+      dispatch(changeSwiperListType(payload));
+    }, 
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(FilterMenu);

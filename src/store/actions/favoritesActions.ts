@@ -25,3 +25,9 @@ export const appCreateFavorites = (payload:any) => {
 		payload
 	};
 };
+export const deleteIsFavorite = (payload:any) => {
+	return {
+		type: FavoriteType.DELET_IS_FAVORITE,
+		payload
+	};
+};

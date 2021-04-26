@@ -26,10 +26,11 @@ import { storeData, getData } from "../utils/local_storage";
 import SimpleImage from "../components/SimpleImage";
 import { connect } from "react-redux";
 import { createFilter } from "react-native-search-filter";
-import { addFavorites } from "../store/actions/favoritesActions";
+import { addFavorites, deleteIsFavorite } from "../store/actions/favoritesActions";
 import player from "../services/player/PlayerServices";
 import Bottom from "../components/Bottom";
 import { changeFilterData, setFilterData } from "../store/actions/menuActions";
+import { changeSwiperListType } from "../store/actions/playlistAction";
 const KEYS_TO_FILTERS = ["pa"];
 interface IState {
   favoriteList: [];
@@ -68,7 +69,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
   _addLookingList(data: any) {
     getData("isLooking").then((lookList) => {
       let count = true;
-      if (lookList) {
+      if (lookList && lookList.length>0) {
         for (let index = 0; index < lookList.length; index++) {
           const element = lookList[index];
           if (element.id == data.id) {
@@ -101,6 +102,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
               isPlayingMusic: this.props.bottomReducer.selectedRadioStation
                 ?.isPlayingMusic,
             };
+            console.log(info);
+            this.props.onchangeSwiperListType('filter')
             player.open(info);
           }}
         >
@@ -109,8 +112,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
             title={data.item.pa}
             image={data.item.im}
             backColor={this.props.theme.backgroundColor}
-            addInFavorite={() => this.props.toaddfavorite(data.item)}
-            isFavorite={this.checkIsFovorite(data.item.id)}
+            addInFavorite={() => this.props.ondeleteIsFavorite(data.item)}
+            id={data.item.id}
           />
         </TouchableHighlight>
       );
@@ -138,6 +141,8 @@ class Favorite extends React.Component<IMenuProps, IState> {
                 ?.isPlayingMusic,
             };
             player.open(info);
+            this.props.onchangeSwiperListType('filter')
+
           }}
           style={{ padding: calcWidth(8) }}
         >
@@ -250,6 +255,12 @@ const mapDispatchToProps = (dispatch: any) => {
     onsetFilterData: (payload: any) => {
       dispatch(changeFilterData(payload));
     },
+    ondeleteIsFavorite: (payload: any) => {
+      dispatch(deleteIsFavorite(payload));
+    },
+     onchangeSwiperListType: (payload: any) => {
+      dispatch(changeSwiperListType(payload));
+    }, 
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Favorite);

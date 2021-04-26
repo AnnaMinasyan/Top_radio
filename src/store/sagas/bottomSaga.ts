@@ -40,6 +40,8 @@ function* onGetPlayType({ payload }: any) {
 function* changeselectedSatationbyBi({ payload }: any) {
   try {
     yield put(setSwiperActiveBi(payload.activeBi));
+    yield storeData('activeRadioStation',payload)
+
     yield put(setSelectedRadioStation(payload));
     if (payload) {
       const data = yield auth.getPlayItemType(payload.data.pl);
@@ -48,6 +50,7 @@ function* changeselectedSatationbyBi({ payload }: any) {
       station.playingSong = data.playList[0];
 
       yield put(setMiniScreenData(station));
+      
       yield put(setSelectedRadioStation(station));
     }
   } catch (ex) {
@@ -67,14 +70,16 @@ function* clearReducerData() {
 function* addselectedRadioStation({ payload }: any) {
   try {
     yield put(setSelectedRadioStation(payload));
-    if (payload.data.pl) {
+    
+    if (payload.data.pl) {      
       const data = yield auth.getPlayItemType(payload.data.pl);
       let station = payload;
       station.activeBi = payload.data.st[0];
       station.playingSong = data.playList[0];
+      yield storeData('activeRadioStation',station)
 
-      yield put(setSelectedRadioStation(station));
-    }
+yield put(setSelectedRadioStation(station));    
+}
     // console.log( data)
   } catch (ex) {
     yield put(setIsConnected(false));
@@ -84,6 +89,7 @@ function* addselectedRadioStation({ payload }: any) {
 }
 function* changeSelectedRadioStationPlaying({ payload }: any) {
   try {
+
     yield put(setSelectedRadioStationPlaying(payload));
   } catch (ex) {
     yield put(setIsConnected(false));
@@ -143,14 +149,18 @@ function* onchangeActiveIndex({ payload }: any) {
 }
 function* changeSwiperShowStation({ payload }: any) {
   try {
+    console.log("0000");
+    
     yield put(setSwiperShowStation(payload.radioStation));    
     if(payload.search){
       yield put(setActiveIndex(payload.radioStation.data.index));
     }else{
       yield put(setActiveIndex(payload.index));
-    }
+    }    
     if (!payload.isPlayingMusic) {
       yield put(setMiniScreenData(payload.radioStation));
+      console.log('99999999999999999999999999999999');
+      yield storeData('activeRadioStation',payload.radioStation)
        yield put(setSelectedRadioStation(payload.radioStation));
     }
     if (payload.radioStation) {
@@ -180,11 +190,7 @@ function* changeMiniScreenData({ payload }: any) {
 }
 function* changeIsconnected({ payload }: any) {
   try {
-    if(payload){
-      console.log("PPPPPPP",payload);
-      yield put(initMenuType())
-      yield put(initAutoPlay())
-    }
+  
     yield put(setIsConnected(payload));
 
   } catch (ex) {

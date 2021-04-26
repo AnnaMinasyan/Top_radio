@@ -2,7 +2,7 @@
 
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import {  SettingsType } from '../constants';
-import {  setAutoPlay,setBufferSize,setIsOnheadsets} from '../actions/settingsAcrion';
+import {  setAutoPlay,setBufferSize,setIsOnheadsets, setReconnenct} from '../actions/settingsAcrion';
 import { getData, storeData } from '../../utils/local_storage';
 
 function* onChangeAutoPlay({payload}:any) {
@@ -10,9 +10,9 @@ function* onChangeAutoPlay({payload}:any) {
     yield put(setAutoPlay(payload));
    
 }
-function* initAutoPlaybyStorage() {
+function* initAutoPlaybyStorage():Generator {
     
-    const autoplay = yield getData('autoPlay');
+    const autoplay:any = yield getData('autoPlay');
 
     if(autoplay==null){        
         yield storeData('autoPlay',false);
@@ -34,6 +34,12 @@ function* changeIsOnheadsets(payload:any) {
     
     
 }
+function* changeReconnect(payload:any) {
+    
+    yield put(setReconnenct(payload.payload));
+
+
+}
 export function* watchSettingsSaga() {
     yield takeEvery(
         SettingsType.INIT_AUTO_PLA as any,
@@ -50,6 +56,10 @@ export function* watchSettingsSaga() {
     yield takeEvery(
         SettingsType.CHANGE_IS_ON_HEADSES as any,
 		changeIsOnheadsets
+	)
+    yield takeEvery(
+        SettingsType.CHANGE_RECONNECT as any,
+		changeReconnect
 	)
 }
 

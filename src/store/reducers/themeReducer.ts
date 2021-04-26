@@ -30,7 +30,6 @@ const themeReducer = (state = initialState, action: IReduxAction<ThemeTypes>) =>
 
             return { ...state, backgroundColor: color }
             case ThemeTypes.SET_HEIGHT_WIDTH:
-                
     
                 return { ...state, height: action.payload.height,width:action.payload.width,albomeMode:action.payload.albomeMode }
         default:

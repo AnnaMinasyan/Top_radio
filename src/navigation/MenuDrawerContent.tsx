@@ -4,9 +4,9 @@ import {
     ScrollView,
     View,
     Text,
-    TouchableOpacity, SafeAreaView,
+    TouchableOpacity, SafeAreaView, StatusBar,
 } from 'react-native'
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import Logo from "../assets/icons/logo.svg"
 import Guitar from "../assets/icons/guitar.svg"
 import GuitarDark from "../assets/icons/guitarDark.svg"
@@ -23,6 +23,8 @@ import {changeActiveArrow} from '../store/actions/bottomAction'
 import { changeSearchData } from '../store/actions/menuActions';
 import { changeFilterGanres } from '../store/actions/ganresAction';
 import { changeFilterCities } from '../store/actions/citiesAction';
+import { DrawerActions } from '@react-navigation/native';
+
 interface Props {
     navigation: NavigationScreenProp<any, any>;
     onchangeisActive(type:string): void;
@@ -36,8 +38,12 @@ interface Props {
     onchangeFilterCities(payload:any):void; 
     bottomReducer:any
 }
-const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => {
-    return (<View style={{height:'100%', zIndex:999}}>
+const CustomDrawerContentComponent: React.FunctionComponent<any> = (props) => {
+console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
+
+    return (
+        <SafeAreaView style={{flex: 1}}>
+   { <View style={{height:'100%', zIndex:999}}>
         <ScrollView style={{ backgroundColor: '#0F1E45', height:deviceHeight}}>
             <View style={styles.container} >
 
@@ -118,7 +124,8 @@ const CustomDrawerContentComponent: React.FunctionComponent<Props> = (props) => 
         </ScrollView>
 
                 
-    </View>
+    </View>}
+   </SafeAreaView>
     )
 };
 

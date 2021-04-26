@@ -13,7 +13,6 @@ import MyAlarmClock from "../screens/MyAlarmClock";
 import Settings from "../screens/Settings";
 import PlayList from "../screens/PlayList";
 import FilterMenu from "../screens/FilterMenu";
-const Drawer = createDrawerNavigator();
 import LookingMenu from "../screens/lookingMenu"
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import  BottomSwiper from "../components/BottomSwiper"
@@ -42,12 +41,15 @@ const BottomTabStack = () => {
         </Tab.Navigator>
     );
 };
-const Navigator: React.FunctionComponent = (props:any) => (
+const Drawer = createDrawerNavigator();
 
+const Navigator: React.FunctionComponent = () => (
 
+<NavigationContainer>
       <Drawer.Navigator
           initialRouteName="BottomTabStack"
           drawerContent={(props) => <MenuDrawerContent {...props} />}
+        drawerStyle={{backgroundColor:"rgba(0,0,0,0)", width:320}}
       >
           <Drawer.Screen
               name="BottomTabStack"
@@ -64,7 +66,7 @@ const Navigator: React.FunctionComponent = (props:any) => (
               component={MyAlarmClock}
           />
       </Drawer.Navigator>
-
+      </NavigationContainer>
 );
 
 export default Navigator;

@@ -128,6 +128,7 @@ class Header extends React.Component<Props, IState> {
 
       this.props.navigation.navigate("Menu")
     } else {
+      
       this.props.onchangeActiveArrow(false)
       this.props.navigation.navigate("Favorite")
     }
@@ -167,7 +168,7 @@ class Header extends React.Component<Props, IState> {
               onPress={() => {
                 if (this.props.filterReducer.isFavorite) { this.props.onchangeFavoriteType() }
 
-                this.props.navigation.dispatch(DrawerActions.toggleDrawer())
+               this.props.navigation.dispatch(DrawerActions.toggleDrawer())
               }}
               style={styles.headerContainer}
             >

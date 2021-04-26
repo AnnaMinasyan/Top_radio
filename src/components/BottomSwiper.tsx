@@ -41,7 +41,7 @@ import RedHeart from "../assets/icons/redHeart.svg";
 import SimpleImage from "./SimpleImage";
 import PlaySvG from "../assets/icons/play.svg";
 import Stop from "../assets/icons/stop.svg";
-import { changeIsConnected } from "../store/actions/bottomAction";
+import { changeActiveArrow, changeIsConnected } from "../store/actions/bottomAction";
 import {
   changeplayItem,
   changePlayingData,
@@ -110,6 +110,7 @@ interface Props {
   onchangeInitialRouteName(payload: any): void;
   onchangeSelectedSatationbyBi(payload: any): void;
   onchangeIsConnected(payload: any): void;
+  onchangeActiveArrow(payload: any): void;
 }
 interface IState {
   menuStyle: boolean;
@@ -182,7 +183,7 @@ class BottomSwiper extends React.Component<Props, IState> {
   async componentDidMount() {
     TrackPlayer.addEventListener("remote-stop", async () => {
       console.log("stop");
-
+      this.props.onchangeActiveArrow(false)
       this.props.onchangeSelectedRadioStationPlaying(false);
       BackHandler.exitApp();
       await TrackPlayer.stop();
@@ -190,13 +191,18 @@ class BottomSwiper extends React.Component<Props, IState> {
     TrackPlayer.addEventListener("remote-play", async () => {
       console.log("play");
       this.props.onchangeSelectedRadioStationPlaying(true);
+      storeData("autoPlayData", this.props.bottomReducer.selectedRadioStation)
 
       await TrackPlayer.play();
     });
 
     TrackPlayer.addEventListener("remote-pause", async () => {
       console.log("pause");
-      this.props.onchangeSelectedRadioStationPlaying(false);
+      if(this.props.settingsReducer.isOnheadsets)
+      {
+        console.log("steeeeeeeeeeeeeeeeeeeeeeeeeeeex");
+        
+        this.props.onchangeSelectedRadioStationPlaying(false);}
 
       await TrackPlayer.pause();
     });
@@ -226,7 +232,7 @@ class BottomSwiper extends React.Component<Props, IState> {
   _addLookingList(data: any) {
     getData("isLooking").then((lookList) => {
       let count = true;
-      if (lookList.length > 0) {
+      if (lookList && lookList.length > 0) {
         //   console.log(lookList);
         for (let index = 0; index < lookList.length; index++) {
           const element = lookList[index];
@@ -248,6 +254,8 @@ class BottomSwiper extends React.Component<Props, IState> {
     if (this.props.bottomReducer.selectedRadioStation?.isPlayingMusic) {
       player._pouseMusic();
       this.props.onchangeSelectedRadioStationPlaying(false);
+      storeData('activeRadioStation',null)
+
     } else if (
       this.props.bottomReducer.selectedRadioStation?.isPlayingMusic &&
       this.state.isRecording
@@ -255,20 +263,25 @@ class BottomSwiper extends React.Component<Props, IState> {
       this.onStopRecord();
       player._pouseMusic().then(()=>{
         this.props.onchangeSelectedRadioStationPlaying(false);
+        storeData('activeRadioStation',null)
+
       })
       
       this.setState({ isRecording: false });
     } else {
       this._addLookingList(this.props.bottomReducer.selectedRadioStation?.data);
+      this.props.onchangeSelectedRadioStationPlaying(true);
+      
+       storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+       if(this.props.settingsReducer.autoPlay){
+        storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
+
+      }
       player._startPlayMusic(
         this.props.bottomReducer.selectedRadioStation?.data,
         this.props.bottomReducer.selectedRadioStation?.activeBi
       )
-      .then(()=>{
-        console.log("ooooooooooooooo");
-        
-        this.props.onchangeSelectedRadioStationPlaying(true);
-      })
+     
     
     }
   }
@@ -476,6 +489,9 @@ class BottomSwiper extends React.Component<Props, IState> {
           this.props.bottomReducer.swiperShowRadiostation?.activeBi
         ).then(()=>{
           this.props.onchangeSelectedRadioStationPlaying(true);
+          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+
+          storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
         this.setState({ loading: false });
         })
         
@@ -498,6 +514,9 @@ class BottomSwiper extends React.Component<Props, IState> {
           this.props.bottomReducer.swiperShowRadiostation?.activeBi
         ).then(()=>{
           this.props.onchangeSelectedRadioStationPlaying(true);
+          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+
+          storeData("autoPlayData",  this.props.bottomReducer.swiperShowRadiostation)
           this.setState({ loading: false });
         })
        
@@ -1283,7 +1302,8 @@ class BottomSwiper extends React.Component<Props, IState> {
     );
   }
 
-  render() {    
+  render() {   
+     
     return (
 
                
@@ -1433,6 +1453,9 @@ const mapDispatchToProps = (dispatch: any) => {
     },
     onchangeIsConnected: (payload: any) => {
       dispatch(changeIsConnected(payload));
+    },
+    onchangeActiveArrow: (payload: boolean) => {
+      dispatch(changeActiveArrow(payload))
     },
   };
 };

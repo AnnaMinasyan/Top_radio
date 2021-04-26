@@ -35,7 +35,8 @@ import { changeSelectedRadioStationPlaying } from "../store/actions/bottomAction
 import {
   changeAutoPlay,
   changeBufferSize,
-  changeIsOnheadsets
+  changeIsOnheadsets,
+  changeReconnenct
 } from "../store/actions/settingsAcrion"
 import player from "../services/player/PlayerServices"
 import DatePicker from "react-native-date-picker";
@@ -52,7 +53,7 @@ interface IState {
   ontimerSleep: boolean,
   activeIndex: number,
   carouselItems: any,
-  timerSlipeTime:any
+  timerSlipeTime: any
 }
 const wheelPickerData = [
   "sunday",
@@ -64,13 +65,13 @@ const wheelPickerData = [
 ];
 class Settings extends React.Component<ISettings, IState> {
   carousel: any
-  timeSleep:any
-  timerSlipeTime:any={
-        
+  timeSleep: any
+  timerSlipeTime: any = {
+
     hours: "",
     minute: ''
- 
-}
+
+  }
   constructor(props: ISettings) {
 
     super(props)
@@ -97,11 +98,11 @@ class Settings extends React.Component<ISettings, IState> {
         0, 2, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
 
       ],
-     // timeSleep: null,
+      // timeSleep: null,
       autoPlay: false,
       ontimerSleep: true,
       activeIndex: 0,
-      
+
 
 
     }
@@ -270,16 +271,16 @@ class Settings extends React.Component<ISettings, IState> {
             <DatePicker
               mode="time"
               textColor={'black'}
-             // dividerHeight={0}
-             //date={this.timeSleep}
-              date={this.timeSleep?this.timeSleep:new Date(Date.now())}
+              // dividerHeight={0}
+              //date={this.timeSleep}
+              date={this.timeSleep ? this.timeSleep : new Date(Date.now())}
               onDateChange={(data) => {
                 const alarm = {
                   hours: data.getHours(),
                   minute: data.getMinutes()
                 }
-                this.timeSleep= `${data.getHours()}:${data.getMinutes()}`
-                this.timerSlipeTime=alarm                
+                this.timeSleep = `${data.getHours()}:${data.getMinutes()}`
+                this.timerSlipeTime = alarm
               }}
             />
           </View>
@@ -295,7 +296,7 @@ class Settings extends React.Component<ISettings, IState> {
           justifyContent: 'center',
           alignItems: 'center'
         }}
-        onPress={()=>{
+        onPress={() => {
           initTimerSleep(this.timerSleep, this.timerSlipeTime)
           storeData("timerSleepTime", this.timerSlipeTime)
           this.setState({ visibleModal: null })
@@ -307,33 +308,26 @@ class Settings extends React.Component<ISettings, IState> {
   }
   timerSleep = () => {
     player.stopPlayer()
-     this.props.onchangeSelectedRadioStationPlaying(false)
+    this.props.onchangeSelectedRadioStationPlaying(false)
 
     // BackHandler.exitApp()
   }
   changeTimeSleep = (index: number) => {
-    // this.setState({
-    //   timeSleep: index
-    // });
-    this.timeSleep=index
+    this.timeSleep = index
     if (this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.timeSleep * 60000)
-      // console.log('time',time)
       storeData("timerSleep", time)
     }
-    //    initTimerSleep(this.timerSleep)
   };
   createTimerSleep() {
     if (!this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.timeSleep * 60000)
 
-      // storeData("timerSleep", time)
     }
 
     this.setState({ ontimerSleep: !this.state.ontimerSleep })
-    //    initTimerSleep(this.timerSleep)
   }
-  chnageAutoPlay() {
+  changeAutoPlay() {
     this.props.onchangeAutoPlay(!this.props.settingsReducer.autoPlay)
     storeData("autoPlay", !this.props.settingsReducer.autoPlay)
   }
@@ -362,7 +356,7 @@ class Settings extends React.Component<ISettings, IState> {
               theme={this.props.theme}
               isEnabled={this.props.settingsReducer.autoPlay}
               onValueChange={() => {
-                this.chnageAutoPlay()
+                this.changeAutoPlay()
               }} />
           </View>
         </View>
@@ -406,16 +400,16 @@ class Settings extends React.Component<ISettings, IState> {
             <SimpleSwitch
               theme={this.props.theme}
 
-              isEnabled={true}
+              isEnabled={this.props.settingsReducer.reconnect}
               onValueChange={() => {
-
-
+                storeData('reconnect',!this.props.settingsReducer.reconnect)
+                this.props.onchangeReconnenct(!this.props.settingsReducer.reconnect)
               }} />
           </View>
         </View>
         <TouchableOpacity
           onPress={() => {
-            this.timeSleep= 0
+            this.timeSleep = 0
             this.setState({ visibleModal: 3, timeSleep: 0 })
           }}
           style={[styles.radiostation,
@@ -575,6 +569,9 @@ const mapDispatchToProps = (dispatch: any) => {
     onchangeSelectedRadioStationPlaying: (payload: boolean) => {
       dispatch(changeSelectedRadioStationPlaying(payload))
     },
+    onchangeReconnenct: (payload: boolean) => {
+      dispatch(changeReconnenct(payload))
+    },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
@@ -632,7 +629,7 @@ const styles = StyleSheet.create({
   },
   modalSleepTimer: {
     backgroundColor: 'white',
-   // marginHorizontal: calcWidth(5),
+    // marginHorizontal: calcWidth(5),
     padding: calcHeight(15),
     borderRadius: 5
     // width: calcWidth(100)

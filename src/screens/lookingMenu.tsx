@@ -96,7 +96,7 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
     _addLookingList(data: any) {
         getData("isLooking").then((lookList) => {
             let count = true
-            if (lookList.length > 0) {
+            if (lookList && lookList.length > 0) {
                 for (let index = 0; index < lookList.length; index++) {
                     const element = lookList[index];
                     if (element.id == data.id) {
@@ -144,7 +144,7 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
                 addInFavorite={() => {
                     this.props.toaddfavorite(data.item)
                 }}
-                isFavorite={this.checkIsFovorite(data.item.id)} />
+                id={data.item.id} />
         </TouchableHighlight >
     }
     renderMenuItemsMenuStyle2(data: any) {

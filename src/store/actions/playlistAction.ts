@@ -27,3 +27,17 @@ export const setHeaderText = (payload:any) => {
 		payload
 	};
 };
+export const changeSwiperListType = (payload:string) => {
+	
+	return {
+		type: PlayListTypes.CHANGE_SWIPER_LIST_TYPE,
+		payload
+	};
+};
+export const setSwiperListType = (payload:string) => {
+	
+	return {
+		type: PlayListTypes.SET_SWIPER_LIST_TYPE,
+		payload
+	};
+};

@@ -6,18 +6,19 @@ import RedHeart from "../assets/icons/redHeart.svg";
 import global_styles from "../assets/styles/global_styles";
 import { IRadioMenuElementProps } from "../Interface";
 import { TouchableHighlight } from "react-native-gesture-handler";
-interface IState {
-  isFavorite: boolean;
-}
+import { connect } from "react-redux";
+
 class RadioMenuElement extends React.Component<IRadioMenuElementProps, IState> {
   constructor(props: IRadioMenuElementProps) {
     super(props);
-    this.state = {
-      isFavorite: this.props.isFavorite,
-    };
+   
   }
   add() {
     this.props.addInFavorite();
+  }
+  checkIsFovorite(num: number) {
+    
+    return this.props.favorites.includes(num);
   }
   render() {
     return (
@@ -65,7 +66,7 @@ class RadioMenuElement extends React.Component<IRadioMenuElementProps, IState> {
               alignItems: "center",
             }}
           >
-            {this.props.isFavorite ? (
+            {this.checkIsFovorite(this.props.id) ? (
               <RedHeart fill="#FF5050" height={19} width={21} />
             ) : (
               <Heart fill="#B3BACE" height={18.54} width={20.83} />
@@ -76,8 +77,25 @@ class RadioMenuElement extends React.Component<IRadioMenuElementProps, IState> {
     );
   }
 }
+const mapStateToProps = ({
+  
+  favorites,
 
-export default RadioMenuElement;
+}: any) => {
+  return {
+
+    favorites,
+  
+  };
+};
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(RadioMenuElement);
+
+
 const styles = StyleSheet.create({
   body: {
     height: 74,

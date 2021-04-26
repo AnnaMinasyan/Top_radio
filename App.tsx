@@ -1,15 +1,16 @@
 import React from 'react';
 import { enableScreens } from 'react-native-screens';
 import SplashScreen from 'react-native-splash-screen'
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import MyApp from "./src/app"
 import { storeData, getData } from "./src/utils/local_storage"
 import store from './src/store';
 import { Provider } from "react-redux"
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import Page from "./src/screens/recording"
 import Navigator from "./src/navigation/Navigator"
-interface Props{
+import { NavigationContainer } from '@react-navigation/native';
+interface Props {
 
 
 }
@@ -22,28 +23,16 @@ class App extends React.Component<Props, any> {
       
     }
 
-}
-componentDidUpdate(prevProps:any, prevState:any) {
-  if (prevState.cardComponents !== this.state.cardComponents) {
-    SplashScreen.hide();
   }
-}
-  async launchBugsee() {
-    let appToken;
-
-    if (Platform.OS === 'ios') {
-        appToken = '<IOS-APP-TOKEN>';
-    } else {
-        appToken = '<ANDROID-APP-TOKEN>';
-    }
-
-  }
+ 
   render() {
     return (
-      <Provider  store={store}>
-       {/* <Navigator/> */}
-       {/*<Page/>*/}
-   <MyApp/>
+
+      <Provider store={store}>
+        <SafeAreaView style={{ flex: 1 }}>
+          <StatusBar barStyle="light-content" backgroundColor="#0F1E45" />
+            <MyApp />
+        </SafeAreaView>
       </Provider>
     );
   }

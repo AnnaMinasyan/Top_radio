@@ -6,10 +6,11 @@ import {setMenuData, setPlayingData,setFilterData,setHeaderText,
 	setSearchData} from "../actions/menuActions"
 import {setSwiperData,setLookingList} from "../actions/menuActions"
 
-import {setIsConnected  } from "../actions/bottomAction";
+import {setIsConnected, setSelectedRadioStation  } from "../actions/bottomAction";
 
 function* getMenuData():Generator {
 	try {
+		yield put(setSelectedRadioStation(undefined))
 		let data:any= yield auth.getMenuDatas()
 		
 		for (let index = 0; index < data.length; index++) {

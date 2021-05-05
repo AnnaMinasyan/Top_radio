@@ -15,9 +15,9 @@ import {
 } from "react-native";
 import {
   changeplayItem,
-  changePlayingData,
-  changeActiveIndex,
-  changeActiveBi,
+  changeSelectedRadioStationPlaying,
+  changeSwiperActiveBi,
+  changeSelectedSatationbyBi,
   getSongData,
   changeSelectedRadioStation,
   changeMiniScreenData,
@@ -715,7 +715,6 @@ class SwipeUpDown extends Component<Props> {
   }
   _onPanResponderMove(event, gestureState) {
     const dy = gestureState.dy + (!this.close ? 0 : this.buttomValue);
-    console.log(dy);
     if (dy < 0) return;
     if (!this.state.startDrag) {
       this.setState({ startDrag: true });
@@ -754,7 +753,6 @@ class SwipeUpDown extends Component<Props> {
 
   showFull(value) {
     this.count=0
-    console.log(value);
     this.fadeOut();
     //console.log("lfkdfk");
     Animated.timing(this.state.swipeAnimation, {
@@ -764,7 +762,6 @@ class SwipeUpDown extends Component<Props> {
     }).start();
     this.close = false
     if (value) {
-      console.log("pppppppppppppp",value);
       this.setState({ visible: false, loading: true, close: false });
       setTimeout(() => {
         this.props.onchangeSwiperShowStation(value);
@@ -804,7 +801,6 @@ class SwipeUpDown extends Component<Props> {
                 this.props.onchangeIsConnected(true);
                 setTimeout(() => {
                   NetInfo.fetch().then((state) => {
-                    console.log("djdkjslakdjad9uao9du0fagbasf.");
                     if (
                       this.props.bottomReducer.selectedRadioStation
                         .isPlayingMusic
@@ -828,10 +824,10 @@ class SwipeUpDown extends Component<Props> {
   }
   showActiveBi() {
     if (
-      this.props.bottomReducer.swiperShowRadiostation?.id ==
-      this.props.bottomReducer.selectedRadioStation?.id
+      this.props.bottomReducer.swiperShowRadiostation?.data.id ==
+      this.props.bottomReducer.selectedRadioStation?.data.id
     ) {
-      return this.props.bottomReducer.selectedRadioStation?.activeBi;
+      return this.props.bottomReducer.selectedRadioStation?.activeBi.bi;
     } else {
       return this.props.bottomReducer.swiperShowRadiostation?.data.st[0].bi;
     }
@@ -913,6 +909,55 @@ class SwipeUpDown extends Component<Props> {
           swiperIndex: this.count + 1,
         });
       }
+    }
+  }
+  changeRadioStancia(item) {
+
+
+    if (
+      this.props.bottomReducer.swiperShowRadiostation?.id ==
+      this.props.bottomReducer.selectedRadioStation?.id
+    ) {
+      this.props.onchangeActiveBi({... this.props.bottomReducer.swiperShowRadiostation,activeBi:item});
+      player._pouseMusic();
+      //setTimeout(() => {
+        player._startPlayMusic(
+          this.props.bottomReducer.swiperShowRadiostation?.data,
+          this.props.bottomReducer.swiperShowRadiostation?.activeBi
+        ).then(()=>{
+          this.props.onchangeSelectedRadioStationPlaying(true);
+          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+
+          storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
+        this.setState({ loading: false });
+        })
+        
+     // }, 500);
+    } else {
+      let data = this.props.bottomReducer.swiperShowRadiostation;
+      data.isPlayingMusic = true;
+      data.activeBi = item;
+
+      player._pouseMusic();
+      this.props.onchangeSelectedSatationbyBi(data);
+      // this.props.onchangeSelectedRadioStation(data)
+
+      //setTimeout(() => {
+        this.props._addLookingList(
+          this.props.bottomReducer.swiperShowRadiostation?.data
+        );
+        player._startPlayMusic(
+          this.props.bottomReducer.swiperShowRadiostation?.data,
+          this.props.bottomReducer.swiperShowRadiostation?.activeBi
+        ).then(()=>{
+          this.props.onchangeSelectedRadioStationPlaying(true);
+          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+
+          storeData("autoPlayData",  this.props.bottomReducer.swiperShowRadiostation)
+          this.setState({ loading: false });
+        })
+       
+     // }, 500);
     }
   }
   renderBottomSheet() {
@@ -1152,13 +1197,12 @@ class SwipeUpDown extends Component<Props> {
                 this.props.bottomReducer.swiperShowRadiostation ? (
                 this.props.bottomReducer.swiperShowRadiostation.data.st.map(
                   (item, index) => {
-                    console.log('item.bi == this.showActiveBi()',item.bi == this.showActiveBi());
                     return (
                       <TouchableOpacity
                         key={index}
                         disabled={this.state.loading}
                         onPress={() => {
-                          this.props.changeRadioStancia(item);
+                          this.changeRadioStancia(item);
                         }}
                         style={
                           item.bi == this.showActiveBi()
@@ -1546,6 +1590,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     onchangeMiniScreenData: (payload) => {
       dispatch(changeMiniScreenData(payload));
+    },
+    onchangeSelectedSatationbyBi: (payload) => {
+      dispatch(changeSelectedSatationbyBi(payload));
+    },
+    onchangeActiveBi: (payload) => {
+      dispatch(changeSwiperActiveBi(payload));
+    },
+    onchangeSelectedRadioStationPlaying: (payload) => {
+      dispatch(changeSelectedRadioStationPlaying(payload));
     },
   };
 };

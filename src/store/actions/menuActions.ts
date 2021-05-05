@@ -1,6 +1,7 @@
 import { MenuTypes } from "../constants"
 
 export const getMenuData = () => {
+	
 	return {
 		type: MenuTypes.GET_MENU_DATA,
 	};

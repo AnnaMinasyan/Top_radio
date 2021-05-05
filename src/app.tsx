@@ -59,13 +59,14 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
   const [height, setHeight] = useState<number>(Dimensions.get("window").height);
   const isConnected = useSelector(isConnectedSelector);
   const selectedRadioStation = useSelector(selectedRadioStationSelector)
+  
   const timerSleep = () => {
-    console.log("sleeesssssssssssssssssssssssssssssssssp");
     player.stopPlayer();
   };
   const [loading, setloading] = useState<boolean>(false);
   const isOnheadsets = useSelector(isOnheadsetsSelector)
   const reConnect=useSelector(reconnectSelector)
+  
   const createAlarmClock = (radioStation: any) => {
     player.open();
     if (radioStation) {
@@ -90,6 +91,7 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     }
   };
   useEffect(() => {
+   
     getData("isLooking").then((lookingList) => {
       if (lookingList) {
         dispatch(changeLookingList(lookingList));
@@ -111,7 +113,6 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
       }
     });
     getData("alarmClock").then((time) => {
-      console.log("alarmclock", time);
       if (time) {
         initAlarmClock(createAlarmClock, time);
       }
@@ -131,7 +132,6 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     getData("autoPlay").then((res) => {
       if (res) {
         getData("autoPlayData").then((info) => {
-          console.log('ifoooo', info);
           let d = {
             radioStation: { ...info, isPlayingMusic: true },
             index: info.index,
@@ -139,7 +139,6 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             search: ''
           }
           player.open(d);
-          console.log("sssssssssssssss",d);
 
           player._startPlayMusic(info.data, info.activeBi);
           dispatch(changeSelectedRadioStation({ ...info, isPlayingMusic: true }))
@@ -154,11 +153,9 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
 
 
   HeadphoneDetection.addListener(date => {
-    console.log("HeadphoneDetection", date)
     if (selectedRadioStation?.isPlayingMusic && !date.audioJack && !date.bluetooth && isOnheadsets) {
       player._pouseMusic()
     } else if (selectedRadioStation?.isPlayingMusic && !date.audioJack && !date.bluetooth && !isOnheadsets) {
-      console.log('elsee', selectedRadioStation?.isPlayingMusic, !date.audioJack, !date.bluetooth);
       player._startPlayMusic(selectedRadioStation.data, selectedRadioStation.activeBi)
       dispatch(changeSelectedRadioStationPlaying(true))
     }
@@ -171,7 +168,6 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
       if (state.isConnected && reConnect) {
 
         getData('activeRadioStation').then((activeRadioStation) => {
-          console.log('activeRadioStationactiveRadioStation',activeRadioStation);
           
           if (activeRadioStation && activeRadioStation.isPlayingMusic) {
             let info = {
@@ -181,14 +177,13 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
               search: ''
             }
             dispatch(changeMiniScreenData(activeRadioStation))
-console.log("oooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
             player.open(info);
             player._startPlayMusic(activeRadioStation.data, activeRadioStation.activeBi)
 
           }
         })
       }
-      SplashScreen.hide()
+    
 
       dispatch(changeIsConnected(state.isConnected));
     });

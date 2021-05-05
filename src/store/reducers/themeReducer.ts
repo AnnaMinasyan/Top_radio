@@ -1,6 +1,4 @@
 import { ThemeTypes } from '../constants';
-import { storeData, getData } from "../../utils/local_storage"
-
 interface IReduxAction<T> {
     type: T;
     payload: any;
@@ -19,7 +17,6 @@ export const initialState: IThemeState = {
 }
 const themeReducer = (state = initialState, action: IReduxAction<ThemeTypes>) => {
     switch (action.type) {
-
         case ThemeTypes.CHANGE_BACKGROUNDCOLOR:
             let color = ''
             if (action.payload) {
@@ -27,7 +24,6 @@ const themeReducer = (state = initialState, action: IReduxAction<ThemeTypes>) =>
             } else {
                 color = "white"
             }
-
             return { ...state, backgroundColor: color }
             case ThemeTypes.SET_HEIGHT_WIDTH:
     

@@ -25,8 +25,8 @@ class PlayList extends React.Component<IPlayListProps, IState> {
         }
     }
     render() {
-        
-    const list=this.props.playListReducer.playList && this.props.playListReducer.trackList? this.state.filterType=='playList'?this.props.playListReducer.trackList:this.props.playListReducer.playList:[]
+        console.log(this.props.playListReducer.playList,this.props.playListReducer.trackList);
+         
 
     return (
         <ScrollView  style={{ backgroundColor: this.props.theme.backgroundColor}}  >
@@ -57,7 +57,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                 </View>:
                 
                     <View>
-                        {list.map((data: any,index:number) => {
+                        {this.props.playListReducer.trackList&& this.props.playListReducer.trackList.map((data: any,index:number) => {
 
                             return (
                                 <View key={index} style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>

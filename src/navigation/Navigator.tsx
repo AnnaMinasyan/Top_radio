@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -43,9 +43,8 @@ const BottomTabStack = () => {
 };
 const Drawer = createDrawerNavigator();
 
-const Navigator: React.FunctionComponent = () => (
-
-<NavigationContainer>
+const Navigator = () => {
+return <NavigationContainer>
       <Drawer.Navigator
           initialRouteName="BottomTabStack"
           drawerContent={(props) => <MenuDrawerContent {...props} />}
@@ -67,6 +66,5 @@ const Navigator: React.FunctionComponent = () => (
           />
       </Drawer.Navigator>
       </NavigationContainer>
-);
-
-export default Navigator;
+}
+export default Navigator

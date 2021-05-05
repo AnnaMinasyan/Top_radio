@@ -1,5 +1,4 @@
 import { FilterTypes } from '../constants';
-import { storeData, getData } from "../../utils/local_storage"
 
 interface IReduxAction<T> {
     type: T;
@@ -19,8 +18,6 @@ export interface IFilterState {
     playListType:any,
     activeIndex:number|undefined
 }
-
-
 export const initialState: IFilterState = {
     isFavorite: false,
     swipeablePanelActive: null,

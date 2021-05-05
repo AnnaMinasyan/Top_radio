@@ -1,6 +1,4 @@
 import { MenuTypes } from '../constants';
-import { storeData, getData } from "../../utils/local_storage"
-
 interface IReduxAction<T> {
     type: T;
     payload: any;

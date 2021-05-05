@@ -1,10 +1,5 @@
 import {
   put,
-  all,
-  takeLatest,
-  select,
-  call,
-  take,
   takeEvery,
 } from "redux-saga/effects";
 import { BottomType, FilterTypes } from "../constants";
@@ -22,39 +17,31 @@ import {
   setActiveArrow,
   setIsConnected,
 } from "../actions/bottomAction";
-import { initMenuType, setActiveIndex } from "../actions/filterAction";
+import { setActiveIndex } from "../actions/filterAction";
 import { changePlayingMusic } from "../actions/filterAction";
 import player from "../../services/player/PlayerServices";
 import { storeData, getData } from "../../utils/local_storage";
 import { Alert } from "react-native";
-import { initFavorites } from "../actions/favoritesActions";
-import { initAutoPlay } from "../actions/settingsAcrion";
 function* onGetPlayType({ payload }: any) {
   try {
     yield put(setplayItem(payload));
   } catch (ex) {
-    yield put(setIsConnected(false));
     console.log(ex);
   }
 }
-function* changeselectedSatationbyBi({ payload }: any) {
+function* changeselectedSatationbyBi({ payload }: any): Generator {
   try {
-    yield put(setSwiperActiveBi(payload.activeBi));
-    yield storeData('activeRadioStation',payload)
-
+    yield put(setSwiperActiveBi(payload));
+    yield storeData('activeRadioStation', payload)
     yield put(setSelectedRadioStation(payload));
     if (payload) {
-      const data = yield auth.getPlayItemType(payload.data.pl);
-
+      const data: any = yield auth.getPlayItemType(payload.data.pl);
       let station = payload;
-      station.playingSong = data.playList[0];
-
+      station.playingSong = data[0];
       yield put(setMiniScreenData(station));
-      
       yield put(setSelectedRadioStation(station));
     }
   } catch (ex) {
-    yield put(setIsConnected(false));
     Alert.alert("Сервер не работает ");
   }
 }
@@ -63,36 +50,29 @@ function* clearReducerData() {
     yield put(setSelectedRadioStation(undefined));
     player.stopPlayer()
   } catch (ex) {
-    yield put(setIsConnected(false));
     console.log(ex);
   }
 }
-function* addselectedRadioStation({ payload }: any) {
+function* addselectedRadioStation({ payload }: any): Generator {
   try {
     yield put(setSelectedRadioStation(payload));
-    
-    if (payload.data.pl) {      
-      const data = yield auth.getPlayItemType(payload.data.pl);
+    if (payload.data.pl) {
+      const data: any = yield auth.getPlayItemType(payload.data.pl);
       let station = payload;
       station.activeBi = payload.data.st[0];
-      station.playingSong = data.playList[0];
-      yield storeData('activeRadioStation',station)
+      station.playingSong = data[0];
+      yield storeData('activeRadioStation', station)
 
-yield put(setSelectedRadioStation(station));    
-}
-    // console.log( data)
+      yield put(setSelectedRadioStation(station));
+    }
   } catch (ex) {
-    yield put(setIsConnected(false));
-    Alert.alert("Сервер не работает ");
-    // yield put(setIsConnected(false))
+
   }
 }
 function* changeSelectedRadioStationPlaying({ payload }: any) {
   try {
-
     yield put(setSelectedRadioStationPlaying(payload));
   } catch (ex) {
-    yield put(setIsConnected(false));
   }
 }
 function* changeSwiperActiveBi({ payload }: any) {
@@ -103,12 +83,14 @@ function* changeSwiperActiveBi({ payload }: any) {
     console.log(ex);
   }
 }
-function* onGetSongData({ payload }: any) {
+function* onGetSongData({ payload }: any): Generator {
   try {
     if (payload) {
-      const res = yield auth.getPlayItemType(payload.data.pl);
+      const res: any = yield auth.getPlayItemType(payload.data.pl);
       if (res) {
-        yield put(setSwiperPlayingSong(res.playList[0]));
+        console.log(res);
+        
+        yield put(setSwiperPlayingSong(res[0]));
       }
       const autoplay = yield getData("autoPlay");
 
@@ -117,7 +99,6 @@ function* onGetSongData({ payload }: any) {
       }
     }
   } catch (ex) {
-    yield put(setIsConnected(false));
     Alert.alert("Сервер не работает ");
   }
 }
@@ -128,15 +109,14 @@ function* onChangePlayingData({ payload }: any) {
     console.log(ex);
   }
 }
-function* onChangeplayItemArtistandSon({ payload }: any) {
+function* onChangeplayItemArtistandSon({ payload }: any): Generator {
   try {
     if (payload) {
-      const data = yield auth.getPlayItemType(payload.pl);
+      const data: any = yield auth.getPlayItemType(payload.pl);
 
-      yield put(setplayItemArtistandSong(data.playList[0]));
+      yield put(setplayItemArtistandSong(data[0]));
     }
   } catch (ex) {
-    yield put(setIsConnected(false));
     console.log(ex);
   }
 }
@@ -147,25 +127,21 @@ function* onchangeActiveIndex({ payload }: any) {
     console.log(ex);
   }
 }
-function* changeSwiperShowStation({ payload }: any) {
+function* changeSwiperShowStation({ payload }: any): Generator {
   try {
-    console.log("0000");
-    
-    yield put(setSwiperShowStation(payload.radioStation));    
-    if(payload.search){
+    yield put(setSwiperShowStation(payload.radioStation));
+    if (payload.search) {
       yield put(setActiveIndex(payload.radioStation.data.index));
-    }else{
+    } else {
       yield put(setActiveIndex(payload.index));
-    }    
+    }
     if (!payload.isPlayingMusic) {
       yield put(setMiniScreenData(payload.radioStation));
-      console.log('99999999999999999999999999999999');
-      yield storeData('activeRadioStation',payload.radioStation)
-       yield put(setSelectedRadioStation(payload.radioStation));
+      yield storeData('activeRadioStation', payload.radioStation)
+      yield put(setSelectedRadioStation(payload.radioStation));
     }
     if (payload.radioStation) {
-      const autoplay = yield getData("autoPlay");
-
+      const autoplay: any = yield getData("autoPlay");
       if (autoplay) {
         yield put(changePlayingMusic(true));
       }
@@ -190,7 +166,7 @@ function* changeMiniScreenData({ payload }: any) {
 }
 function* changeIsconnected({ payload }: any) {
   try {
-  
+
     yield put(setIsConnected(payload));
 
   } catch (ex) {
@@ -215,7 +191,7 @@ export function* watchBottomType() {
     BottomType.CHANGE_SELECTED_RADIOSTATION_PLAYMUSIC as any,
     changeSelectedRadioStationPlaying
   );
- 
+
   yield takeEvery(
     BottomType.CHANGE_SWIPERSHOW_RADIOSTATION as any,
     changeSwiperShowStation

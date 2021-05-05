@@ -206,8 +206,14 @@ class BottomSwiper extends React.Component<Props, IState> {
 
       await TrackPlayer.pause();
     });
-    await TrackPlayer.setupPlayer();
+    await TrackPlayer.setupPlayer(
+      {
+        minBuffer: 30,
+        maxCacheSize:20
+      }
+    );
     TrackPlayer.updateOptions({
+      
       stopWithApp: true,
       capabilities: [
         TrackPlayer.CAPABILITY_PLAY,
@@ -474,55 +480,7 @@ class BottomSwiper extends React.Component<Props, IState> {
     }
   }
 
-  changeRadioStancia(item: any) {
-    this.setState({ loading: true });
-
-    if (
-      this.props.bottomReducer.swiperShowRadiostation?.id ==
-      this.props.bottomReducer.selectedRadioStation?.id
-    ) {
-      this.props.onchangeActiveBi(item);
-      player._pouseMusic();
-      //setTimeout(() => {
-        player._startPlayMusic(
-          this.props.bottomReducer.swiperShowRadiostation?.data,
-          this.props.bottomReducer.swiperShowRadiostation?.activeBi
-        ).then(()=>{
-          this.props.onchangeSelectedRadioStationPlaying(true);
-          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
-
-          storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
-        this.setState({ loading: false });
-        })
-        
-     // }, 500);
-    } else {
-      let data = this.props.bottomReducer.swiperShowRadiostation;
-      data.isPlayingMusic = true;
-      data.activeBi = item;
-
-      player._pouseMusic();
-      this.props.onchangeSelectedSatationbyBi(data);
-      // this.props.onchangeSelectedRadioStation(data)
-
-      //setTimeout(() => {
-        this._addLookingList(
-          this.props.bottomReducer.swiperShowRadiostation?.data
-        );
-        player._startPlayMusic(
-          this.props.bottomReducer.swiperShowRadiostation?.data,
-          this.props.bottomReducer.swiperShowRadiostation?.activeBi
-        ).then(()=>{
-          this.props.onchangeSelectedRadioStationPlaying(true);
-          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
-
-          storeData("autoPlayData",  this.props.bottomReducer.swiperShowRadiostation)
-          this.setState({ loading: false });
-        })
-       
-     // }, 500);
-    }
-  }
+ 
   closed() {
     Animated.timing(this.anim, {
       toValue: 1,

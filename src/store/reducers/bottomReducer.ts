@@ -40,8 +40,6 @@ export const initialState: IBottomState = {
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
 
-console.log(action.type);
-
     switch (action.type) {
         case BottomType.SET_IS_CONNECTED:
             return { ...state, isConnected: action.payload }
@@ -64,8 +62,7 @@ console.log(action.type);
 
         case BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI:
 
-            return { ...state, swiperShowRadiostation:
-                 { ...state.swiperShowRadiostation, activeBi: action.payload } }
+            return { ...state, swiperShowRadiostation: action.payload,selectedRadioStation:action.payload } 
 
         case BottomType.SET_ACTIVEARROW:
 

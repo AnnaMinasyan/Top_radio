@@ -14,13 +14,18 @@ interface IDATA {
 }
 class Static implements IDATA {
     async getMenuDatas() {
-        try {
+        
+        try {    
+            console.log("pppppppppppppppppppppppppppppppppppppppp",`${keys.API_URL}radios.json`);
+
             const response = await authApi.get(`${keys.API_URL}radios.json`,);
+            
 
 
             return response.data
         } catch (error) {
-            return Alert.alert("Error", error)
+            return console.log(error);
+            
 
         }
     }
@@ -43,11 +48,11 @@ class Static implements IDATA {
             return Alert.alert("Error", ex)
         }
     }
-    async getPlayLists(payload: number) {
+    async getTrackLists(payload: number) {
 
         try {
             const data = moment().format('YYYY-MM-DD')
-            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=100`,);
+            const response = await authApi.get(`https://botan.ru.com/api/application/tracklists/${payload}`,);
             return response.data
         } catch (ex) {
             return Alert.alert("Error", ex)
@@ -57,14 +62,16 @@ class Static implements IDATA {
         try {
 
             const data = moment().format('YYYY-MM-DD')
-            if (payload) {
-                const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}?trackList=true&limit=1`,);
+           
+
+            if (payload && data) {
+                const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`,);
 
 
                 return response.data
             }
         } catch (ex) {
-            console.log(ex)
+            console.log('errorr',ex.response.data)
             throw ex
 
         }

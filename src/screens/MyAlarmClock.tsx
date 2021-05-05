@@ -81,7 +81,6 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
 
   componentDidMount() {
     getData('alarmClock').then((time) => {
-      console.log(time);
 
       if (time) {
         this.setState({
@@ -251,7 +250,6 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
       data.radioStation = this.state.playItem
       data.alarmClockTime = this.alarmClockTime
       data.datePickerData = datePickerData
-      console.log(data);
       
       storeData("alarmClock", data)
       initAlarmClock(this.alarmClockTodo, data)
@@ -259,7 +257,6 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
 
   }
   alarmClockTodo = (data: any) => {
-    console.log(";;;;;;;;;;;;;;;;;", this.state.playItem);
     let playingData = {
       data: this.state.playItem,
       isPlayingMusic: true,

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     StyleSheet,
     ScrollView,
@@ -6,7 +6,7 @@ import {
     Text,
     TouchableOpacity, SafeAreaView, StatusBar,
 } from 'react-native'
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import Logo from "../assets/icons/logo.svg"
 import Guitar from "../assets/icons/guitar.svg"
 import GuitarDark from "../assets/icons/guitarDark.svg"
@@ -24,26 +24,34 @@ import { changeSearchData } from '../store/actions/menuActions';
 import { changeFilterGanres } from '../store/actions/ganresAction';
 import { changeFilterCities } from '../store/actions/citiesAction';
 import { DrawerActions } from '@react-navigation/native';
+import { isActiveSelector } from '../store/selector/filterSelector';
+import { swiperShowRadiostationSelector } from '../store/selector/bottomSelector';
+import { ganresSelector } from '../store/selector/ganreSelector';
+import { menuDataSelector } from '../store/selector/menuSelector';
+import { citiesSelector } from '../store/selector/citiesSelector';
 
 interface Props {
     navigation: NavigationScreenProp<any, any>;
-    onchangeisActive(type:string): void;
-    onchangeActiveArrow(type:boolean): void;
-    onchangeSearchData(payload:any):void; 
-    filterReducer: any,
-    menuReducer:any,
-    ganresReducer:any,
-    citiesReducer:any,
-    onchangeFilterGanres(payload:any):void; 
-    onchangeFilterCities(payload:any):void; 
-    bottomReducer:any
+
 }
 const CustomDrawerContentComponent: React.FunctionComponent<any> = (props) => {
-console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
+const dispatch = useDispatch();
+const isActive =useSelector(isActiveSelector)
+const swiperShowRadiostation=useSelector(swiperShowRadiostationSelector)
+const ganres=useSelector(ganresSelector)
+const menuData=useSelector(menuDataSelector)
+const cities=useSelector(citiesSelector)
+const [loading,setLoading]=useState<boolean>(false)
+useEffect(()=>{
+    setTimeout(()=>{
+        setLoading(true)
+    },3000)
+},[])
+console.log('loadingloadingloading',loading);
 
     return (
         <SafeAreaView style={{flex: 1}}>
-   { <View style={{height:'100%', zIndex:999}}>
+   {loading? <View style={{height:'100%', zIndex:999}}>
         <ScrollView style={{ backgroundColor: '#0F1E45', height:deviceHeight}}>
             <View style={styles.container} >
 
@@ -55,16 +63,16 @@ console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
-                            props.onchangeisActive('all')
-                            props.onchangeActiveArrow(true)
+                          dispatch(changeisActive('all'))
+                          dispatch(changeActiveArrow(true))
                             props.navigation.navigate('Menu')  
-                           props.bottomReducer.swiperShowRadiostation && player.close()              
-                            props.onchangeSearchData(props.menuReducer.menuData)
+                           swiperShowRadiostation&& player.close()              
+                            dispatch(changeSearchData(menuData))
                         }}
                     >
                         <View style={styles.item}>
-                            <RadioSvg height={22.02} width={30} fill={props.filterReducer.isActive=="all"?'#6C7BA4':"white"} />
-                            <Text style={props.filterReducer.isActive=="all" ? styles.activeitemText : styles.itemText}>Все радиостанции</Text>
+                            <RadioSvg height={22.02} width={30} fill={isActive=="all"?'#6C7BA4':"white"} />
+                            <Text style={isActive=="all" ? styles.activeitemText : styles.itemText}>Все радиостанции</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -72,47 +80,47 @@ console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
                         onPress={() => {
                             
                             props.navigation.navigate('Genres')
-                             props.onchangeisActive('genres')
-                             props.onchangeActiveArrow(true)
-                            props.onchangeFilterGanres(props.ganresReducer.ganres)
-                        props.bottomReducer.swiperShowRadiostation && player.close()
+                            dispatch(changeisActive('genres'))
+                            dispatch(changeActiveArrow(true))
+                         dispatch(changeFilterGanres(ganres))
+                        swiperShowRadiostation&& player.close()
                         }}
                     >
                         <View style={styles.item}>
-                            {props.filterReducer.isActive=="genres"?
+                            {isActive=="genres"?
                             <GuitarDark height={29.95} width={30} />:<Guitar height={29.95} width={30}   />}
-                            <Text style={props.filterReducer.isActive=="genres" ? styles.activeitemText : styles.itemText}>Жанры</Text>
+                            <Text style={isActive=="genres" ? styles.activeitemText : styles.itemText}>Жанры</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
                             props.navigation.navigate('Cities')
-                            props.onchangeisActive('cities')
-                            props.onchangeActiveArrow(true)
-                            props.onchangeFilterCities(props.citiesReducer.cities)
-                            props.bottomReducer.swiperShowRadiostation && player.close()
+                            dispatch(changeisActive('cities'))
+                            dispatch(changeActiveArrow(true))
+                           dispatch(changeFilterCities(cities))
+                            swiperShowRadiostation&& player.close()
                         }}
                     >
                         <View style={styles.item}>
-                        {props.filterReducer.isActive=="cities"?
+                        {isActive=="cities"?
                           <LocationSvg height={30} width={30}/>:
                             <Location height={30} width={30}/>}
-                            <Text style={props.filterReducer.isActive=="cities" ? styles.activeitemText : styles.itemText}>Города</Text>
+                            <Text style={isActive=="cities" ? styles.activeitemText : styles.itemText}>Города</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.item}
                         onPress={() => {
-                            props.onchangeisActive('looking')
+                            dispatch(changeisActive('looking'))
                             props.navigation.navigate('LookingMenu')
-                            props.onchangeActiveArrow(false)
-                            props.bottomReducer.swiperShowRadiostation && player.close()
+                            dispatch(changeActiveArrow(false))
+                            swiperShowRadiostation&& player.close()
                         }}
                     >
                         <View style={styles.item}>
-                            <EyesSvg height={30} width={30} fill={props.filterReducer.isActive=="looking"?'#6C7BA4':"white"} />
-                            <Text style={props.filterReducer.isActive=="looking" ? styles.activeitemText : styles.itemText}>Просмотренные</Text>
+                            <EyesSvg height={30} width={30} fill={isActive=="looking"?'#6C7BA4':"white"} />
+                            <Text style={isActive=="looking" ? styles.activeitemText : styles.itemText}>Просмотренные</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -124,7 +132,7 @@ console.log(';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
         </ScrollView>
 
                 
-    </View>}
+    </View>:null}
    </SafeAreaView>
     )
 };
@@ -181,32 +189,5 @@ marginBottom:300
         marginBottom:25
     }
 });
-const mapStateToProps = (state: any) => {
-    return state
-};
-// const mapStateToProps = (state: any) => ({
 
-//     reducer:state
-
-
-// });
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        onchangeisActive: (payload: string) => {
-            dispatch(changeisActive(payload))
-        },
-        onchangeActiveArrow: (payload: string) => {
-            dispatch(changeActiveArrow(payload))
-        },
-        onchangeSearchData: (payload: any) => {
-            dispatch(changeSearchData(payload));
-          },
-          onchangeFilterGanres: (payload: string) => {
-            dispatch(changeFilterGanres(payload))
-        },
-        onchangeFilterCities: (payload: string) => {
-            dispatch(changeFilterCities(payload));
-          },
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(CustomDrawerContentComponent);
+export default CustomDrawerContentComponent

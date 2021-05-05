@@ -26,7 +26,6 @@ import {
 import {
   changeplayItem,
   changePlayingData,
-  changeActiveIndex,
   changeActiveBi,
   getSongData,
   changeSelectedRadioStation,
@@ -90,7 +89,7 @@ class Menu extends React.Component<IMenuProps, IState> {
       this.setState({ styleView: menuView });
     });
 
-    this.props.ongetMenuData();
+     this.props.ongetMenuData();
     getData("isLooking").then((looking) => {
       if (looking) {
         this.props.onchangeLookingList(looking);
@@ -138,7 +137,7 @@ class Menu extends React.Component<IMenuProps, IState> {
           let info={
             radioStation:radioStation,
             index:data.index,
-            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
+            isPlayingMusic:false,
             search:this.state.searchvalue
           }
           player.open(info);
@@ -178,7 +177,7 @@ class Menu extends React.Component<IMenuProps, IState> {
             let info={
               radioStation:radioStation,
               index:data.item.index,
-              isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
+              isPlayingMusic:false,
               search:this.state.searchvalue
             }
             this.props.onchangeSwiperListType('main')

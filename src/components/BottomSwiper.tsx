@@ -208,8 +208,9 @@ class BottomSwiper extends React.Component<Props, IState> {
     });
     await TrackPlayer.setupPlayer(
       {
-        minBuffer: 30,
-        maxCacheSize:20
+        maxBuffer: 15,
+        maxCacheSize:20,
+        playBuffer:5
       }
     );
     TrackPlayer.updateOptions({
@@ -277,8 +278,10 @@ class BottomSwiper extends React.Component<Props, IState> {
     } else {
       this._addLookingList(this.props.bottomReducer.selectedRadioStation?.data);
       this.props.onchangeSelectedRadioStationPlaying(true);
-      
-       storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+      if(this.props.settingsReducer.reconnect){
+        console.log("1111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+
+       storeData('activeRadioStation',{...this.props.bottomReducer.selectedRadioStation,isPlayingMusic:true})}
        if(this.props.settingsReducer.autoPlay){
         storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
 
@@ -1280,7 +1283,6 @@ class BottomSwiper extends React.Component<Props, IState> {
         onStartRecord={()=>{this.onStartRecord()}}
         _addLookingList={(v)=>{this._addLookingList(v)}}
         _navigatePlayList={()=>{this._navigatePlayList()}}
-        changeRadioStancia={(v)=>{this.changeRadioStancia(v)}}
         anim={this.anim}
         animation={"easeInEaseOut"}
         onchangeIsConnected={(v:any)=>this.props.onchangeIsConnected(v)}

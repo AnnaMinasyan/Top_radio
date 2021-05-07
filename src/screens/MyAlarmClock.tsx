@@ -99,9 +99,22 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
     if (this.checkIsFovorite(data.item.id) && this.state.isFavorite) {
       return <TouchableHighlight
         onPress={() => {
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: true,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index:data.index,
+          };
+          let info={
+            radioStation:radioStation,
+            index:data.index,
+            isPlayingMusic:true,
+            search:null
+          }
           this.setState({
             visibleModal: null,
-            playItem: data.item,
+            playItem: info,
           })
 
           this._changeIsOnAlarmClock(this.state.alarmClock)
@@ -119,10 +132,22 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
     else if (this.state.isFavorite == false) {
       return <TouchableOpacity
         onPress={() => {
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: true,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index:data.index,
+          };
+          let info={
+            radioStation:radioStation,
+            index:data.index,
+            isPlayingMusic:true,
+            search:null
+          }
           this.setState({
             visibleModal: null,
-            playItem: data.item,
-
+            playItem: info,
           })
           this._changeIsOnAlarmClock(this.state.alarmClock)
         }}
@@ -257,24 +282,14 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
 
   }
   alarmClockTodo = (data: any) => {
-    let playingData = {
-      data: this.state.playItem,
-      isPlayingMusic: true,
-      activeBi: this.state.playItem.st[0],
-      id: this.state.playItem.id,
-      index:data.index,
-    }
-    let info={
-      radioStation:playingData,
-      index:data.index,
-      isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic,
-      search:null
-    }
-  
-    this.props.onchangeSelectedRadioStation(info)
-    this.props.onchangeMiniScreenData(info)
-    player.open()
-    player._startPlayMusic(playingData.data, playingData.activeBi)
+    console.log(data,"----------------------------------");
+
+
+    this.props.onchangeSelectedRadioStation(data.radioStation)
+    this.props.onchangeMiniScreenData(data.radioStation)
+   player.open(data)
+    player._startPlayMusic(data.radioStation.data,
+    data.radioStation?.data.st[0])
   }
   changeIsOnAlarmclock() {
 
@@ -332,7 +347,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
               <Text style={[global_styles.stationTexttitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>
                 Радиостанция
             </Text>
-              <Text style={global_styles.stationComment}>{this.state.playItem ? this.state.playItem.pa : 'Выберите радио'}</Text>
+              <Text style={global_styles.stationComment}>{this.state.playItem ? this.state.playItem.radioStation.data.pa : 'Выберите радио'}</Text>
             </View>
           </View>
           <ArrowLeft height={calcHeight(12)} width={calcWidth(6.84)} fill='#B3BACE' />

@@ -52,7 +52,20 @@ class Static implements IDATA {
 
         try {
             const data = moment().format('YYYY-MM-DD')
+            console.log(`https://botan.ru.com/api/application/tracklists/${payload}`);
+            
             const response = await authApi.get(`https://botan.ru.com/api/application/tracklists/${payload}`,);
+            return response.data
+        } catch (ex) {
+            return Alert.alert("Error", ex)
+        }
+    }
+    async getPlayLists(payload: number) {
+
+        try {
+ 
+            const data = moment().format('YYYY-MM-DD')
+            const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`,);
             return response.data
         } catch (ex) {
             return Alert.alert("Error", ex)
@@ -66,6 +79,7 @@ class Static implements IDATA {
 
             if (payload && data) {
                 const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`,);
+console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`);
 
 
                 return response.data

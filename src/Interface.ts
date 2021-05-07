@@ -35,8 +35,10 @@ import { NavigationScreenProp } from 'react-navigation';
  }
 export interface IPlayListProps {
     playListReducer:any,
+    bottomReducer:any,
     navigation: NavigationScreenProp<any, any>,
     ongetPlayList(payload:any):void; 
+    ongetTrackList(payload:any):void; 
     theme:any
 }
 export interface IFilterMenuProps {

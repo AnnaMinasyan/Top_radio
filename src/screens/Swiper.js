@@ -594,9 +594,10 @@ class SwipeUpDown extends Component<Props> {
                                   this.props.bottomReducer
                                     .swiperShowRadiostation?.data.st[0]
                                 );
-                                storeData('activeRadioStation', this.props.bottomReducer.swiperShowRadiostation)
+                                console.log("22222222222222222222222222222222222222222222222222222222222222");
+                                storeData('activeRadioStation',{...this.props.bottomReducer.swiperShowRadiostation,isPlayingMusic:true})
                                 if (this.settingsReducer.autoPlay) {
-                                  storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
+                                  storeData("autoPlayData", d)
 
                                 }
                                 this.setState({
@@ -764,6 +765,7 @@ class SwipeUpDown extends Component<Props> {
     if (value) {
       this.setState({ visible: false, loading: true, close: false });
       setTimeout(() => {
+        console.log(value);
         this.props.onchangeSwiperShowStation(value);
         this.props.get_songData(value.radioStation);
         this.setState({ loading: false });
@@ -925,11 +927,18 @@ class SwipeUpDown extends Component<Props> {
           this.props.bottomReducer.swiperShowRadiostation?.data,
           this.props.bottomReducer.swiperShowRadiostation?.activeBi
         ).then(()=>{
-          this.props.onchangeSelectedRadioStationPlaying(true);
-          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+          this.setState({loading:true})
+
+          setTimeout(() => {
+            this.props.onchangeSelectedRadioStationPlaying(true);
+            console.log('333333333333333333333333333333333333333333333333333333333333333333333');
+            storeData('activeRadioStation',{...this.props.bottomReducer.selectedRadioStation,isPlayingMusic:true})
+
+            this.setState({ loading: false });
+
+          }, 2500);        
 
           storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
-        this.setState({ loading: false });
         })
         
      // }, 500);
@@ -950,11 +959,17 @@ class SwipeUpDown extends Component<Props> {
           this.props.bottomReducer.swiperShowRadiostation?.data,
           this.props.bottomReducer.swiperShowRadiostation?.activeBi
         ).then(()=>{
-          this.props.onchangeSelectedRadioStationPlaying(true);
-          storeData('activeRadioStation',this.props.bottomReducer.selectedRadioStation)
+          this.setState({loading:true})
+          setTimeout(() => {
+            this.props.onchangeSelectedRadioStationPlaying(true);
+            console.log('444444444444444444444444444444444444444444444444');
+            if(this.props.settingsReducer.reconnect){
+            storeData('activeRadioStation',{...this.props.bottomReducer.selectedRadioStation,isPlayingMusic:true})}
+            this.setState({ loading: false });
+
+          }, 2500);
 
           storeData("autoPlayData",  this.props.bottomReducer.swiperShowRadiostation)
-          this.setState({ loading: false });
         })
        
      // }, 500);
@@ -1322,7 +1337,10 @@ class SwipeUpDown extends Component<Props> {
                           this.props.bottomReducer.swiperShowRadiostation?.data
                             .st[0]
                         );
-                        storeData('activeRadioStation', this.props.bottomReducer.swiperShowRadiostation)
+                        if(this.props.settingsReducer.reconnect){
+                          console.log('555555555555555555555555555555555555555555555555555555555555555555555555555');
+
+                        storeData('activeRadioStation',{...this.props.bottomReducer.swiperShowRadiostation,isPlayingMusic:true})}
                         if (this.props.settingsReducer.autoPlay) {
                           storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
 
@@ -1505,7 +1523,7 @@ class SwipeUpDown extends Component<Props> {
                         },
                       ]}
                     >
-                      {this.props.bottomReducer.miniScreenData?.data.pa}
+                      {this.props.bottomReducer.miniScreenData?.data?.pa}
                     </Text>
                     {this.props.bottomReducer.miniScreenData?.playingSong && (
                       <Text

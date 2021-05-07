@@ -39,7 +39,6 @@ export const initialState: IBottomState = {
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
-
     switch (action.type) {
         case BottomType.SET_IS_CONNECTED:
             return { ...state, isConnected: action.payload }
@@ -47,6 +46,7 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
             
             return { ...state, selectedRadioStation: action.payload }
         case BottomType.SET_SWIPERSHOW_RADIOSTATION:
+
 
             return { ...state, swiperShowRadiostation: action.payload }
         case BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC:

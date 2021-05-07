@@ -90,7 +90,7 @@ export const setSwiperShowStation = (payload: any) => {
   };
 };
 export const changeSwiperShowStation = (payload: any) => {
-  console.log('777777777777');
+  console.log('777777777777',payload);
   
   return {
     type: BottomType.CHANGE_SWIPERSHOW_RADIOSTATION,
@@ -160,6 +160,12 @@ export const changeIsConnected = (payload: any) => {
 export const setIsConnected = (payload: any) => {
   return {
     type: BottomType.SET_IS_CONNECTED,
+    payload,
+  };
+};
+export const changeMiniSelect = (payload: any) => {
+  return {
+    type: BottomType.CHANGE_MINI_SELECTED_RADIOSTATION,
     payload,
   };
 };

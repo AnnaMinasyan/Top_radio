@@ -26,6 +26,7 @@ export enum PlayListTypes {
     SET_TRACK_LIST = '@playListtypes/GET_TRACK_LIST',
     SET_HEADER_TEXT = '@playListtypes/SET_HEADER_TEXT',
     GET_PLAY_LIST = '@playListtypes/GET_PLAY_LIST',
+    GET_TRACK_LIST = '@playListtypes/GET_TRACK_LIST',
     SET_SWIPER_LIST_TYPE = '@playListtypes/SET_SWIPER_LIST_TYPE',
      CHANGE_SWIPER_LIST_TYPE = '@playListtypes/CHANGE_SWIPER_LIST_TYPE',
 }
@@ -85,7 +86,7 @@ export enum BottomType {
     CHANGE_PLAYING_DATA = '@bottomtypes/CHANGE_PLAYING_DATA',
     SET_PLAYING_DATA = '@bottomtypes/SET_PLAYING_DATA',
     CHANGE_PLAY_ITEM_ARTIST_SONG = '@bottomtypes/CHANGE_PLAY_ITEM_ARTIST_SONG',
-  
+    CHANGE_MINI_SELECTED_RADIOSTATION= '@bottomtypes/CHANGE_MINI_SELECTED_RADIOSTATION',
     SET_ACTIVE_BI = '@bottomtypes/SET_ACTIVE_BI',
     CHANGE_ACTIVE_BI = '@bottomtypes/CHANGE_ACTIVE_BI',
     GET_SONG_DATA = '@bottomtypes/GET_SONG_DATA',

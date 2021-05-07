@@ -25,7 +25,7 @@ import { changeFilterGanres } from '../store/actions/ganresAction';
 import { changeFilterCities } from '../store/actions/citiesAction';
 import { DrawerActions } from '@react-navigation/native';
 import { isActiveSelector } from '../store/selector/filterSelector';
-import { swiperShowRadiostationSelector } from '../store/selector/bottomSelector';
+import { selectedRadioStationSelector, swiperShowRadiostationSelector } from '../store/selector/bottomSelector';
 import { ganresSelector } from '../store/selector/ganreSelector';
 import { menuDataSelector } from '../store/selector/menuSelector';
 import { citiesSelector } from '../store/selector/citiesSelector';
@@ -37,7 +37,7 @@ interface Props {
 const CustomDrawerContentComponent: React.FunctionComponent<any> = (props) => {
 const dispatch = useDispatch();
 const isActive =useSelector(isActiveSelector)
-const swiperShowRadiostation=useSelector(swiperShowRadiostationSelector)
+const swiperShowRadiostation=useSelector(selectedRadioStationSelector)
 const ganres=useSelector(ganresSelector)
 const menuData=useSelector(menuDataSelector)
 const cities=useSelector(citiesSelector)
@@ -47,8 +47,6 @@ useEffect(()=>{
         setLoading(true)
     },3000)
 },[])
-console.log('loadingloadingloading',loading);
-
     return (
         <SafeAreaView style={{flex: 1}}>
    {loading? <View style={{height:'100%', zIndex:999}}>

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 import { IPlayListProps} from "../Interface"
-import { getPlayList } from '../store/actions/playlistAction'
+import { getPlayList, getTrackList } from '../store/actions/playlistAction'
 import HeaderByBack from "../components/HeaderByBack"
 import { connect } from "react-redux"
 import moment from 'moment-timezone';
@@ -25,7 +25,6 @@ class PlayList extends React.Component<IPlayListProps, IState> {
         }
     }
     render() {
-        console.log(this.props.playListReducer.playList,this.props.playListReducer.trackList);
          
 
     return (
@@ -37,27 +36,30 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                 <View style={styles.tabFilter}>
                     <TouchableOpacity
                         onPress={() => {
-                            this.setState({ filterType: 'efir' })
+                            this.setState({ filterType: 'efir' }) 
+                               this.props.ongetPlayList(this.props.bottomReducer.swiperShowRadiostation.data)
+
                         }}
                         style={this.state.filterType == 'efir' ? [styles.activeTouch, styles.touch] : styles.activeTouch}>
                         <Text style={this.state.filterType == 'efir' ? styles.touchText : styles.activeTouchText}>Эфир</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            this.setState({ filterType: 'playList' })
+                            this.setState({ filterType: 'trackList' })
+                            this.props.ongetTrackList(this.props.bottomReducer.swiperShowRadiostation.data)
                         }}
-                        style={this.state.filterType == 'playList' ? [styles.activeTouch, styles.touch] : styles.activeTouch}>
-                        <Text style={this.state.filterType == 'playList' ? styles.touchText : styles.activeTouchText}>Kоличество</Text>
+                        style={this.state.filterType == 'trackList' ? [styles.activeTouch, styles.touch] : styles.activeTouch}>
+                        <Text style={this.state.filterType == 'trackList' ? styles.touchText : styles.activeTouchText}>Kоличество</Text>
                     </TouchableOpacity>
 
                 </View>
-                { !this.props.playListReducer.playList && !this.props.playListReducer.trackList?
+                { !this.props.playListReducer.playList ?
                  <View style={{ justifyContent:'center', alignItems:'center', marginTop:calcHeight(150)}}>
                  <ActivityIndicator size="large" color="#0F1E45" />
                 </View>:
                 
                     <View>
-                        {this.props.playListReducer.trackList&& this.props.playListReducer.trackList.map((data: any,index:number) => {
+                        {this.props.playListReducer.playList.map((data: any,index:number) => {
 
                             return (
                                 <View key={index} style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
@@ -67,9 +69,9 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                                     </View>
                                     <View>
                                         {
-                                            this.state.filterType == 'playList'? 
+                                            this.state.filterType == 'trackList'? 
                                             <Text style={styles.elementCount}>{data.count}</Text>:
-                                            <Text style={styles.elementCount}>{moment.utc(data.date).local().format("HH:mm")}</Text>
+                                            <Text style={styles.elementCount}>{moment.utc(data.start_at).local().format("HH:mm")}</Text>
                                             
                                         }
                                        
@@ -93,6 +95,9 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         ongetPlayList: (payload: any) => {
             dispatch(getPlayList(payload))
+        },
+        ongetTrackList: (payload: any) => {
+            dispatch(getTrackList(payload))
         }
     }
 }

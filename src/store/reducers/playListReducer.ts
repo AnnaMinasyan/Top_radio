@@ -4,9 +4,13 @@ interface IReduxAction<T> {
     type: T;
     payload: any;
 }
-
+export interface playListType{
+    start_at: string
+    artist: string
+    song:string
+}
 export interface IPlayListState {
-    playList:any,
+    playList:playListType | undefined,
     trackList:any,
     title:string,
     swiperListType:string
@@ -15,16 +19,14 @@ export interface IPlayListState {
 
 export const initialState: IPlayListState = {
    
-    playList:null,
+    playList:undefined,
     trackList:null,
     title:"",
     swiperListType:'main'
 }
 const playListReducer = (state = initialState, action: IReduxAction<PlayListTypes>) => {
     switch (action.type) {
-        case PlayListTypes.SET_PLAY_LIST:
-            console.log(' action.payload', action.payload);
-            
+        case PlayListTypes.SET_PLAY_LIST:            
             return {...state, playList: action.payload };
         case PlayListTypes.SET_TRACK_LIST:
             return {...state, trackList: action.payload };

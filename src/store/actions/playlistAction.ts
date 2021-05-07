@@ -1,17 +1,25 @@
 import { PlayListTypes } from "../constants"
+import { IPlayListState } from "../reducers/playListReducer";
 export const getPlayList = (payload:any) => {
 	return {
 		type: PlayListTypes.GET_PLAY_LIST,
 		payload
 	};
 };
-export const setPlayList = (payload:any) => {
+export const getTrackList = (payload:any) => {
+	return {
+		type: PlayListTypes.GET_TRACK_LIST,
+		payload
+	};
+};
+export const setPlayList = (payload:IPlayListState |undefined) => {
 	
 	return {
 		type: PlayListTypes.SET_PLAY_LIST,
 		payload
 	};
 };
+
 export const setTrackList = (payload:any) => {
 	
 	return {

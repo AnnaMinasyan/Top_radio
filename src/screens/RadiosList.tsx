@@ -137,7 +137,8 @@ class Menu extends React.Component<IMenuProps, IState> {
           let info={
             radioStation:radioStation,
             index:data.index,
-            isPlayingMusic:false,
+            isPlayingMusic: this.props.bottomReducer.selectedRadioStation?.isPlayingMusic? this.props.bottomReducer.selectedRadioStation
+            .isPlayingMusic:false,
             search:this.state.searchvalue
           }
           player.open(info);
@@ -177,7 +178,8 @@ class Menu extends React.Component<IMenuProps, IState> {
             let info={
               radioStation:radioStation,
               index:data.item.index,
-              isPlayingMusic:false,
+              isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic? this.props.bottomReducer.selectedRadioStation
+              .isPlayingMusic:false,
               search:this.state.searchvalue
             }
             this.props.onchangeSwiperListType('main')

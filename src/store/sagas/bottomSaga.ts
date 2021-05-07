@@ -32,7 +32,6 @@ function* onGetPlayType({ payload }: any) {
 function* changeselectedSatationbyBi({ payload }: any): Generator {
   try {
     yield put(setSwiperActiveBi(payload));
-    yield storeData('activeRadioStation', payload)
     yield put(setSelectedRadioStation(payload));
     if (payload) {
       const data: any = yield auth.getPlayItemType(payload.data.pl);
@@ -61,7 +60,6 @@ function* addselectedRadioStation({ payload }: any): Generator {
       let station = payload;
       station.activeBi = payload.data.st[0];
       station.playingSong = data[0];
-      yield storeData('activeRadioStation', station)
 
       yield put(setSelectedRadioStation(station));
     }
@@ -88,7 +86,6 @@ function* onGetSongData({ payload }: any): Generator {
     if (payload) {
       const res: any = yield auth.getPlayItemType(payload.data.pl);
       if (res) {
-        console.log(res);
         
         yield put(setSwiperPlayingSong(res[0]));
       }
@@ -129,6 +126,8 @@ function* onchangeActiveIndex({ payload }: any) {
 }
 function* changeSwiperShowStation({ payload }: any): Generator {
   try {
+    console.log('payloadpayloadpayloadpayloadpayloadpayloadpayload',payload);
+    
     yield put(setSwiperShowStation(payload.radioStation));
     if (payload.search) {
       yield put(setActiveIndex(payload.radioStation.data.index));
@@ -137,7 +136,6 @@ function* changeSwiperShowStation({ payload }: any): Generator {
     }
     if (!payload.isPlayingMusic) {
       yield put(setMiniScreenData(payload.radioStation));
-      yield storeData('activeRadioStation', payload.radioStation)
       yield put(setSelectedRadioStation(payload.radioStation));
     }
     if (payload.radioStation) {
@@ -160,6 +158,23 @@ function* changeActiveArrow({ payload }: any) {
 function* changeMiniScreenData({ payload }: any) {
   try {
     yield put(setMiniScreenData(payload));
+  } catch (ex) {
+    console.log(ex);
+  }
+}
+function* changeMiniSELECT({ payload }: any):Generator {
+  try {
+    yield put(setSelectedRadioStation(payload));
+    yield put(setMiniScreenData(payload));
+    if (payload.data.pl) {
+      const data: any = yield auth.getPlayItemType(payload.data.pl);
+      let station = payload;
+      station.activeBi = payload.data.st[0];
+      station.playingSong = data[0];
+      yield put(setMiniScreenData(payload));
+      yield put(setSelectedRadioStation(station));
+    }
+    
   } catch (ex) {
     console.log(ex);
   }
@@ -211,4 +226,5 @@ export function* watchBottomType() {
   );
   yield takeEvery(BottomType.CHANGE_IS_CONNECTED as any, changeIsconnected);
   yield takeEvery(BottomType.CLEAR_REDUCER as any, clearReducerData);
+  yield takeEvery(BottomType.CHANGE_MINI_SELECTED_RADIOSTATION as any, changeMiniSELECT);
 }

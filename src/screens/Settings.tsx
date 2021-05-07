@@ -402,6 +402,9 @@ class Settings extends React.Component<ISettings, IState> {
 
               isEnabled={this.props.settingsReducer.reconnect}
               onValueChange={() => {
+                if(this.props.settingsReducer.reconnect){
+                  storeData('activeRadioStation',null)
+                }
                 storeData('reconnect',!this.props.settingsReducer.reconnect)
                 this.props.onchangeReconnenct(!this.props.settingsReducer.reconnect)
               }} />

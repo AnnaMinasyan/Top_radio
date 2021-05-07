@@ -69,7 +69,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView, { marginTop: (6), borderColor: this.props.theme.backgroundColor == "white" ? '#F3F4F5' : "#1E2B4D" }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
-            this.props.bottomReducer.swiperShowRadiostation && player.close()
+            this.props.bottomReducer.selectedRadioStation && player.close()
             this.props.navigation.navigate("MyAlarmClock")
           }}
         >
@@ -78,7 +78,7 @@ class Header extends React.Component<Props, IState> {
         <TouchableOpacity
           style={[styles.modalView, { borderColor: this.props.theme.backgroundColor == "white" ? '#F3F4F5' : "#1E2B4D" }]}
           onPress={() => {
-            this.props.bottomReducer.swiperShowRadiostation && player.close()
+            this.props.bottomReducer.selectedRadioStation && player.close()
             Linking.openURL('http://top-radio.ru/dobavit-radio?fbclid=IwAR2LH7GH0qQTcByNabxFiGh9yNuktf48R2dAlyYGz15_i7QegNoXYYFPnRk')
           }}
         >
@@ -88,7 +88,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView, { borderColor: this.props.theme.backgroundColor == "white" ? '#F3F4F5' : "#1E2B4D" }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
-            this.props.bottomReducer.swiperShowRadiostation && player.close()
+            this.props.bottomReducer.selectedRadioStation && player.close()
             Linking.openURL("market://details?id=ru.topradio");
           }}
         >
@@ -98,7 +98,7 @@ class Header extends React.Component<Props, IState> {
           style={[styles.modalView, { borderColor: this.props.theme.backgroundColor == "white" ? '#F3F4F5' : "#1E2B4D" }]}
           onPress={() => {
             this.setState({ hideMenuModal: false })
-            this.props.bottomReducer.swiperShowRadiostation && player.close()
+            this.props.bottomReducer.selectedRadioStation && player.close()
             this.props.navigation.navigate('Settings')
           }}
         >
@@ -107,7 +107,7 @@ class Header extends React.Component<Props, IState> {
         <TouchableOpacity
           style={[styles.modalView, { borderBottomWidth: 0, borderColor: this.props.theme.backgroundColor == "white" ? '#F3F4F5' : "#1E2B4D" }]}
           onPress={() => {
-            this.props.bottomReducer.swiperShowRadiostation && player.close()
+            this.props.bottomReducer.selectedRadioStation && player.close()
             player.init(null)
             this.props.onclearReducer()
             BackHandler.exitApp()

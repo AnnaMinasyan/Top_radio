@@ -21,7 +21,8 @@ import {
   changeSelectedRadioStation,
   changeMiniScreenData,
   changeSelectedRadioStationPlaying,
-  changeSwiperShowStation
+  changeSwiperShowStation,
+  changeMiniSelect
 } from "./store/actions/bottomAction";
 import { initAlarmClock } from "./utils/createAlarmClock";
 import { getData, storeData } from "./utils/local_storage";
@@ -67,28 +68,29 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
   const isOnheadsets = useSelector(isOnheadsetsSelector)
   const reConnect=useSelector(reconnectSelector)
   
-  const createAlarmClock = (radioStation: any) => {
-    player.open();
-    if (radioStation) {
-      let playingData = {
-        data: radioStation,
-        isPlayingMusic: true,
-        activeBi: radioStation.st[0],
-        id: radioStation.id,
-        index: radioStation.data.index,
-      };
-      let info = {
-        radioStation: radioStation,
-        index: radioStation.index,
-        isPlayingMusic: true,
-        search: null
-      }
+  const createAlarmClock = (data: any) => {
+    
+    if (data) {
+      player.open(data)
+      // let playingData = {
+      //   data: radioStation,
+      //   isPlayingMusic: true,
+      //   activeBi: radioStation.st[0],
+      //   id: radioStation.id,
+      //   index: radioStation.data.index,
+      // };
+      // let info = {
+      //   radioStation: radioStation,
+      //   index: radioStation.index,
+      //   isPlayingMusic: true,
+      //   search: null
+      // }
+      console.log('sdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsd');
+      
+  dispatch(changeMiniSelect(data.radioStation));
 
-      dispatch(changeSelectedRadioStation(info));
-      dispatch(changeMiniScreenData(info));
-
-      player._startPlayMusic(playingData.data, playingData.activeBi);
-    }
+     player._startPlayMusic(data.radioStation.data,
+      data.radioStation?.data.st[0])    }
   };
   useEffect(() => {
    
@@ -126,6 +128,8 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     });
     getData('reconnect').then((reconnect) => {
       if (reconnect) {
+        console.log('reconnectreconnectreconnect');
+        
         dispatch(changeReconnenct(reconnect))
       }
     })
@@ -134,16 +138,15 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         getData("autoPlayData").then((info) => {
           let d = {
             radioStation: { ...info, isPlayingMusic: true },
-            index: info.index,
+            index: undefined,
             isPlayingMusic: true,
             search: ''
           }
           player.open(d);
 
           player._startPlayMusic(info.data, info.activeBi);
-          dispatch(changeSelectedRadioStation({ ...info, isPlayingMusic: true }))
+          dispatch(changeMiniSelect({ ...info, isPlayingMusic: true }))
         });
-      } else {
       }
     });
     dispatch(initMenuType());
@@ -163,25 +166,30 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
   useEffect(() => {
     // Subscribe to network state updates
     const unsubscribe = NetInfo.addEventListener(state => {
-      if (!state.isConnected) {
-      }
+    console.log(state.isConnected ,'reConnect', reConnect);
+    
       if (state.isConnected && reConnect) {
 
         getData('activeRadioStation').then((activeRadioStation) => {
+          console.log('activeRadioStation',activeRadioStation?.isPlayingMusic);
           
           if (activeRadioStation && activeRadioStation.isPlayingMusic) {
             let info = {
               radioStation: activeRadioStation,
-              index: activeRadioStation.index,
+              index: undefined,
               isPlayingMusic: true,
               search: ''
             }
             dispatch(changeMiniScreenData(activeRadioStation))
+            dispatch(changeSelectedRadioStation(activeRadioStation))
             player.open(info);
             player._startPlayMusic(activeRadioStation.data, activeRadioStation.activeBi)
 
           }
         })
+      }else{
+        dispatch(changeMiniSelect(undefined));
+
       }
     
 

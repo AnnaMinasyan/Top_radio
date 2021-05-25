@@ -54,22 +54,28 @@ import HeadphoneDetection from 'react-native-headphone-detection';
 import { isOnheadsetsSelector, reconnectSelector } from "./store/selector/settingsSelector";
 import SplashScreen from "react-native-splash-screen";
 
-const MyApp: React.FunctionComponent<Props> = (props) => {
+
+const MyApp: React.FunctionComponent<any> = (props) => {
   const dispatch = useDispatch();
   const [width, setWidth] = useState<number>(Dimensions.get("window").width);
   const [height, setHeight] = useState<number>(Dimensions.get("window").height);
   const isConnected = useSelector(isConnectedSelector);
   const selectedRadioStation = useSelector(selectedRadioStationSelector)
-  
   const timerSleep = () => {
     player.stopPlayer();
   };
   const [loading, setloading] = useState<boolean>(false);
   const isOnheadsets = useSelector(isOnheadsetsSelector)
-  const reConnect=useSelector(reconnectSelector)
-  
+  const reConnect = useSelector(reconnectSelector)
+  const [configsetings, setConfigSettings] = useState<boolean>(false);
+  let fistTime = true;
+  let settings: any = {
+    "timerSlipeTime": null,
+    'autoPlay': false,
+    'reconnect': true,
+  };
   const createAlarmClock = (data: any) => {
-    
+
     if (data) {
       player.open(data)
       // let playingData = {
@@ -85,15 +91,14 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
       //   isPlayingMusic: true,
       //   search: null
       // }
-      console.log('sdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsdsd');
-      
-  dispatch(changeMiniSelect(data.radioStation));
 
-     player._startPlayMusic(data.radioStation.data,
-      data.radioStation?.data.st[0])    }
+      dispatch(changeMiniSelect(data.radioStation));
+
+      player._startPlayMusic(data.radioStation.data,
+        data.radioStation?.data.st[0])
+    }
   };
-  useEffect(() => {
-   
+  const isLooking = () => {
     getData("isLooking").then((lookingList) => {
       if (lookingList) {
         dispatch(changeLookingList(lookingList));
@@ -102,6 +107,8 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         storeData("isLooking", []);
       }
     });
+  }
+  const theme = () => {
     getData("theme").then((res) => {
       if (res) {
         dispatch(changeBackgroundColor(res));
@@ -109,71 +116,32 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
         dispatch(changeBackgroundColor(false));
       }
     });
-    getData("timerSleepTime").then((time) => {
-      if (time) {
-        initTimerSleep(timerSleep, time);
-      }
-    });
+  }
+  const alarmClock = () => {
     getData("alarmClock").then((time) => {
       if (time) {
         initAlarmClock(createAlarmClock, time);
       }
     });
-    getData("favorites").then((res) => {
-      if (res) {
-        dispatch(appCreateFavorites(res));
-      } else {
-        dispatch(initFavorites());
-      }
-    });
-    getData('reconnect').then((reconnect) => {
-      if (reconnect) {
-        console.log('reconnectreconnectreconnect');
-        
-        dispatch(changeReconnenct(reconnect))
-      }
-    })
-    getData("autoPlay").then((res) => {
-      if (res) {
-        getData("autoPlayData").then((info) => {
-          let d = {
-            radioStation: { ...info, isPlayingMusic: true },
-            index: undefined,
-            isPlayingMusic: true,
-            search: ''
-          }
-          player.open(d);
-
-          player._startPlayMusic(info.data, info.activeBi);
-          dispatch(changeMiniSelect({ ...info, isPlayingMusic: true }))
-        });
-      }
-    });
-    dispatch(initMenuType());
-    dispatch(initAutoPlay());
-    dispatch(setHeightWidth({ height: height, width: width }));
-  }, []);
-
-
-  HeadphoneDetection.addListener(date => {
-    if (selectedRadioStation?.isPlayingMusic && !date.audioJack && !date.bluetooth && isOnheadsets) {
-      player._pouseMusic()
-    } else if (selectedRadioStation?.isPlayingMusic && !date.audioJack && !date.bluetooth && !isOnheadsets) {
-      player._startPlayMusic(selectedRadioStation.data, selectedRadioStation.activeBi)
-      dispatch(changeSelectedRadioStationPlaying(true))
-    }
-  })
-  useEffect(() => {
+  }
+  const internetConnectHandler = () => {
     // Subscribe to network state updates
-    const unsubscribe = NetInfo.addEventListener(state => {
-    console.log(state.isConnected ,'reConnect', reConnect);
-    
-      if (state.isConnected && reConnect) {
+ //   console.log('------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', settings.autoPlay, fistTime);
 
+    return NetInfo.addEventListener(state => {
+      console.log(state,'000000000000');
+       if(state.isConnected!=isConnected)
+     {
+        dispatch(changeIsConnected(state.isConnected));
+      console.log("reConnect", settings);
+      
+      if (state.isConnected && settings.reconnect) {
         getData('activeRadioStation').then((activeRadioStation) => {
-          console.log('activeRadioStation',activeRadioStation?.isPlayingMusic);
-          
-          if (activeRadioStation && activeRadioStation.isPlayingMusic) {
+          const b = fistTime ? settings.autoPlay : true;
+       //  console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;+++++++++++++++++++++++;;;;;;;;;;;;;",activeRadioStation?.isPlayingMusic, b);
+
+          if (activeRadioStation && activeRadioStation?.isPlayingMusic && b) {
+
             let info = {
               radioStation: activeRadioStation,
               index: undefined,
@@ -183,24 +151,86 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
             dispatch(changeMiniScreenData(activeRadioStation))
             dispatch(changeSelectedRadioStation(activeRadioStation))
             player.open(info);
+            
             player._startPlayMusic(activeRadioStation.data, activeRadioStation.activeBi)
 
           }
         })
-      }else{
+      } else {
         dispatch(changeMiniSelect(undefined));
 
       }
-    
 
-      dispatch(changeIsConnected(state.isConnected));
+      fistTime = false;}
     });
+  
+  }
+  useEffect(() => {
+    isLooking();
+    theme();
+    alarmClock()
+    getData("favorites").then((res) => {
+      if (res) {
+        dispatch(appCreateFavorites(res));
+      } else {
+        dispatch(initFavorites());
+      }
+    });
+    getData("settings").then((_settings) => {
+      internetConnectHandler();
+      if (_settings) {
+        settings = _settings;
 
-    return () => {
-      // Unsubscribe to network state updates
-      unsubscribe();
-    };
+        if (settings?.autoPlay) {
+          console.log('autoPlayData');
+          
+          getData("autoPlayData").then((info) => {
+            console.log(info);
+            
+            if(info){
+            let d = {
+              radioStation: { ...info, isPlayingMusic: true },
+              index: undefined,
+              isPlayingMusic: true,
+              search: ''
+            }
+            player.open(d);
+
+            player._startPlayMusic(info.data, info.activeBi);
+            dispatch(changeMiniSelect({ ...info, isPlayingMusic: true }))
+          }
+          });
+        }
+        //const unsubscribe = 
+
+        if (settings?.timerSlipeTime) {
+          initTimerSleep(timerSleep, settings.timerSlipeTime);
+        }
+        if (settings?.reconnect) {
+          dispatch(changeReconnenct(settings.reconnect))
+        }
+        //return unsubscribe
+      } else {
+        storeData('settings', settings)
+      }
+    })
+
+    dispatch(initMenuType());
+    dispatch(initAutoPlay());
+    dispatch(setHeightWidth({ height: height, width: width }));
+
   }, []);
+
+  HeadphoneDetection.addListener(date => {
+    if (selectedRadioStation?.isPlayingMusic && !date.audioJack && !date.bluetooth && isOnheadsets) {
+      player._pouseMusic()
+    } else if (selectedRadioStation?.isPlayingMusic && !date.audioJack && !date.bluetooth && !isOnheadsets) {
+      player._startPlayMusic(selectedRadioStation.data, selectedRadioStation.activeBi)
+      dispatch(changeSelectedRadioStationPlaying(true))
+    }
+  })
+
+
 
 
   Dimensions.addEventListener("change", (value: any) => {
@@ -217,12 +247,15 @@ const MyApp: React.FunctionComponent<Props> = (props) => {
     );
     //  console.log(width, height);
   }, [width]);
+  console.log('isConnectedisConnected', isConnected);
+
   return isConnected ? (
 
     <Navigator />
 
   ) : (
-    <View>
+
+    isConnected == false && <View>
       <Image
         style={{ resizeMode: "center" }}
         source={require("./assets/images/launch_screen.png")}

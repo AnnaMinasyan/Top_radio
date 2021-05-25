@@ -22,6 +22,7 @@ import {
   changeSelectedRadioStation,
   changeMiniScreenData,
   changeSwiperShowStation,
+  changeIsConnected
 } from "../store/actions/bottomAction";
 import BackGroundSvg from "../assets/icons/background.svg";
 import RecordSvg from "../assets/icons/disrecording.svg";
@@ -240,8 +241,8 @@ class SwipeUpDown extends Component<Props> {
     // this.viewRef.setNativeProps(this.customStyle);
   }
   renderBottomSheetHorizontal() {
-    let listPlayer=this.props.playListReducer.swiperListType=='main'? this.props.menuReducer.menuData
-    :this.props.menuReducer.filterData
+    let listPlayer = this.props.playListReducer.swiperListType == 'main' ? this.props.menuReducer.menuData
+      : this.props.menuReducer.filterData
     return (
       <ImageBackground
         resizeMode={"stretch"}
@@ -561,54 +562,61 @@ class SwipeUpDown extends Component<Props> {
                     ) : (
                       <TouchableOpacity
                         onPress={() => {
-                          if (this.props.bottomReducer.isConnected) {
-                            if (this.state.isRecording) {
-                              //console.log("dhkabsakhshakj");
-                              this.onStopRecord();
-                            }
-                            if (
-                              this.props.bottomReducer.selectedRadioStation
-                                ?.id ==
-                              this.props.bottomReducer.swiperShowRadiostation
-                                ?.id
-                            ) {
+                          NetInfo.addEventListener(state => {
+                           
+                            if (state.isConnected) {
+                              if (this.state.isRecording) {
+                                //console.log("dhkabsakhshakj");
+                                this.onStopRecord();
+                              }
+                              if (
+                                this.props.bottomReducer.selectedRadioStation
+                                  ?.id ==
+                                this.props.bottomReducer.swiperShowRadiostation
+                                  ?.id
+                              ) {
+                               
                               this.props.isPlaying();
-                            } else {
-                              player._pouseMusic();
-                              this.setState({ loading: true });
-                              let d = this.props.bottomReducer
-                                .swiperShowRadiostation;
-                              d.isPlayingMusic = true;
-                              //console.log("ddd", d);
-                              this.props.onchangeSelectedRadioStation(d);
-                              this.props.onchangeMiniScreenData(d);
+                              } else {
+                                player._pouseMusic();
+                                this.setState({ loading: true });
+                                let d = this.props.bottomReducer
+                                  .swiperShowRadiostation;
+                                d.isPlayingMusic = true;
+                                //console.log("ddd", d);
+                                this.props.onchangeSelectedRadioStation(d);
+                                this.props.onchangeMiniScreenData(d);
 
-                              setTimeout(() => {
-                                this.props._addLookingList(
-                                  this.props.bottomReducer
-                                    .swiperShowRadiostation?.data
-                                );
-                                player._startPlayMusic(
-                                  this.props.bottomReducer
-                                    .swiperShowRadiostation?.data,
-                                  this.props.bottomReducer
-                                    .swiperShowRadiostation?.data.st[0]
-                                );
-                                console.log("22222222222222222222222222222222222222222222222222222222222222");
-                                storeData('activeRadioStation',{...this.props.bottomReducer.swiperShowRadiostation,isPlayingMusic:true})
-                                if (this.settingsReducer.autoPlay) {
-                                  storeData("autoPlayData", d)
+                                setTimeout(() => {
+                                  this.props._addLookingList(
+                                    this.props.bottomReducer
+                                      .swiperShowRadiostation?.data
+                                  );
+                                  player._startPlayMusic(
+                                    this.props.bottomReducer
+                                      .swiperShowRadiostation?.data,
+                                    this.props.bottomReducer
+                                      .swiperShowRadiostation?.data.st[0]
+                                  );
+                                  console.log("22222222222222222222222222222222222222222222222222222222222222");
+                                  storeData('activeRadioStation', { ...this.props.bottomReducer.swiperShowRadiostation, isPlayingMusic: true })
+                                  if (this.props.settingsReducer.autoPlay) {
+                                    storeData("autoPlayData", d)
 
-                                }
-                                this.setState({
-                                  swiperIndex: this.count,
-                                  loading: false,
-                                });
-                              }, 500);
+                                  }
+                                  this.setState({
+                                    swiperIndex: this.count,
+                                    loading: false,
+                                  });
+                                }, 500);
+                              }
+                            }else{
+                              this.props.onchangeIsConnected(state.isConnected);
                             }
-                          } else {
-                            this.props.onchangeIsConnected(false);
-                          }
+                          })
+
+
+
                         }}
                         style={[
                           styles.btnPlay,
@@ -674,7 +682,7 @@ class SwipeUpDown extends Component<Props> {
                 </View>
               </View>
               {this.props.bottomReducer.activeArrow &&
-              listPlayer&&  this.count < listPlayer.length - 1 && (
+                listPlayer && this.count < listPlayer.length - 1 && (
                   <TouchableOpacity
                     style={[
                       styles.arrow,
@@ -737,7 +745,6 @@ class SwipeUpDown extends Component<Props> {
     }).start();
   }
   _onPanResponderRelease(event, gestureState) {
-    console.log('gestureState', gestureState.dy);
     const delta = this.buttomValue;
     this.setState({ startDrag: false });
 
@@ -753,7 +760,7 @@ class SwipeUpDown extends Component<Props> {
   }
 
   showFull(value) {
-    this.count=0
+    this.count = 0
     this.fadeOut();
     //console.log("lfkdfk");
     Animated.timing(this.state.swipeAnimation, {
@@ -762,6 +769,7 @@ class SwipeUpDown extends Component<Props> {
       useNativeDriver: true,
     }).start();
     this.close = false
+    console.log("sddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
     if (value) {
       this.setState({ visible: false, loading: true, close: false });
       setTimeout(() => {
@@ -805,7 +813,7 @@ class SwipeUpDown extends Component<Props> {
                   NetInfo.fetch().then((state) => {
                     if (
                       this.props.bottomReducer.selectedRadioStation
-                        .isPlayingMusic
+                        .isPlayingMusic && state.isConnected
                     ) {
                       this.props.isPlaying();
                     }
@@ -836,8 +844,8 @@ class SwipeUpDown extends Component<Props> {
   }
   swipeLeft() {
     console.log(this.props.filterReducer.activeIndex);
-    let listPlayer=this.props.playListReducer.swiperListType=='main'? this.props.menuReducer.menuData
-    :this.props.menuReducer.filterData
+    let listPlayer = this.props.playListReducer.swiperListType == 'main' ? this.props.menuReducer.menuData
+      : this.props.menuReducer.filterData
     if (this.props.filterReducer.activeIndex > 0) {
       let radiostation = {
         data: listPlayer[
@@ -847,7 +855,7 @@ class SwipeUpDown extends Component<Props> {
         activeBi: listPlayer[
           this.props.filterReducer.activeIndex - 1
         ].st[0],
-        id:listPlayer[
+        id: listPlayer[
           this.props.filterReducer.activeIndex - 1
         ].id,
         index: this.props.filterReducer.activeIndex - 1,
@@ -873,9 +881,9 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   swipeRight() {
-    console.log("----", this.props.filterReducer.activeIndex,this.props.playListReducer.swiperListType);
-    let listPlayer=this.props.playListReducer.swiperListType=='main'? this.props.menuReducer.menuData
-    :this.props.menuReducer.filterData
+    console.log("----", this.props.filterReducer.activeIndex, this.props.playListReducer.swiperListType);
+    let listPlayer = this.props.playListReducer.swiperListType == 'main' ? this.props.menuReducer.menuData
+      : this.props.menuReducer.filterData
     if (this.count < listPlayer.length) {
       let radiostation = {
         data: listPlayer[
@@ -914,34 +922,36 @@ class SwipeUpDown extends Component<Props> {
     }
   }
   changeRadioStancia(item) {
+    this.setState({ loading: true })
 
 
     if (
       this.props.bottomReducer.swiperShowRadiostation?.id ==
       this.props.bottomReducer.selectedRadioStation?.id
     ) {
-      this.props.onchangeActiveBi({... this.props.bottomReducer.swiperShowRadiostation,activeBi:item});
+      this.props.onchangeActiveBi({ ... this.props.bottomReducer.swiperShowRadiostation, activeBi: item });
       player._pouseMusic();
       //setTimeout(() => {
-        player._startPlayMusic(
-          this.props.bottomReducer.swiperShowRadiostation?.data,
-          this.props.bottomReducer.swiperShowRadiostation?.activeBi
-        ).then(()=>{
-          this.setState({loading:true})
+      player._startPlayMusic(
+        this.props.bottomReducer.swiperShowRadiostation?.data,
+        this.props.bottomReducer.swiperShowRadiostation?.activeBi
+      ).then(() => {
+        this.setState({ loading: false })
 
-          setTimeout(() => {
-            this.props.onchangeSelectedRadioStationPlaying(true);
-            console.log('333333333333333333333333333333333333333333333333333333333333333333333');
-            storeData('activeRadioStation',{...this.props.bottomReducer.selectedRadioStation,isPlayingMusic:true})
 
-            this.setState({ loading: false });
+    //    setTimeout(() => {
+          this.props.onchangeSelectedRadioStationPlaying(true);
+          console.log('333333333333333333333333333333333333333333333333333333333333333333333');
+          storeData('activeRadioStation', { ...this.props.bottomReducer.selectedRadioStation, isPlayingMusic: true })
 
-          }, 2500);        
+         
 
-          storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
-        })
-        
-     // }, 500);
+     //   }, 2500);
+
+        storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
+      })
+
+      // }, 500);
     } else {
       let data = this.props.bottomReducer.swiperShowRadiostation;
       data.isPlayingMusic = true;
@@ -952,32 +962,33 @@ class SwipeUpDown extends Component<Props> {
       // this.props.onchangeSelectedRadioStation(data)
 
       //setTimeout(() => {
-        this.props._addLookingList(
-          this.props.bottomReducer.swiperShowRadiostation?.data
-        );
-        player._startPlayMusic(
-          this.props.bottomReducer.swiperShowRadiostation?.data,
-          this.props.bottomReducer.swiperShowRadiostation?.activeBi
-        ).then(()=>{
-          this.setState({loading:true})
-          setTimeout(() => {
-            this.props.onchangeSelectedRadioStationPlaying(true);
-            console.log('444444444444444444444444444444444444444444444444');
-            if(this.props.settingsReducer.reconnect){
-            storeData('activeRadioStation',{...this.props.bottomReducer.selectedRadioStation,isPlayingMusic:true})}
-            this.setState({ loading: false });
+      this.props._addLookingList(
+        this.props.bottomReducer.swiperShowRadiostation?.data
+      );
+      player._startPlayMusic(
+        this.props.bottomReducer.swiperShowRadiostation?.data,
+        this.props.bottomReducer.swiperShowRadiostation?.activeBi
+      ).then(() => {
+        this.setState({ loading: true })
+        setTimeout(() => {
+          this.props.onchangeSelectedRadioStationPlaying(true);
+          console.log('444444444444444444444444444444444444444444444444');
+          if (this.props.settingsReducer.reconnect) {
+            storeData('activeRadioStation', { ...this.props.bottomReducer.selectedRadioStation, isPlayingMusic: true })
+          }
+          this.setState({ loading: false });
 
-          }, 2500);
+        }, 2500);
 
-          storeData("autoPlayData",  this.props.bottomReducer.swiperShowRadiostation)
-        })
-       
-     // }, 500);
+        storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
+      })
+
+      // }, 500);
     }
   }
   renderBottomSheet() {
-    let listPlayer=this.props.playListReducer.swiperListType=='main'? this.props.menuReducer.menuData
-    :this.props.menuReducer.filterData
+    let listPlayer = this.props.playListReducer.swiperListType == 'main' ? this.props.menuReducer.menuData
+      : this.props.menuReducer.filterData
     return (
       <View style={{ height: "100%" }}>
         <View
@@ -1114,7 +1125,7 @@ class SwipeUpDown extends Component<Props> {
                 <View
                   style={[
                     styles.arrow,
-                   
+
                   ]}
                 />
               )}
@@ -1134,7 +1145,7 @@ class SwipeUpDown extends Component<Props> {
                   </View>
                 )}
               </View>
-              {listPlayer && this.props.filterReducer.activeIndex <listPlayer.length - 1 ? (
+              {listPlayer && this.props.filterReducer.activeIndex < listPlayer.length - 1 ? (
                 <TouchableOpacity
                   style={[styles.arrow]}
                   disabled={this.state.loading}
@@ -1308,21 +1319,26 @@ class SwipeUpDown extends Component<Props> {
               </View>
             ) : (
               <TouchableOpacity
-                onPress={() => {
-                  if (this.props.bottomReducer.isConnected) {
+              onPress={() => {
+                NetInfo.addEventListener(state => {
+                 
+                  if (state.isConnected) {
                     if (this.state.isRecording) {
                       //console.log("dhkabsakhshakj");
                       this.onStopRecord();
                     }
                     if (
-                      this.props.bottomReducer.selectedRadioStation?.id ==
-                      this.props.bottomReducer.swiperShowRadiostation?.id
+                      this.props.bottomReducer.selectedRadioStation
+                        ?.id ==
+                      this.props.bottomReducer.swiperShowRadiostation
+                        ?.id
                     ) {
                       this.props.isPlaying();
                     } else {
                       player._pouseMusic();
                       this.setState({ loading: true });
-                      let d = this.props.bottomReducer.swiperShowRadiostation;
+                      let d = this.props.bottomReducer
+                        .swiperShowRadiostation;
                       d.isPlayingMusic = true;
                       //console.log("ddd", d);
                       this.props.onchangeSelectedRadioStation(d);
@@ -1330,19 +1346,19 @@ class SwipeUpDown extends Component<Props> {
 
                       setTimeout(() => {
                         this.props._addLookingList(
-                          this.props.bottomReducer.swiperShowRadiostation?.data
+                          this.props.bottomReducer
+                            .swiperShowRadiostation?.data
                         );
                         player._startPlayMusic(
-                          this.props.bottomReducer.swiperShowRadiostation?.data,
-                          this.props.bottomReducer.swiperShowRadiostation?.data
-                            .st[0]
+                          this.props.bottomReducer
+                            .swiperShowRadiostation?.data,
+                          this.props.bottomReducer
+                            .swiperShowRadiostation?.data.st[0]
                         );
-                        if(this.props.settingsReducer.reconnect){
-                          console.log('555555555555555555555555555555555555555555555555555555555555555555555555555');
-
-                        storeData('activeRadioStation',{...this.props.bottomReducer.swiperShowRadiostation,isPlayingMusic:true})}
+                        console.log("22222222222222222222222222222222222222222222222222222222222222");
+                        storeData('activeRadioStation', { ...this.props.bottomReducer.swiperShowRadiostation, isPlayingMusic: true })
                         if (this.props.settingsReducer.autoPlay) {
-                          storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
+                          storeData("autoPlayData", d)
 
                         }
                         this.setState({
@@ -1351,10 +1367,14 @@ class SwipeUpDown extends Component<Props> {
                         });
                       }, 500);
                     }
-                  } else {
-                    this.props.onchangeIsConnected(false);
+                  }else{
+                    this.props.onchangeIsConnected(state.isConnected);
                   }
-                }}
+                })
+
+
+
+              }}
                 style={[
                   styles.btnPlay,
                   {
@@ -1475,7 +1495,7 @@ class SwipeUpDown extends Component<Props> {
                 this.close = false;
               }}
               onTouchStart={() => {
-                this.count=0
+                this.count = 0
                 this.setState({ close: false });
                 if (this.props.bottomReducer.selectedRadioStation && this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
                   console.log(this.props.bottomReducer.selectedRadioStation);
@@ -1617,6 +1637,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     onchangeSelectedRadioStationPlaying: (payload) => {
       dispatch(changeSelectedRadioStationPlaying(payload));
+    },
+    onchangeIsConnected: (payload) => {
+      dispatch(changeIsConnected(payload));
     },
   };
 };

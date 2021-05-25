@@ -7,7 +7,7 @@ export interface ISettingsState {
   autoPlay: boolean,
   bufferSize: IBufferSizeType[],
   isOnheadsets: boolean,
-  reconnect: boolean
+  reconnect: boolean |undefined
 }
 interface IBufferSizeType {
   title: string,

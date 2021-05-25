@@ -14,18 +14,16 @@ interface IDATA {
 }
 class Static implements IDATA {
     async getMenuDatas() {
-        
-        try {    
-            console.log("pppppppppppppppppppppppppppppppppppppppp",`${keys.API_URL}radios.json`);
+console.log("apiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 
-            const response = await authApi.get(`${keys.API_URL}radios.json`,);
+        try {
+            const response = await authApi.get(`${keys.API_URL}radios.json`);
             
-
-
             return response.data
         } catch (error) {
-            return console.log(error);
-            
+            return console.log(error.status, error.message);
+        
+
 
         }
     }
@@ -53,7 +51,7 @@ class Static implements IDATA {
         try {
             const data = moment().format('YYYY-MM-DD')
             console.log(`https://botan.ru.com/api/application/tracklists/${payload}`);
-            
+
             const response = await authApi.get(`https://botan.ru.com/api/application/tracklists/${payload}`,);
             return response.data
         } catch (ex) {
@@ -63,9 +61,10 @@ class Static implements IDATA {
     async getPlayLists(payload: number) {
 
         try {
- 
+
             const data = moment().format('YYYY-MM-DD')
             const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`,);
+            console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`, response.data);
             return response.data
         } catch (ex) {
             return Alert.alert("Error", ex)
@@ -75,17 +74,15 @@ class Static implements IDATA {
         try {
 
             const data = moment().format('YYYY-MM-DD')
-           
+
 
             if (payload && data) {
                 const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`,);
-console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`);
-
-
+                console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`);
                 return response.data
             }
         } catch (ex) {
-            console.log('errorr',ex.response.data)
+            console.log('errorr', ex.response.data)
             throw ex
 
         }

@@ -90,7 +90,6 @@ export const setSwiperShowStation = (payload: any) => {
   };
 };
 export const changeSwiperShowStation = (payload: any) => {
-  console.log('777777777777',payload);
   
   return {
     type: BottomType.CHANGE_SWIPERSHOW_RADIOSTATION,
@@ -151,7 +150,7 @@ export const changeSelectedSatationbyBi = (payload: any) => {
     payload,
   };
 };
-export const changeIsConnected = (payload: any) => {
+export const changeIsConnected = (payload: any) => {  
   return {
     type: BottomType.CHANGE_IS_CONNECTED,
     payload,

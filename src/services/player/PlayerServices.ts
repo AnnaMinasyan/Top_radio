@@ -1,6 +1,7 @@
 
 
 import TrackPlayer from 'react-native-track-player';
+import { storeData } from '../../utils/local_storage';
 
 export interface IgetMenuDatasMethodResponse {
     [key: string]: any,
@@ -24,7 +25,7 @@ class PlayerServices implements IDATA {
      
       
     }
-    open(radioStation:any) {
+    open(radioStation:any) {        
         if(this.playerRef)
             {this.playerRef.showFull(radioStation)}
           
@@ -40,7 +41,6 @@ class PlayerServices implements IDATA {
     }
     async _startPlayMusic(music:any,activeBi:any) {
         const playerState = await TrackPlayer.getState();
-     console.log("----------------------------", playerState,music);
 
            // console.log('destroying..', music.st);
             await TrackPlayer.reset();
@@ -56,6 +56,7 @@ class PlayerServices implements IDATA {
        
     }
     async _pouseMusic() {
+        storeData("autoPlayData",null)
             await TrackPlayer.pause();
         
     }

@@ -5,7 +5,8 @@ import {
     Text,
     ScrollView,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    Dimensions
 } from 'react-native';
 import { calcFontSize, calcHeight, calcWidth } from "../assets/styles/dimensions"
 import { IPlayListProps} from "../Interface"
@@ -28,7 +29,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
          
 
     return (
-        <ScrollView  style={{ backgroundColor: this.props.theme.backgroundColor}}  >
+        <ScrollView  style={{ backgroundColor: this.props.theme.backgroundColor, paddingBottom:80}}  >
             <View style={{ backgroundColor: this.props.theme.backgroundColor}}>
 
                 <HeaderByBack title={this.props.playListReducer.title}
@@ -62,7 +63,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                         {this.props.playListReducer.playList.map((data: any,index:number) => {
 
                             return (
-                                <View key={index} style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
+                                data.song&&   <View key={index} style={[styles.elements,{backgroundColor:this.props.theme.backgroundColor, borderColor: this.props.theme.backgroundColor=="white"?'#F3F4F5':"#1E2B4D"}]}>
                                     <View style={styles.elementsRow}>
                                         <Text style={[styles.elementTitle, { color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white" }]}>{data.song}</Text>
                                         <Text style={styles.elementAuther}>{data.artist}</Text>
@@ -71,7 +72,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                                         {
                                             this.state.filterType == 'trackList'? 
                                             <Text style={styles.elementCount}>{data.count}</Text>:
-                                            <Text style={styles.elementCount}>{moment.utc(data.start_at).local().format("HH:mm")}</Text>
+                                            <Text style={styles.elementCount}>{moment.utc(data.start_at).format("HH:mm")}</Text>
                                             
                                         }
                                        

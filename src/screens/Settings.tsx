@@ -298,7 +298,12 @@ class Settings extends React.Component<ISettings, IState> {
         }}
         onPress={() => {
           initTimerSleep(this.timerSleep, this.timerSlipeTime)
-          storeData("timerSleepTime", this.timerSlipeTime)
+          storeData("settings",{
+            "timerSlipeTime" :this.timerSlipeTime,
+            'autoPlay':this.props.settingsReducer.autoPlay,
+            'reconnect':this.props.settingsReducer.reconnect,
+          })
+        //  storeData("timerSleepTime", this.timerSlipeTime)
           this.setState({ visibleModal: null })
         }}
       >
@@ -316,7 +321,12 @@ class Settings extends React.Component<ISettings, IState> {
     this.timeSleep = index
     if (this.state.ontimerSleep) {
       let time = new Date(Date.now() + this.timeSleep * 60000)
-      storeData("timerSleep", time)
+  //    storeData("timerSleep", time)
+      storeData("settings",{
+        "timerSlipeTime" :time,
+        'autoPlay':this.props.settingsReducer.autoPlay,
+        'reconnect':this.props.settingsReducer.reconnect,
+      })
     }
   };
   createTimerSleep() {
@@ -329,7 +339,12 @@ class Settings extends React.Component<ISettings, IState> {
   }
   changeAutoPlay() {
     this.props.onchangeAutoPlay(!this.props.settingsReducer.autoPlay)
-    storeData("autoPlay", !this.props.settingsReducer.autoPlay)
+   // storeData("autoPlay", !this.props.settingsReducer.autoPlay)
+    storeData("settings",{
+      "timerSlipeTime" :this.props.settingsReducer.timerSleep,
+      'autoPlay': !this.props.settingsReducer.autoPlay,
+      'reconnect':this.props.settingsReducer.reconnect,
+    })
   }
   render() {
 
@@ -405,7 +420,12 @@ class Settings extends React.Component<ISettings, IState> {
                 if(this.props.settingsReducer.reconnect){
                   storeData('activeRadioStation',null)
                 }
-                storeData('reconnect',!this.props.settingsReducer.reconnect)
+              //  storeData('reconnect',!this.props.settingsReducer.reconnect)
+                storeData("settings",{
+                  "timerSlipeTime" :this.props.settingsReducer.timerSleep,
+                  'autoPlay': this.props.settingsReducer.autoPlay,
+                  'reconnect':!this.props.settingsReducer.reconnect,
+                })
                 this.props.onchangeReconnenct(!this.props.settingsReducer.reconnect)
               }} />
           </View>

@@ -41,7 +41,7 @@ function* changeselectedSatationbyBi({ payload }: any): Generator {
       yield put(setSelectedRadioStation(station));
     }
   } catch (ex) {
-    Alert.alert("Сервер не работает ");
+   // Alert.alert("Сервер не работает ");
   }
 }
 function* clearReducerData() {
@@ -96,7 +96,7 @@ function* onGetSongData({ payload }: any): Generator {
       }
     }
   } catch (ex) {
-    Alert.alert("Сервер не работает ");
+   // Alert.alert("Сервер не работает ");
   }
 }
 function* onChangePlayingData({ payload }: any) {
@@ -126,7 +126,6 @@ function* onchangeActiveIndex({ payload }: any) {
 }
 function* changeSwiperShowStation({ payload }: any): Generator {
   try {
-    console.log('payloadpayloadpayloadpayloadpayloadpayloadpayload',payload);
     
     yield put(setSwiperShowStation(payload.radioStation));
     if (payload.search) {
@@ -166,7 +165,7 @@ function* changeMiniSELECT({ payload }: any):Generator {
   try {
     yield put(setSelectedRadioStation(payload));
     yield put(setMiniScreenData(payload));
-    if (payload.data.pl) {
+    if (payload?.data?.pl) {
       const data: any = yield auth.getPlayItemType(payload.data.pl);
       let station = payload;
       station.activeBi = payload.data.st[0];
@@ -180,6 +179,8 @@ function* changeMiniSELECT({ payload }: any):Generator {
   }
 }
 function* changeIsconnected({ payload }: any) {
+  console.log(")))))))))))))))))))",payload);
+  
   try {
 
     yield put(setIsConnected(payload));

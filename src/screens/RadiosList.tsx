@@ -88,8 +88,9 @@ class Menu extends React.Component<IMenuProps, IState> {
     getData("menuView").then((menuView) => {
       this.setState({ styleView: menuView });
     });
+console.log(";;;;;;;;;componentwillmaount");
 
-     this.props.ongetMenuData();
+    this.props.ongetMenuData();
     getData("isLooking").then((looking) => {
       if (looking) {
         this.props.onchangeLookingList(looking);
@@ -212,8 +213,11 @@ class Menu extends React.Component<IMenuProps, IState> {
     this.props.onchangeSearchData(data.filter((i:any)=>i.pa.toLowerCase().includes(text.toLowerCase())))
 
   }
+  
   render() {    
-    
+
+console.log('reeeeeeeeeeeeeeeeeeeeeeendeeeeeer');
+
     return (
       <KeyboardAvoidingView>
         <View
@@ -291,7 +295,6 @@ const mapStateToProps = ({
   menuReducer,
   favorites,
   theme,
-  settingsReducer,
   bottomReducer,
 }: any) => {
   return {
@@ -299,7 +302,6 @@ const mapStateToProps = ({
     menuReducer,
     favorites,
     theme,
-    settingsReducer,
     bottomReducer,
   };
 };
@@ -329,9 +331,7 @@ const mapDispatchToProps = (dispatch: any) => {
     onchangeActiveBi: (payload: number) => {
       dispatch(changeActiveBi(payload));
     },
-    onchangeActiveIndex: (payload: number) => {
-      dispatch(changeActiveIndex(payload));
-    },
+ 
     onchangeSwiperData: (payload: any) => {
       dispatch(changeSwiperData(payload));
     },

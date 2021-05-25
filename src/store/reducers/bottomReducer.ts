@@ -22,7 +22,7 @@ export interface IBottomState {
     swiperShowRadiostation: ISelectedRadioStation | null,
     activeArrow:boolean,
     miniScreenData:ISelectedRadioStation | null,
-    isConnected:boolean
+    isConnected:boolean |undefined
 }
 
 
@@ -35,7 +35,7 @@ export const initialState: IBottomState = {
     swiperShowRadiostation: null,
     activeArrow:true,
     miniScreenData:null,
-    isConnected:true
+    isConnected:undefined
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {

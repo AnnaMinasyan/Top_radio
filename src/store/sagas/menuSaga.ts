@@ -9,20 +9,25 @@ import {setSwiperData,setLookingList} from "../actions/menuActions"
 import {setIsConnected, setSelectedRadioStation  } from "../actions/bottomAction";
 
 function* getMenuData():Generator {
+	console.log("sagaaaaaaaaaaaaaaa");
+	
 	try {
 		yield put(setSelectedRadioStation(undefined))
+
 		let data:any= yield auth.getMenuDatas()
+
 		
 		for (let index = 0; index < data.length; index++) {
 			const element = data[index];
 			element.index=index
 		}
+		
 		yield put(setMenuData(data))
 		yield put(setFilterData(data))
 		yield put(setSearchData(data))
-
 	} catch (ex) {
-		yield put(setIsConnected(false))
+		console.log(ex);
+		
 
 	}
 }

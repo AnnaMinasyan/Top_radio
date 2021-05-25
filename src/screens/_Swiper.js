@@ -740,24 +740,7 @@ class SwipeUpDown extends Component<Props> {
             }, 50);
         }
     }
-    // componentWillReceiveProps() {
-    //   const albome=this.props.theme.width>this.props.theme.height
-    //    if(this.state.visible){
-    //     if(albome){
-    //       console.log("1111111111",this.props.theme.height);
-    //       this.customStyle.style.top = this.props.theme.height-50-86;
-    //       this.height = DEVICE_HEIGHT;
-    //     //  !this.state.collapsed && this.setState({ collapsed: true });
-    //       this.updateNativeProps();
-    //     }else{
-    //       console.log("22222222222");
-    //       this.customStyle.style.top = this.props.theme.height-50-86;
-    //       this.height = DEVICE_HEIGHT;
-    //       //!this.state.collapsed && this.setState({ collapsed: true });
-    //       this.updateNativeProps();
-    //     }
-    //    }
-    // }
+
     showMini() {
         this.fadeIn();
         if (this.props.theme.albomeMode) {
@@ -1433,23 +1416,7 @@ class SwipeUpDown extends Component<Props> {
         const { itemMini, itemFull, style } = this.props;
         const { collapsed } = this.state;
 
-        // if (this.state.visible ) {
-        //   if (this.props.theme.albomeMode) {
-        //     console.log("1111111111", this.props.theme.height);
-        //     this.customStyle.style.top = this.props.theme.height - 50 - 86;
-        //     this.height = DEVICE_HEIGHT;
-
-        //     this.updateNativeProps();
-        //   } else {
-        //     console.log("22222222222");
-        //     this.customStyle.style.top = this.props.theme.height - 50 - 86;
-        //     this.height = DEVICE_HEIGHT;
-
-        //     this.updateNativeProps();
-        //   }
-        // }
-
-        //   
+       
         return (
             <Animated.View
                 {...this._panResponder.panHandlers}

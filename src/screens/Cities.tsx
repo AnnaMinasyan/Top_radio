@@ -114,7 +114,15 @@ class Cities extends React.Component<ICitiesProps, IState> {
             <ActivityIndicator size="large" color="grey" />
           </View>
         )}
-        {!this.props.citiesReducer.cities ? (
+        {this.props.citiesReducer.cities ? (
+          <FlatList
+            numColumns={1}
+            data={  this.props.citiesReducer.filterCities}
+            renderItem={(d) => this.renderMenuItems(d)}
+            keyExtractor={(item: any, index: number) => item.id.toString()}
+            maxToRenderPerBatch={10}
+          />
+        ): (
           <View
             style={{
               justifyContent: "center",
@@ -126,15 +134,7 @@ class Cities extends React.Component<ICitiesProps, IState> {
           >
             <ActivityIndicator size="large" color="#0F1E45" />
           </View>
-        ) : (
-          <FlatList
-            numColumns={1}
-            data={  this.props.citiesReducer.filterCities}
-            renderItem={(d) => this.renderMenuItems(d)}
-            keyExtractor={(item: any, index: number) => item.id.toString()}
-            maxToRenderPerBatch={10}
-          />
-        )}
+        ) }
       </View>
     );
   }

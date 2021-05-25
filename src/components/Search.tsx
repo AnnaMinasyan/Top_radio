@@ -54,9 +54,7 @@ class Search extends React.Component<Props, IState> {
 
           <TextInput
             onChangeText={(term) => {
-              this.onChangeText(term)
-              // this.searchUpdated(term)
-              // 
+               this.onChangeText(term)
             }}
             style={styles.searchInput}
             placeholderTextColor='white'

@@ -208,9 +208,9 @@ class BottomSwiper extends React.Component<Props, IState> {
     });
     await TrackPlayer.setupPlayer(
       {
-        maxBuffer: 15,
+        maxBuffer: 30,
         maxCacheSize:20,
-        playBuffer:5
+        playBuffer:2
       }
     );
     TrackPlayer.updateOptions({
@@ -276,20 +276,22 @@ class BottomSwiper extends React.Component<Props, IState> {
       
       this.setState({ isRecording: false });
     } else {
-      this._addLookingList(this.props.bottomReducer.selectedRadioStation?.data);
-      this.props.onchangeSelectedRadioStationPlaying(true);
+      player._startPlayMusic(
+        this.props.bottomReducer.selectedRadioStation?.data,
+        this.props.bottomReducer.selectedRadioStation?.activeBi
+      ).then(()=>{
+        this.props.onchangeSelectedRadioStationPlaying(true);
+      })
+   //   this._addLookingList(this.props.bottomReducer.selectedRadioStation?.data);
+      
       if(this.props.settingsReducer.reconnect){
-        console.log("1111111111111111111111111111111111111111111111111111111111111111111111111111111111");
 
        storeData('activeRadioStation',{...this.props.bottomReducer.selectedRadioStation,isPlayingMusic:true})}
        if(this.props.settingsReducer.autoPlay){
         storeData("autoPlayData", this.props.bottomReducer.swiperShowRadiostation)
 
       }
-      player._startPlayMusic(
-        this.props.bottomReducer.selectedRadioStation?.data,
-        this.props.bottomReducer.selectedRadioStation?.activeBi
-      )
+     
      
     
     }
@@ -417,10 +419,14 @@ class BottomSwiper extends React.Component<Props, IState> {
             },
           ]}
           onPress={() => {
+            console.log('this.props.bottomReducer.selectedRadioStation',
+            this.props.bottomReducer.selectedRadioStation);
+            console.log(' this.props.bottomReducer.miniScreenData', this.props.bottomReducer.miniScreenData);
+            
             if (this.props.bottomReducer.isConnected) {
               if (
-                this.props.bottomReducer.selectedRadioStation.id ==
-                this.props.bottomReducer.miniScreenData.id
+                this.props.bottomReducer.selectedRadioStation?.data.id ==
+                this.props.bottomReducer.miniScreenData?.data.id
               ) {
                 this.isPlaying();
               } else {

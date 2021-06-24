@@ -212,23 +212,23 @@ const styles: any = StyleSheet.create({
   
     private onStatusPress = (e: any) => {
       const touchX = e.nativeEvent.locationX;
-      console.log(`touchX: ${touchX}`);
+      //console.log(`touchX: ${touchX}`);
       const playWidth =
         (this.state.currentPositionSec / this.state.currentDurationSec) *
         (56);
-      console.log(`currentPlayWidth: ${playWidth}`);
+      //console.log(`currentPlayWidth: ${playWidth}`);
   
       const currentPosition = Math.round(this.state.currentPositionSec);
-      console.log(`currentPosition: ${currentPosition}`);
+      //console.log(`currentPosition: ${currentPosition}`);
   
       if (playWidth && playWidth < touchX) {
         const addSecs = Math.round(currentPosition + 1000);
         this.audioRecorderPlayer.seekToPlayer(addSecs);
-        console.log(`addSecs: ${addSecs}`);
+        //console.log(`addSecs: ${addSecs}`);
       } else {
         const subSecs = Math.round(currentPosition - 1000);
         this.audioRecorderPlayer.seekToPlayer(subSecs);
-        console.log(`subSecs: ${subSecs}`);
+        //console.log(`subSecs: ${subSecs}`);
       }
     };
     dowloadFile(url: string) {
@@ -241,7 +241,7 @@ const styles: any = StyleSheet.create({
       };
       RNFS.downloadFile(options).promise
           .then(() => {
-            console.log("kdcvklscjsdpspov"),
+            //console.log("kdcvklscjsdpspov"),
             FileViewer.open(localFile)
 
     })
@@ -259,7 +259,7 @@ const styles: any = StyleSheet.create({
           type: [DocumentPicker.types.allFiles],
         });
 
-        console.log(
+        //console.log(
             "fjkjfkdjdl",res
         );
       } catch (err) {
@@ -283,9 +283,9 @@ const styles: any = StyleSheet.create({
             },
           );
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('You can use the storage');
+            //console.log('You can use the storage');
           } else {
-            console.log('permission denied');
+            //console.log('permission denied');
             return;
           }
         } catch (err) {
@@ -305,9 +305,9 @@ const styles: any = StyleSheet.create({
             },
           );
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('You can use the camera');
+            //console.log('You can use the camera');
           } else {
-            console.log('permission denied');
+            //console.log('permission denied');
             return;
           }
         } catch (err) {
@@ -315,7 +315,7 @@ const styles: any = StyleSheet.create({
           return;
         }
       }
-      console.log(RNFS.DownloadDirectoryPath)
+      //console.log(RNFS.DownloadDirectoryPath)
       const path = `${RNFS.DownloadDirectoryPath}/TopRadio${Date.now()}.aac`
    //   const path=`/storage/emulated/0/Download/kkkkk.aac`
       const audioSet: AudioSet = {
@@ -328,7 +328,7 @@ const styles: any = StyleSheet.create({
 
 
       const uri = await this.audioRecorderPlayer.startRecorder(path,true,audioSet);
-      console.log(";;;;;;;;;;;;;;",uri)
+      //console.log(";;;;;;;;;;;;;;",uri)
 
       this.audioRecorderPlayer.addRecordBackListener((e: any) => {
         this.setState({
@@ -338,7 +338,7 @@ const styles: any = StyleSheet.create({
           ),
         });
       });
-      console.log(`uri: ${uri}`);
+      //console.log(`uri: ${uri}`);
     };
   
     private onStopRecord = async () => {
@@ -348,11 +348,11 @@ const styles: any = StyleSheet.create({
         recordSecs: 0,
       });
    //   this.dowloadFile(result)
-      console.log("result",result);
+      //console.log("result",result);
     };
   
     private onStartPlay = async () => {
-      console.log('onStartPlay');
+      //console.log('onStartPlay');
       // const path = Platform.select({
       //       //   ios: 'hello.m4a',
       //       //   android: 'sdcard/hello.mp4',
@@ -360,10 +360,10 @@ const styles: any = StyleSheet.create({
       const path=`${RNFS.DocumentDirectoryPath}/temporaryfile.aac`
       const msg = await this.audioRecorderPlayer.startPlayer(path);
       this.audioRecorderPlayer.setVolume(1.0);
-      console.log(msg);
+      //console.log(msg);
       this.audioRecorderPlayer.addPlayBackListener((e: any) => {
         if (e.current_position === e.duration) {
-          console.log('finished');
+          //console.log('finished');
           this.audioRecorderPlayer.stopPlayer();
         }
         this.setState({
@@ -382,7 +382,7 @@ const styles: any = StyleSheet.create({
     };
   
     private onStopPlay = async () => {
-      console.log('onStopPlay');
+      //console.log('onStopPlay');
       this.audioRecorderPlayer.stopPlayer();
       this.audioRecorderPlayer.removePlayBackListener();
     };

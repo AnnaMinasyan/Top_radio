@@ -11,7 +11,7 @@ import player from "../services/player/PlayerServices"
 import { calcFontSize, calcHeight, calcWidth, deviceHeight } from "../assets/styles/dimensions"
 import Header from "../components/Header"
 import { IMenuProps } from "../Interface"
-import {styles} from "./RadiosList"
+import { styles } from "./RadiosList"
 import {
     getMenuData,
     changeSwiperData, changeLookingList
@@ -19,9 +19,7 @@ import {
 import {
     changeplayItem,
     changePlayingData,
-    changeActiveIndex,
     changeActiveBi,
-    getSongData,
     changeSelectedRadioStation,
     changeMiniScreenData,
     changeSwiperShowStation
@@ -49,8 +47,8 @@ interface IState {
     playUrl: string,
     activBi: number,
     favoriteList: any,
-    searchvalue:string,
-    lookingData:any
+    searchvalue: string,
+    lookingData: any
 }
 
 class LookingMenu extends React.Component<IMenuProps, IState> {
@@ -67,7 +65,7 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
             activBi: 0,
             favoriteList: [],
             searchvalue: '',
-            lookingData:[]
+            lookingData: []
         }
         const unsubscribe = props.navigation.addListener('focus', () => {
             this.setData()
@@ -79,10 +77,10 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
         })
         getData('isLooking').then((looking) => {
             this.props.onchangeLookingList(looking)
-            this.setState({lookingData:looking})
+            this.setState({ lookingData: looking })
         })
         this.props.ongetMenuData()
-        
+
     }
     componentDidMount() {
         navigationService.setNavigator(this.props.navigation)
@@ -116,25 +114,26 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
     }
     renderMenuItems(data: any) {
         return <TouchableHighlight
-            onPress={() => {
-
-              
-          this._addLookingList(data.item);
-          let radioStation = {
-            data: data.item,
-            isPlayingMusic: false,
-            activeBi: data.item.st[0],
-            id: data.item.id,
-            index:data.index,
-          };
-          let info={
-            radioStation:radioStation,
-            index:data.index,
-            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
-          }
-          player.open(info);
-
-            }}>
+        onPress={() => {
+            this.props.onchangeSwiperListType('main')
+            this._addLookingList(data.item);
+            let radioStation = {
+              data: data.item,
+              isPlayingMusic: false,
+              activeBi: data.item.st[0],
+              id: data.item.id,
+              index: data.index,
+            };
+            let info = {
+              radioStation: radioStation,
+              index: data.index,
+              isPlayingMusic: this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ? this.props.bottomReducer.selectedRadioStation
+                .isPlayingMusic : false,
+              search: this.state.searchvalue
+            }
+            player.open(info);
+  
+          }}>
             <RadioMenuElement
                 showFavoriteHeart={true}
                 title={data.item.pa}
@@ -149,52 +148,55 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
     }
     renderMenuItemsMenuStyle2(data: any) {
         return <TouchableHighlight
-            onPress={() => {
-                
-          this._addLookingList(data.item);
-          let radioStation = {
-            data: data.item,
-            isPlayingMusic: false,
-            activeBi: data.item.st[0],
-            id: data.item.id,
-            index:data.index,
-          };
-          let info={
-            radioStation:radioStation,
-            index:data.index,
-            isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic
-          }
-          player.open(info);
-            }} style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
+        onPress={() => {
+            this.props.onchangeSwiperListType('main')
+            this._addLookingList(data.item);
+            let radioStation = {
+              data: data.item,
+              isPlayingMusic: false,
+              activeBi: data.item.st[0],
+              id: data.item.id,
+              index: data.index,
+            };
+            let info = {
+              radioStation: radioStation,
+              index: data.index,
+              isPlayingMusic: this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ? this.props.bottomReducer.selectedRadioStation
+                .isPlayingMusic : false,
+              search: this.state.searchvalue
+            }
+            player.open(info);
+  
+          }}style={{ marginRight: calcWidth(16), marginBottom: calcHeight(16), borderRadius: 8 }}>
             <SimpleImage size={98} image={data.item.im} />
         </TouchableHighlight>
     }
     _changeSearchData(text: string) {
-       
-          this.setState({ searchvalue: text });
-          let data = this.props.menuReducer.lookingList;
-          data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()));
-          this.setState(
-           {lookingData: data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()))}
-          );
-        
-      }
+
+        this.setState({ searchvalue: text });
+        let data = this.props.menuReducer.lookingList;
+        data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()));
+        this.setState(
+            { lookingData: data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase())) }
+        );
+
+    }
     render() {
-        
+
         return (
-            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height,paddingBottom:25 }]}>
+            <View style={[styles.container, { backgroundColor: this.props.theme.backgroundColor, height: Dimensions.get('window').height, paddingBottom: 25 }]}>
                 <Header
-                   clearSearchData={()=>{ this.setState({ searchvalue: '' });}}
+                    clearSearchData={() => { this.setState({ searchvalue: '' }); }}
 
                     navigation={this.props.navigation}
                     changeSearchData={(text) => {
                         this._changeSearchData(text);
-                      }}
-                      searchvalue={this.state.searchvalue}
+                    }}
+                    searchvalue={this.state.searchvalue}
 
-                    title={'Просмотренные'}/>
+                    title={'Просмотренные'} />
 
-                    {!this.props.menuReducer.menuData ?
+                {!this.props.menuReducer.menuData ?
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: calcHeight(150) }}>
                         <ActivityIndicator size="large" color="#0F1E45" />
                     </View> :
@@ -204,21 +206,21 @@ class LookingMenu extends React.Component<IMenuProps, IState> {
                             renderItem={(d) => this.renderMenuItems(d)}
                             keyExtractor={(item: any, index: number) => item.id.toString()}
                             maxToRenderPerBatch={10}
-                        />:
+                        /> :
                         <FlatList
-                            data={this.state.lookingData}
-                            renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
-                            contentContainerStyle={{
-                                width: '100%',
-                                flexWrap: 'wrap',
-                                flexDirection: 'row',
-                                paddingLeft: calcWidth(15),
-                                paddingTop: calcHeight(8),
-                                justifyContent: 'center'
-                            }}
-                            keyExtractor={(item: any, index: number) => item.id.toString()}
-                            maxToRenderPerBatch={10}
-                        /> }
+                        key={'#'}
+                        data={this.state.favoriteList}
+                        renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
+                        contentContainerStyle={{
+                            width: "100%",
+                            justifyContent: 'center',
+                            paddingBottom: this.props.bottomReducer.swiperShowRadiostation ? 95 : 20,
+                            flexDirection: 'row',
+                            flexWrap: 'wrap'
+                        }}
+                        keyExtractor={(item: any, index: number) => item.id?.toString()}
+                        maxToRenderPerBatch={10}
+                        />}
 
             </View>
         );
@@ -232,7 +234,7 @@ const mapDispatchToProps = (dispatch: any) => {
         ongetMenuData: () => {
             dispatch(getMenuData())
         },
-        onchangeLookingList:(payload:any) => {
+        onchangeLookingList: (payload: any) => {
             dispatch(changeLookingList(payload))
         },
         onchangeplayItem: (payload: boolean) => {
@@ -261,9 +263,6 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         onchangePlayingData: (payload: any) => {
             dispatch(changePlayingData(payload))
-        },
-        get_songData: (payload: any) => {
-            dispatch(getSongData(payload))
         },
         onchangeSelectedRadioStation: (payload: any) => {
             dispatch(changeSelectedRadioStation(payload))

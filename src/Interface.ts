@@ -38,8 +38,11 @@ export interface IPlayListProps {
     bottomReducer:any,
     navigation: NavigationScreenProp<any, any>,
     ongetPlayList(payload:any):void; 
-    ongetTrackList(payload:any):void; 
-    theme:any
+    ongetTrackList(payload:any):void;
+    onchangeSelectedRadioStationPlaying(payload:any):void;
+    onchangeSwiperShowStation(payload:any):void;
+    theme:any,
+    filterReducer:any,
 }
 export interface IFilterMenuProps {
     styleView:boolean;

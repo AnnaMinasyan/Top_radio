@@ -33,7 +33,7 @@ class PlayerServices implements IDATA {
             // setTimeout(this.open, 500);
     }
     close() {        
-        this.playerRef&&    this.playerRef.showMini()
+        this.playerRef &&    this.playerRef.showMini()
     
     }
     changeopenpanel(){
@@ -41,8 +41,6 @@ class PlayerServices implements IDATA {
     }
     async _startPlayMusic(music:any,activeBi:any) {
         const playerState = await TrackPlayer.getState();
-
-           // console.log('destroying..', music.st);
             await TrackPlayer.reset();
             await TrackPlayer.add({
                 id: "local-track",

@@ -11,8 +11,6 @@ import { IMenuProps } from "../Interface";
 import {
   changeplayItem,
   changePlayingData,
-  getSongData,
-  changeActiveIndex,
   changeMiniScreenData,
   changeSelectedRadioStation,
 } from "../store/actions/bottomAction";
@@ -57,8 +55,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
   setData() {
     getData("favorites").then((favorite) => {
       this.setState({ favoriteList: favorite });
-      console.log(favorite);
-
       this.props.onsetFilterData(favorite);
     });
     this.setState({ searchvalue: "" });
@@ -69,7 +65,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
   _addLookingList(data: any) {
     getData("isLooking").then((lookList) => {
       let count = true;
-      if (lookList && lookList.length>0) {
+      if (lookList && lookList.length > 0) {
         for (let index = 0; index < lookList.length; index++) {
           const element = lookList[index];
           if (element.id == data.id) {
@@ -102,7 +98,6 @@ class Favorite extends React.Component<IMenuProps, IState> {
               isPlayingMusic: this.props.bottomReducer.selectedRadioStation
                 ?.isPlayingMusic,
             };
-            console.log(info);
             this.props.onchangeSwiperListType('filter')
             player.open(info);
           }}
@@ -146,7 +141,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
           }}
           style={{ padding: calcWidth(8) }}
         >
-          <SimpleImage size={calcWidth(98)} image={data.item.im} />
+          <SimpleImage size={100} image={data.item.im} />
         </TouchableHighlight>
       );
     } else {
@@ -183,7 +178,7 @@ class Favorite extends React.Component<IMenuProps, IState> {
         />
         {this.state.favoriteList && this.props.filterReducer.menuType == 1 ? (
           <FlatList
-          key={'_'}
+            key={'_'}
 
             data={this.state.favoriteList}
             renderItem={(d) => this.renderMenuItems(d)}
@@ -192,18 +187,20 @@ class Favorite extends React.Component<IMenuProps, IState> {
           />
         ) : (
           <FlatList
-          key={'#'}
-
+            key={'#'}
             data={this.state.favoriteList}
             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
             contentContainerStyle={{
-              paddingLeft: calcWidth(12),
-              paddingRight: calcWidth(16),
-              justifyContent: "center",
+               width: "100%",
+                justifyContent: 'center',
+                paddingBottom: this.props.bottomReducer.swiperShowRadiostation ? 95 : 20,
+                flexDirection: 'row',
+                flexWrap: 'wrap'
+            
             }}
             keyExtractor={(item: any, index: number) => item.id?.toString()}
             maxToRenderPerBatch={10}
-            numColumns={3}
+            numColumns={this.props.theme.albomeMode?5:3}
 
           />
         )}
@@ -240,12 +237,6 @@ const mapDispatchToProps = (dispatch: any) => {
     onchangePlayingData: (payload: any) => {
       dispatch(changePlayingData(payload));
     },
-    onchangeActiveIndex: (payload: any) => {
-      dispatch(changeActiveIndex(payload));
-    },
-    get_songData: (payload: any) => {
-      dispatch(getSongData(payload));
-    },
     onchangeSelectedRadioStation: (payload: any) => {
       dispatch(changeSelectedRadioStation(payload));
     },
@@ -258,9 +249,9 @@ const mapDispatchToProps = (dispatch: any) => {
     ondeleteIsFavorite: (payload: any) => {
       dispatch(deleteIsFavorite(payload));
     },
-     onchangeSwiperListType: (payload: any) => {
+    onchangeSwiperListType: (payload: any) => {
       dispatch(changeSwiperListType(payload));
-    }, 
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Favorite);

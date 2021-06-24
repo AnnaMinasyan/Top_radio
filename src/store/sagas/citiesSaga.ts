@@ -19,7 +19,7 @@ function* getCitiesData():Generator{
 		yield put(setCities(data))
 		
 	} catch (ex) {
-		console.log(ex);
+		//console.log(ex);
 	}
 }
 function* changeFilterCities({payload}:any) {
@@ -27,7 +27,7 @@ function* changeFilterCities({payload}:any) {
 		yield put(setFilterCities(payload))
 	} catch (ex) {
 		yield put(setIsConnected(false))
-		console.log(ex);
+		//console.log(ex);
 	}
 }
 export function* watchCities() {

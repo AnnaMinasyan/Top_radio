@@ -143,7 +143,7 @@ class Header extends React.Component<Props, IState> {
     return <View>
       {this.props.type || this.props.title ? <View>
         <Text numberOfLines={1} style={[styles.title, { marginLeft: this.props.title ? (20) : 0 }]}>{this.props.title ? this.props.title : this.props.menuReducer.headertext}</Text>
-      </View> : <Logo height={(21)} width={(113)} style={{ marginLeft: (13), }} />}
+      </View> : <Logo  style={{ marginLeft: (13), }} />}
     </View>
   }
   render() {

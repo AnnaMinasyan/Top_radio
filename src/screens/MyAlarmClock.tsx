@@ -282,7 +282,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
 
   }
   alarmClockTodo = (data: any) => {
-    console.log(data,"----------------------------------");
+    //console.log(data,"----------------------------------");
 
 
     this.props.onchangeSelectedRadioStation(data.radioStation)
@@ -322,7 +322,7 @@ class MyAlarmClock extends React.Component<IMenuProps, IState> {
                 {
                   color: this.props.theme.backgroundColor == "white" ? "#1E2B4D" : "white",
                 }]}>
-                Включить будельник
+                Включить будильник
                 </Text>
             </View>
           </View>

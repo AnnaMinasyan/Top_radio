@@ -9,7 +9,7 @@ function* onGetMenuType({payload}:any):Generator {
         yield storeData('menuType',payload);
     yield put(setMenuType(payload));
       } catch (ex) {
-        console.log('errror',ex);
+        //console.log('errror',ex);
       }
 }
 function* initMenuTypebyStorage():Generator {  

@@ -5,6 +5,8 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  AppStates,
+  AppState
 } from "react-native";
 import Navigator from "./navigation/Navigator";
 import { NavigationScreenProp } from "react-navigation";
@@ -22,7 +24,8 @@ import {
   changeMiniScreenData,
   changeSelectedRadioStationPlaying,
   changeSwiperShowStation,
-  changeMiniSelect
+  changeMiniSelect,
+  getSongData
 } from "./store/actions/bottomAction";
 import { initAlarmClock } from "./utils/createAlarmClock";
 import { getData, storeData } from "./utils/local_storage";
@@ -39,6 +42,7 @@ import {
   selectedRadioStationSelector,
 
   isConnectedSelector,
+  swiperShowRadiostationSelector,
 } from "./store/selector/bottomSelector";
 import Modal from "react-native-modal";
 import player from "./services/player/PlayerServices"; // 2.4.0
@@ -49,7 +53,7 @@ interface Props {
 }
 import { NavigationContainer } from "@react-navigation/native";
 
-import { changeLookingList } from "./store/actions/menuActions";
+import { changeLookingList, getMenuData } from "./store/actions/menuActions";
 import HeadphoneDetection from 'react-native-headphone-detection';
 import { isOnheadsetsSelector, reconnectSelector } from "./store/selector/settingsSelector";
 import SplashScreen from "react-native-splash-screen";
@@ -61,6 +65,7 @@ const MyApp: React.FunctionComponent<any> = (props) => {
   const [height, setHeight] = useState<number>(Dimensions.get("window").height);
   const isConnected = useSelector(isConnectedSelector);
   const selectedRadioStation = useSelector(selectedRadioStationSelector)
+  const swiperShowRadiostation=useSelector(swiperShowRadiostationSelector)
   const timerSleep = () => {
     player.stopPlayer();
   };
@@ -72,7 +77,7 @@ const MyApp: React.FunctionComponent<any> = (props) => {
   let settings: any = {
     "timerSlipeTime": null,
     'autoPlay': false,
-    'reconnect': true,
+    'reconnect': false,
   };
   const createAlarmClock = (data: any) => {
 
@@ -120,27 +125,24 @@ const MyApp: React.FunctionComponent<any> = (props) => {
   const alarmClock = () => {
     getData("alarmClock").then((time) => {
       if (time) {
+        
         initAlarmClock(createAlarmClock, time);
       }
     });
   }
   const internetConnectHandler = () => {
-    // Subscribe to network state updates
- //   console.log('------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', settings.autoPlay, fistTime);
-
     return NetInfo.addEventListener(state => {
-      console.log(state,'000000000000');
        if(state.isConnected!=isConnected)
      {
         dispatch(changeIsConnected(state.isConnected));
-      console.log("reConnect", settings);
-      
+
       if (state.isConnected && settings.reconnect) {
+        
         getData('activeRadioStation').then((activeRadioStation) => {
           const b = fistTime ? settings.autoPlay : true;
-       //  console.log(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;+++++++++++++++++++++++;;;;;;;;;;;;;",activeRadioStation?.isPlayingMusic, b);
 
           if (activeRadioStation && activeRadioStation?.isPlayingMusic && b) {
+            console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 
             let info = {
               radioStation: activeRadioStation,
@@ -165,10 +167,38 @@ const MyApp: React.FunctionComponent<any> = (props) => {
     });
   
   }
+  let interval:any;
+  useEffect(()=>{
+    if(selectedRadioStation?.isPlayingMusic){
+      interval=   setInterval(()=>{
+        dispatch(getSongData(swiperShowRadiostation))
+      },10000)
+    }
+    
+  },[swiperShowRadiostation])
+ let appState= AppState.currentState
+
+ const  _handleAppStateChange = (nextAppState:any) => {
+    if (appState.match(/inactive|background/) && nextAppState === 'active' &&  selectedRadioStation?.isPlayingMusic) {
+      console.log('App has come to the foreground!', selectedRadioStation?.isPlayingMusic)
+     
+
+      player._startPlayMusic(selectedRadioStation.data, selectedRadioStation.activeBi);
+
+    }
+ appState= nextAppState
+  }
+  AppState.addEventListener('change', _handleAppStateChange);
+
   useEffect(() => {
+    console.log("pppppppppppppppppppppppppp");
+    
+
     isLooking();
     theme();
     alarmClock()
+    dispatch(getMenuData())
+       
     getData("favorites").then((res) => {
       if (res) {
         dispatch(appCreateFavorites(res));
@@ -180,12 +210,9 @@ const MyApp: React.FunctionComponent<any> = (props) => {
       internetConnectHandler();
       if (_settings) {
         settings = _settings;
-
         if (settings?.autoPlay) {
-          console.log('autoPlayData');
-          
           getData("autoPlayData").then((info) => {
-            console.log(info);
+            console.log("stexxxxxxxxxxxxxxx");
             
             if(info){
             let d = {
@@ -206,7 +233,7 @@ const MyApp: React.FunctionComponent<any> = (props) => {
         if (settings?.timerSlipeTime) {
           initTimerSleep(timerSleep, settings.timerSlipeTime);
         }
-        if (settings?.reconnect) {
+        if (_settings?.reconnect) {
           dispatch(changeReconnenct(settings.reconnect))
         }
         //return unsubscribe
@@ -245,9 +272,7 @@ const MyApp: React.FunctionComponent<any> = (props) => {
         albomeMode: width > height,
       })
     );
-    //  console.log(width, height);
   }, [width]);
-  console.log('isConnectedisConnected', isConnected);
 
   return isConnected ? (
 

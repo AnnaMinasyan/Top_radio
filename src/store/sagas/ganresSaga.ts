@@ -19,7 +19,7 @@ function* getGanresData():Generator {
 		yield put(setGanres(data))
 	} catch (ex) {
 		yield put(setIsConnected(false))
-		console.log(ex);
+		//console.log(ex);
 	}
 }
 function* changeFilerGenre({payload}:any) {
@@ -27,7 +27,7 @@ function* changeFilerGenre({payload}:any) {
 	yield put(setFilterGanres(payload))
 	} catch (ex) {
 		yield put(setIsConnected(false))
-		console.log(ex);
+		//console.log(ex);
 	}
 }
 export function* watchGanres() {

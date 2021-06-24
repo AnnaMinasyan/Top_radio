@@ -97,6 +97,8 @@ export const changeSwiperShowStation = (payload: any) => {
   };
 };
 export const setSwiperPlayingSong = (payload: any) => {
+  console.log("dhskjshfkdshfkdfdksfj", payload);
+  
   return {
     type: BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG,
     payload,

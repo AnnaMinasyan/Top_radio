@@ -2,27 +2,27 @@ import { getData, storeData } from "./local_storage"
 import player from "../services/player/PlayerServices"
 const intervals: any[] = []
 export const initAlarmClock = (toDo: (data: any) => void, data: any) => {
-    console.log("initAlarmClock", data);
+    //console.log("initAlarmClock", data);
 if (data) {
     while (intervals.length) {
         clearInterval(intervals.shift());
     }
     const interval = setInterval(() => {
-        console.log('timer', new Date().getHours(), new Date().getMinutes(), data);
+        //console.log('timer', new Date().getHours(), new Date().getMinutes(), data);
 
         let nowMinute = new Date().getMinutes()
         let nowHours = new Date().getHours()
         if (nowHours == data.alarmClockTime.hours) {
 
             if (nowMinute == data.alarmClockTime.minute) {
-                console.log("sakdalk");
+                //console.log("sakdalk");
 
                 toDo(data.radioStation)
-                console.log("minuu");
-                console.log('interval', interval);
+                //console.log("minuu");
+                //console.log('interval', interval);
 
                 if (data.alarmClockTime.repeatTime > 0) {
-                    console.log("oifsfiosoehfii");
+                    //console.log("oifsfiosoehfii");
 
                     toDo(data.radioStation)
                     let alarmClockData = data
@@ -39,7 +39,7 @@ if (data) {
     }, 5000);
     intervals.push(interval) 
 }else{
-    console.log("sssssssssssssssssss");
+    //console.log("sssssssssssssssssss");
     
     while (intervals.length) {
         clearInterval(intervals.shift());

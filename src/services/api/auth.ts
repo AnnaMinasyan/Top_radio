@@ -14,14 +14,13 @@ interface IDATA {
 }
 class Static implements IDATA {
     async getMenuDatas() {
-console.log("apiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 
         try {
             const response = await authApi.get(`${keys.API_URL}radios.json`);
             
             return response.data
         } catch (error) {
-            return console.log(error.status, error.message);
+            return //console.log(error.status, error.message);
         
 
 
@@ -50,7 +49,7 @@ console.log("apiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 
         try {
             const data = moment().format('YYYY-MM-DD')
-            console.log(`https://botan.ru.com/api/application/tracklists/${payload}`);
+            //console.log(`https://botan.ru.com/api/application/tracklists/${payload}`);
 
             const response = await authApi.get(`https://botan.ru.com/api/application/tracklists/${payload}`,);
             return response.data
@@ -64,7 +63,7 @@ console.log("apiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 
             const data = moment().format('YYYY-MM-DD')
             const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`,);
-            console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`, response.data);
+            //console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`, response.data);
             return response.data
         } catch (ex) {
             return Alert.alert("Error", ex)
@@ -74,15 +73,16 @@ console.log("apiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
         try {
 
             const data = moment().format('YYYY-MM-DD')
+            console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`);
 
 
             if (payload && data) {
                 const response = await authApi.get(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`,);
-                console.log(`https://botan.ru.com/api/application/playlist/${payload}/schedules/${data}`);
+                
                 return response.data
             }
         } catch (ex) {
-            console.log('errorr', ex.response.data)
+            //console.log('errorr', ex.response.data)
             throw ex
 
         }

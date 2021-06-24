@@ -1,4 +1,5 @@
 import {
+  call,
   put,
   takeEvery,
 } from "redux-saga/effects";
@@ -26,7 +27,7 @@ function* onGetPlayType({ payload }: any) {
   try {
     yield put(setplayItem(payload));
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* changeselectedSatationbyBi({ payload }: any): Generator {
@@ -49,7 +50,7 @@ function* clearReducerData() {
     yield put(setSelectedRadioStation(undefined));
     player.stopPlayer()
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* addselectedRadioStation({ payload }: any): Generator {
@@ -78,12 +79,24 @@ function* changeSwiperActiveBi({ payload }: any) {
     yield put(setSelectedRadioStationPlaying(false));
     yield put(setSwiperActiveBi(payload));
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
+}
+const anotherSaga :any= function * ({ payload }: any): Generator {
+  const runner = yield call(setInterval, () => {
+    const res: any =  auth.getPlayItemType(payload.data.pl);
+      if (res) {
+        
+         put(setSwiperPlayingSong(res[0]));
+      }
+
+  }, 5000);
+  console.log(runner);
 }
 function* onGetSongData({ payload }: any): Generator {
   try {
     if (payload) {
+    
       const res: any = yield auth.getPlayItemType(payload.data.pl);
       if (res) {
         
@@ -96,6 +109,7 @@ function* onGetSongData({ payload }: any): Generator {
       }
     }
   } catch (ex) {
+    console.log(ex)
    // Alert.alert("Сервер не работает ");
   }
 }
@@ -103,7 +117,7 @@ function* onChangePlayingData({ payload }: any) {
   try {
     yield put(setPlayingData(payload));
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* onChangeplayItemArtistandSon({ payload }: any): Generator {
@@ -114,14 +128,14 @@ function* onChangeplayItemArtistandSon({ payload }: any): Generator {
       yield put(setplayItemArtistandSong(data[0]));
     }
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* onchangeActiveIndex({ payload }: any) {
   try {
     yield put(setActiveIndex(payload));
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* changeSwiperShowStation({ payload }: any): Generator {
@@ -144,21 +158,21 @@ function* changeSwiperShowStation({ payload }: any): Generator {
       }
     }
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* changeActiveArrow({ payload }: any) {
   try {
     yield put(setActiveArrow(payload));
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* changeMiniScreenData({ payload }: any) {
   try {
     yield put(setMiniScreenData(payload));
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 function* changeMiniSELECT({ payload }: any):Generator {
@@ -175,18 +189,16 @@ function* changeMiniSELECT({ payload }: any):Generator {
     }
     
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
-function* changeIsconnected({ payload }: any) {
-  console.log(")))))))))))))))))))",payload);
-  
+function* changeIsconnected({ payload }: any) {  
   try {
 
     yield put(setIsConnected(payload));
 
   } catch (ex) {
-    console.log(ex);
+    //console.log(ex);
   }
 }
 export function* watchBottomType() {

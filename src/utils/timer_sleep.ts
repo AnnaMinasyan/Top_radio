@@ -7,14 +7,14 @@ export const initTimerSleep = (toDo: () => void, data:any) => {
             clearInterval(intervals.shift());
         }
         const interval = setInterval(() => {
-            console.log('timer',new Date().getHours(),new Date().getMinutes(),data);
+            //console.log('timer',new Date().getHours(),new Date().getMinutes(),data);
             
         let nowMinute= new Date().getMinutes()
         let nowHours= new Date().getHours()
                 if(nowHours==data.hours){
                     if(nowMinute==data.minute){
-                        console.log("minuu");
-                        console.log('interval',interval);
+                        //console.log("minuu");
+                        //console.log('interval',interval);
                         storeData('timerSleepTime',null)
                         clearInterval(interval);
                         toDo()

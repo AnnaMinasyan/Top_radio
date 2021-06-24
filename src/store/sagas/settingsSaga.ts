@@ -22,7 +22,7 @@ function* initAutoPlaybyStorage(): Generator {
         }
     } catch (ex) {
 
-        console.log(ex);
+        //console.log(ex);
     }
 }
 function* changingBufferSize(payload: any) {

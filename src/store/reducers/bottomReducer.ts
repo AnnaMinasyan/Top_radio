@@ -20,9 +20,9 @@ export interface IBottomState {
     activeBi: number,
     selectedRadioStation: ISelectedRadioStation | null,
     swiperShowRadiostation: ISelectedRadioStation | null,
-    activeArrow:boolean,
-    miniScreenData:ISelectedRadioStation | null,
-    isConnected:boolean |undefined
+    activeArrow: boolean,
+    miniScreenData: ISelectedRadioStation | null,
+    isConnected: boolean | undefined
 }
 
 
@@ -33,9 +33,9 @@ export const initialState: IBottomState = {
     activeBi: 0,
     selectedRadioStation: null,
     swiperShowRadiostation: null,
-    activeArrow:true,
-    miniScreenData:null,
-    isConnected:undefined
+    activeArrow: true,
+    miniScreenData: null,
+    isConnected: undefined
 
 }
 const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) => {
@@ -43,33 +43,33 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
         case BottomType.SET_IS_CONNECTED:
             return { ...state, isConnected: action.payload }
         case BottomType.SET_SELECTED_RADIOSTATION:
-            
             return { ...state, selectedRadioStation: action.payload }
         case BottomType.SET_SWIPERSHOW_RADIOSTATION:
 
 
             return { ...state, swiperShowRadiostation: action.payload }
         case BottomType.SET_SELECTED_RADIOSTATION_PLAYMUSIC:
-            console.log("action.payload",action.payload);
-            
-            return { ...state, selectedRadioStation: { ...state.selectedRadioStation, isPlayingMusic: action.payload },
+
+            return {
+                ...state, selectedRadioStation: { ...state.selectedRadioStation, isPlayingMusic: action.payload },
                 miniScreenData: { ...state.miniScreenData, isPlayingMusic: action.payload }
             }
         case BottomType.SET_SWIPERSHOW_RADIOSTATION_PLAYINGSONG:
-
-            return { ...state, swiperShowRadiostation: { ...state.swiperShowRadiostation, playingSong: action.payload },
-                miniScreenData: { ...state.miniScreenData, playingSong: action.payload } }
+            return {
+                ...state, swiperShowRadiostation: { ...state.swiperShowRadiostation, playingSong: action.payload },
+                miniScreenData: { ...state.miniScreenData, playingSong: action.payload }
+            }
 
         case BottomType.SET_SWIPERSHOW_RADIOSTATION_ACTIVEBI:
 
-            return { ...state, swiperShowRadiostation: action.payload,selectedRadioStation:action.payload } 
+            return { ...state, swiperShowRadiostation: action.payload, selectedRadioStation: action.payload }
 
         case BottomType.SET_ACTIVEARROW:
 
-  return { ...state,  activeArrow:action.payload}
+            return { ...state, activeArrow: action.payload }
         case BottomType.SET_MINI_SCREENDATA:
 
-            return { ...state,  miniScreenData:action.payload}
+            return { ...state, miniScreenData: action.payload }
         case BottomType.SET_PLAY_ITEM:
 
             return { ...state, playItem: action.payload, activeBi: action.payload.st[0].bi }
@@ -79,7 +79,7 @@ const bottomReducer = (state = initialState, action: IReduxAction<BottomType>) =
         case BottomType.SET_PLAYING_DATA:
             return { ...state, playMusicData: action.payload }
 
-       
+
         case BottomType.SET_ACTIVE_BI:
             return { ...state, activeBi: action.payload }
 

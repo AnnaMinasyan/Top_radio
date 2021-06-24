@@ -1,89 +1,100 @@
 import { put, all, takeLatest, select, call, take, takeEvery } from 'redux-saga/effects';
 import { MenuTypes } from '../constants';
 import auth from "../../services/api/auth"
-import {setMenuData, setPlayingData,setFilterData,setHeaderText,
+import {
+	setMenuData, setPlayingData, setFilterData, setHeaderText,
 	setInitialRouteName,
-	setSearchData} from "../actions/menuActions"
-import {setSwiperData,setLookingList} from "../actions/menuActions"
+	setSearchData
+} from "../actions/menuActions"
+import { setSwiperData, setLookingList } from "../actions/menuActions"
 
-import {setIsConnected, setSelectedRadioStation  } from "../actions/bottomAction";
+import { setIsConnected, setSelectedRadioStation } from "../actions/bottomAction";
 
-function* getMenuData():Generator {
-	console.log("sagaaaaaaaaaaaaaaa");
-	
+function* getMenuData(): Generator {
 	try {
-		yield put(setSelectedRadioStation(undefined))
 
-		let data:any= yield auth.getMenuDatas()
+		let data: any = yield auth.getMenuDatas()
 
-		
-		for (let index = 0; index < data.length; index++) {
-			const element = data[index];
-			element.index=index
+		if (data) {
+			for (let index = 0; index < data.length; index++) {
+				const element = data[index];
+				element.index = index
+			}
+
+			yield put(setMenuData(data))
+			yield put(setFilterData(data))
+			yield put(setSearchData(data))
+		}else{
+
+			let data: any = yield auth.getMenuDatas()	
+			for (let index = 0; index < data.length; index++) {
+				const element = data[index];
+				element.index = index
+			}
+
+			yield put(setMenuData(data))
+			yield put(setFilterData(data))
+			yield put(setSearchData(data))
 		}
-		
-		yield put(setMenuData(data))
-		yield put(setFilterData(data))
-		yield put(setSearchData(data))
 	} catch (ex) {
-		console.log(ex);
-		
+		//console.log(ex);
+
 
 	}
 }
-function* changeInitialRouteName({payload}:any) {
+function* changeInitialRouteName({ payload }: any) {
 
 	try {
 		yield put(setInitialRouteName(payload))
 	} catch (ex) {
-		console.log(ex);
+		//console.log(ex);
 	}
 }
-function* changeLookingList({payload}:any) {
+function* changeLookingList({ payload }: any) {
 	try {
 		yield put(setLookingList(payload.reverse()))
 
 	} catch (ex) {
-		console.log(ex);
+		//console.log(ex);
 	}
 }
-function* onChangePlayingData({payload}:any) {
-	
-    try {
+function* onChangePlayingData({ payload }: any) {
+
+	try {
 		yield put(setPlayingData(payload))
 	} catch (ex) {
-		console.log(ex);
-	} 
+		//console.log(ex);
+	}
 }
-function* onChangeSwiperData({payload}:any) {
-    try {
+function* onChangeSwiperData({ payload }: any) {
+	try {
 		yield put(setSwiperData(payload))
 	} catch (ex) {
-		console.log(ex);
-	} 
+		//console.log(ex);
+	}
 }
-function* onChangeFilterData({payload}:any) {
-    try {		
+function* onChangeFilterData({ payload }: any) {
+	try {
 		yield put(setFilterData(payload))
 		yield put(setSearchData(payload))
 
 	} catch (ex) {
-		console.log(ex);
-	} 
+		//console.log(ex);
+	}
 }
-function* onChangeHeaderText({payload}:any) {
-    try {
+function* onChangeHeaderText({ payload }: any) {
+	try {
 		yield put(setHeaderText(payload))
 	} catch (ex) {
-		console.log(ex);
-	} 
+		//console.log(ex);
+	}
 }
-function* changeSearchData({payload}:any) {
-    try {		
+function* changeSearchData({ payload }: any) {
+	try {
 		yield put(setSearchData(payload))
 	} catch (ex) {
-		console.log(ex);
-	} 
+		//console.log(ex);
+	}
 }
 export function* watchMenuType() {
 	yield takeEvery(
@@ -91,19 +102,19 @@ export function* watchMenuType() {
 		getMenuData
 	)
 	yield takeEvery(
-        MenuTypes.CHANGE_PLAYINGDATA as any,
+		MenuTypes.CHANGE_PLAYINGDATA as any,
 		onChangePlayingData
 	)
 	yield takeEvery(
-        MenuTypes.CHANGE_SWIPER_DATA as any,
+		MenuTypes.CHANGE_SWIPER_DATA as any,
 		onChangeSwiperData
 	)
 	yield takeEvery(
-        MenuTypes.CHANGE_FILTER_DATA as any,
+		MenuTypes.CHANGE_FILTER_DATA as any,
 		onChangeFilterData
 	)
 	yield takeEvery(
-        MenuTypes.CHANGE_HEADERTEXT as any,
+		MenuTypes.CHANGE_HEADERTEXT as any,
 		onChangeHeaderText
 	)
 	yield takeEvery(

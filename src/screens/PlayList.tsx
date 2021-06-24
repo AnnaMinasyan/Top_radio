@@ -15,6 +15,7 @@ import HeaderByBack from "../components/HeaderByBack"
 import { connect } from "react-redux"
 import moment from 'moment-timezone';
 import player from "../services/player/PlayerServices"
+import { changeSelectedRadioStation, changeSelectedRadioStationPlaying, changeSwiperShowStation } from '../store/actions/bottomAction';
 interface IState {
     filterType: string
 }
@@ -33,7 +34,17 @@ class PlayList extends React.Component<IPlayListProps, IState> {
             <View style={{ backgroundColor: this.props.theme.backgroundColor}}>
 
                 <HeaderByBack title={this.props.playListReducer.title}
-                              onNavigate={() => { this.props.navigation.navigate('Menu'),player.open() }} />
+                              onNavigate={() => { this.props.navigation.navigate('Menu')
+                             
+                              if (this.props.bottomReducer.selectedRadioStation && this.props.bottomReducer.selectedRadioStation.isPlayingMusic) {
+                                console.log(this.props.bottomReducer.selectedRadioStation);
+                               
+                                this.props.onchangeSwiperShowStation(this.props.bottomReducer.selectedRadioStation);
+                                player.open()
+
+                              }
+                              
+                               }} />
                 <View style={styles.tabFilter}>
                     <TouchableOpacity
                         onPress={() => {
@@ -72,7 +83,7 @@ class PlayList extends React.Component<IPlayListProps, IState> {
                                         {
                                             this.state.filterType == 'trackList'? 
                                             <Text style={styles.elementCount}>{data.count}</Text>:
-                                            <Text style={styles.elementCount}>{moment.utc(data.start_at).format("HH:mm")}</Text>
+                                            <Text style={styles.elementCount}>{moment(data.start_at).format("HH:mm")}</Text>
                                             
                                         }
                                        
@@ -99,7 +110,11 @@ const mapDispatchToProps = (dispatch: any) => {
         },
         ongetTrackList: (payload: any) => {
             dispatch(getTrackList(payload))
-        }
+        },
+        onchangeSwiperShowStation: (payload:any) => {
+            dispatch(changeSelectedRadioStation(payload));
+          },
+          
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(PlayList);

@@ -216,10 +216,10 @@ class Bottom extends React.Component<Props, IState> {
     async _pouseMusic() {
         const playerState = await TrackPlayer.getState();
         if (this.props.filterReducer.isPlayingMusic) {
-            console.log("playMusic");
+            //console.log("playMusic");
             await TrackPlayer.play();
         } else {
-            console.log("_pouseMusic");
+            //console.log("_pouseMusic");
             await TrackPlayer.pause();
         }
     }
@@ -321,9 +321,9 @@ class Bottom extends React.Component<Props, IState> {
                     },
                 );
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log('You can use the storage');
+                    //console.log('You can use the storage');
                 } else {
-                    console.log('permission denied');
+                    //console.log('permission denied');
                     return;
                 }
             } catch (err) {
@@ -342,9 +342,9 @@ class Bottom extends React.Component<Props, IState> {
                     },
                 );
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log('You can use the camera');
+                    //console.log('You can use the camera');
                 } else {
-                    console.log('permission denied');
+                    //console.log('permission denied');
                     return;
                 }
             } catch (err) {
@@ -356,7 +356,7 @@ class Bottom extends React.Component<Props, IState> {
         // create a path you want to write to
         var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.aacp`;
 
-    //    console.log(RNFileManager.MainBundlePath);
+    //    //console.log(RNFileManager.MainBundlePath);
 
         const audioSet = {
             AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
@@ -365,7 +365,7 @@ class Bottom extends React.Component<Props, IState> {
             AVNumberOfChannelsKeyIOS: 2,
             AVFormatIDKeyIOS: AVEncodingOption.aac,
         };
-       // console.log('audioSet', audioSet);
+       // //console.log('audioSet', audioSet);
         const uri = await this.audioRecorderPlayer.startRecorder(path, true, audioSet);
 
         this.audioRecorderPlayer.addRecordBackListener((e: any) => {
@@ -376,11 +376,10 @@ class Bottom extends React.Component<Props, IState> {
                 ),
             });
         });
-        //console.log(`uri: ${uri}`,);
+        ////console.log(`uri: ${uri}`,);
     }
 
     private onStartPlay = async () => {
-        console.log('onStartPlay');
         var path = RNFS.DocumentDirectoryPath + `/audio_record_${Date.now()}.mp4saacp`;
 
         // const path = Platform.select({
@@ -389,10 +388,9 @@ class Bottom extends React.Component<Props, IState> {
         // });
         const msg = await this.audioRecorderPlayer.startPlayer(path);
         this.audioRecorderPlayer.setVolume(1.0);
-       // console.log(msg);
+       // //console.log(msg);
         this.audioRecorderPlayer.addPlayBackListener((e: any) => {
             if (e.current_position === e.duration) {
-                console.log('finished');
                 this.audioRecorderPlayer.stopPlayer();
             }
             this.setState({
@@ -406,7 +404,7 @@ class Bottom extends React.Component<Props, IState> {
         });
     };
     private onStopRecord = async () => {
-        console.log("stoppppppppp");
+        //console.log("stoppppppppp");
 
         const result = await this.audioRecorderPlayer.stopRecorder();
         this.audioRecorderPlayer.removeRecordBackListener();
@@ -416,7 +414,7 @@ class Bottom extends React.Component<Props, IState> {
         const dest = `${result}`;
         // RNFS.copyFileAssets(result, dest)
         // .then(() => {
-        //     console.log("opeeeeeeeeeeeeeeeeeeeen");
+        //     //console.log("opeeeeeeeeeeeeeeeeeeeen");
 
         //     FileViewer.open(dest)
         // })
@@ -425,7 +423,7 @@ class Bottom extends React.Component<Props, IState> {
         // })
         // .catch(error => {
         //    /* */
-        //    console.log(error);
+        //    //console.log(error);
 
         // });
         // Alert.alert(
@@ -434,14 +432,14 @@ class Bottom extends React.Component<Props, IState> {
         //     [
         //       {
         //         text: "Cancel",
-        //         onPress: () => console.log("Cancel Pressed"),
+        //         onPress: () => //console.log("Cancel Pressed"),
         //         style: "cancel"
         //       },
-        //       { text: "OK", onPress: () => console.log("OK Pressed") }
+        //       { text: "OK", onPress: () => //console.log("OK Pressed") }
         //     ],
         //     { cancelable: false }
         //   );
-      //  console.log(result);
+      //  //console.log(result);
     };
 
     renderBottomSheetHorizontal() {
@@ -562,7 +560,7 @@ class Bottom extends React.Component<Props, IState> {
                                         <TouchableOpacity style={[styles.arrow,]}
                                             disabled={this.props.bottomReducer.activeIndex == this.props.menuReducer.menuData.length - 1}
                                             onPress={() => {
-                                                console.log("right");
+                                                //console.log("right");
                                                 this.count += 1
                                                 this.swipeRight()
                                             }}
@@ -671,7 +669,7 @@ class Bottom extends React.Component<Props, IState> {
                             <TouchableOpacity
                                 disabled={this.props.bottomReducer.activeIndex == 0}
                                 onPress={() => {
-                                    console.log("left");
+                                    //console.log("left");
                                     this.count -= 1
                                     this.swipeLeft()
                                 }}
@@ -690,7 +688,7 @@ class Bottom extends React.Component<Props, IState> {
                             <TouchableOpacity style={styles.arrow}
                                 disabled={this.props.bottomReducer.activeIndex == this.props.menuReducer.menuData.length - 1}
                                 onPress={() => {
-                                    console.log("right");
+                                    //console.log("right");
                                     this.count += 1
                                     this.swipeRight()
                                 }}
@@ -820,7 +818,7 @@ closed() {
     } 
     render() {
         Dimensions.addEventListener('change', () => {
-            console.log("chnageee");
+            //console.log("chnageee");
 
             this.isPortrait();
         })
@@ -835,9 +833,7 @@ closed() {
                 orientation={this.state.orientation}
                 itemMini={this.renderBottomSheetheader()} // Pass props component when collapsed
               itemFull={this.state.orientation == 'landscape' ? this.renderBottomSheetHorizontal() : this.renderBottomSheet()} // Pass props component when show full
-                onShowMini={() => {
-                    console.log("miniiiiiiiiiiiiiiiiii");
-                    
+                onShowMini={() => {                    
                     Animated.timing(this.anim, {
                         toValue: 1,
                         duration: 50,

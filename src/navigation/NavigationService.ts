@@ -6,7 +6,6 @@ class NavigationService {
 	private _navigator: any = null;
 
 	navigate(routeName: string, params?: { [key: string]: any }) {
-		console.log("routeName",routeName)
 		// firebase.analytics().logEvent('navigation', {screen: routeName});
 		// Analytics.trackEvent('navigation', {screen: routeName});
 		if(this._navigator){

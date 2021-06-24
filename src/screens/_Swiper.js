@@ -299,7 +299,7 @@ class SwipeUpDown extends Component<Props> {
                                 top: 5,
                             }}
                             onPress={() => {
-                                console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
+                                //console.log("preeeeeeeeeeeeeeeeeeeeeeeeeeesssssss");
                                 this.props.toaddfavorite();
                             }}
                         >
@@ -330,7 +330,7 @@ class SwipeUpDown extends Component<Props> {
                             <TouchableOpacity
                                 disabled={this.count == 0}
                                 onPress={() => {
-                                    console.log("left");
+                                    //console.log("left");
                                     this.count -= 1;
                                     this.swipeLeft();
                                 }}
@@ -449,7 +449,7 @@ class SwipeUpDown extends Component<Props> {
                                                         ?.isPlayingMusic
                                                 ) {
                                                     if (this.state.isRecording) {
-                                                        console.log("onstart");
+                                                        //console.log("onstart");
                                                         this.props.onStopRecord();
                                                     } else {
                                                         this.props.onStartRecord();
@@ -507,7 +507,7 @@ class SwipeUpDown extends Component<Props> {
                                                     onPress={() => {
                                                         if (this.props.bottomReducer.isConnected) {
                                                             if (this.state.isRecording) {
-                                                                console.log("dhkabsakhshakj");
+                                                                //console.log("dhkabsakhshakj");
                                                                 this.props.onStopRecord();
                                                             }
                                                             if (
@@ -523,7 +523,7 @@ class SwipeUpDown extends Component<Props> {
                                                                 let d = this.props.bottomReducer
                                                                     .swiperShowRadiostation;
                                                                 d.isPlayingMusic = true;
-                                                                console.log("ddd", d);
+                                                                //console.log("ddd", d);
                                                                 this.props.onchangeSelectedRadioStation(d);
                                                                 this.props.onchangeMiniScreenData(d);
 
@@ -545,7 +545,7 @@ class SwipeUpDown extends Component<Props> {
                                                                 }, 500);
                                                             }
                                                         } else {
-                                                            console.log(";;;;;;;;;;;;;;;;;;;;");
+                                                            //console.log(";;;;;;;;;;;;;;;;;;;;");
                                                             this.props.onchangeIsConnected(false);
                                                         }
                                                     }}
@@ -616,7 +616,7 @@ class SwipeUpDown extends Component<Props> {
                                             this.props.menuReducer.menuData.length - 1
                                         }
                                         onPress={() => {
-                                            console.log("right");
+                                            //console.log("right");
                                             this.count += 1;
                                             this.swipeRight();
                                         }}
@@ -642,14 +642,14 @@ class SwipeUpDown extends Component<Props> {
         );
     }
     _onPanResponderMove(event, gestureState) {
-        // console.log(gestureState.dy,deviceHeight-deviceHeight/5);
+        // //console.log(gestureState.dy,deviceHeight-deviceHeight/5);
         if (this.props.theme.albomeMode) {
             if (
                 gestureState.dy > 0 &&
                 !this.checkCollapsed &&
                 gestureState.dy < deviceHeight - deviceHeight / 5
             ) {
-                // console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+                // //console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
                 // SWIPE DOWN
                 this.customStyle.style.top = this.top + gestureState.dy;
                 this.height = DEVICE_HEIGHT;
@@ -660,8 +660,8 @@ class SwipeUpDown extends Component<Props> {
                 gestureState.dy < 0 &&
                 gestureState.dy > -(DEVICE_HEIGHT - 180)
             ) {
-                //   console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
-                // console.log( this.customStyle.style.top,"this.customStyle.style.top");
+                //   //console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
+                // //console.log( this.customStyle.style.top,"this.customStyle.style.top");
                 // SWIPE UP
                 this.top = 0;
                 this.customStyle.style.top = DEVICE_HEIGHT - 180 + gestureState.dy;
@@ -677,7 +677,7 @@ class SwipeUpDown extends Component<Props> {
                 !this.checkCollapsed &&
                 gestureState.dy < DEVICE_HEIGHT
             ) {
-                // console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+                // //console.log("downnnnnnnnnnnnnnnnnnnnnnnnnnnn");
                 // SWIPE DOWN
                 this.customStyle.style.top = this.top + gestureState.dy;
                 this.height = DEVICE_HEIGHT;
@@ -688,8 +688,8 @@ class SwipeUpDown extends Component<Props> {
                 gestureState.dy < 0 &&
                 gestureState.dy > -(DEVICE_HEIGHT - 180)
             ) {
-                //   console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
-                // console.log( this.customStyle.style.top,"this.customStyle.style.top");
+                //   //console.log("uppppppppppppppppppppppppppppppppppppppp",-(DEVICE_HEIGHT-50));
+                // //console.log( this.customStyle.style.top,"this.customStyle.style.top");
                 // SWIPE UP
                 this.top = 0;
                 this.customStyle.style.top = DEVICE_HEIGHT - 180 + gestureState.dy;
@@ -755,7 +755,7 @@ class SwipeUpDown extends Component<Props> {
             this.checkCollapsed = true;
             onShowMini && onShowMini();
         } else {
-            console.log("lllpdssp[");
+            //console.log("lllpdssp[");
             const { onShowMini, itemMini } = this.props;
             this.customStyle.style.top = 700
             // itemMini
@@ -844,7 +844,7 @@ class SwipeUpDown extends Component<Props> {
                     .isPlayingMusic,
             });
             this.timerHandle = setTimeout(() => {
-                this.props.get_songData(radiostation);
+                this.props.get_songData(this.props.bottomReducer.swiperShowRadiostation);
             }, 800);
 
             if (this.props.settingsReducer.autoPlay) {
@@ -882,7 +882,8 @@ class SwipeUpDown extends Component<Props> {
             this.timerHandle = setTimeout(() => {
                 // this.setState({loading:true})
 
-                this.props.get_songData(radiostation);
+                this.props.get_songData(this.props.bottomReducer.swiperShowRadiostation);
+
             }, 800);
 
             if (this.props.settingsReducer.autoPlay) {
@@ -1004,7 +1005,7 @@ class SwipeUpDown extends Component<Props> {
                                 <TouchableOpacity
                                     disabled={this.state.loading}
                                     onPress={() => {
-                                        console.log("left");
+                                        //console.log("left");
 
                                         this.swipeLeft();
                                     }}
@@ -1056,7 +1057,7 @@ class SwipeUpDown extends Component<Props> {
                                         style={styles.arrow}
                                         disabled={this.state.loading}
                                         onPress={() => {
-                                            console.log("right");
+                                            //console.log("right");
                                             this.count += 1;
                                             this.swipeRight();
                                         }}
@@ -1169,7 +1170,7 @@ class SwipeUpDown extends Component<Props> {
                                             ?.isPlayingMusic
                                     ) {
                                         if (this.state.isRecording) {
-                                            console.log("onstart");
+                                            //console.log("onstart");
                                             this.props.onStopRecord();
                                         } else {
                                             this.props.onStartRecord();
@@ -1228,7 +1229,7 @@ class SwipeUpDown extends Component<Props> {
                                     onPress={() => {
                                         if (this.props.bottomReducer.isConnected) {
                                             if (this.state.isRecording) {
-                                                console.log("dhkabsakhshakj");
+                                                //console.log("dhkabsakhshakj");
                                                 this.onStopRecord();
                                             }
                                             if (
@@ -1241,7 +1242,7 @@ class SwipeUpDown extends Component<Props> {
                                                 this.setState({ loading: true });
                                                 let d = this.props.bottomReducer.swiperShowRadiostation;
                                                 d.isPlayingMusic = true;
-                                                console.log("ddd", d);
+                                                //console.log("ddd", d);
                                                 this.props.onchangeSelectedRadioStation(d);
                                                 this.props.onchangeMiniScreenData(d);
 
@@ -1261,7 +1262,7 @@ class SwipeUpDown extends Component<Props> {
                                                 }, 500);
                                             }
                                         } else {
-                                            console.log(";;;;;;;;;;;;;;;;;;;;");
+                                            //console.log(";;;;;;;;;;;;;;;;;;;;");
                                             this.props.onchangeIsConnected(false);
                                         }
                                     }}

@@ -97,7 +97,7 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
 
     }
   }, [ispanelActive])
-  console.log(
+  //console.log(
     "themebackground", ispanelActive
   );
 
@@ -107,7 +107,7 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
     switch (gestureName) {
 
       case SWIPE_LEFT:
-        console.log("SWIPE_LEFT");
+        //console.log("SWIPE_LEFT");
         if (swiperactiveIndex < filterData.length) {
             setswiperactiveIndex(swiperactiveIndex + 1)
             setactivBi(filterData[swiperactiveIndex + 1].st[0].bi)
@@ -125,7 +125,7 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
 
         break;
       case SWIPE_RIGHT:
-        console.log("SWIPE_RIGHT");
+        //console.log("SWIPE_RIGHT");
         if (swiperactiveIndex > 0) {
           setswiperactiveIndex(swiperactiveIndex - 1)
           setactivBi(filterData[swiperactiveIndex - 1].st[0].bi)
@@ -182,7 +182,7 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
     } else {
        // this._startPlayMusic()
     }
-    // console.log("changePlayingMusic",isPlayingMusic);
+    // //console.log("changePlayingMusic",isPlayingMusic);
     
     dispatch(changePlayingMusic(!isPlayingMusic))
 }
@@ -390,8 +390,8 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
     </View>
   }
   //            this.swiperRef.scrollTo(this.props.menuReducer.activeIndex)
-  // console.log(":::::::::::::::::::::",swiper)
-  // console.log(swiperRef);
+  // //console.log(":::::::::::::::::::::",swiper)
+  // //console.log(swiperRef);
 
   return (
 
@@ -404,11 +404,11 @@ const Bottom1: React.FunctionComponent<Props> = (props) => {
       >
       <View
         onTouchStart={() => {
-          console.log("onstart");
+          //console.log("onstart");
 
         }}
         onMagicTap={() => {
-          console.log("onMagicTap");
+          //console.log("onMagicTap");
 
         }}
         style={styles.slide1}>

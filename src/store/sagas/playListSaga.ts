@@ -10,7 +10,7 @@ function* getPlayListData({payload}: any): Generator {
 	
 		yield put(setPlayList(data))
 	} catch (ex) {
-		console.log(ex);
+		//console.log(ex);
 	}
 }
 function* getTrackListData({payload}: any): Generator {
@@ -21,14 +21,14 @@ function* getTrackListData({payload}: any): Generator {
 	
 		yield put(setPlayList(data))
 	} catch (ex) {
-		console.log(ex);
+		//console.log(ex);
 	}
 }
 function* changeSwiperListType({ payload }: any) {
 	try {
 		yield put(setSwiperListType(payload))
 	} catch (ex) {
-		console.log(ex);
+		//console.log(ex);
 	}
 }
 

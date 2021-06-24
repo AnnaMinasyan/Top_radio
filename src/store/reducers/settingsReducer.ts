@@ -31,7 +31,7 @@ export const initialState: ISettingsState = {
     }
   ],
   isOnheadsets: true,
-  reconnect: true
+  reconnect: undefined
 }
 const settingsReducer = (state = initialState, action: IReduxAction<SettingsType>) => {
 

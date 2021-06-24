@@ -28,7 +28,6 @@ import {
 import {
   changeplayItem,
   changePlayingData,
-  getSongData,
   changeMiniScreenData,
   changeSwiperShowStation,
   changeSelectedRadioStation,
@@ -175,7 +174,7 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
         }}
         style={{ padding: calcWidth(8) }}
       >
-        <SimpleImage size={calcWidth(98)} image={data.item.im} />
+        <SimpleImage size={98} image={data.item.im} />
       </TouchableHighlight>
     );
   }
@@ -229,11 +228,13 @@ class FilterMenu extends React.Component<IFilterMenuProps, IState> {
             data={list}
             renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
             contentContainerStyle={{
-              paddingLeft: calcWidth(12),
-              paddingRight: calcWidth(16),
-              justifyContent: "center",
+              width: "100%",
+              justifyContent: 'center',
+              paddingBottom: this.props.bottomReducer.swiperShowRadiostation ? 95 : 20,
+              flexDirection: 'row',
+              flexWrap: 'wrap'
             }}
-            numColumns={3}
+            numColumns={this.props.theme.albomeMode?5:3}
             keyExtractor={(item: any, index: number) => item.id.toString()}
             maxToRenderPerBatch={10}
           />
@@ -276,15 +277,8 @@ const mapDispatchToProps = (dispatch: any) => {
     onchangePlayingData: (payload: any) => {
       dispatch(changePlayingData(payload));
     },
-    onchangeActiveIndex: (payload: number) => {
-      dispatch(changeActiveIndex(payload));
-    },
     onchangeSwiperData: (payload: number) => {
       dispatch(changeSwiperData(payload));
-    },
-
-    get_songData: (payload: any) => {
-      dispatch(getSongData(payload));
     },
     onchangeSwiperShowStation: (payload: any) => {
       dispatch(changeSwiperShowStation(payload));

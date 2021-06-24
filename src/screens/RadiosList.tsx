@@ -27,7 +27,6 @@ import {
   changeplayItem,
   changePlayingData,
   changeActiveBi,
-  getSongData,
   changeSelectedRadioStation,
   changeMiniScreenData,
   changeSwiperShowStation,
@@ -59,7 +58,7 @@ interface IState {
   lookingList: any;
   searchData: any | null;
   searchvalue: string;
-  data:any
+  data: any
 }
 
 class Menu extends React.Component<IMenuProps, IState> {
@@ -77,19 +76,17 @@ class Menu extends React.Component<IMenuProps, IState> {
       favoriteList: [],
       searchData: null,
       searchvalue: "",
-      data:[]
+      data: []
     };
     const unsubscribe = props.navigation.addListener("focus", () => {
       this.setData();
     });
   }
   setData() {
-   
+
     getData("menuView").then((menuView) => {
       this.setState({ styleView: menuView });
     });
-console.log(";;;;;;;;;componentwillmaount");
-
     this.props.ongetMenuData();
     getData("isLooking").then((looking) => {
       if (looking) {
@@ -101,7 +98,7 @@ console.log(";;;;;;;;;componentwillmaount");
     navigationService.setNavigator(this.props.navigation);
   }
 
- 
+
   _addLookingList(data: any) {
     getData("isLooking").then((lookList) => {
       let count = true;
@@ -125,7 +122,6 @@ console.log(";;;;;;;;;componentwillmaount");
     return (
       <TouchableHighlight
         onPress={() => {
-          console.log('press');
           this.props.onchangeSwiperListType('main')
           this._addLookingList(data.item);
           let radioStation = {
@@ -133,17 +129,17 @@ console.log(";;;;;;;;;componentwillmaount");
             isPlayingMusic: false,
             activeBi: data.item.st[0],
             id: data.item.id,
-            index:data.index,
+            index: data.index,
           };
-          let info={
-            radioStation:radioStation,
-            index:data.index,
-            isPlayingMusic: this.props.bottomReducer.selectedRadioStation?.isPlayingMusic? this.props.bottomReducer.selectedRadioStation
-            .isPlayingMusic:false,
-            search:this.state.searchvalue
+          let info = {
+            radioStation: radioStation,
+            index: data.index,
+            isPlayingMusic: this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ? this.props.bottomReducer.selectedRadioStation
+              .isPlayingMusic : false,
+            search: this.state.searchvalue
           }
           player.open(info);
-          
+
         }}
       >
         <RadioMenuElement
@@ -153,7 +149,6 @@ console.log(";;;;;;;;;componentwillmaount");
           theme={this.props.theme}
           backColor={this.props.theme.backgroundColor}
           addInFavorite={() => {
-            console.log("press",data.item)
             this.props.toaddfavorite(data.item);
 
           }}
@@ -166,31 +161,29 @@ console.log(";;;;;;;;;componentwillmaount");
     return (
       <TouchableHighlight
         onPress={() => {
-     console.log('press');
-     
-            this._addLookingList(data.item);
-            let radioStation = {
-              data: data.item,
-              isPlayingMusic: false,
-              activeBi: data.item.st[0],
-              id: data.item.id,
-              index:data.item.index,
-            };
-            let info={
-              radioStation:radioStation,
-              index:data.item.index,
-              isPlayingMusic:this.props.bottomReducer.selectedRadioStation?.isPlayingMusic? this.props.bottomReducer.selectedRadioStation
-              .isPlayingMusic:false,
-              search:this.state.searchvalue
-            }
-            this.props.onchangeSwiperListType('main')
-            player.open(info);
-          }   
-        
+
+          this._addLookingList(data.item);
+          let radioStation = {
+            data: data.item,
+            isPlayingMusic: false,
+            activeBi: data.item.st[0],
+            id: data.item.id,
+            index: data.item.index,
+          };
+          let info = {
+            radioStation: radioStation,
+            index: data.item.index,
+            isPlayingMusic: this.props.bottomReducer.selectedRadioStation?.isPlayingMusic ? this.props.bottomReducer.selectedRadioStation
+              .isPlayingMusic : false,
+            search: this.state.searchvalue
+          }
+          this.props.onchangeSwiperListType('main')
+          player.open(info);
+        }
+
         }
         style={{
-          marginRight: calcWidth(16),
-          marginBottom: calcHeight(16),
+          padding: 8,
           borderRadius: 8,
         }}
       >
@@ -208,16 +201,13 @@ console.log(";;;;;;;;;componentwillmaount");
 
   _changeSearchData(text: string) {
     this.setState({ searchvalue: text });
-    let data=this.props.menuReducer.menuData
-    data.filter((i:any)=>i.pa.toLowerCase().includes(text.toLowerCase()))
-    this.props.onchangeSearchData(data.filter((i:any)=>i.pa.toLowerCase().includes(text.toLowerCase())))
+    let data = this.props.menuReducer.menuData
+    data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase()))
+    this.props.onchangeSearchData(data.filter((i: any) => i.pa.toLowerCase().includes(text.toLowerCase())))
 
   }
-  
-  render() {    
 
-console.log('reeeeeeeeeeeeeeeeeeeeeeendeeeeeer');
-
+  render() {
     return (
       <KeyboardAvoidingView>
         <View
@@ -226,7 +216,7 @@ console.log('reeeeeeeeeeeeeeeeeeeeeeendeeeeeer');
             {
               backgroundColor: this.props.theme.backgroundColor,
               height: Dimensions.get("window").height,
-             
+
             },
           ]}
         >
@@ -237,8 +227,9 @@ console.log('reeeeeeeeeeeeeeeeeeeeeeendeeeeeer');
             }}
             navigation={this.props.navigation}
             onchnageSearchData={this.props.onchnageSearchData}
-            clearSearchData={()=>{ 
-             this._changeSearchData ("")}}
+            clearSearchData={() => {
+              this._changeSearchData("")
+            }}
           />
 
           {!this.props.menuReducer.menuData ? (
@@ -253,30 +244,29 @@ console.log('reeeeeeeeeeeeeeeeeeeeeeendeeeeeer');
             </View>
           ) : this.props.filterReducer.menuType == 1 ? (
             <FlatList
-            key={'_'}
+              key={'_'}
               data={this.props.menuReducer.searchData}
               renderItem={(d) => this.renderMenuItems(d)}
               keyExtractor={(item: any, index: number) => item.id.toString()}
               windowSize={5}
               onEndReached={(info) => {
-                console.log(info);
               }}
-           
+
             />
           ) : (
             <FlatList
-            key={'#'}
+              key={'#'}
               onEndReachedThreshold={0.01}
               data={this.props.menuReducer.searchData}
               renderItem={(d) => this.renderMenuItemsMenuStyle2(d)}
               contentContainerStyle={{
                 width: "100%",
-                
-                paddingLeft: calcWidth(30),
-                paddingTop: calcHeight(8),
-                justifyContent: "center",
+                justifyContent: 'center',
+                paddingBottom: this.props.bottomReducer.swiperShowRadiostation ? 95 : 20,
+                flexDirection: 'row',
+                flexWrap: 'wrap'
               }}
-              numColumns={3}
+              // numColumns={this.props.theme.albomeMode?5:3}
               initialNumToRender={7}
               snapToAlignment="start"
 
@@ -331,15 +321,12 @@ const mapDispatchToProps = (dispatch: any) => {
     onchangeActiveBi: (payload: number) => {
       dispatch(changeActiveBi(payload));
     },
- 
+
     onchangeSwiperData: (payload: any) => {
       dispatch(changeSwiperData(payload));
     },
     onchangePlayingData: (payload: any) => {
       dispatch(changePlayingData(payload));
-    },
-    get_songData: (payload: any) => {
-      dispatch(getSongData(payload));
     },
     onchangeSelectedRadioStation: (payload: any) => {
       dispatch(changeSelectedRadioStation(payload));
@@ -351,11 +338,11 @@ const mapDispatchToProps = (dispatch: any) => {
       dispatch(changeMiniScreenData(payload));
     },
     onchangeSearchData: (payload: any) => {
-        dispatch(changeSearchData(payload));
-      },
-      onchangeSwiperListType: (payload: any) => {
-        dispatch(changeSwiperListType(payload));
-      }
+      dispatch(changeSearchData(payload));
+    },
+    onchangeSwiperListType: (payload: any) => {
+      dispatch(changeSwiperListType(payload));
+    }
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
@@ -363,7 +350,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 export const styles = StyleSheet.create({
   container1: {
     flex: 1,
-    backgroundColor: "red",
+
   },
   header: {
     backgroundColor: "#0F1E45",
@@ -469,7 +456,7 @@ export const styles = StyleSheet.create({
     elevation: 8,
   },
   container: {
-    height:'100%',
+    height: '100%',
   },
   box: {
     width: 50,

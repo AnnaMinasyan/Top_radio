@@ -242,7 +242,7 @@ class Settings extends React.Component<ISettings, IState> {
   }
 
   onRenderModalSleepTimer() {
-    // console.log("PPPPPPPPP",this.carousel)
+    // //console.log("PPPPPPPPP",this.carousel)
     return <View style={[styles.modalSleepTimer]}>
       <View style={styles.sleepTimerTop}>
         <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
@@ -262,6 +262,12 @@ class Settings extends React.Component<ISettings, IState> {
             isEnabled={this.state.ontimerSleep}
             onValueChange={() => {
               // this.createTimerSleep()
+              this.setState({ontimerSleep:!this.state.ontimerSleep})
+              storeData("settings",{
+                "timerSlipeTime" :!this.state.ontimerSleep,
+                'autoPlay':this.props.settingsReducer.autoPlay,
+                'reconnect':this.props.settingsReducer.reconnect,
+              })
             }} />
         </View>
       </View>
@@ -275,6 +281,7 @@ class Settings extends React.Component<ISettings, IState> {
               //date={this.timeSleep}
               date={this.timeSleep ? this.timeSleep : new Date(Date.now())}
               onDateChange={(data) => {
+                this.setState({ontimerSleep:true})
                 const alarm = {
                   hours: data.getHours(),
                   minute: data.getMinutes()
@@ -297,6 +304,7 @@ class Settings extends React.Component<ISettings, IState> {
           alignItems: 'center'
         }}
         onPress={() => {
+          
           initTimerSleep(this.timerSleep, this.timerSlipeTime)
           storeData("settings",{
             "timerSlipeTime" :this.timerSlipeTime,
